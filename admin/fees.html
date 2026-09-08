@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Edsynk — Fees & Payments</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&family=Noto+Naskh+Arabic:wght@500&display=swap" rel="stylesheet">
+<script>tailwind.config={theme:{extend:{colors:{canvas:'#F7F9FC',ink:'#0B2A56',charcoal:'#18181B',steel:'#64748B',whisper:'#E2E8F0',blue:'#2177EF',skyblue:'#5C9DF5',wash:'#EAF2FE',mist:'#D3E4FD',confirm:'#16A34A',caution:'#D97706',alert:'#DC2626',excused:'#7C8DA6'},fontFamily:{sans:['Geist','sans-serif'],mono:['"Geist Mono"','monospace'],arabic:['"Noto Naskh Arabic"','serif']},boxShadow:{soft:'0 1px 2px rgba(11,42,86,0.04), 0 6px 24px rgba(11,42,86,0.05)',lift:'0 1px 3px rgba(11,42,86,0.10), 0 12px 32px rgba(11,42,86,0.12)'}}}}</script>
+<style>
+@keyframes rise{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}.rise{animation:rise .45s cubic-bezier(.2,.8,.2,1) both}
+@keyframes fillw{from{width:0}}.hbar{animation:fillw 1s cubic-bezier(.2,.8,.2,1) both}
+@keyframes grow{from{transform:scaleY(0)}to{transform:scaleY(1)}}.vbar{transform-origin:bottom;animation:grow .8s cubic-bezier(.2,.8,.2,1) both}
+.tabp{display:none}.tabp.on{display:block}
+#drawer{transform:translateX(105%);transition:transform .28s cubic-bezier(.2,.8,.2,1)}body.dopen #drawer{transform:none}
+#dbg{opacity:0;pointer-events:none;transition:opacity .2s}body.dopen #dbg{opacity:1;pointer-events:auto}
+.modal.open{opacity:1!important;pointer-events:auto!important}
+</style>
+</head>
+<body data-active="Fees & Payments" data-persona="admin" class="bg-canvas font-sans text-charcoal antialiased">
+<div class="flex min-h-screen">
+  <div id="sidebar-root"></div>
+  <div class="flex-1 min-w-0">
+    <header class="h-[60px] bg-white/80 backdrop-blur-md border-b border-whisper/70 flex items-center justify-between px-4 sm:px-7 sticky top-0 z-20">
+      <div class="flex items-center gap-3">
+        <h1 class="text-[15px] font-semibold tracking-tight">Fees &amp; Payments</h1>
+        <span class="font-mono text-[11.5px] font-medium text-blue bg-wash rounded-full px-2.5 py-1 hidden sm:inline">Third Term · 2025/26</span>
+      </div>
+      <div class="flex items-center gap-2.5">
+        <button onclick="toast('Exporting fees &amp; payments report…')" class="h-9 px-4 rounded-lg bg-white ring-1 ring-whisper text-[13px] font-medium text-steel hover:bg-mist/30 hidden sm:block">Export</button>
+        <button onclick="openDrawer('record')" class="h-9 px-4 rounded-lg bg-blue text-white text-[13px] font-medium shadow-soft active:translate-y-px">Record payment</button>
+      </div>
+    </header>
+
+    <main class="p-4 sm:p-7 max-w-[1240px] space-y-5 pb-12">
+
+      <!-- tabs -->
+      <div class="rise flex gap-1 border-b border-whisper/70 overflow-x-auto" id="tabs">
+        <button data-t="0" class="tb shrink-0 px-4 py-2.5 text-[12.5px] font-medium border-b-2 -mb-px text-ink border-blue">Overview</button>
+        <button data-t="1" class="tb shrink-0 px-4 py-2.5 text-[12.5px] font-medium border-b-2 -mb-px text-steel border-transparent hover:text-charcoal">Invoices &amp; balances</button>
+        <button data-t="2" class="tb shrink-0 px-4 py-2.5 text-[12.5px] font-medium border-b-2 -mb-px text-steel border-transparent hover:text-charcoal">Fee structure</button>
+        <button data-t="3" class="tb shrink-0 px-4 py-2.5 text-[12.5px] font-medium border-b-2 -mb-px text-steel border-transparent hover:text-charcoal">Refunds</button>
+        <button data-t="4" class="tb shrink-0 px-4 py-2.5 text-[12.5px] font-medium border-b-2 -mb-px text-steel border-transparent hover:text-charcoal">Settings</button>
+      </div>
+
+      <!-- ===== TAB 0: OVERVIEW ===== -->
+      <section class="tabp on" data-p="0">
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-3">
+          <div class="rise bg-white ring-1 ring-whisper/80 rounded-2xl p-4 shadow-soft"><p class="text-[10.5px] font-semibold uppercase tracking-wider text-steel">Expected · term</p><p class="font-mono text-[22px] font-semibold mt-1.5">₦30.3M</p><p class="text-[11.5px] text-steel mt-1">412 students billed</p></div>
+          <div class="rise bg-white ring-1 ring-whisper/80 rounded-2xl p-4 shadow-soft" style="animation-delay:.04s"><p class="text-[10.5px] font-semibold uppercase tracking-wider text-steel">Collected</p><p class="font-mono text-[22px] font-semibold mt-1.5 text-confirm">₦23.8M</p><p class="text-[11.5px] text-steel mt-1">79% collection rate</p></div>
+          <div class="rise bg-white ring-1 ring-whisper/80 rounded-2xl p-4 shadow-soft" style="animation-delay:.08s"><p class="text-[10.5px] font-semibold uppercase tracking-wider text-steel">Outstanding</p><p class="font-mono text-[22px] font-semibold mt-1.5 text-alert">₦6.5M</p><p class="text-[11.5px] text-steel mt-1">88 students owing</p></div>
+          <div class="rise bg-white ring-1 ring-whisper/80 rounded-2xl p-4 shadow-soft" style="animation-delay:.12s"><p class="text-[10.5px] font-semibold uppercase tracking-wider text-steel">Online vs offline</p><p class="font-mono text-[22px] font-semibold mt-1.5">61<span class="text-steel text-[13px]">/39</span></p><p class="text-[11.5px] text-steel mt-1">% via Paystack / transfer</p></div>
+        </div>
+
+        <div class="grid lg:grid-cols-5 gap-4 mt-4">
+          <div class="rise lg:col-span-3 bg-white ring-1 ring-whisper/80 rounded-2xl p-5 shadow-soft" style="animation-delay:.16s">
+            <p class="text-[13.5px] font-semibold">Collection by class</p>
+            <div class="mt-4 space-y-2.5" id="byClass"></div>
+          </div>
+          <div class="rise lg:col-span-2 bg-white ring-1 ring-whisper/80 rounded-2xl p-5 shadow-soft" style="animation-delay:.2s">
+            <div class="flex items-center justify-between"><p class="text-[13.5px] font-semibold">Top debtors</p><button onclick="tab(1)" class="text-[11.5px] font-medium text-blue">All →</button></div>
+            <div class="mt-3 space-y-2 text-[12.5px]" id="debtors"></div>
+          </div>
+        </div>
+
+        <div class="rise rounded-2xl bg-gradient-to-r from-wash to-white ring-1 ring-mist p-5 shadow-soft mt-4 flex items-start gap-3.5" style="animation-delay:.24s">
+          <span class="h-10 w-10 rounded-xl bg-blue grid place-items-center text-white shrink-0 shadow-lift"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l1.9 5.7L19.5 10l-5.6 1.3L12 17l-1.9-5.7L4.5 10l5.6-1.3z"/></svg></span>
+          <div class="flex-1"><p class="text-[13.5px] font-semibold">EdInsight · smart reminders</p>
+          <p class="text-[12px] text-steel mt-1 leading-relaxed">88 families owe ₦6.5M. EdInsight grouped them: <span class="font-medium text-charcoal">31 usually pay late but always pay</span> (gentle nudge), <span class="font-medium text-charcoal">12 partial-payers</span> (offer installments), <span class="font-medium text-charcoal">5 at-risk</span> (call personally). Drafts a tailored WhatsApp for each group.</p>
+          <div class="mt-3 flex flex-wrap gap-2"><button onclick="openComposer()" class="h-9 px-4 rounded-lg bg-blue text-white text-[12.5px] font-medium shadow-soft">Review &amp; send reminders</button><button onclick="openComposer()" class="h-9 px-4 rounded-lg bg-white ring-1 ring-mist text-[12.5px] font-medium text-blue hover:bg-wash/60">Customise reminder</button></div></div>
+        </div>
+      </section>
+
+      <!-- ===== TAB 1: INVOICES ===== -->
+      <section class="tabp" data-p="1">
+        <div class="rise flex flex-wrap items-center gap-2 mb-3">
+          <div class="flex items-center gap-2 h-10 flex-1 min-w-[200px] bg-white ring-1 ring-whisper rounded-xl px-3.5 text-[13px] text-steel">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+            <input id="iq" oninput="renderInv()" placeholder="Search student or reg number…" class="bg-transparent flex-1 focus:outline-none">
+          </div>
+          <div class="flex gap-1.5 text-[12px] font-medium" id="invFilter">
+            <button data-f="all" class="h-10 px-3.5 rounded-xl bg-blue text-white">All</button>
+            <button data-f="owing" class="h-10 px-3.5 rounded-xl bg-white ring-1 ring-whisper text-steel">Owing</button>
+            <button data-f="part" class="h-10 px-3.5 rounded-xl bg-white ring-1 ring-whisper text-steel">Part-paid</button>
+            <button data-f="paid" class="h-10 px-3.5 rounded-xl bg-white ring-1 ring-whisper text-steel">Paid</button>
+          </div>
+        </div>
+        <div class="rise bg-white ring-1 ring-whisper/80 rounded-2xl shadow-soft overflow-hidden" style="animation-delay:.05s">
+          <div class="overflow-x-auto"><table class="w-full text-[12.5px]">
+            <thead><tr class="text-left text-[10.5px] uppercase tracking-wider text-steel border-b border-whisper/70 bg-canvas/60">
+              <th class="px-5 py-3 font-semibold">Student</th><th class="px-3 py-3 font-semibold">Invoice</th>
+              <th class="px-3 py-3 font-semibold text-right">Billed</th><th class="px-3 py-3 font-semibold text-right">Paid</th>
+              <th class="px-3 py-3 font-semibold text-right">Balance</th><th class="px-3 py-3 font-semibold">Status</th><th class="px-5 py-3"></th></tr></thead>
+            <tbody id="invBody" class="divide-y divide-whisper/60"></tbody>
+          </table></div>
+          <div class="px-5 py-3 border-t border-whisper/70 bg-canvas/50 text-[11.5px] text-steel">Click a row to open the student's fee account — record a payment, set an installment plan, or issue a refund. Use <span class="font-medium text-charcoal">Adjust fees</span> to manually edit a student's bill, apply a discount or waiver, or set the balance.</div>
+        </div>
+      </section>
+
+      <!-- ===== TAB 2: FEE STRUCTURE ===== -->
+      <section class="tabp" data-p="2">
+        <div class="rise flex items-center justify-between flex-wrap gap-3 mb-3">
+          <div class="flex items-center gap-2"><select class="h-10 rounded-xl border border-whisper bg-white px-3 text-[12.5px] font-semibold"><option>JSS 2 — day student</option><option>JSS 2 — boarding</option><option>SS 1 — day student</option></select><span class="text-[11.5px] text-steel">Third Term · 2025/26</span></div>
+          <button onclick="toast('Copy this fee structure to other classes…')" class="h-10 px-4 rounded-xl bg-white ring-1 ring-whisper text-[12.5px] font-medium text-steel hover:bg-mist/30">Copy to other classes</button>
+        </div>
+        <div class="grid lg:grid-cols-[1fr_320px] gap-4">
+          <div class="rise bg-white ring-1 ring-whisper/80 rounded-2xl shadow-soft overflow-hidden" style="animation-delay:.05s">
+            <p class="text-[13.5px] font-semibold px-5 pt-4 pb-2">Fee heads · JSS 2 day student</p>
+            <div class="divide-y divide-whisper/60" id="heads"></div>
+            <div class="px-5 py-3 border-t border-whisper/70 flex items-center justify-between">
+              <button onclick="toast('Add a new fee head to JSS 2 day student…')" class="text-[12.5px] font-medium text-blue">＋ Add fee head</button>
+              <p class="text-[13px] font-semibold">Term total: <span class="font-mono text-ink">₦73,500</span> <span class="text-[11px] text-steel font-normal">(+ optional)</span></p>
+            </div>
+          </div>
+          <div class="space-y-4">
+            <div class="rise bg-white ring-1 ring-whisper/80 rounded-2xl p-5 shadow-soft" style="animation-delay:.1s">
+              <p class="text-[13.5px] font-semibold">Discounts &amp; scholarships</p>
+              <div class="mt-3 space-y-2 text-[12px]">
+                <div class="flex items-center justify-between rounded-xl ring-1 ring-whisper bg-canvas px-3.5 py-2.5"><div><p class="font-medium">Sibling discount</p><p class="text-[10.5px] text-steel">2nd child 10% · 3rd+ 15%</p></div><span class="text-confirm text-[11px] font-semibold">On</span></div>
+                <div class="flex items-center justify-between rounded-xl ring-1 ring-whisper bg-canvas px-3.5 py-2.5"><div><p class="font-medium">Staff children</p><p class="text-[10.5px] text-steel">50% tuition</p></div><span class="text-confirm text-[11px] font-semibold">On</span></div>
+                <div class="flex items-center justify-between rounded-xl ring-1 ring-whisper bg-canvas px-3.5 py-2.5"><div><p class="font-medium">Bursary / scholarship</p><p class="text-[10.5px] text-steel">14 students · per-student %</p></div><button onclick="toast('Opening bursary &amp; scholarship list…')" class="text-blue text-[11px] font-medium">Manage</button></div>
+              </div>
+            </div>
+            <div class="rise bg-white ring-1 ring-whisper/80 rounded-2xl p-5 shadow-soft" style="animation-delay:.14s">
+              <p class="text-[13.5px] font-semibold">Installment plan</p>
+              <p class="text-[11.5px] text-steel mt-1">Allow part-payment in up to</p>
+              <div class="mt-2 flex gap-1.5" id="instBtns">
+                <button data-n="1" class="flex-1 h-9 rounded-lg ring-1 ring-whisper text-[12px] font-medium text-steel">1</button>
+                <button data-n="2" class="flex-1 h-9 rounded-lg bg-blue text-white text-[12px] font-medium">2</button>
+                <button data-n="3" class="flex-1 h-9 rounded-lg ring-1 ring-whisper text-[12px] font-medium text-steel">3</button>
+              </div>
+              <p class="text-[11px] text-steel mt-2">2 installments: 60% at resumption, 40% by mid-term. Late balance → ₦1,000/week fee.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== TAB 3: REFUNDS ===== -->
+      <section class="tabp" data-p="3">
+        <div class="rise grid grid-cols-2 sm:grid-cols-4 gap-3 mb-4">
+          <div class="bg-white ring-1 ring-whisper/80 rounded-2xl p-4 shadow-soft"><p class="text-[10.5px] font-semibold uppercase tracking-wider text-steel">Pending</p><p class="font-mono text-[20px] font-semibold mt-1.5 text-caution">3</p></div>
+          <div class="bg-white ring-1 ring-whisper/80 rounded-2xl p-4 shadow-soft"><p class="text-[10.5px] font-semibold uppercase tracking-wider text-steel">Approved · processing</p><p class="font-mono text-[20px] font-semibold mt-1.5">1</p></div>
+          <div class="bg-white ring-1 ring-whisper/80 rounded-2xl p-4 shadow-soft"><p class="text-[10.5px] font-semibold uppercase tracking-wider text-steel">Refunded · term</p><p class="font-mono text-[20px] font-semibold mt-1.5">₦142k</p></div>
+          <div class="bg-white ring-1 ring-whisper/80 rounded-2xl p-4 shadow-soft"><p class="text-[10.5px] font-semibold uppercase tracking-wider text-steel">Credit wallets</p><p class="font-mono text-[20px] font-semibold mt-1.5">₦88k</p></div>
+        </div>
+        <div class="rise bg-white ring-1 ring-whisper/80 rounded-2xl shadow-soft overflow-hidden" style="animation-delay:.05s">
+          <p class="text-[13.5px] font-semibold px-5 pt-4 pb-3">Refund queue</p>
+          <div class="divide-y divide-whisper/60" id="refunds"></div>
+          <div class="px-5 py-3 border-t border-whisper/70 bg-canvas/50 text-[11.5px] text-steel">Refunds to card payments reverse via Paystack (3–5 days); transfer/cash refunds are paid out by the school and marked here. Every refund is audit-logged with reason &amp; approver.</div>
+        </div>
+      </section>
+
+      <!-- ===== TAB 4: SETTINGS ===== -->
+      <section class="tabp" data-p="4">
+        <div class="grid lg:grid-cols-2 gap-4">
+          <div class="rise bg-white ring-1 ring-whisper/80 rounded-2xl p-5 shadow-soft">
+            <p class="text-[13.5px] font-semibold">How parents pay</p>
+            <div class="mt-3 space-y-2 text-[12.5px]">
+              <div class="flex items-center justify-between rounded-xl ring-1 ring-whisper bg-canvas px-3.5 py-3"><div class="flex items-center gap-2.5"><span class="h-8 w-8 rounded-lg bg-confirm/10 text-confirm grid place-items-center text-[11px] font-bold">P</span><div><p class="font-medium">Paystack — card, transfer, USSD</p><p class="text-[10.5px] text-steel">Split: school account + Edsynk platform fee</p></div></div><span class="text-[10.5px] font-semibold text-confirm bg-confirm/10 rounded-full px-2 py-0.5">Connected ✓</span></div>
+              <div class="flex items-center justify-between rounded-xl ring-1 ring-whisper bg-canvas px-3.5 py-3"><div class="flex items-center gap-2.5"><span class="h-8 w-8 rounded-lg bg-wash text-blue grid place-items-center text-[11px] font-bold">₦</span><div><p class="font-medium">Direct bank transfer</p><p class="text-[10.5px] text-steel">Moniepoint · reconciled manually</p></div></div><span class="text-[10.5px] font-semibold text-confirm bg-confirm/10 rounded-full px-2 py-0.5">On</span></div>
+              <div class="flex items-center justify-between rounded-xl ring-1 ring-whisper bg-canvas px-3.5 py-3"><div class="flex items-center gap-2.5"><span class="h-8 w-8 rounded-lg bg-canvas ring-1 ring-whisper text-steel grid place-items-center text-[11px] font-bold">$</span><div><p class="font-medium">Cash at bursary</p><p class="text-[10.5px] text-steel">recorded by staff, receipt issued</p></div></div><span class="text-[10.5px] font-semibold text-confirm bg-confirm/10 rounded-full px-2 py-0.5">On</span></div>
+            </div>
+            <div class="mt-3 rounded-xl bg-wash/50 ring-1 ring-mist/60 px-4 py-3 text-[11.5px] text-ink"><span class="font-semibold">Edsynk never holds your money.</span> Online payments settle straight to your school's bank via Paystack split — we only take a small platform fee per transaction.</div>
+          </div>
+          <div class="rise bg-white ring-1 ring-whisper/80 rounded-2xl p-5 shadow-soft" style="animation-delay:.05s">
+            <p class="text-[13.5px] font-semibold">Policies</p>
+            <div class="mt-3 rounded-xl ring-1 ring-whisper/80 divide-y divide-whisper/60 text-[12.5px]">
+              <div class="flex justify-between px-4 py-2.5"><span class="text-steel">Late-payment fee</span><span class="font-medium">₦1,000 / week after due date</span></div>
+              <div class="flex justify-between px-4 py-2.5"><span class="text-steel">Results held for debtors?</span><span class="font-medium text-alert">No — never (Edsynk policy)</span></div>
+              <div class="flex justify-between px-4 py-2.5"><span class="text-steel">Overpayment</span><span class="font-medium">→ student credit wallet</span></div>
+              <div class="flex justify-between items-center px-4 py-2.5"><span class="text-steel">Auto-reminders</span><span class="flex items-center gap-2"><span class="font-medium">resumption, mid-term, due-date</span><button onclick="openComposer()" class="text-blue text-[11.5px] font-medium">Edit message</button></span></div>
+              <div class="flex justify-between px-4 py-2.5"><span class="text-steel">Receipt</span><span class="font-medium">auto-PDF + WhatsApp</span></div>
+            </div>
+            <p class="text-[11px] text-steel mt-3">We don't hold children's results hostage over fees — debt is a conversation, not a punishment. You can restrict <em>new</em> services, never existing records.</p>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+</div>
+
+<!-- ===== SLIDE-OVER: student fee account / record payment ===== -->
+<div id="dbg" class="fixed inset-0 z-40 bg-ink/30 backdrop-blur-[2px]" onclick="closeDrawer()"></div>
+<aside id="drawer" class="fixed inset-y-0 right-0 z-50 w-full max-w-[460px] bg-white shadow-lift overflow-y-auto">
+  <div class="sticky top-0 bg-white/90 backdrop-blur border-b border-whisper/70 px-5 py-4 flex items-center justify-between">
+    <div class="flex items-center gap-3"><span id="dAv" class="h-10 w-10 rounded-xl bg-blue text-white grid place-items-center text-[13px] font-bold">FA</span>
+      <div><p id="dName" class="text-[14.5px] font-semibold">Fatima Abubakar</p><p id="dMeta" class="font-mono text-[10.5px] text-steel">JSS 2A · AFA/2024/0117</p></div></div>
+    <button class="h-8 w-8 grid place-items-center rounded-lg hover:bg-mist/40 text-steel" onclick="closeDrawer()">✕</button>
+  </div>
+  <div class="p-5 space-y-5 text-[12.5px]">
+    <div class="grid grid-cols-3 gap-2 text-center">
+      <div class="rounded-xl bg-canvas ring-1 ring-whisper/70 py-3"><p class="font-mono text-[15px] font-semibold">₦73.5k</p><p class="text-[10px] text-steel mt-0.5">billed</p></div>
+      <div class="rounded-xl bg-canvas ring-1 ring-whisper/70 py-3"><p class="font-mono text-[15px] font-semibold text-confirm">₦44.1k</p><p class="text-[10px] text-steel mt-0.5">paid</p></div>
+      <div class="rounded-xl bg-alert/[0.06] ring-1 ring-alert/20 py-3"><p class="font-mono text-[15px] font-semibold text-alert">₦29.4k</p><p class="text-[10px] text-steel mt-0.5">balance</p></div>
+    </div>
+    <div>
+      <p class="text-[11px] font-semibold uppercase tracking-wider text-steel mb-2">Fee breakdown</p>
+      <div class="rounded-xl ring-1 ring-whisper/80 divide-y divide-whisper/60">
+        <div class="flex justify-between px-4 py-2"><span class="text-steel">Tuition</span><span class="font-mono">₦45,000</span></div>
+        <div class="flex justify-between px-4 py-2"><span class="text-steel">Development levy</span><span class="font-mono">₦10,000</span></div>
+        <div class="flex justify-between px-4 py-2"><span class="text-steel">Books &amp; materials</span><span class="font-mono">₦8,000</span></div>
+        <div class="flex justify-between px-4 py-2"><span class="text-steel arabic">رسوم الإسلامية</span><span class="font-mono">₦5,000</span></div>
+        <div class="flex justify-between px-4 py-2"><span class="text-steel">Exam fee</span><span class="font-mono">₦3,500</span></div>
+        <div class="flex justify-between px-4 py-2"><span class="text-steel">PTA dues</span><span class="font-mono">₦2,000</span></div>
+        <div class="flex justify-between px-4 py-2 bg-confirm/[0.04]"><span class="text-confirm font-medium">Sibling discount (10%)</span><span class="font-mono text-confirm">−₦4,500</span></div>
+      </div>
+    </div>
+    <div>
+      <p class="text-[11px] font-semibold uppercase tracking-wider text-steel mb-2">Payments &amp; installments</p>
+      <div class="space-y-2">
+        <div class="flex items-center gap-3 rounded-xl ring-1 ring-whisper/80 px-3.5 py-2.5"><span class="h-7 w-7 rounded-lg bg-confirm/10 text-confirm grid place-items-center text-[11px]">✓</span><div class="flex-1"><p class="font-medium">Installment 1 · ₦44,100</p><p class="text-[10.5px] text-steel">Paystack card · 9 May · receipt #AF-2291</p></div><button onclick="toast('Opening receipt #AF-2291…')" class="text-blue text-[11px] font-medium">Receipt</button></div>
+        <div class="flex items-center gap-3 rounded-xl ring-1 ring-caution/30 bg-caution/[0.04] px-3.5 py-2.5"><span class="h-7 w-7 rounded-lg bg-caution/15 text-caution grid place-items-center text-[11px]">2</span><div class="flex-1"><p class="font-medium">Installment 2 · ₦29,400</p><p class="text-[10.5px] text-steel">due 20 Jun · not yet paid</p></div></div>
+      </div>
+    </div>
+    <div>
+      <p class="text-[11px] font-semibold uppercase tracking-wider text-steel mb-2">Actions</p>
+      <div class="grid grid-cols-2 gap-2">
+        <button onclick="toast('Recording payment for Fatima Abubakar…')" class="h-10 rounded-xl bg-blue text-white text-[12.5px] font-semibold shadow-soft">Record payment</button>
+        <button onclick="openComposer()" class="h-10 rounded-xl ring-1 ring-whisper bg-white text-[12.5px] font-medium text-steel hover:bg-mist/30">Send reminder</button>
+        <button onclick="toast('Preparing fee statement PDF…')" class="h-10 rounded-xl ring-1 ring-whisper bg-white text-[12.5px] font-medium text-steel hover:bg-mist/30">Print statement</button>
+        <button onclick="openAdjust('Fatima Abubakar','JSS 2A',73500,44100)" class="h-10 rounded-xl ring-1 ring-blue/30 bg-wash/40 text-[12.5px] font-semibold text-blue hover:bg-wash/70">Adjust fees</button>
+      </div>
+      <button onclick="toast('Opening refund request for Fatima Abubakar…')" class="mt-2 w-full h-10 rounded-xl ring-1 ring-alert/30 text-alert text-[12.5px] font-medium hover:bg-alert/5">Issue refund…</button>
+    </div>
+  </div>
+</aside>
+
+<!-- ===== MODAL: adjust a student's fees ===== -->
+<div id="adjM" class="modal fixed inset-0 z-[55] bg-ink/40 backdrop-blur-sm grid place-items-center p-4" style="opacity:0;pointer-events:none;transition:opacity .2s" onclick="if(event.target===this)closeM('adjM')">
+  <div class="rise bg-white w-full max-w-[560px] max-h-[90vh] overflow-y-auto rounded-2xl shadow-lift p-5">
+    <div class="flex items-start justify-between mb-1">
+      <div><p class="text-[15px] font-semibold">Adjust fees</p><p id="adjWho" class="text-[12px] text-steel mt-0.5">Fatima Abubakar · JSS 2A</p></div>
+      <button onclick="closeM('adjM')" class="h-8 w-8 grid place-items-center rounded-lg hover:bg-mist/40 text-steel">✕</button>
+    </div>
+    <p class="text-[11.5px] text-steel mb-3">Edit any fee item, apply a discount or waiver, or add a custom line. The total and balance update live.</p>
+
+    <p class="text-[10.5px] font-semibold uppercase tracking-wider text-steel mb-2">Fee items</p>
+    <div id="adjItems" class="space-y-2"></div>
+    <button onclick="addAdjLine()" class="mt-2 text-[12px] font-medium text-blue">＋ Add custom line item</button>
+
+    <div class="mt-4 grid sm:grid-cols-2 gap-3">
+      <div class="rounded-xl ring-1 ring-whisper bg-canvas p-3">
+        <p class="text-[11px] font-semibold uppercase tracking-wider text-steel mb-2">Discount / scholarship / waiver</p>
+        <div class="flex gap-1.5 mb-2 text-[12px] font-medium" id="adjDiscMode">
+          <button data-m="amount" class="flex-1 h-8 rounded-lg bg-blue text-white">Amount (₦)</button>
+          <button data-m="percent" class="flex-1 h-8 rounded-lg ring-1 ring-whisper bg-white text-steel">Percent (%)</button>
+        </div>
+        <input id="adjDisc" type="number" min="0" value="0" oninput="recalcAdj()" class="w-full h-9 rounded-lg ring-1 ring-whisper bg-white px-3 text-[13px] font-mono focus:outline-none focus:ring-blue">
+        <select id="adjDiscType" onchange="recalcAdj()" class="w-full h-9 rounded-lg ring-1 ring-whisper bg-white px-2 text-[12px] mt-2 focus:outline-none focus:ring-blue">
+          <option>Sibling discount</option><option>Staff children</option><option>Bursary / scholarship</option><option>Hardship waiver</option><option>Goodwill / other</option>
+        </select>
+      </div>
+      <div class="rounded-xl ring-1 ring-whisper bg-canvas p-3">
+        <p class="text-[11px] font-semibold uppercase tracking-wider text-steel mb-2">Balance</p>
+        <p class="text-[11px] text-steel mb-1">Paid so far</p>
+        <input id="adjPaid" type="number" min="0" value="0" oninput="recalcAdj()" class="w-full h-9 rounded-lg ring-1 ring-whisper bg-white px-3 text-[13px] font-mono focus:outline-none focus:ring-blue">
+        <p class="text-[11px] text-steel mt-2 mb-1">Override balance <span class="text-steel/70">(optional)</span></p>
+        <input id="adjBal" type="number" min="0" placeholder="auto" oninput="recalcAdj()" class="w-full h-9 rounded-lg ring-1 ring-whisper bg-white px-3 text-[13px] font-mono focus:outline-none focus:ring-blue">
+      </div>
+    </div>
+
+    <div class="mt-3">
+      <p class="text-[11px] font-semibold uppercase tracking-wider text-steel mb-1.5">Reason for adjustment</p>
+      <textarea id="adjReason" rows="2" placeholder="e.g. Bursary awarded for Third Term; parent agreed installment." class="w-full rounded-xl ring-1 ring-whisper bg-white px-3 py-2 text-[12.5px] focus:outline-none focus:ring-blue resize-none"></textarea>
+    </div>
+
+    <div class="mt-4 rounded-xl bg-wash/50 ring-1 ring-mist/60 p-3 text-[12.5px] space-y-1">
+      <div class="flex justify-between"><span class="text-steel">Gross fees</span><span class="font-mono" id="adjGross">₦0</span></div>
+      <div class="flex justify-between text-confirm"><span>Discount / waiver</span><span class="font-mono" id="adjDiscOut">−₦0</span></div>
+      <div class="flex justify-between font-semibold border-t border-mist/60 pt-1"><span>Net billed</span><span class="font-mono" id="adjNet">₦0</span></div>
+      <div class="flex justify-between"><span class="text-steel">Paid</span><span class="font-mono text-confirm" id="adjPaidOut">₦0</span></div>
+      <div class="flex justify-between font-semibold"><span>Balance due</span><span class="font-mono text-alert" id="adjBalOut">₦0</span></div>
+    </div>
+
+    <div class="flex justify-end gap-2 mt-5">
+      <button onclick="closeM('adjM')" class="h-10 px-4 rounded-lg ring-1 ring-whisper text-[13px] font-medium text-steel">Cancel</button>
+      <button onclick="saveAdj()" class="h-10 px-5 rounded-lg bg-blue text-white text-[13px] font-semibold shadow-soft">Save changes</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== MODAL: reminder composer ===== -->
+<div id="remM" class="modal fixed inset-0 z-[55] bg-ink/40 backdrop-blur-sm grid place-items-center p-4" style="opacity:0;pointer-events:none;transition:opacity .2s" onclick="if(event.target===this)closeM('remM')">
+  <div class="rise bg-white w-full max-w-[680px] max-h-[90vh] overflow-y-auto rounded-2xl shadow-lift p-5">
+    <div class="flex items-start justify-between mb-1">
+      <div><p class="text-[15px] font-semibold">Customise reminder message</p><p class="text-[12px] text-steel mt-0.5">Used for resumption, mid-term &amp; due-date reminders.</p></div>
+      <button onclick="closeM('remM')" class="h-8 w-8 grid place-items-center rounded-lg hover:bg-mist/40 text-steel">✕</button>
+    </div>
+
+    <div class="grid md:grid-cols-2 gap-4 mt-3">
+      <div>
+        <div class="flex items-center justify-between mb-1.5">
+          <p class="text-[11px] font-semibold uppercase tracking-wider text-steel">Channels</p>
+          <div class="flex gap-1.5 text-[11.5px] font-medium" id="remChan">
+            <button data-c="SMS" class="h-7 px-2.5 rounded-lg ring-1 ring-whisper bg-white text-steel">SMS</button>
+            <button data-c="WhatsApp" class="h-7 px-2.5 rounded-lg bg-blue text-white">WhatsApp</button>
+            <button data-c="Email" class="h-7 px-2.5 rounded-lg ring-1 ring-whisper bg-white text-steel">Email</button>
+          </div>
+        </div>
+        <div class="flex items-center justify-between mb-1.5 mt-3">
+          <p class="text-[11px] font-semibold uppercase tracking-wider text-steel">Tone</p>
+          <div class="flex gap-1.5 text-[11.5px] font-medium" id="remTone">
+            <button data-t="Gentle" class="h-7 px-2.5 rounded-lg ring-1 ring-whisper bg-white text-steel">Gentle</button>
+            <button data-t="Standard" class="h-7 px-2.5 rounded-lg bg-blue text-white">Standard</button>
+            <button data-t="Firm" class="h-7 px-2.5 rounded-lg ring-1 ring-whisper bg-white text-steel">Firm</button>
+          </div>
+        </div>
+        <p class="text-[11px] font-semibold uppercase tracking-wider text-steel mb-1.5 mt-3">Message template</p>
+        <textarea id="remTpl" rows="8" oninput="renderPreview()" class="w-full rounded-xl ring-1 ring-whisper bg-white px-3 py-2.5 text-[12.5px] leading-relaxed focus:outline-none focus:ring-blue resize-none"></textarea>
+        <p class="text-[11px] text-steel mt-2">Merge tags:
+          <button onclick="insTag('{parent_name}')" class="font-mono text-[10.5px] text-blue bg-wash rounded px-1.5 py-0.5">{parent_name}</button>
+          <button onclick="insTag('{student_name}')" class="font-mono text-[10.5px] text-blue bg-wash rounded px-1.5 py-0.5">{student_name}</button>
+          <button onclick="insTag('{amount_due}')" class="font-mono text-[10.5px] text-blue bg-wash rounded px-1.5 py-0.5">{amount_due}</button>
+          <button onclick="insTag('{due_date}')" class="font-mono text-[10.5px] text-blue bg-wash rounded px-1.5 py-0.5">{due_date}</button>
+          <button onclick="insTag('{school_name}')" class="font-mono text-[10.5px] text-blue bg-wash rounded px-1.5 py-0.5">{school_name}</button>
+        </p>
+      </div>
+      <div>
+        <p class="text-[11px] font-semibold uppercase tracking-wider text-steel mb-1.5">Live preview</p>
+        <div class="rounded-2xl ring-1 ring-whisper bg-canvas p-3">
+          <div class="flex items-center gap-2 mb-2"><span class="h-8 w-8 rounded-full bg-confirm/10 text-confirm grid place-items-center text-[11px] font-bold" id="remChIcon">W</span><div><p class="text-[12px] font-semibold">Hajiya Maryam Abubakar</p><p class="text-[10px] text-steel" id="remChLabel">WhatsApp · +234 ···</p></div></div>
+          <div class="rounded-xl bg-white ring-1 ring-whisper px-3 py-2.5 text-[12.5px] leading-relaxed whitespace-pre-wrap" id="remPreview"></div>
+          <p class="text-[10.5px] text-steel mt-2">Example values: Hajiya Maryam · Fatima · ₦29,400 · 30 June · Al-Furqan Academy.</p>
+        </div>
+        <div class="mt-3 rounded-xl bg-wash/50 ring-1 ring-mist/60 px-3 py-2.5 text-[11.5px] text-ink">Sent to <span class="font-semibold">88 owing families</span> · est. ₦6.5M outstanding. Auto-reminders reuse this template.</div>
+      </div>
+    </div>
+
+    <div class="flex justify-end gap-2 mt-5">
+      <button onclick="closeM('remM')" class="h-10 px-4 rounded-lg ring-1 ring-whisper text-[13px] font-medium text-steel">Cancel</button>
+      <button onclick="closeM('remM');toast('Reminder template saved')" class="h-10 px-4 rounded-lg ring-1 ring-blue/30 bg-wash/40 text-blue text-[13px] font-semibold">Save template</button>
+      <button onclick="closeM('remM');toast('Reminders sent to 88 owing families')" class="h-10 px-5 rounded-lg bg-blue text-white text-[13px] font-semibold shadow-soft">Send now</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast" class="hidden fixed bottom-5 left-1/2 -translate-x-1/2 z-[70] bg-ink text-white text-[12.5px] font-medium px-4 py-2.5 rounded-xl shadow-lift"></div>
+
+<script src="../assets/shell.js"></script>
+<script>
+const NF=n=>'₦'+n.toLocaleString();
+// collection by class
+const CLS=[['JSS 1',92],['JSS 2',84],['JSS 3',81],['SS 1',77],['SS 2',73],['SS 3',68],["I'dadiyyah",58]];
+document.getElementById('byClass').innerHTML=CLS.map(c=>`<div><div class="flex justify-between text-[11.5px] mb-1"><span class="font-medium ${c[0].indexOf("'")>-1?'arabic':''}">${c[0]}</span><span class="font-mono text-steel">${c[1]}%</span></div><div class="h-2.5 rounded-full bg-canvas ring-1 ring-whisper/60 overflow-hidden"><div class="hbar h-full rounded-full ${c[1]>=80?'bg-confirm':c[1]>=70?'bg-blue':'bg-caution'}" style="width:${c[1]}%"></div></div></div>`).join('');
+// debtors
+const DEBT=[['Bashir Nuhu','JSS 3A',58500],['Amina Kabir','SS 1B',47000],['Tobi Okeke','JSS 2B',29400],['Zara Idris','SS 2A',73500],['Musa Lawal','JSS 1A',21000]];
+document.getElementById('debtors').innerHTML=DEBT.map(d=>`<div class="flex items-center justify-between rounded-xl hover:bg-canvas/60 px-2.5 py-2 cursor-pointer" onclick="openDrawer()"><div class="flex items-center gap-2.5"><span class="h-7 w-7 rounded-full bg-wash text-blue grid place-items-center text-[9.5px] font-bold">${d[0].split(' ').map(x=>x[0]).join('')}</span><div><p class="font-medium">${d[0]}</p><p class="text-[10px] text-steel">${d[1]}</p></div></div><span class="font-mono text-alert text-[12px] font-semibold">${NF(d[2])}</span></div>`).join('');
+// invoices
+const INV=[
+ ['Fatima Abubakar','FA','JSS 2A','AF-2291',73500,44100,'part'],
+ ['Abdulrahman Aliyu','AA','JSS 2A','AF-2288',73500,73500,'paid'],
+ ['Bashir Nuhu','BN','JSS 3A','AF-2301',81000,22500,'owing'],
+ ['Chiamaka Okafor','CO','JSS 2A','AF-2294',73500,73500,'paid'],
+ ['Amina Kabir','AK','SS 1B','AF-2310',92000,45000,'part'],
+ ['Ibrahim Bello','IB','JSS 2A','AF-2293',73500,0,'owing'],
+ ['Zainab Umar','ZU','JSS 2A','AF-2295',66150,66150,'paid'],
+ ['Tobi Okeke','TO','JSS 2B','AF-2299',73500,44100,'part'],
+];
+let invF='all';
+function statusPill(s){return {paid:['Paid','text-confirm bg-confirm/10'],part:['Part-paid','text-caution bg-caution/10'],owing:['Owing','text-alert bg-alert/10']}[s];}
+function renderInv(){
+  const q=(document.getElementById('iq').value||'').toLowerCase();
+  document.getElementById('invBody').innerHTML=INV.filter(i=>{
+    const mq=i[0].toLowerCase().includes(q)||i[3].toLowerCase().includes(q);
+    const mf=invF==='all'||i[6]===invF;
+    return mq&&mf;
+  }).map(i=>{const bal=i[4]-i[5];const sp=statusPill(i[6]);
+    return `<tr onclick="openDrawer()" class="hover:bg-canvas/60 cursor-pointer">
+      <td class="px-5 py-3"><div class="flex items-center gap-2.5"><span class="h-8 w-8 rounded-full bg-wash text-blue grid place-items-center text-[10px] font-bold">${i[1]}</span><div><p class="font-medium">${i[0]}</p><p class="text-[10px] text-steel">${i[2]}</p></div></div></td>
+      <td class="px-3 py-3 font-mono text-[11px] text-steel">${i[3]}</td>
+      <td class="px-3 py-3 text-right font-mono">${NF(i[4])}</td>
+      <td class="px-3 py-3 text-right font-mono text-confirm">${NF(i[5])}</td>
+      <td class="px-3 py-3 text-right font-mono ${bal>0?'text-alert':'text-steel'}">${bal>0?NF(bal):'—'}</td>
+      <td class="px-3 py-3"><span class="text-[10.5px] font-semibold ${sp[1]} rounded-full px-2 py-0.5">${sp[0]}</span></td>
+      <td class="px-5 py-3 text-right whitespace-nowrap"><button onclick="event.stopPropagation();openAdjust('${i[0].replace(/'/g,"\\'")}','${i[2]}',${i[4]},${i[5]})" class="h-8 px-3 rounded-lg ring-1 ring-whisper text-[11.5px] font-medium text-steel hover:bg-mist/30">Adjust fees</button></td></tr>`;
+  }).join('');
+}
+document.querySelectorAll('#invFilter button').forEach(b=>b.onclick=()=>{invF=b.dataset.f;document.querySelectorAll('#invFilter button').forEach(x=>x.className='h-10 px-3.5 rounded-xl bg-white ring-1 ring-whisper text-steel');b.className='h-10 px-3.5 rounded-xl bg-blue text-white';renderInv();});
+renderInv();
+// fee heads
+const HEADS=[['Tuition',45000,'mandatory'],['Development levy',10000,'mandatory'],['Books & materials',8000,'mandatory'],['Islamiyyah levy',5000,'mandatory'],['Examination fee',3500,'mandatory'],['PTA dues',2000,'mandatory'],['Transport (optional)',15000,'optional'],['Boarding (optional)',60000,'optional'],['Uniform (one-off)',12000,'optional']];
+document.getElementById('heads').innerHTML=HEADS.map(h=>`<div class="flex items-center justify-between px-5 py-2.5"><div class="flex items-center gap-2"><span class="text-[12.5px] font-medium">${h[0]}</span>${h[2]==='optional'?'<span class="text-[9.5px] font-semibold text-steel bg-canvas ring-1 ring-whisper rounded-full px-2 py-0.5">optional</span>':''}</div><div class="flex items-center gap-3"><span class="font-mono text-[12.5px]">${NF(h[1])}</span><button onclick="toast('Editing fee head: '+\`${h[0]}\`+'…')" class="text-steel/50 hover:text-steel">✎</button></div></div>`).join('');
+// refunds
+const REF=[
+ ['Halima Sani','HS','Overpayment — paid twice via card','₦44,100','pending','card'],
+ ['Yusuf Musa','YM','Withdrew mid-term — pro-rata tuition','₦28,000','pending','transfer'],
+ ['Grace Eze','GE','Optional transport not used','₦15,000','pending','wallet'],
+ ['Bashir Idris','BI','Duplicate transfer','₦10,000','processing','transfer'],
+];
+document.getElementById('refunds').innerHTML=REF.map(r=>{
+  const st={pending:['Awaiting approval','text-caution bg-caution/10'],processing:['Processing','text-blue bg-wash']}[r[4]];
+  const act=r[4]==='pending'?`<button onclick="toast('Approving ${r[3]} refund for '+\`${r[0]}\`+'…')" class="h-9 px-4 rounded-lg bg-blue text-white text-[12px] font-medium">Approve · ${r[3]}</button>`:`<span class="text-[10.5px] font-medium text-blue bg-wash rounded-full px-2.5 py-1">via ${r[5]} · 3–5 days</span>`;
+  return `<div class="px-5 py-3.5 flex items-center justify-between gap-3 flex-wrap"><div class="flex items-center gap-3"><span class="h-9 w-9 rounded-full bg-wash text-blue grid place-items-center text-[10px] font-bold">${r[1]}</span><div><p class="text-[13px] font-medium">${r[0]} <span class="text-[10.5px] font-semibold ${st[1]} rounded-full px-2 py-0.5 ml-1">${st[0]}</span></p><p class="text-[11px] text-steel mt-0.5">${r[2]} · ${r[5]==='wallet'?'→ credit wallet':'refund to '+r[5]}</p></div></div>${act}</div>`;
+}).join('');
+// tabs
+function tab(n){document.querySelectorAll('.tabp').forEach(p=>p.classList.toggle('on',+p.dataset.p===n));document.querySelectorAll('.tb').forEach(b=>{const on=+b.dataset.t===n;b.className='tb shrink-0 px-4 py-2.5 text-[12.5px] font-medium border-b-2 -mb-px '+(on?'text-ink border-blue':'text-steel border-transparent hover:text-charcoal');});window.scrollTo({top:0,behavior:'smooth'});}
+document.querySelectorAll('.tb').forEach(b=>b.onclick=()=>tab(+b.dataset.t));
+// drawer
+function openDrawer(){document.body.classList.add('dopen');}
+function closeDrawer(){document.body.classList.remove('dopen');}
+
+// ===== toast + modal helpers =====
+function toast(m){var t=document.getElementById('toast');t.textContent=m;t.classList.remove('hidden');clearTimeout(window._tt);window._tt=setTimeout(function(){t.classList.add('hidden');},2200);}
+function openM(id){document.getElementById(id).classList.add('open');}
+function closeM(id){document.getElementById(id).classList.remove('open');}
+
+// installment plan toggle
+document.querySelectorAll('#instBtns button').forEach(function(b){b.onclick=function(){document.querySelectorAll('#instBtns button').forEach(function(x){x.className='flex-1 h-9 rounded-lg ring-1 ring-whisper text-[12px] font-medium text-steel';});b.className='flex-1 h-9 rounded-lg bg-blue text-white text-[12px] font-medium';toast('Installment plan set to '+b.dataset.n+' payment'+(b.dataset.n==='1'?'':'s'));};});
+
+// debtor rows open the adjust-fees modal for that student (balance owed = d[2])
+document.getElementById('debtors').innerHTML=DEBT.map(function(d){return '<div class="flex items-center justify-between rounded-xl hover:bg-canvas/60 px-2.5 py-2 cursor-pointer" onclick="openAdjust(\''+d[0].replace(/'/g,"\\'")+'\',\''+d[1]+'\','+d[2]+',0)"><div class="flex items-center gap-2.5"><span class="h-7 w-7 rounded-full bg-wash text-blue grid place-items-center text-[9.5px] font-bold">'+d[0].split(' ').map(function(x){return x[0];}).join('')+'</span><div><p class="font-medium">'+d[0]+'</p><p class="text-[10px] text-steel">'+d[1]+'</p></div></div><span class="font-mono text-alert text-[12px] font-semibold">'+NF(d[2])+'</span></div>';}).join('');
+
+// ===== ADJUST FEES modal =====
+const ADJ_BASE=[['Tuition',45000],['Development levy',10000],['Books & materials',8000],['Islamiyyah levy',5000],['Examination fee',3500],['PTA dues',2000]];
+let adjDiscMode='amount';
+function openAdjust(name,cls,billed,paid){
+  document.getElementById('adjWho').textContent=name+' · '+cls;
+  // scale the base breakdown so its total roughly matches the student's billed amount
+  const baseSum=ADJ_BASE.reduce(function(s,r){return s+r[1];},0);
+  const factor=billed?billed/baseSum:1;
+  const items=ADJ_BASE.map(function(r){return [r[0],Math.round(r[1]*factor/100)*100];});
+  document.getElementById('adjItems').innerHTML=items.map(function(it,idx){
+    return '<div class="flex items-center gap-2"><input value="'+it[0].replace(/"/g,'&quot;')+'" class="flex-1 h-9 rounded-lg ring-1 ring-whisper bg-white px-3 text-[12.5px] focus:outline-none focus:ring-blue"><div class="flex items-center h-9 rounded-lg ring-1 ring-whisper bg-white px-2"><span class="text-steel text-[12px]">₦</span><input type="number" min="0" value="'+it[1]+'" oninput="recalcAdj()" class="adjAmt w-24 h-full bg-transparent px-1 text-[12.5px] font-mono text-right focus:outline-none"></div><button onclick="this.closest(\'div.flex\').remove();recalcAdj()" class="h-9 w-9 grid place-items-center rounded-lg text-steel/50 hover:text-alert hover:bg-alert/5" title="Remove line">✕</button></div>';
+  }).join('');
+  document.getElementById('adjPaid').value=paid||0;
+  document.getElementById('adjBal').value='';
+  document.getElementById('adjDisc').value=0;
+  document.getElementById('adjReason').value='';
+  recalcAdj();
+  openM('adjM');
+}
+function addAdjLine(){
+  const wrap=document.createElement('div');
+  wrap.className='flex items-center gap-2';
+  wrap.innerHTML='<input placeholder="Custom item (e.g. Excursion)" class="flex-1 h-9 rounded-lg ring-1 ring-whisper bg-white px-3 text-[12.5px] focus:outline-none focus:ring-blue"><div class="flex items-center h-9 rounded-lg ring-1 ring-whisper bg-white px-2"><span class="text-steel text-[12px]">₦</span><input type="number" min="0" value="0" oninput="recalcAdj()" class="adjAmt w-24 h-full bg-transparent px-1 text-[12.5px] font-mono text-right focus:outline-none"></div><button class="h-9 w-9 grid place-items-center rounded-lg text-steel/50 hover:text-alert hover:bg-alert/5" title="Remove line">✕</button>';
+  wrap.querySelector('button').onclick=function(){wrap.remove();recalcAdj();};
+  document.getElementById('adjItems').appendChild(wrap);
+}
+function adjDiscBtns(){document.querySelectorAll('#adjDiscMode button').forEach(function(b){b.onclick=function(){adjDiscMode=b.dataset.m;document.querySelectorAll('#adjDiscMode button').forEach(function(x){x.className='flex-1 h-8 rounded-lg ring-1 ring-whisper bg-white text-steel';});b.className='flex-1 h-8 rounded-lg bg-blue text-white';recalcAdj();};});}
+adjDiscBtns();
+function recalcAdj(){
+  let gross=0;
+  document.querySelectorAll('#adjItems .adjAmt').forEach(function(i){gross+=+i.value||0;});
+  let disc=+document.getElementById('adjDisc').value||0;
+  if(adjDiscMode==='percent'){disc=Math.round(gross*disc/100);}
+  if(disc>gross)disc=gross;
+  const net=gross-disc;
+  const paid=+document.getElementById('adjPaid').value||0;
+  const override=document.getElementById('adjBal').value;
+  const bal=override===''?Math.max(net-paid,0):(+override||0);
+  document.getElementById('adjGross').textContent=NF(gross);
+  document.getElementById('adjDiscOut').textContent='−'+NF(disc);
+  document.getElementById('adjNet').textContent=NF(net);
+  document.getElementById('adjPaidOut').textContent=NF(paid);
+  document.getElementById('adjBalOut').textContent=NF(bal);
+}
+function saveAdj(){
+  const who=document.getElementById('adjWho').textContent.split(' · ')[0];
+  closeM('adjM');
+  toast('Fees updated for '+who);
+}
+
+// ===== REMINDER COMPOSER =====
+const EX={parent:'Hajiya Maryam',student:'Fatima',amount:'₦29,400',due:'30 June',school:'Al-Furqan Academy'};
+let remChan='WhatsApp', remTone='Standard';
+const TONE_TPL={
+  Gentle:"Assalamu alaikum {parent_name}, this is a gentle reminder from {school_name}. {student_name}'s fee balance of {amount_due} is due by {due_date}. No rush — kindly pay when you're able, or reply to arrange an installment. Jazakumullahu khairan.",
+  Standard:"Assalamu alaikum {parent_name}. This is a reminder from {school_name} that {student_name} has an outstanding fee balance of {amount_due}, due by {due_date}. Please make payment via the school portal, transfer, or at the bursary. Reply to this message if you'd like to arrange an installment plan. Thank you.",
+  Firm:"Dear {parent_name}, {school_name} records show {student_name}'s fee balance of {amount_due} is now due. Kindly settle this by {due_date} to avoid the ₦1,000/week late fee. Payment can be made via the portal, transfer, or at the bursary. Please respond to confirm. Thank you."
+};
+function applyTags(s){return s.replace(/{parent_name}/g,EX.parent).replace(/{student_name}/g,EX.student).replace(/{amount_due}/g,EX.amount).replace(/{due_date}/g,EX.due).replace(/{school_name}/g,EX.school);}
+function renderPreview(){document.getElementById('remPreview').textContent=applyTags(document.getElementById('remTpl').value);}
+function insTag(t){const ta=document.getElementById('remTpl');const s=ta.selectionStart||ta.value.length;ta.value=ta.value.slice(0,s)+t+ta.value.slice(ta.selectionEnd||s);ta.focus();renderPreview();}
+function setChanUI(){
+  const map={SMS:['S','SMS · +234 ···','bg-blue/10 text-blue'],WhatsApp:['W','WhatsApp · +234 ···','bg-confirm/10 text-confirm'],Email:['@','Email · maryam@…','bg-caution/10 text-caution']};
+  const m=map[remChan];
+  const ic=document.getElementById('remChIcon');ic.textContent=m[0];ic.className='h-8 w-8 rounded-full grid place-items-center text-[11px] font-bold '+m[2];
+  document.getElementById('remChLabel').textContent=m[1];
+}
+document.querySelectorAll('#remChan button').forEach(function(b){b.onclick=function(){remChan=b.dataset.c;document.querySelectorAll('#remChan button').forEach(function(x){x.className='h-7 px-2.5 rounded-lg ring-1 ring-whisper bg-white text-steel';});b.className='h-7 px-2.5 rounded-lg bg-blue text-white';setChanUI();};});
+document.querySelectorAll('#remTone button').forEach(function(b){b.onclick=function(){remTone=b.dataset.t;document.querySelectorAll('#remTone button').forEach(function(x){x.className='h-7 px-2.5 rounded-lg ring-1 ring-whisper bg-white text-steel';});b.className='h-7 px-2.5 rounded-lg bg-blue text-white';document.getElementById('remTpl').value=TONE_TPL[remTone];renderPreview();};});
+function openComposer(){if(!document.getElementById('remTpl').value){document.getElementById('remTpl').value=TONE_TPL[remTone];}setChanUI();renderPreview();openM('remM');}
+</script>
+</body>
+</html>

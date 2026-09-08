@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Edsynk — Student · Fatima Abubakar</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&family=Noto+Naskh+Arabic:wght@500&family=Caveat:wght@600&display=swap" rel="stylesheet">
+<script>tailwind.config={theme:{extend:{colors:{canvas:'#F7F9FC',ink:'#0B2A56',charcoal:'#18181B',steel:'#64748B',whisper:'#E2E8F0',blue:'#2177EF',skyblue:'#5C9DF5',wash:'#EAF2FE',mist:'#D3E4FD',confirm:'#16A34A',caution:'#D97706',alert:'#DC2626',excused:'#7C8DA6'},fontFamily:{sans:['Geist','sans-serif'],mono:['"Geist Mono"','monospace'],arabic:['"Noto Naskh Arabic"','serif']},boxShadow:{soft:'0 1px 2px rgba(11,42,86,0.04), 0 6px 24px rgba(11,42,86,0.05)',lift:'0 1px 3px rgba(11,42,86,0.10), 0 12px 32px rgba(11,42,86,0.12)'}}}}</script>
+<style>@keyframes rise{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}.rise{animation:rise .45s cubic-bezier(.2,.8,.2,1) both}.tabp{display:none}.tabp.on{display:block;animation:rise .4s cubic-bezier(.2,.8,.2,1) both}.modal{opacity:0;pointer-events:none;transition:opacity .2s}.modal.open{opacity:1;pointer-events:auto}@keyframes fillw{from{width:0}}.hbar{animation:fillw 1s cubic-bezier(.2,.8,.2,1) both}</style>
+</head>
+<body data-active="Students" data-persona="admin" class="bg-canvas font-sans text-charcoal antialiased">
+<div class="flex min-h-screen">
+  <div id="sidebar-root"></div>
+  <div class="flex-1 min-w-0">
+    <header class="h-15 bg-white/80 backdrop-blur-md border-b border-whisper/70 flex items-center justify-between px-4 sm:px-7 sticky top-0 z-20">
+      <div class="flex items-center gap-3"><a href="students-list.html" class="text-[13px] text-steel hover:text-blue">Students</a><span class="text-steel/40">/</span><h1 class="text-[15px] font-semibold tracking-tight">Fatima Abubakar</h1></div>
+      <button onclick="om('msgM')" class="h-9 px-4 rounded-lg bg-blue text-white text-[13px] font-medium shadow-soft active:translate-y-px">Message guardian</button>
+    </header>
+    <main class="p-4 sm:p-7 max-w-310 space-y-5 pb-12">
+
+      <!-- header card -->
+      <div class="rise bg-white ring-1 ring-whisper/80 rounded-2xl shadow-soft overflow-hidden">
+        <div class="h-16 bg-linear-to-r from-wash to-mist/40"></div>
+        <div class="px-5 sm:px-6 pb-5 -mt-8">
+          <div class="flex flex-col sm:flex-row sm:items-end gap-4">
+            <span class="h-20 w-20 rounded-2xl bg-blue text-white ring-4 ring-white grid place-items-center text-[26px] font-bold shadow-lift shrink-0">FA</span>
+            <div class="flex-1 min-w-0 pt-2"><div class="flex items-center gap-2 flex-wrap"><h2 class="text-[19px] font-bold tracking-tight text-ink">Fatima Abubakar</h2><span class="text-[10.5px] font-semibold text-confirm bg-confirm/10 rounded-full px-2 py-0.5">Active</span></div>
+            <p class="font-mono text-[12px] text-steel mt-0.5">AFA/2024/0117 · JSS 2A · 13 yrs · Female</p></div>
+            <div class="flex flex-wrap gap-2">
+              <button onclick="location.href='id-card-studio.html'" class="h-9 px-3 rounded-lg bg-white ring-1 ring-whisper text-[13px] font-medium text-steel hover:bg-mist/30">Print ID card</button>
+              <button onclick="om('editM')" class="h-9 px-3 rounded-lg bg-white ring-1 ring-whisper text-[13px] font-medium text-steel hover:bg-mist/30">Edit</button>
+              <div class="relative"><button onclick="document.getElementById('moreMenu').classList.toggle('hidden')" class="h-9 px-3 rounded-lg bg-white ring-1 ring-whisper text-[13px] font-medium text-steel hover:bg-mist/30">More ▾</button>
+                <div id="moreMenu" class="hidden absolute right-0 mt-1 w-52 bg-white ring-1 ring-whisper rounded-xl shadow-lift py-1.5 z-10 text-[12.5px]">
+                  <button onclick="location.href='id-card-studio.html'" class="w-full text-left px-4 py-2 hover:bg-mist/30">Print ID card · choose design</button>
+                  <button onclick="tab(3);document.getElementById('moreMenu').classList.add('hidden')" class="w-full text-left px-4 py-2 hover:bg-mist/30">Transfer to another class…</button>
+                  <button class="w-full text-left px-4 py-2 hover:bg-mist/30">Mark on leave / deferred…</button>
+                  <button class="w-full text-left px-4 py-2 hover:bg-mist/30 text-steel">Reset password</button>
+                  <div class="border-t border-whisper/60 my-1"></div>
+                  <button class="w-full text-left px-4 py-2 hover:bg-alert/5 text-alert">Withdraw student…</button>
+                </div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- tabs -->
+      <div class="rise flex gap-1 border-b border-whisper/70 overflow-x-auto" id="tabs">
+        <button data-t="0" class="tb shrink-0 px-4 py-2.5 text-[12.5px] font-medium border-b-2 -mb-px text-ink border-blue">Overview</button>
+        <button data-t="1" class="tb shrink-0 px-4 py-2.5 text-[12.5px] font-medium border-b-2 -mb-px text-steel border-transparent hover:text-charcoal">Results</button>
+        <button data-t="2" class="tb shrink-0 px-4 py-2.5 text-[12.5px] font-medium border-b-2 -mb-px text-steel border-transparent hover:text-charcoal">Attendance</button>
+        <button data-t="3" class="tb shrink-0 px-4 py-2.5 text-[12.5px] font-medium border-b-2 -mb-px text-steel border-transparent hover:text-charcoal">Behaviour</button>
+        <button data-t="4" class="tb shrink-0 px-4 py-2.5 text-[12.5px] font-medium border-b-2 -mb-px text-steel border-transparent hover:text-charcoal">Guardians</button>
+        <button data-t="5" class="tb shrink-0 px-4 py-2.5 text-[12.5px] font-medium border-b-2 -mb-px text-steel border-transparent hover:text-charcoal">Audit</button>
+      </div>
+
+      <!-- OVERVIEW -->
+      <section class="tabp on" data-p="0">
+        <div class="grid lg:grid-cols-[1fr_320px] gap-4">
+          <div class="space-y-4">
+            <div class="bg-white ring-1 ring-whisper/80 rounded-2xl p-5 shadow-soft">
+              <p class="text-[13.5px] font-semibold">This term at a glance</p>
+              <div class="grid grid-cols-3 gap-2.5 mt-3 text-center">
+                <div class="rounded-xl bg-canvas ring-1 ring-whisper/70 py-3"><p class="font-mono text-[18px] font-semibold">87.2%</p><p class="text-[10px] text-steel mt-0.5">term average</p></div>
+                <div class="rounded-xl bg-canvas ring-1 ring-whisper/70 py-3"><p class="font-mono text-[18px] font-semibold">3rd</p><p class="text-[10px] text-steel mt-0.5">of 38</p></div>
+                <div class="rounded-xl bg-canvas ring-1 ring-whisper/70 py-3"><p class="font-mono text-[18px] font-semibold text-confirm">95%</p><p class="text-[10px] text-steel mt-0.5">attendance</p></div>
+              </div>
+            </div>
+            <div class="bg-white ring-1 ring-whisper/80 rounded-2xl p-5 shadow-soft"><p class="text-[11px] font-semibold uppercase tracking-wider text-steel">Identity</p>
+              <div class="mt-3 rounded-xl ring-1 ring-whisper/80 divide-y divide-whisper/60 text-[12.5px]">
+                <div class="flex justify-between px-4 py-2.5"><span class="text-steel">Admission no.</span><span class="font-mono">AFA/2024/0117</span></div>
+                <div class="flex justify-between px-4 py-2.5"><span class="text-steel">Class / arm</span><span class="font-medium">JSS 2A</span></div>
+                <div class="flex justify-between px-4 py-2.5"><span class="text-steel">Date of birth</span><span class="font-mono">14 Mar 2013</span></div>
+                <div class="flex justify-between px-4 py-2.5"><span class="text-steel">Gender · blood group</span><span class="font-medium">Female · O+</span></div>
+                <div class="flex justify-between px-4 py-2.5"><span class="text-steel">Admitted</span><span class="font-mono">Sept 2024</span></div>
+              </div></div>
+          </div>
+          <div class="space-y-4">
+            <div class="bg-white ring-1 ring-whisper/80 rounded-2xl p-5 shadow-soft"><div class="flex items-center justify-between"><p class="text-[11px] font-semibold uppercase tracking-wider text-steel">Login access</p><span class="text-[10px] font-semibold text-blue bg-wash rounded-full px-2 py-0.5">admission ID</span></div>
+              <div class="mt-3 rounded-xl bg-canvas ring-1 ring-whisper p-3 text-center"><p class="text-[10px] text-steel">Logs in with</p><p class="font-mono text-[15px] font-bold tracking-wide text-ink mt-1">AFA/2024/0117</p><p class="text-[10px] text-steel mt-1">+ generated password</p></div>
+              <div class="flex gap-2 mt-2"><button class="flex-1 h-8 rounded-lg ring-1 ring-whisper text-[11.5px] font-medium text-steel hover:bg-mist/30">Reprint slip</button><button class="flex-1 h-8 rounded-lg ring-1 ring-whisper text-[11.5px] font-medium text-steel hover:bg-mist/30">Reset password</button></div></div>
+            <div class="rounded-2xl ring-1 ring-whisper/80 bg-white p-5 shadow-soft"><p class="text-[11px] font-semibold uppercase tracking-wider text-steel">Health note</p><p class="text-[12px] text-charcoal mt-2 leading-relaxed">Mild asthma — inhaler in the sick bay. Excuse strenuous sport on high-pollen days.</p><p class="text-[10px] text-steel mt-2">Visible to owner, admin &amp; form teacher only.</p></div>
+            <div class="rounded-2xl ring-1 ring-alert/20 bg-alert/4 p-5"><p class="text-[11px] font-semibold uppercase tracking-wider text-alert">Status actions</p><div class="mt-2.5 space-y-1.5"><button onclick="tab(3)" class="w-full h-9 rounded-lg bg-white ring-1 ring-whisper text-[12px] font-medium text-steel hover:bg-mist/30 text-left px-3">Transfer to another class…</button><button class="w-full h-9 rounded-lg bg-white ring-1 ring-alert/30 text-[12px] font-medium text-alert hover:bg-alert/5 text-left px-3">Withdraw student…</button></div><p class="text-[10px] text-steel mt-2.5">Withdrawal keeps the record &amp; sealed results forever — read-only, exportable.</p></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- RESULTS -->
+      <section class="tabp" data-p="1">
+        <div class="flex items-center justify-between mb-3 flex-wrap gap-2"><select class="h-9 rounded-lg border border-whisper bg-white px-3 text-[12.5px] font-medium"><option>Third Term · 2025/26</option><option>Second Term · 2025/26</option></select><div class="flex gap-2"><span class="text-[12px] text-steel self-center">avg <span class="font-mono font-semibold text-charcoal">87.2%</span> · pos <span class="font-mono font-semibold text-charcoal">3rd</span></span><button class="h-9 px-3.5 rounded-lg bg-blue text-white text-[12px] font-semibold shadow-soft">Open report card</button></div></div>
+        <div class="bg-white ring-1 ring-whisper/80 rounded-2xl shadow-soft overflow-hidden">
+          <div class="overflow-x-auto"><table class="w-full text-[12.5px]"><thead><tr class="text-left text-[10px] uppercase tracking-wider text-steel border-b border-whisper/70 bg-canvas/60"><th class="px-5 py-2.5 font-semibold">Subject</th><th class="px-3 py-2.5 font-semibold text-center">CA1</th><th class="px-3 py-2.5 font-semibold text-center">CA2</th><th class="px-3 py-2.5 font-semibold text-center">Exam</th><th class="px-3 py-2.5 font-semibold text-center">Total</th><th class="px-3 py-2.5 font-semibold text-center">Grade</th><th class="px-5 py-2.5 font-semibold text-center">Pos</th></tr></thead><tbody id="resBody" class="divide-y divide-whisper/60"></tbody></table></div>
+        </div>
+      </section>
+
+      <!-- ATTENDANCE -->
+      <section class="tabp" data-p="2">
+        <div class="grid lg:grid-cols-[1fr_320px] gap-4">
+          <div class="bg-white ring-1 ring-whisper/80 rounded-2xl p-5 shadow-soft"><p class="text-[13.5px] font-semibold">June 2026</p><div class="mt-4 grid grid-cols-7 gap-1.5 text-center" id="att"></div>
+            <div class="flex flex-wrap gap-x-4 gap-y-1.5 mt-4 text-[11px]"><span class="flex items-center gap-1.5"><span class="h-3 w-3 rounded bg-confirm/80"></span>Present</span><span class="flex items-center gap-1.5"><span class="h-3 w-3 rounded bg-alert"></span>Absent</span><span class="flex items-center gap-1.5"><span class="h-3 w-3 rounded bg-caution"></span>Late</span><span class="flex items-center gap-1.5"><span class="h-3 w-3 rounded bg-excused"></span>Excused</span></div></div>
+          <div class="space-y-4">
+            <div class="grid grid-cols-2 gap-3"><div class="bg-white ring-1 ring-whisper/80 rounded-2xl p-4 shadow-soft text-center"><p class="font-mono text-[20px] font-semibold text-confirm">95%</p><p class="text-[10px] text-steel mt-0.5">this term</p></div><div class="bg-white ring-1 ring-whisper/80 rounded-2xl p-4 shadow-soft text-center"><p class="font-mono text-[20px] font-semibold">58/61</p><p class="text-[10px] text-steel mt-0.5">days present</p></div></div>
+            <div class="bg-white ring-1 ring-whisper/80 rounded-2xl p-5 shadow-soft"><p class="text-[13px] font-semibold">Absences</p><div class="mt-2.5 space-y-2 text-[12px]"><div class="flex items-start gap-2.5"><span class="h-6 w-6 rounded-lg bg-excused/10 text-excused grid place-items-center text-[9px] font-bold shrink-0">E</span><div><p class="font-medium">Thu 17 Jun — Excused</p><p class="text-[10px] text-steel">Clinic appointment</p></div></div><div class="flex items-start gap-2.5"><span class="h-6 w-6 rounded-lg bg-alert/10 text-alert grid place-items-center text-[9px] font-bold shrink-0">A</span><div><p class="font-medium">Thu 4 Jun — Absent</p><p class="text-[10px] text-steel">no reason recorded</p></div></div></div></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- BEHAVIOUR -->
+      <section class="tabp" data-p="3">
+        <div class="grid lg:grid-cols-2 gap-4">
+          <div class="bg-white ring-1 ring-whisper/80 rounded-2xl p-5 shadow-soft"><p class="text-[13.5px] font-semibold">Affective &amp; psychomotor traits</p><div class="mt-3 grid grid-cols-2 gap-x-6 gap-y-2 text-[12.5px]" id="traits"></div></div>
+          <div class="bg-white ring-1 ring-whisper/80 rounded-2xl p-5 shadow-soft"><div class="flex items-center justify-between"><p class="text-[13.5px] font-semibold">Incident &amp; commendation log</p><button class="text-[11.5px] font-medium text-blue">+ Log</button></div>
+            <div class="mt-3 space-y-2.5 text-[12px]">
+              <div class="flex items-start gap-2.5"><span class="h-7 w-7 rounded-lg bg-confirm/10 text-confirm grid place-items-center shrink-0 text-[11px] font-bold">+</span><div><p class="font-medium">Helped a new student settle in</p><p class="text-[10px] text-steel">Commendation · Mallam Musa · 6 Jun</p></div></div>
+              <div class="flex items-start gap-2.5"><span class="h-7 w-7 rounded-lg bg-caution/10 text-caution grid place-items-center shrink-0 text-[11px] font-bold">!</span><div><p class="font-medium">Late to morning assembly</p><p class="text-[10px] text-steel">Minor · 11 Jun · resolved</p></div></div>
+              <div class="flex items-start gap-2.5"><span class="h-7 w-7 rounded-lg bg-confirm/10 text-confirm grid place-items-center shrink-0 text-[11px] font-bold">★</span><div><p class="font-medium">2nd place — inter-house Qur'an quiz</p><p class="text-[10px] text-steel">Commendation · 2 Jun</p></div></div>
+            </div>
+            <p class="text-[11px] text-steel mt-3">Separate from termly traits; visible to form teacher + admin.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- GUARDIANS -->
+      <section class="tabp" data-p="4">
+        <div class="grid lg:grid-cols-2 gap-4">
+          <div class="bg-white ring-1 ring-whisper/80 rounded-2xl p-5 shadow-soft">
+            <div class="flex items-center gap-3"><span class="h-11 w-11 rounded-xl bg-caution/15 text-caution grid place-items-center text-[13px] font-bold">MA</span><div class="flex-1"><div class="flex items-center gap-2"><p class="text-[14px] font-semibold">Hajiya Maryam Abubakar</p><span class="text-[10px] font-semibold text-blue bg-wash rounded-full px-2 py-0.5">Primary</span></div><p class="text-[11px] text-steel">Mother</p></div></div>
+            <div class="mt-3 rounded-xl ring-1 ring-whisper/80 divide-y divide-whisper/60 text-[12.5px]">
+              <div class="flex justify-between px-4 py-2.5"><span class="text-steel">Phone</span><span class="font-mono">0803 ··· 812</span></div>
+              <div class="flex justify-between px-4 py-2.5"><span class="text-steel">Parent portal</span><span class="text-confirm font-medium">claimed ✓ · 2 children</span></div>
+              <div class="flex justify-between px-4 py-2.5"><span class="text-steel">Pays fees</span><span class="font-medium">yes</span></div>
+            </div>
+            <button onclick="om('msgM')" class="mt-3 h-9 px-4 rounded-lg bg-blue text-white text-[12.5px] font-medium shadow-soft">Message</button>
+          </div>
+          <div class="bg-white ring-1 ring-whisper/80 rounded-2xl p-5 shadow-soft">
+            <div class="flex items-center gap-3"><span class="h-11 w-11 rounded-xl bg-wash text-blue grid place-items-center text-[13px] font-bold">AA</span><div class="flex-1"><p class="text-[14px] font-semibold">Alhaji Ahmad Abubakar</p><p class="text-[11px] text-steel">Father</p></div></div>
+            <div class="mt-3 rounded-xl ring-1 ring-whisper/80 divide-y divide-whisper/60 text-[12.5px]">
+              <div class="flex justify-between px-4 py-2.5"><span class="text-steel">Phone</span><span class="font-mono">0806 ··· 440</span></div>
+              <div class="flex justify-between px-4 py-2.5"><span class="text-steel">Parent portal</span><span class="text-steel">not claimed</span></div>
+              <div class="flex justify-between px-4 py-2.5"><span class="text-steel">Emergency contact</span><span class="font-medium">yes</span></div>
+            </div>
+            <button class="mt-3 h-9 px-4 rounded-lg bg-white ring-1 ring-whisper text-[12.5px] font-medium text-steel hover:bg-mist/30">Send portal invite</button>
+          </div>
+        </div>
+        <button class="mt-4 h-10 px-4 rounded-xl bg-white ring-1 ring-whisper text-[12.5px] font-medium text-steel hover:bg-mist/30">+ Add guardian</button>
+      </section>
+
+      <!-- AUDIT -->
+      <section class="tabp" data-p="5">
+        <div class="bg-white ring-1 ring-whisper/80 rounded-2xl p-5 shadow-soft"><p class="text-[13.5px] font-semibold">Record history</p>
+          <div class="mt-3 space-y-0 text-[12px]">
+            <div class="flex gap-3 pb-3"><div class="flex flex-col items-center"><span class="h-2 w-2 rounded-full bg-confirm mt-1.5"></span><span class="w-px flex-1 bg-whisper"></span></div><div>Third-term results published &amp; sealed<p class="font-mono text-[10px] text-steel mt-0.5">12 Jun 14:32 · by Ustadh Abdullahi</p></div></div>
+            <div class="flex gap-3 pb-3"><div class="flex flex-col items-center"><span class="h-2 w-2 rounded-full bg-blue mt-1.5"></span><span class="w-px flex-1 bg-whisper"></span></div><div>Maths CA2 corrected 14→18 (v1→v2)<p class="font-mono text-[10px] text-steel mt-0.5">11 Jun 11:47 · exam office · reason logged</p></div></div>
+            <div class="flex gap-3 pb-3"><div class="flex flex-col items-center"><span class="h-2 w-2 rounded-full bg-steel mt-1.5"></span><span class="w-px flex-1 bg-whisper"></span></div><div>Password reset (parent request)<p class="font-mono text-[10px] text-steel mt-0.5">2 Jun · by admin</p></div></div>
+            <div class="flex gap-3"><div class="flex flex-col items-center"><span class="h-2 w-2 rounded-full bg-steel mt-1.5"></span></div><div>Admitted into JSS 1A<p class="font-mono text-[10px] text-steel mt-0.5">Sept 2024 · admission</p></div></div>
+          </div>
+          <p class="text-[11px] text-steel mt-3">Append-only · 7-year retention (NDPA 2023).</p>
+        </div>
+      </section>
+    </main>
+  </div>
+</div>
+
+<!-- ID CARD MODAL -->
+<div id="idM" class="modal fixed inset-0 z-50 bg-ink/50 backdrop-blur-sm grid place-items-center p-4" onclick="if(event.target===this)cm('idM')">
+  <div class="w-full max-w-105">
+    <div class="flex items-center justify-between mb-3"><p class="text-white text-[14px] font-semibold">Student ID card</p><button onclick="cm('idM')" class="h-8 w-8 grid place-items-center rounded-lg bg-white/10 text-white hover:bg-white/20">✕</button></div>
+    <!-- the card -->
+    <div class="bg-white rounded-2xl shadow-lift overflow-hidden ring-1 ring-black/5">
+      <div class="bg-ink text-white px-4 py-3 flex items-center gap-3"><span class="h-9 w-9 rounded-lg bg-white/10 ring-1 ring-white/20 grid place-items-center text-[13px] font-bold">AF</span><div><p class="text-[12.5px] font-bold leading-tight">AL-FURQAN ACADEMY</p><p class="text-[8px] text-white/60">Bauchi · Student Identity Card · 2025/26</p></div><span class="ml-auto text-[8px] uppercase tracking-wider text-skyblue">Student</span></div>
+      <div class="p-4 flex gap-4">
+        <div class="shrink-0"><div class="h-24 w-20 rounded-lg bg-wash ring-1 ring-whisper grid place-items-center text-blue text-[22px] font-bold">FA</div></div>
+        <div class="flex-1 min-w-0 text-[11.5px] space-y-1.5">
+          <div><p class="text-[8.5px] uppercase text-steel">Name</p><p class="font-semibold text-[13px] leading-tight">Fatima Abubakar</p></div>
+          <div class="grid grid-cols-2 gap-x-2"><div><p class="text-[8.5px] uppercase text-steel">Class</p><p class="font-medium">JSS 2A</p></div><div><p class="text-[8.5px] uppercase text-steel">Blood</p><p class="font-medium">O+</p></div></div>
+          <div><p class="text-[8.5px] uppercase text-steel">Admission no.</p><p class="font-mono font-semibold">AFA/2024/0117</p></div>
+        </div>
+      </div>
+      <div class="px-4 pb-4 flex items-end justify-between">
+        <div class="text-[8.5px] text-steel"><p>Valid till: <span class="font-mono">Jul 2026</span></p><p class="font-sig text-[18px] text-ink -rotate-2 mt-1" style="font-family:'Caveat',cursive">A. Abdullahi</p><div class="h-px w-24 bg-charcoal/30"></div><p>Principal</p></div>
+        <span class="h-14 w-14 rounded-lg ring-1 ring-whisper bg-white grid place-items-center"><svg width="40" height="40" viewBox="0 0 36 36" fill="#0B2A56"><rect x="2" y="2" width="9" height="9"/><rect x="4" y="4" width="5" height="5" fill="#fff"/><rect x="25" y="2" width="9" height="9"/><rect x="27" y="4" width="5" height="5" fill="#fff"/><rect x="2" y="25" width="9" height="9"/><rect x="4" y="27" width="5" height="5" fill="#fff"/><rect x="15" y="15" width="6" height="6"/><rect x="25" y="25" width="5" height="5"/></svg></span>
+      </div>
+      <div class="bg-canvas px-4 py-2 text-[8px] text-steel border-t border-whisper">If found, return to Al-Furqan Academy, 12 Zaria Road, Bauchi · verify at alfurqan.edsynk.ng/id/0117</div>
+    </div>
+    <div class="flex gap-2 mt-3"><button class="flex-1 h-11 rounded-xl bg-white text-charcoal text-[13px] font-semibold">Print card</button><button class="flex-1 h-11 rounded-xl bg-blue text-white text-[13px] font-semibold">Download PDF</button></div>
+  </div>
+</div>
+
+<!-- EDIT MODAL -->
+<div id="editM" class="modal fixed inset-0 z-50 bg-ink/40 backdrop-blur-sm grid place-items-center p-4" onclick="if(event.target===this)cm('editM')">
+  <div class="bg-white rounded-2xl shadow-lift max-w-120 w-full p-6 max-h-[90vh] overflow-y-auto">
+    <div class="flex items-center justify-between mb-4"><p class="text-[15px] font-semibold">Edit student</p><button onclick="cm('editM')" class="h-8 w-8 grid place-items-center rounded-lg hover:bg-mist/40 text-steel">✕</button></div>
+    <div class="grid grid-cols-2 gap-3 text-[13px]">
+      <div class="col-span-2"><label class="text-[11.5px] font-semibold text-steel">Full name</label><input value="Fatima Abubakar" class="mt-1.5 w-full h-10 rounded-lg border border-whisper bg-canvas px-3.5"></div>
+      <div><label class="text-[11.5px] font-semibold text-steel">Class</label><select class="mt-1.5 w-full h-10 rounded-lg border border-whisper bg-canvas px-2.5"><option>JSS 2A</option><option>JSS 2B</option></select></div>
+      <div><label class="text-[11.5px] font-semibold text-steel">Date of birth</label><input type="date" value="2013-03-14" class="mt-1.5 w-full h-10 rounded-lg border border-whisper bg-canvas px-2.5 font-mono text-[12px]"></div>
+      <div><label class="text-[11.5px] font-semibold text-steel">Gender</label><select class="mt-1.5 w-full h-10 rounded-lg border border-whisper bg-canvas px-2.5"><option>Female</option><option>Male</option></select></div>
+      <div><label class="text-[11.5px] font-semibold text-steel">Blood group</label><input value="O+" class="mt-1.5 w-full h-10 rounded-lg border border-whisper bg-canvas px-3.5"></div>
+      <div class="col-span-2"><label class="text-[11.5px] font-semibold text-steel">Health note</label><textarea rows="2" class="mt-1.5 w-full rounded-lg border border-whisper bg-canvas px-3 py-2 text-[12.5px] resize-none">Mild asthma — inhaler in the sick bay.</textarea></div>
+    </div>
+    <div class="flex justify-end gap-2 mt-6"><button onclick="cm('editM')" class="h-10 px-4 rounded-lg ring-1 ring-whisper text-[13px] font-medium text-steel">Cancel</button><button onclick="cm('editM')" class="h-10 px-5 rounded-lg bg-blue text-white text-[13px] font-semibold shadow-soft">Save changes</button></div>
+  </div>
+</div>
+
+<!-- MESSAGE MODAL -->
+<div id="msgM" class="modal fixed inset-0 z-50 bg-ink/40 backdrop-blur-sm grid place-items-center p-4" onclick="if(event.target===this)cm('msgM')">
+  <div class="bg-white rounded-2xl shadow-lift max-w-110 w-full p-6">
+    <div class="flex items-center justify-between mb-3"><p class="text-[15px] font-semibold">Message guardian</p><button onclick="cm('msgM')" class="h-8 w-8 grid place-items-center rounded-lg hover:bg-mist/40 text-steel">✕</button></div>
+    <p class="text-[12px] text-steel">To <span class="font-medium text-charcoal">Hajiya Maryam Abubakar</span> (Fatima's mother) · lands in her parent inbox + WhatsApp ping.</p>
+    <textarea rows="4" class="mt-3 w-full rounded-xl border border-whisper bg-canvas px-4 py-3 text-[13px] focus:outline-none focus:ring-2 focus:ring-blue/50 resize-none" placeholder="Write a message…"></textarea>
+    <div class="flex justify-end gap-2 mt-3"><button onclick="cm('msgM')" class="h-10 px-4 rounded-lg ring-1 ring-whisper text-[13px] font-medium text-steel">Cancel</button><button onclick="cm('msgM')" class="h-10 px-5 rounded-lg bg-blue text-white text-[13px] font-semibold shadow-soft">Send</button></div>
+  </div>
+</div>
+
+<script src="../assets/shell.js"></script>
+<script>
+const RES=[['Mathematics',18,17,52,87,'A1','3rd'],['English Language',15,16,47,78,'B2','8th'],['Basic Science',17,18,47,82,'A1','4th'],['القرآن الكريم',19,18,53,90,'A1','2nd'],['Basic Technology',14,15,42,71,'B3','11th'],['Social Studies',16,15,45,76,'B2','6th'],['Civic Education',15,16,48,79,'B2','5th'],['اللغة العربية',17,16,50,83,'A1','3rd']];
+function gt(g){return g[0]==='A'?'text-confirm bg-confirm/10':g[0]==='B'?'text-blue bg-wash':g[0]==='C'?'text-caution bg-caution/10':'text-alert bg-alert/10';}
+function isAr(s){return /[؀-ۿ]/.test(s);}
+document.getElementById('resBody').innerHTML=RES.map(s=>`<tr class="hover:bg-canvas/60"><td class="px-5 py-2.5 font-medium ${isAr(s[0])?'arabic text-[14px]':''}">${s[0]}</td><td class="px-3 py-2.5 text-center font-mono text-steel">${s[1]}</td><td class="px-3 py-2.5 text-center font-mono text-steel">${s[2]}</td><td class="px-3 py-2.5 text-center font-mono text-steel">${s[3]}</td><td class="px-3 py-2.5 text-center font-mono font-semibold">${s[4]}</td><td class="px-3 py-2.5 text-center"><span class="text-[10.5px] font-semibold ${gt(s[5])} rounded-full px-2 py-0.5">${s[5]}</span></td><td class="px-5 py-2.5 text-center font-mono text-steel">${s[6]}</td></tr>`).join('');
+const stat={1:'P',2:'P',3:'P',4:'A',5:'P',8:'P',9:'P',10:'P',11:'L',12:'P',15:'P',16:'P',17:'E',18:'P',19:'P',22:'P',23:'P',24:'P',25:'P',26:'P',29:'P',30:'P'};
+const tones={'P':'bg-confirm/80 text-white','A':'bg-alert text-white','L':'bg-caution text-white','E':'bg-excused text-white','-':'bg-canvas ring-1 ring-whisper/60 text-steel/40'};
+let ah='';['Mo','Tu','We','Th','Fr','Sa','Su'].forEach(d=>ah+=`<span class="text-[9.5px] font-semibold uppercase text-steel/60 pb-1">${d}</span>`);
+for(let d=1;d<=30;d++){const s=stat[d]||'-';ah+=`<div class="aspect-square rounded-lg ${tones[s]} grid place-items-center text-[11px] font-mono font-medium">${d}</div>`;}
+document.getElementById('att').innerHTML=ah;
+const TR=[['Punctuality',5],['Politeness',5],['Neatness',4],['Honesty',5],['Cooperation',4],['Attentiveness',4],['Handwriting',4],['Sport',5]];
+document.getElementById('traits').innerHTML=TR.map(t=>{let d='';for(let i=1;i<=5;i++)d+=`<span class="h-2 w-2 rounded-full ${i<=t[1]?'bg-blue':'bg-whisper'}"></span>`;return `<div class="flex items-center justify-between"><span>${t[0]}</span><span class="flex gap-1">${d}</span></div>`;}).join('');
+function tab(n){document.querySelectorAll('.tabp').forEach(p=>p.classList.toggle('on',+p.dataset.p===n));document.querySelectorAll('.tb').forEach(b=>{const on=+b.dataset.t===n;b.className='tb shrink-0 px-4 py-2.5 text-[12.5px] font-medium border-b-2 -mb-px '+(on?'text-ink border-blue':'text-steel border-transparent hover:text-charcoal');});}
+document.querySelectorAll('.tb').forEach(b=>b.onclick=()=>tab(+b.dataset.t));
+function om(id){document.getElementById(id).classList.add('open');}
+function cm(id){document.getElementById(id).classList.remove('open');}
+</script>
+</body>
+</html>

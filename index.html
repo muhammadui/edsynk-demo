@@ -1,0 +1,417 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Edsynk — Product Preview</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              canvas: "#F7F9FC",
+              ink: "#0B2A56",
+              charcoal: "#18181B",
+              steel: "#64748B",
+              whisper: "#E2E8F0",
+              blue: "#2177EF",
+              skyblue: "#5C9DF5",
+              wash: "#EAF2FE",
+              mist: "#D3E4FD",
+              confirm: "#16A34A",
+              caution: "#D97706",
+              alert: "#DC2626",
+              excused: "#7C8DA6",
+            },
+            fontFamily: {
+              sans: ["Geist", "sans-serif"],
+              mono: ['"Geist Mono"', "monospace"],
+            },
+            boxShadow: {
+              soft: "0 1px 2px rgba(11,42,86,0.05), 0 8px 32px rgba(11,42,86,0.07)",
+              lift: "0 2px 8px rgba(11,42,86,0.10), 0 24px 64px rgba(11,42,86,0.16)",
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      @keyframes rise {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        to {
+          opacity: 1;
+          transform: none;
+        }
+      }
+      .rise {
+        animation: rise 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+      }
+    </style>
+  </head>
+  <body
+    class="font-sans text-charcoal antialiased min-h-screen lg:grid lg:grid-cols-[1fr_1.1fr]"
+  >
+    <!-- LEFT: sign-in -->
+    <main
+      class="min-h-screen lg:min-h-0 bg-white flex flex-col px-6 sm:px-12 py-8"
+    >
+      <div class="flex items-center gap-2">
+        <span
+          class="h-7 w-7 rounded-lg bg-blue grid place-items-center text-white font-bold text-[13px]"
+          >E</span
+        >
+        <span class="font-semibold tracking-tight text-[15px]">edsynk</span>
+      </div>
+
+      <div class="flex-1 grid place-items-center py-10">
+        <div class="w-full max-w-[400px]">
+          <h1 class="rise text-[24px] font-bold tracking-[-0.02em] text-ink">
+            Sign in to your school
+          </h1>
+          <p
+            class="rise text-[13.5px] text-steel mt-1.5"
+            style="animation-delay: 0.05s"
+          >
+            alfurqan<span class="font-mono text-charcoal">.edsynk.ng</span>
+          </p>
+
+          <div class="rise mt-7 space-y-3" style="animation-delay: 0.1s">
+            <div>
+              <label
+                class="text-[11.5px] font-semibold uppercase tracking-wider text-steel"
+                >Email or username</label
+              >
+              <input
+                value="m.ibrahim"
+                class="mt-1.5 w-full h-12 rounded-xl border border-whisper bg-canvas px-4 text-[14px] font-mono focus:outline-none focus:ring-2 focus:ring-blue/50"
+              />
+            </div>
+            <div>
+              <label
+                class="text-[11.5px] font-semibold uppercase tracking-wider text-steel"
+                >Password</label
+              >
+              <input
+                type="password"
+                value="••••••••••"
+                class="mt-1.5 w-full h-12 rounded-xl border border-whisper bg-canvas px-4 text-[14px] focus:outline-none focus:ring-2 focus:ring-blue/50"
+              />
+            </div>
+            <div class="flex items-center justify-between text-[12px]">
+              <label class="flex items-center gap-2 text-steel"
+                ><input
+                  type="checkbox"
+                  checked
+                  class="h-4 w-4 rounded accent-[#2177EF]"
+                />Keep me signed in</label
+              >
+              <a href="auth/forgot-password.html" class="text-blue font-medium"
+                >Forgot password?</a
+              >
+            </div>
+            <button
+              onclick="
+                document
+                  .getElementById('roles')
+                  .scrollIntoView({ behavior: 'smooth' });
+                document
+                  .getElementById('roles')
+                  .classList.add('ring-2', 'ring-blue/60');
+              "
+              class="w-full h-12 rounded-xl bg-blue text-white text-[14.5px] font-semibold shadow-soft active:translate-y-px"
+            >
+              Sign in
+            </button>
+          </div>
+
+          <!-- Preview persona picker -->
+          <div
+            id="roles"
+            class="rise mt-8 rounded-2xl ring-1 ring-whisper/90 bg-canvas/70 p-4 transition-shadow"
+            style="animation-delay: 0.15s"
+          >
+            <p
+              class="text-[11px] font-semibold uppercase tracking-[0.08em] text-steel"
+            >
+              Preview mode — continue as
+            </p>
+            <div class="mt-3 grid grid-cols-2 gap-2.5">
+              <a
+                href="admin/admin-dashboard.html"
+                class="group flex items-center gap-3 rounded-xl bg-white ring-1 ring-whisper hover:ring-blue hover:shadow-soft px-3.5 py-3"
+              >
+                <span
+                  class="h-9 w-9 rounded-lg bg-ink text-white grid place-items-center text-[11px] font-semibold shrink-0"
+                  >UA</span
+                >
+                <span
+                  ><span class="block text-[13px] font-semibold leading-tight"
+                    >School owner</span
+                  >
+                  <span class="block text-[10.5px] text-steel mt-0.5"
+                    >full dashboard</span
+                  ></span
+                ></a
+              >
+              <a
+                href="teacher/teacher-home.html"
+                class="group flex items-center gap-3 rounded-xl bg-white ring-1 ring-whisper hover:ring-blue hover:shadow-soft px-3.5 py-3"
+              >
+                <span
+                  class="h-9 w-9 rounded-lg bg-wash text-blue grid place-items-center text-[11px] font-semibold shrink-0"
+                  >MI</span
+                >
+                <span
+                  ><span class="block text-[13px] font-semibold leading-tight"
+                    >Teacher</span
+                  >
+                  <span class="block text-[10.5px] text-steel mt-0.5"
+                    >classes &amp; scores</span
+                  ></span
+                ></a
+              >
+              <a
+                href="student/student-home.html"
+                class="group flex items-center gap-3 rounded-xl bg-white ring-1 ring-whisper hover:ring-blue hover:shadow-soft px-3.5 py-3"
+              >
+                <span
+                  class="h-9 w-9 rounded-lg bg-confirm/10 text-confirm grid place-items-center text-[11px] font-semibold shrink-0"
+                  >FA</span
+                >
+                <span
+                  ><span class="block text-[13px] font-semibold leading-tight"
+                    >Student</span
+                  >
+                  <span class="block text-[10.5px] text-steel mt-0.5"
+                    >exams &amp; EdMentor</span
+                  ></span
+                ></a
+              >
+              <a
+                href="parent/parent-home.html"
+                class="group flex items-center gap-3 rounded-xl bg-white ring-1 ring-whisper hover:ring-blue hover:shadow-soft px-3.5 py-3"
+              >
+                <span
+                  class="h-9 w-9 rounded-lg bg-caution/10 text-caution grid place-items-center text-[11px] font-semibold shrink-0"
+                  >MA</span
+                >
+                <span
+                  ><span class="block text-[13px] font-semibold leading-tight"
+                    >Parent</span
+                  >
+                  <span class="block text-[10.5px] text-steel mt-0.5"
+                    >all my children</span
+                  ></span
+                ></a
+              >
+            </div>
+            <a
+              href="platform/hq-dashboard.html"
+              class="mt-2.5 group flex items-center gap-3 rounded-xl bg-ink text-white px-3.5 py-3 hover:shadow-lift"
+            >
+              <span
+                class="h-9 w-9 rounded-lg bg-white/10 ring-1 ring-white/20 grid place-items-center text-[12px] font-bold shrink-0"
+                >E</span
+              >
+              <span
+                ><span class="block text-[13px] font-semibold leading-tight"
+                  >Edsynk HQ</span
+                >
+                <span class="block text-[10.5px] text-white/60 mt-0.5"
+                  >platform console — us, the company</span
+                ></span
+              >
+              <span class="ml-auto text-white/50 group-hover:text-white"
+                >→</span
+              ></a
+            >
+            <div class="mt-3 grid grid-cols-3 gap-2 text-[11.5px] font-medium">
+              <a
+                href="public/landing.html"
+                class="h-9 rounded-lg ring-1 ring-whisper bg-white hover:bg-mist/30 grid place-items-center"
+                >Marketing site</a
+              >
+              <a
+                href="public/verify-result.html"
+                class="h-9 rounded-lg ring-1 ring-whisper bg-white hover:bg-mist/30 grid place-items-center"
+                >Verify a result</a
+              >
+              <a
+                href="student/exam-runner.html"
+                class="h-9 rounded-lg ring-1 ring-whisper bg-white hover:bg-mist/30 grid place-items-center"
+                >CBT exam</a
+              >
+              <a
+                href="public/results-lookup.html"
+                class="h-9 rounded-lg ring-1 ring-whisper bg-white hover:bg-mist/30 grid place-items-center"
+                >Results lookup</a
+              >
+              <a
+                href="auth/access-code-login.html"
+                class="h-9 rounded-lg ring-1 ring-whisper bg-white hover:bg-mist/30 grid place-items-center"
+                >Student login (admission ID)</a
+              >
+              <a
+                href="auth/parent-claim.html"
+                class="h-9 rounded-lg ring-1 ring-whisper bg-white hover:bg-mist/30 grid place-items-center"
+                >Parent onboarding</a
+              >
+              <a
+                href="auth/set-password.html"
+                class="h-9 rounded-lg ring-1 ring-whisper bg-white hover:bg-mist/30 grid place-items-center"
+                >Set password</a
+              >
+              <a
+                href="auth/forgot-password.html"
+                class="h-9 rounded-lg ring-1 ring-whisper bg-white hover:bg-mist/30 grid place-items-center"
+                >Forgot password</a
+              >
+              <a
+                href="states.html"
+                class="h-9 rounded-lg ring-1 ring-whisper bg-white hover:bg-mist/30 grid place-items-center"
+                >System states</a
+              >
+              <a
+                href="offline.html"
+                class="h-9 rounded-lg ring-1 ring-whisper bg-white hover:bg-mist/30 grid place-items-center"
+                >Offline (PWA)</a
+              >
+              <a
+                href="auth/login.html"
+                class="h-9 rounded-lg ring-1 ring-whisper bg-white hover:bg-mist/30 grid place-items-center"
+                >Full login page</a
+              >
+              <a
+                href="auth/register-school.html"
+                class="h-9 rounded-lg ring-1 ring-whisper bg-white hover:bg-mist/30 grid place-items-center"
+                >Register a school</a
+              >
+              <a
+                href="public/pricing.html"
+                class="h-9 rounded-lg ring-1 ring-whisper bg-white hover:bg-mist/30 grid place-items-center"
+                >Pricing</a
+              >
+              <a
+                href="public/school-portal.html"
+                class="h-9 rounded-lg ring-1 ring-whisper bg-white hover:bg-mist/30 grid place-items-center"
+                >School public portal</a
+              >
+              <a
+                href="cashier/cashier-dashboard.html"
+                class="h-9 rounded-lg ring-1 ring-whisper bg-white hover:bg-mist/30 grid place-items-center"
+                >Cashier desk</a
+              >
+              <a
+                href="public/apply.html"
+                class="h-9 rounded-lg ring-1 ring-whisper bg-white hover:bg-mist/30 grid place-items-center"
+                >Apply for admission</a
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <p class="text-[11px] text-steel/80">
+        © 2026 Edsynk Technologies Ltd ·
+        <a href="public/privacy-policy.html" class="hover:text-charcoal"
+          >Privacy (NDPA 2023)</a
+        >
+        · <a href="public/terms.html" class="hover:text-charcoal">Terms</a> ·
+        <a href="#" class="hover:text-charcoal">Need help? WhatsApp us</a>
+      </p>
+    </main>
+
+    <!-- RIGHT: brand panel -->
+    <aside
+      class="hidden lg:flex relative overflow-hidden bg-ink text-white flex-col justify-between p-12"
+      style="
+        background:
+          radial-gradient(
+            700px 420px at 80% -10%,
+            rgba(33, 119, 239, 0.35),
+            transparent 60%
+          ),
+          radial-gradient(
+            500px 500px at -10% 110%,
+            rgba(33, 119, 239, 0.18),
+            transparent 55%
+          ),
+          linear-gradient(170deg, #0b2a56 0%, #081d3d 55%, #050f22 100%);
+      "
+    >
+      <div
+        class="rise text-[12px] font-medium text-skyblue/90 uppercase tracking-[0.12em]"
+      >
+        The school operating system
+      </div>
+
+      <div class="rise" style="animation-delay: 0.1s">
+        <h2
+          class="text-[clamp(1.8rem,2.8vw,2.6rem)] font-bold tracking-[-0.02em] leading-[1.1] max-w-[16ch]"
+        >
+          Results your parents can trust.
+        </h2>
+        <!-- mini artifact -->
+        <div
+          class="mt-8 max-w-[360px] bg-white text-charcoal rounded-2xl shadow-lift rotate-[1.5deg] overflow-hidden"
+        >
+          <div
+            class="px-4 py-3 flex items-center justify-between border-b border-whisper/60"
+          >
+            <div>
+              <p class="text-[12px] font-semibold">Fatima Abubakar</p>
+              <p class="font-mono text-[9.5px] text-steel">
+                JSS 2A · Third Term
+              </p>
+            </div>
+            <p class="font-mono text-[16px] font-semibold">87.2%</p>
+          </div>
+          <div class="px-4 py-2.5 flex items-center justify-between bg-canvas">
+            <p class="font-mono text-[9px] text-steel">
+              sha256: 4f2a…c91d · sealed
+            </p>
+            <span
+              class="flex items-center gap-1 text-[10px] font-semibold text-confirm bg-confirm/10 rounded-full px-2 py-0.5"
+            >
+              <svg
+                width="9"
+                height="9"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="3"
+              >
+                <path d="M20 6L9 17l-5-5" /></svg
+              >Genuine</span
+            >
+          </div>
+        </div>
+      </div>
+
+      <div
+        class="rise flex items-center justify-between text-[11.5px] text-white/50"
+        style="animation-delay: 0.2s"
+      >
+        <p>
+          "Results week took an afternoon, wallahi."<br /><span
+            class="text-white/35"
+            >— pilot school exam officer, Bauchi</span
+          >
+        </p>
+        <div class="flex gap-1.5">
+          <span class="h-1.5 w-5 rounded-full bg-blue"></span
+          ><span class="h-1.5 w-1.5 rounded-full bg-white/20"></span
+          ><span class="h-1.5 w-1.5 rounded-full bg-white/20"></span>
+        </div>
+      </div>
+    </aside>
+  </body>
+</html>

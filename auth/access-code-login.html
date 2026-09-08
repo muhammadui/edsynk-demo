@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Edsynk — Student sign in</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script>tailwind.config={theme:{extend:{colors:{canvas:'#F7F9FC',ink:'#0B2A56',charcoal:'#18181B',steel:'#64748B',whisper:'#E2E8F0',blue:'#2177EF',skyblue:'#5C9DF5',wash:'#EAF2FE',mist:'#D3E4FD',confirm:'#16A34A',caution:'#D97706',alert:'#DC2626',excused:'#7C8DA6'},fontFamily:{sans:['Geist','sans-serif'],mono:['"Geist Mono"','monospace']},boxShadow:{soft:'0 1px 2px rgba(11,42,86,0.05), 0 8px 32px rgba(11,42,86,0.07)',lift:'0 2px 8px rgba(11,42,86,0.10), 0 24px 64px rgba(11,42,86,0.16)'}}}}</script>
+<style>@keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}.rise{animation:rise .5s cubic-bezier(.2,.8,.2,1) both}</style>
+</head>
+<body class="font-sans text-charcoal antialiased min-h-screen lg:grid lg:grid-cols-[1fr_1.05fr]">
+<main class="min-h-screen lg:min-h-0 bg-white flex flex-col px-6 sm:px-12 py-8">
+  <div class="flex items-center gap-2"><span class="h-7 w-7 rounded-lg bg-blue grid place-items-center text-white font-bold text-[13px]">E</span><span class="font-semibold tracking-tight text-[15px]">edsynk</span></div>
+  <div class="flex-1 grid place-items-center py-10"><div class="w-full max-w-[420px]">
+    <h1 class="rise text-[24px] font-bold tracking-[-0.02em] text-ink">Student sign in</h1>
+    <p class="rise text-[13.5px] text-steel mt-1.5" style="animation-delay:.05s">Use your <span class="font-medium text-charcoal">admission number</span> and the password your school gave you.</p>
+    <div class="rise mt-7 space-y-4" style="animation-delay:.1s">
+      <div><label class="text-[11.5px] font-semibold uppercase tracking-wider text-steel">Admission number</label>
+        <input value="AFA/2024/0117" class="mt-1.5 w-full h-12 rounded-xl border border-whisper bg-canvas px-4 text-[15px] font-mono focus:outline-none focus:ring-2 focus:ring-blue/50">
+        <p class="text-[11px] text-steel mt-1.5">It's on your report card and ID card — e.g. AFA/2024/0117.</p></div>
+      <div><label class="text-[11.5px] font-semibold uppercase tracking-wider text-steel">Password</label>
+        <input type="password" value="••••••••" class="mt-1.5 w-full h-12 rounded-xl border border-whisper bg-canvas px-4 text-[15px] focus:outline-none focus:ring-2 focus:ring-blue/50"></div>
+      <button onclick="location.href='../student/student-home.html'" class="w-full h-12 rounded-xl bg-blue text-white text-[14.5px] font-semibold shadow-soft active:translate-y-px">Sign in</button>
+      <div class="rounded-xl bg-canvas ring-1 ring-whisper px-4 py-3 text-[12px] text-steel">First time? Your form teacher gives you a printed slip with a temporary password — you'll set your own on first sign in. Works on any phone.</div>
+      <div class="flex items-center justify-between text-[12.5px]"><a href="forgot-password.html" class="text-blue font-medium">Forgot password?</a><a href="../index.html" class="text-steel hover:text-charcoal">Staff or parent? →</a></div>
+    </div>
+  </div></div>
+  <p class="text-[11px] text-steel/80"><a href="../index.html" class="hover:text-charcoal">← Back to sign in</a> · <a href="#" onclick="toast('Opening WhatsApp support…');return false;" class="hover:text-charcoal">Need help? WhatsApp us</a></p>
+</main>
+<aside class="hidden lg:flex relative overflow-hidden bg-ink text-white flex-col justify-between p-12" style="background:radial-gradient(700px 420px at 80% -10%, rgba(33,119,239,0.35), transparent 60%),linear-gradient(170deg,#0B2A56 0%,#081D3D 55%,#050F22 100%)">
+  <div class="rise text-[12px] font-medium text-skyblue/90 uppercase tracking-[0.12em]">The school operating system</div>
+  <div class="rise" style="animation-delay:.1s"><h2 class="text-[clamp(1.7rem,2.6vw,2.4rem)] font-bold tracking-[-0.02em] leading-[1.1] max-w-[16ch]">One login per student — your admission number.</h2>
+    <p class="text-[12.5px] text-white/60 mt-4 max-w-[42ch]">No emails to remember. Every student already has an admission number — that's the login. Built for every phone in Nigeria.</p></div>
+  <p class="rise text-[11.5px] text-white/45" style="animation-delay:.2s">© 2026 Edsynk Technologies Ltd · Bauchi, Nigeria</p>
+</aside>
+<div id="toast" class="hidden fixed bottom-5 left-1/2 -translate-x-1/2 z-[60] bg-ink text-white text-[12.5px] font-medium px-4 py-2.5 rounded-xl shadow-lift"></div>
+<script>function toast(m){var t=document.getElementById('toast');t.textContent=m;t.classList.remove('hidden');clearTimeout(window._tt);window._tt=setTimeout(function(){t.classList.add('hidden')},2200);}</script>
+</body>
+</html>

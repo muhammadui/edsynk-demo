@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Edsynk — Messages</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script>tailwind.config={theme:{extend:{colors:{canvas:'#F7F9FC',ink:'#0B2A56',charcoal:'#18181B',steel:'#64748B',whisper:'#E2E8F0',blue:'#2177EF',skyblue:'#5C9DF5',wash:'#EAF2FE',mist:'#D3E4FD',confirm:'#16A34A',caution:'#D97706',alert:'#DC2626',excused:'#7C8DA6'},fontFamily:{sans:['Geist','sans-serif'],mono:['"Geist Mono"','monospace']},boxShadow:{soft:'0 1px 2px rgba(11,42,86,0.04), 0 6px 24px rgba(11,42,86,0.05)',lift:'0 1px 3px rgba(11,42,86,0.10), 0 12px 32px rgba(11,42,86,0.12)'}}}}</script>
+<style>@keyframes rise{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}.rise{animation:rise .5s cubic-bezier(.2,.8,.2,1) both}</style>
+</head>
+<body data-active="Messages" data-persona="student" class="bg-canvas font-sans text-charcoal antialiased">
+<div class="flex min-h-screen">
+  <div id="sidebar-root"></div>
+  <div class="flex-1 min-w-0 flex flex-col">
+    <header class="h-[60px] bg-white/80 backdrop-blur-md border-b border-whisper/70 flex items-center justify-between px-4 sm:px-7 sticky top-0 z-20">
+      <div class="flex items-center gap-3">
+        <h1 class="text-[15px] font-semibold tracking-tight">Messages</h1>
+        <span class="font-mono text-[11.5px] font-medium text-blue bg-wash rounded-full px-2.5 py-1 hidden sm:inline">My teachers</span>
+      </div>
+      <button onclick="toast('You can message a teacher your school has enabled')" class="h-9 px-4 rounded-lg bg-blue text-white text-[13px] font-medium shadow-soft active:translate-y-px">New message</button>
+    </header>
+
+    <main class="flex-1 p-4 sm:p-7 grid lg:grid-cols-[330px_1fr] gap-4 max-w-[1100px] w-full">
+
+      <!-- thread list -->
+      <div class="rise bg-white ring-1 ring-whisper/80 rounded-2xl shadow-soft overflow-hidden h-fit">
+        <div class="px-4 py-3 border-b border-whisper/70 flex items-center justify-between">
+          <p class="text-[11px] font-semibold uppercase tracking-[0.08em] text-steel">Conversations</p>
+          <span class="text-[10px] font-semibold text-blue bg-wash rounded-full px-2 py-0.5">1 reply</span>
+        </div>
+        <div class="divide-y divide-whisper/50">
+          <!-- active: Mallam Musa -->
+          <button class="w-full text-left px-4 py-3 bg-wash flex gap-3">
+            <span class="h-10 w-10 rounded-full bg-blue text-white grid place-items-center text-[11px] font-bold shrink-0">MI</span>
+            <div class="min-w-0 flex-1">
+              <div class="flex items-center justify-between gap-2"><p class="text-[12.5px] font-semibold text-ink truncate">Mallam Musa Ibrahim</p><span class="text-[9.5px] text-steel shrink-0">9:42am</span></div>
+              <p class="text-[10.5px] text-blue font-medium">Mathematics</p>
+              <p class="text-[11.5px] text-charcoal font-medium truncate mt-0.5">Yes, attempt 1–10 only. The rest is optional…</p>
+            </div>
+          </button>
+          <!-- Mallam Sani -->
+          <button onclick="toast('Opening conversation with Mallam Sani')" class="w-full text-left px-4 py-3 hover:bg-canvas/70 flex gap-3">
+            <span class="h-10 w-10 rounded-full bg-wash text-blue ring-1 ring-mist grid place-items-center text-[11px] font-bold shrink-0">SA</span>
+            <div class="min-w-0 flex-1">
+              <div class="flex items-center justify-between gap-2"><p class="text-[12.5px] font-semibold truncate">Mallam Sani</p><span class="text-[9.5px] text-steel shrink-0">Yesterday</span></div>
+              <p class="text-[10.5px] text-skyblue font-medium">Basic Science</p>
+              <p class="text-[11.5px] text-steel truncate mt-0.5">Well done on the lab report, Fatima.</p>
+            </div>
+          </button>
+          <!-- School office / notice -->
+          <button onclick="toast('Opening School Office notices — read only')" class="w-full text-left px-4 py-3 hover:bg-canvas/70 flex gap-3">
+            <span class="h-10 w-10 rounded-full bg-ink/10 text-ink grid place-items-center shrink-0"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18M5 21V7l8-4v18M19 21V11l-6-4"/></svg></span>
+            <div class="min-w-0 flex-1">
+              <div class="flex items-center justify-between gap-2"><p class="text-[12.5px] font-semibold truncate">School Office</p><span class="text-[9.5px] text-steel shrink-0">2 days</span></div>
+              <p class="text-[10.5px] text-steel font-medium">Notices · read only</p>
+              <p class="text-[11.5px] text-steel truncate mt-0.5">Exams begin Monday — arrive 7:30am.</p>
+            </div>
+          </button>
+          <!-- locked teacher -->
+          <button onclick="toast('Mrs. Adeyemi has not enabled student messages')" class="w-full text-left px-4 py-3 hover:bg-canvas/70 flex gap-3 opacity-70">
+            <span class="h-10 w-10 rounded-full bg-canvas ring-1 ring-whisper text-steel grid place-items-center text-[11px] font-bold shrink-0">AD</span>
+            <div class="min-w-0 flex-1">
+              <div class="flex items-center justify-between gap-2"><p class="text-[12.5px] font-semibold truncate text-steel">Mrs. Adeyemi</p>
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-steel shrink-0"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></div>
+              <p class="text-[10.5px] text-steel font-medium">English</p>
+              <p class="text-[11.5px] text-steel truncate mt-0.5">Messaging is turned off for this teacher</p>
+            </div>
+          </button>
+        </div>
+        <div class="px-4 py-3 border-t border-whisper/70 bg-canvas/40">
+          <p class="text-[10.5px] text-steel leading-relaxed">You can only message <span class="font-medium text-charcoal">teachers your school enables</span>. Every message is visible to school administration — keep it polite and about your work.</p>
+        </div>
+      </div>
+
+      <!-- conversation -->
+      <div class="rise bg-white ring-1 ring-whisper/80 rounded-2xl shadow-soft flex flex-col" style="animation-delay:.06s">
+        <div class="px-5 py-3.5 border-b border-whisper/70 flex items-center gap-3">
+          <span class="h-10 w-10 rounded-full bg-blue text-white grid place-items-center text-[12px] font-bold">MI</span>
+          <div class="flex-1 min-w-0">
+            <p class="text-[14px] font-semibold">Mallam Musa Ibrahim</p>
+            <p class="text-[11px] text-steel">Mathematics · form teacher JSS 2A</p>
+          </div>
+          <span class="h-2 w-2 rounded-full bg-confirm shrink-0"></span><span class="text-[11px] text-steel hidden sm:inline">online</span>
+        </div>
+
+        <div class="mx-5 mt-4 flex items-center gap-2 rounded-xl bg-canvas ring-1 ring-whisper/70 px-3.5 py-2.5 text-[11px] text-steel">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-steel shrink-0"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+          This conversation is visible to your teacher and school administration.
+        </div>
+
+        <div class="mx-5 mt-2 flex items-center gap-2 rounded-xl bg-wash/70 ring-1 ring-mist/60 px-3.5 py-2 text-[11px] text-ink">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-blue shrink-0"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg>
+          Voice notes &amp; attachments are <span class="font-medium">enabled by your school</span>.
+        </div>
+
+        <div id="msgList" class="flex-1 p-5 space-y-4 overflow-y-auto">
+          <p class="text-center text-[10px] font-medium text-steel/70 uppercase tracking-wider">Today</p>
+
+          <div class="flex gap-2.5 flex-row-reverse">
+            <span class="h-7 w-7 rounded-full bg-wash text-blue ring-1 ring-mist grid place-items-center text-[9px] font-bold shrink-0">FA</span>
+            <div class="max-w-[78%]"><div class="rounded-2xl rounded-tr-md bg-blue text-white px-3.5 py-2.5 text-[12.5px] leading-relaxed">Assalamu alaikum Mallam. For the algebra homework on page 42, should I do all 20 questions or just the ones you marked in class?</div><p class="text-[9.5px] text-steel mt-1 text-right">You · 9:31am</p></div>
+          </div>
+
+          <div class="flex gap-2.5">
+            <span class="h-7 w-7 rounded-full bg-blue text-white grid place-items-center text-[9px] font-bold shrink-0">MI</span>
+            <div class="max-w-[78%]"><div class="rounded-2xl rounded-tl-md bg-canvas ring-1 ring-whisper/80 px-3.5 py-2.5 text-[12.5px] leading-relaxed">Wa alaikumus salam Fatima. Yes, attempt 1–10 only. The rest is optional practice for those who want extra.</div><p class="text-[9.5px] text-steel mt-1">Mallam Musa · 9:42am</p></div>
+          </div>
+
+          <div class="flex gap-2.5">
+            <span class="h-7 w-7 rounded-full bg-blue text-white grid place-items-center text-[9px] font-bold shrink-0">MI</span>
+            <div class="max-w-[78%]"><div class="rounded-2xl rounded-tl-md bg-canvas ring-1 ring-whisper/80 px-3.5 py-2.5 text-[12.5px] leading-relaxed">Submit it before the test on Monday, insha Allah. Well done for asking.</div><p class="text-[9.5px] text-steel mt-1">Mallam Musa · 9:42am</p></div>
+          </div>
+        </div>
+
+        <div class="px-5 pb-4">
+          <div class="flex items-center gap-2 mb-2 flex-wrap">
+            <button onclick="quick(this)" class="text-[11px] font-medium text-blue bg-wash rounded-full px-2.5 py-1 hover:bg-mist/50">Jazakallahu khairan, Mallam</button>
+            <button onclick="quick(this)" class="text-[11px] font-medium text-blue bg-wash rounded-full px-2.5 py-1 hover:bg-mist/50">Understood, thank you</button>
+            <button onclick="quick(this)" class="text-[11px] font-medium text-blue bg-wash rounded-full px-2.5 py-1 hover:bg-mist/50">I'll submit it today</button>
+          </div>
+          <div id="attachChip" class="hidden mb-2 inline-flex items-center gap-2 rounded-lg bg-wash ring-1 ring-mist px-2.5 py-1.5 text-[11px] text-ink">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-blue shrink-0"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg>
+            <span class="font-medium">Permission-slip.pdf</span><span class="text-steel">240 KB</span>
+            <button type="button" onclick="clearAttach()" class="text-steel hover:text-alert" aria-label="Remove attachment">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M18 6L6 18M6 6l12 12"/></svg>
+            </button>
+          </div>
+          <form onsubmit="send(event)" class="flex items-end gap-1.5 rounded-2xl ring-1 ring-whisper bg-canvas px-3 py-2.5">
+            <button type="button" id="attachBtn" onclick="attach()" title="Attach PDF or image" class="h-9 w-9 grid place-items-center rounded-xl text-steel hover:bg-mist/40 hover:text-blue shrink-0"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"/></svg></button>
+            <button type="button" id="micBtn" onclick="toggleRec()" title="Record voice note" class="h-9 px-2.5 min-w-9 grid place-items-center rounded-xl text-steel hover:bg-mist/40 hover:text-blue shrink-0"><svg id="micIcon" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z"/><path d="M19 10v2a7 7 0 01-14 0v-2M12 19v4"/></svg><span id="recLabel" class="hidden text-[11.5px] font-semibold text-alert ml-1.5"></span></button>
+            <input id="msgInput" autocomplete="off" placeholder="Reply to Mallam Musa…" class="flex-1 bg-transparent text-[12.5px] py-1.5 focus:outline-none placeholder:text-steel min-w-0">
+            <button type="submit" class="h-9 w-9 grid place-items-center rounded-xl bg-blue text-white shadow-soft active:translate-y-px shrink-0"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg></button>
+          </form>
+          <p class="text-[10px] text-steel mt-2">Replies are recorded. Mallam Musa usually replies before school and at break.</p>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+<script src="../assets/shell.js"></script>
+<div id="toast" class="hidden fixed bottom-5 left-1/2 -translate-x-1/2 z-[60] bg-ink text-white text-[12.5px] font-medium px-4 py-2.5 rounded-xl shadow-lift"></div>
+<script>
+function toast(m){var t=document.getElementById('toast');t.textContent=m;t.classList.remove('hidden');clearTimeout(window._tt);window._tt=setTimeout(function(){t.classList.add('hidden')},2200);}
+function quick(b){document.getElementById('msgInput').value=b.textContent;document.getElementById('msgInput').focus();}
+
+var attachPending=false, recState='idle', recTimer=null, recSecs=0, recPending=null;
+function fmt(s){var m=Math.floor(s/60),x=s%60;return m+':'+(x<10?'0':'')+x;}
+
+function attach(){if(recState!=='idle'){toast('Finish your voice note first');return;}attachPending=true;document.getElementById('attachChip').classList.remove('hidden');toast('Permission-slip.pdf attached');}
+function clearAttach(){attachPending=false;document.getElementById('attachChip').classList.add('hidden');}
+
+function toggleRec(){
+  var lbl=document.getElementById('recLabel'),btn=document.getElementById('micBtn'),icon=document.getElementById('micIcon');
+  if(recState==='idle'){
+    recState='recording';recSecs=0;
+    btn.className='h-9 px-2.5 min-w-9 grid place-items-center rounded-xl bg-alert/10 text-alert ring-1 ring-alert/30 shrink-0';
+    icon.classList.add('hidden');lbl.classList.remove('hidden');lbl.textContent='● Recording 0:00 — tap to stop';
+    recTimer=setInterval(function(){recSecs++;lbl.textContent='● Recording '+fmt(recSecs)+' — tap to stop';},1000);
+    toast('Recording voice note…');
+  } else {
+    clearInterval(recTimer);recState='idle';
+    recPending=Math.max(recSecs,1);
+    btn.className='h-9 px-2.5 min-w-9 grid place-items-center rounded-xl text-steel hover:bg-mist/40 hover:text-blue shrink-0';
+    icon.classList.remove('hidden');lbl.classList.add('hidden');
+    toast('Voice note ready — press send');
+  }
+}
+
+function bubble(html){
+  var list=document.getElementById('msgList');
+  var wrap=document.createElement('div');wrap.className='flex gap-2.5 flex-row-reverse rise';
+  wrap.innerHTML='<span class="h-7 w-7 rounded-full bg-wash text-blue ring-1 ring-mist grid place-items-center text-[9px] font-bold shrink-0">FA</span><div class="max-w-[78%]">'+html+'<p class="text-[9.5px] text-steel mt-1 text-right">You · just now</p></div>';
+  list.appendChild(wrap);list.scrollTop=list.scrollHeight;
+}
+function fileCard(name,size){
+  return '<div class="rounded-2xl rounded-tr-md bg-blue text-white px-3 py-3 text-[12.5px]"><div class="flex items-center gap-3"><span class="h-10 w-10 rounded-lg bg-white/20 grid place-items-center shrink-0"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg></span><div class="min-w-0"><p class="font-medium truncate">'+name+'</p><p class="text-[10.5px] text-white/80">'+size+'</p></div><button type="button" onclick="toast(\'Downloading '+name+'\')" class="ml-1 h-8 w-8 grid place-items-center rounded-lg bg-white/20 hover:bg-white/30 shrink-0" aria-label="Download"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg></button></div></div>';
+}
+function voiceCard(dur){
+  var bars='';for(var i=0;i<22;i++){var h=4+Math.round(Math.abs(Math.sin(i*1.3))*14);bars+='<span style="height:'+h+'px" class="w-[2.5px] rounded-full bg-white/70 inline-block"></span>';}
+  return '<div class="rounded-2xl rounded-tr-md bg-blue text-white px-3 py-2.5"><div class="flex items-center gap-2.5"><button type="button" onclick="toast(\'Playing voice note\')" class="h-9 w-9 grid place-items-center rounded-full bg-white/20 hover:bg-white/30 shrink-0" aria-label="Play"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></button><div class="flex items-center gap-[2px] h-5">'+bars+'</div><span class="text-[10.5px] font-mono text-white/85 shrink-0">'+fmt(dur)+'</span></div></div>';
+}
+
+function send(e){
+  e.preventDefault();
+  if(recState==='recording'){toast('Tap the mic to stop recording first');return;}
+  var i=document.getElementById('msgInput');
+  var hasText=!!i.value.trim();
+  if(!hasText && !attachPending && recPending===null){toast('Type a message, attach a file, or record a voice note');return;}
+  if(recPending!==null){bubble(voiceCard(recPending));recPending=null;}
+  if(attachPending){bubble(fileCard('Permission-slip.pdf','240 KB'));clearAttach();}
+  if(hasText){bubble('<div class="rounded-2xl rounded-tr-md bg-blue text-white px-3.5 py-2.5 text-[12.5px] leading-relaxed">'+i.value.replace(/</g,'&lt;')+'</div>');i.value='';}
+  toast('Message sent to Mallam Musa');
+}
+</script>
+</body>
+</html>

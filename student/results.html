@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Edsynk — My Results</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&family=Noto+Naskh+Arabic:wght@500&display=swap" rel="stylesheet">
+<script>tailwind.config={theme:{extend:{colors:{canvas:'#F7F9FC',ink:'#0B2A56',charcoal:'#18181B',steel:'#64748B',whisper:'#E2E8F0',blue:'#2177EF',skyblue:'#5C9DF5',wash:'#EAF2FE',mist:'#D3E4FD',confirm:'#16A34A',caution:'#D97706',alert:'#DC2626',excused:'#7C8DA6'},fontFamily:{sans:['Geist','sans-serif'],mono:['"Geist Mono"','monospace'],arabic:['"Noto Naskh Arabic"','serif']},boxShadow:{soft:'0 1px 2px rgba(11,42,86,0.04), 0 6px 24px rgba(11,42,86,0.05)',lift:'0 1px 3px rgba(11,42,86,0.10), 0 12px 32px rgba(11,42,86,0.12)'}}}}</script>
+<style>@keyframes rise{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}.rise{animation:rise .45s cubic-bezier(.2,.8,.2,1) both}</style>
+</head>
+<body data-active="My Results" data-persona="student" class="bg-canvas font-sans text-charcoal antialiased">
+<div class="flex min-h-screen">
+  <div id="sidebar-root"></div>
+  <div class="flex-1 min-w-0">
+    <header class="h-[60px] bg-white/80 backdrop-blur-md border-b border-whisper/70 flex items-center justify-between px-4 sm:px-7 sticky top-0 z-20">
+      <div class="flex items-center gap-3">
+        <h1 class="text-[15px] font-semibold tracking-tight">My Results</h1>
+        <select id="termSel" onchange="renderTerm()" class="h-9 rounded-lg border border-whisper bg-white px-3 text-[12.5px] font-medium">
+          <option value="t3">Third Term · 2025/26</option>
+          <option value="t2" selected>Second Term · 2025/26</option>
+          <option value="t1">First Term · 2025/26</option>
+        </select>
+      </div>
+      <button id="dlBtn" onclick="toast('Preparing your report card PDF…')" class="h-9 px-4 rounded-lg bg-blue text-white text-[13px] font-medium shadow-soft active:translate-y-px hidden sm:block">Download report card</button>
+    </header>
+
+    <main class="p-4 sm:p-7 max-w-[1000px] space-y-5 pb-10">
+
+      <!-- pending state (third term) -->
+      <section id="pending" class="rise hidden">
+        <div class="bg-white ring-1 ring-whisper/80 rounded-2xl shadow-soft p-8 text-center">
+          <div class="h-14 w-14 rounded-2xl bg-wash text-blue grid place-items-center mx-auto"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div>
+          <p class="text-[16px] font-semibold mt-4">Third term results aren't out yet</p>
+          <p class="text-[13px] text-steel mt-1.5 max-w-[40ch] mx-auto">Exams run 23–27 June. Your report card will appear here — sealed and verifiable — the moment your school publishes. You'll get a notification.</p>
+          <a href="exams.html" class="inline-block mt-4 h-10 px-5 rounded-xl ring-1 ring-whisper bg-white text-[13px] font-medium text-steel hover:bg-mist/30">See exam timetable</a>
+        </div>
+      </section>
+
+      <!-- published result -->
+      <section id="published" class="space-y-5">
+        <!-- summary -->
+        <div class="rise bg-white ring-1 ring-whisper/80 rounded-2xl shadow-soft overflow-hidden">
+          <div class="bg-ink text-white px-5 sm:px-6 py-4 flex items-center justify-between gap-4 flex-wrap">
+            <div><p class="text-[12px] text-white/60">Al-Furqan Academy · <span id="termName">Second Term 2025/26</span></p>
+            <p class="text-[17px] font-semibold mt-0.5">Fatima Abubakar · JSS 2A</p></div>
+            <span class="flex items-center gap-1.5 text-[11px] font-semibold text-confirm bg-white/10 ring-1 ring-white/20 rounded-full px-2.5 py-1"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>Sealed &amp; verified</span>
+          </div>
+          <div class="grid grid-cols-2 sm:grid-cols-4 divide-x divide-whisper/60">
+            <div class="px-5 py-4 text-center"><p class="font-mono text-[22px] font-semibold" id="sAvg">85.4%</p><p class="text-[10.5px] text-steel uppercase tracking-wider mt-0.5">Average</p></div>
+            <div class="px-5 py-4 text-center"><p class="font-mono text-[22px] font-semibold" id="sPos">5th</p><p class="text-[10.5px] text-steel uppercase tracking-wider mt-0.5">of 38</p></div>
+            <div class="px-5 py-4 text-center"><p class="font-mono text-[22px] font-semibold text-confirm">A1</p><p class="text-[10.5px] text-steel uppercase tracking-wider mt-0.5">Grade</p></div>
+            <div class="px-5 py-4 text-center"><p class="font-mono text-[22px] font-semibold">95%</p><p class="text-[10.5px] text-steel uppercase tracking-wider mt-0.5">Attendance</p></div>
+          </div>
+        </div>
+
+        <!-- subjects -->
+        <div class="rise bg-white ring-1 ring-whisper/80 rounded-2xl shadow-soft overflow-hidden" style="animation-delay:.05s">
+          <p class="text-[13.5px] font-semibold px-5 pt-4 pb-3">Subjects</p>
+          <div class="overflow-x-auto"><table class="w-full text-[12.5px]">
+            <thead><tr class="text-left text-[10px] uppercase tracking-wider text-steel border-y border-whisper/70 bg-canvas/60">
+              <th class="px-5 py-2.5 font-semibold">Subject</th><th class="px-3 py-2.5 font-semibold text-center">CA1</th><th class="px-3 py-2.5 font-semibold text-center">CA2</th><th class="px-3 py-2.5 font-semibold text-center">Exam</th><th class="px-3 py-2.5 font-semibold text-center">Total</th><th class="px-3 py-2.5 font-semibold text-center">Grade</th><th class="px-3 py-2.5 font-semibold text-center">Pos</th><th class="px-5 py-2.5 font-semibold">Remark</th></tr></thead>
+            <tbody id="subjBody" class="divide-y divide-whisper/60"></tbody>
+          </table></div>
+        </div>
+
+        <!-- ============ RESULT ANALYSIS ============ -->
+        <section class="rise space-y-5" style="animation-delay:.07s">
+          <div class="flex items-center justify-between gap-3 flex-wrap">
+            <h2 class="text-[15px] font-semibold tracking-tight flex items-center gap-2">
+              <span class="h-6 w-6 rounded-lg bg-blue grid place-items-center text-white"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M7 14l3-3 3 2 5-6"/></svg></span>
+              Result analysis</h2>
+            <a href="../student/report-card.html" class="h-9 px-4 rounded-lg bg-white ring-1 ring-whisper text-[12.5px] font-medium text-steel hover:bg-mist/30 grid place-items-center">Full analysis →</a>
+          </div>
+
+          <!-- Edsynk AI auto-insight -->
+          <div class="rounded-2xl bg-ink text-white p-5 shadow-soft flex items-start gap-3.5">
+            <span class="h-9 w-9 shrink-0 rounded-xl bg-blue/20 ring-1 ring-skyblue/30 grid place-items-center text-skyblue"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l1.9 5.7L19.5 10l-5.6 1.3L12 17l-1.9-5.7L4.5 10l5.6-1.3z"/></svg></span>
+            <div>
+              <p class="text-[10px] font-semibold uppercase tracking-wider text-skyblue">Edsynk AI · auto-insight</p>
+              <p class="text-[13.5px] leading-relaxed mt-1" id="aiInsight">Strong in the Sciences and Qur'an — well above class average. Your English exam dropped against your CA; revising comprehension and timed practice should lift it next term.</p>
+              <p class="text-[10.5px] text-white/55 mt-2">Generated from your recorded scores. AI explains your numbers — it never sets your grades.</p>
+            </div>
+          </div>
+
+          <!-- top stat row: trend + movement + split -->
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <!-- term-over-term trend -->
+            <div class="bg-white ring-1 ring-whisper/80 rounded-2xl shadow-soft p-4">
+              <p class="text-[10.5px] font-semibold uppercase tracking-wider text-steel">Average · term trend</p>
+              <div class="mt-3 flex items-end gap-3">
+                <div class="relative h-16 flex-1">
+                  <svg viewBox="0 0 100 50" preserveAspectRatio="none" class="w-full h-full overflow-visible">
+                    <polyline points="6,30 50,24 94,13" fill="none" stroke="#2177EF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    <circle cx="6" cy="30" r="3" fill="#fff" stroke="#2177EF" stroke-width="2"/>
+                    <circle cx="50" cy="24" r="3" fill="#fff" stroke="#2177EF" stroke-width="2"/>
+                    <circle cx="94" cy="13" r="3.5" fill="#2177EF"/>
+                  </svg>
+                </div>
+                <p class="font-mono text-[20px] font-semibold leading-none">85.4<span class="text-[12px] text-steel">%</span></p>
+              </div>
+              <div class="flex justify-between text-[9.5px] text-steel font-mono mt-1"><span>T1 83.1</span><span>T2 84.0</span><span class="text-confirm">T3 85.4</span></div>
+            </div>
+            <!-- position movement -->
+            <div class="bg-white ring-1 ring-whisper/80 rounded-2xl shadow-soft p-4">
+              <p class="text-[10.5px] font-semibold uppercase tracking-wider text-steel">Position movement</p>
+              <p class="mt-3 flex items-baseline gap-2"><span class="font-mono text-[16px] text-steel line-through">5th</span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#16A34A" stroke-width="2.5"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg><span class="font-mono text-[26px] font-semibold text-confirm leading-none">3rd</span></p>
+              <p class="text-[11px] text-confirm font-medium mt-2">↑ Up 2 places this term · of 38</p>
+            </div>
+            <!-- CA vs exam split -->
+            <div class="bg-white ring-1 ring-whisper/80 rounded-2xl shadow-soft p-4">
+              <p class="text-[10.5px] font-semibold uppercase tracking-wider text-steel">CA vs Exam balance</p>
+              <div class="mt-3 h-4 rounded-full overflow-hidden flex ring-1 ring-whisper/70">
+                <div class="bg-skyblue grid place-items-center" style="width:42%"><span class="text-[9px] font-semibold text-ink">CA 42%</span></div>
+                <div class="bg-blue grid place-items-center" style="width:58%"><span class="text-[9px] font-semibold text-white">Exam 58%</span></div>
+              </div>
+              <p class="text-[10.5px] text-steel mt-2">Well-rounded — strong continuous assessment backs your exam scores.</p>
+            </div>
+          </div>
+
+          <!-- per-subject vs class average -->
+          <div class="bg-white ring-1 ring-whisper/80 rounded-2xl shadow-soft p-5">
+            <div class="flex items-center justify-between gap-2 flex-wrap">
+              <p class="text-[13.5px] font-semibold">Your score vs class average</p>
+              <p class="text-[10.5px] text-steel flex items-center gap-3"><span class="flex items-center gap-1.5"><span class="h-2 w-4 rounded-full bg-blue inline-block"></span>you</span><span class="flex items-center gap-1.5"><span class="h-2 w-4 rounded-full bg-whisper inline-block"></span>class avg</span></p>
+            </div>
+            <div class="mt-4 space-y-3" id="analysisBars"></div>
+          </div>
+
+          <!-- strongest / weakest -->
+          <div class="grid sm:grid-cols-2 gap-3">
+            <div class="rounded-2xl bg-confirm/[0.06] ring-1 ring-confirm/20 p-4">
+              <p class="text-[10.5px] font-semibold uppercase tracking-wider text-confirm">Strongest subjects</p>
+              <ul class="mt-2 space-y-1.5 text-[12.5px]" id="strongList"></ul>
+            </div>
+            <div class="rounded-2xl bg-caution/[0.07] ring-1 ring-caution/25 p-4">
+              <p class="text-[10.5px] font-semibold uppercase tracking-wider text-caution">Focus next term</p>
+              <ul class="mt-2 space-y-1.5 text-[12.5px]" id="weakList"></ul>
+            </div>
+          </div>
+        </section>
+
+        <div class="grid lg:grid-cols-2 gap-5">
+          <!-- affective -->
+          <div class="rise bg-white ring-1 ring-whisper/80 rounded-2xl shadow-soft p-5" style="animation-delay:.1s">
+            <p class="text-[13.5px] font-semibold">Behaviour &amp; skills</p>
+            <div class="mt-3 grid grid-cols-2 gap-x-6 gap-y-2 text-[12.5px]" id="traits"></div>
+          </div>
+          <!-- remarks -->
+          <div class="rise bg-white ring-1 ring-whisper/80 rounded-2xl shadow-soft p-5 space-y-3" style="animation-delay:.14s">
+            <div><p class="text-[10.5px] font-semibold uppercase tracking-wider text-steel">Form teacher's remark</p><p class="text-[12.5px] mt-1 leading-relaxed">Fatima is diligent and respectful, and a quiet leader in class. With more confidence speaking up, she will shine even brighter. A pleasure to teach.</p><p class="text-[10.5px] text-steel mt-1">— Mallam Musa Ibrahim</p></div>
+            <div class="pt-3 border-t border-whisper/60"><p class="text-[10.5px] font-semibold uppercase tracking-wider text-steel">Principal's remark</p><p class="text-[12.5px] mt-1 leading-relaxed">An excellent result. Keep it up. <span class="font-arabic">بارك الله فيك</span></p><p class="text-[10.5px] text-steel mt-1">— Ustadh Abdullahi Sani</p></div>
+          </div>
+        </div>
+
+        <!-- verify strip -->
+        <div class="rise rounded-2xl bg-wash/60 ring-1 ring-mist/60 p-4 flex items-center justify-between gap-3 flex-wrap" style="animation-delay:.18s">
+          <div class="flex items-center gap-3">
+            <span class="h-11 w-11 rounded-xl bg-white ring-1 ring-whisper grid place-items-center"><svg width="22" height="22" viewBox="0 0 36 36" fill="#0B2A56"><rect x="2" y="2" width="9" height="9"/><rect x="4" y="4" width="5" height="5" fill="#fff"/><rect x="25" y="2" width="9" height="9"/><rect x="27" y="4" width="5" height="5" fill="#fff"/><rect x="2" y="25" width="9" height="9"/><rect x="4" y="27" width="5" height="5" fill="#fff"/><rect x="15" y="15" width="6" height="6"/></svg></span>
+            <div><p class="text-[12.5px] font-semibold text-ink">This result is sealed &amp; tamper-proof</p><p class="text-[11px] text-steel">Anyone can verify it at alfurqan.edsynk.ng/v/8KQ2 · sha256: 4f2a…c91d</p></div>
+          </div>
+          <div class="flex gap-2"><a href="../public/verify-result.html" class="h-10 px-4 rounded-xl ring-1 ring-whisper bg-white text-[12.5px] font-medium text-steel grid place-items-center">Verify</a><button onclick="toast('Preparing your report card PDF…')" class="h-10 px-4 rounded-xl bg-blue text-white text-[12.5px] font-semibold">Download PDF</button></div>
+        </div>
+      </section>
+    </main>
+  </div>
+</div>
+<div id="toast" class="hidden fixed bottom-5 left-1/2 -translate-x-1/2 z-[60] bg-ink text-white text-[12.5px] font-medium px-4 py-2.5 rounded-xl shadow-lift"></div>
+<script>function toast(m){var t=document.getElementById('toast');t.textContent=m;t.classList.remove('hidden');clearTimeout(window._tt);window._tt=setTimeout(function(){t.classList.add('hidden')},2200);}</script>
+<script src="../assets/shell.js"></script>
+<script>
+const SUBJ=[
+ ['Mathematics',18,17,52,87,'A1','3rd','Excellent'],
+ ['English Language',15,16,47,78,'B2','8th','Very good'],
+ ['Basic Science',17,18,47,82,'A1','4th','Excellent'],
+ ['القرآن الكريم',19,18,53,90,'A1','2nd','Outstanding'],
+ ['Basic Technology',14,15,42,71,'B3','11th','Good'],
+ ['Social Studies',16,15,45,76,'B2','6th','Very good'],
+ ['Civic Education',15,16,48,79,'B2','5th','Very good'],
+ ['اللغة العربية',17,16,50,83,'A1','3rd','Excellent'],
+];
+const TRAITS=[['Punctuality',5],['Politeness',5],['Neatness',4],['Honesty',5],['Cooperation',4],['Attentiveness',4],['Handwriting',4],['Sport',5]];
+// [name, your total, class average] — for analysis vs class
+const ANALYSIS=[
+ ['Mathematics',87,72],['English Language',78,68],['Basic Science',82,70],['القرآن الكريم',90,76],
+ ['Basic Technology',71,64],['Social Studies',76,67],['Civic Education',79,69],['اللغة العربية',83,71],
+];
+function gradeTone(g){return g[0]==='A'?'text-confirm bg-confirm/10':g[0]==='B'?'text-blue bg-wash':g[0]==='C'?'text-caution bg-caution/10':'text-alert bg-alert/10';}
+function isAr(s){return /[؀-ۿ]/.test(s);}
+document.getElementById('subjBody').innerHTML=SUBJ.map(s=>`<tr class="hover:bg-canvas/60">
+  <td class="px-5 py-2.5 font-medium ${isAr(s[0])?'arabic text-[14px]':''}">${s[0]}</td>
+  <td class="px-3 py-2.5 text-center font-mono text-steel">${s[1]}</td><td class="px-3 py-2.5 text-center font-mono text-steel">${s[2]}</td><td class="px-3 py-2.5 text-center font-mono text-steel">${s[3]}</td>
+  <td class="px-3 py-2.5 text-center font-mono font-semibold">${s[4]}</td>
+  <td class="px-3 py-2.5 text-center"><span class="text-[10.5px] font-semibold ${gradeTone(s[5])} rounded-full px-2 py-0.5">${s[5]}</span></td>
+  <td class="px-3 py-2.5 text-center font-mono text-steel">${s[6]}</td>
+  <td class="px-5 py-2.5 text-steel">${s[7]}</td></tr>`).join('');
+document.getElementById('traits').innerHTML=TRAITS.map(t=>{let dots='';for(let i=1;i<=5;i++)dots+=`<span class="h-2 w-2 rounded-full ${i<=t[1]?'bg-blue':'bg-whisper'}"></span>`;return `<div class="flex items-center justify-between"><span>${t[0]}</span><span class="flex gap-1">${dots}</span></div>`;}).join('');
+// analysis bars: your score (blue) overlaid on class avg (whisper), with a delta chip
+document.getElementById('analysisBars').innerHTML=ANALYSIS.map(a=>{const you=a[1],avg=a[2],d=you-avg,ar=isAr(a[0]);
+  return `<div class="grid grid-cols-[128px_1fr_64px] gap-3 items-center text-[12px]">
+    <span class="font-medium truncate ${ar?'arabic text-[14px]':''}">${a[0]}</span>
+    <div class="relative h-5">
+      <div class="absolute inset-y-1 left-0 rounded-full bg-whisper" style="width:${avg}%"></div>
+      <div class="absolute inset-y-0.5 left-0 rounded-full bg-blue" style="width:${you}%"></div>
+    </div>
+    <span class="font-mono text-right">${you} <span class="text-[10px] ${d>=0?'text-confirm':'text-alert'}">${d>=0?'+':''}${d}</span></span>
+  </div>`;}).join('');
+// strongest / weakest by margin above class average
+const ranked=[...ANALYSIS].map(a=>({n:a[0],you:a[1],avg:a[2],d:a[1]-a[2]})).sort((x,y)=>y.d-x.d);
+const li=o=>`<li class="flex items-center justify-between"><span class="${isAr(o.n)?'arabic text-[14px]':''}">${o.n}</span><span class="font-mono text-[11.5px]">${o.you} <span class="text-steel">(${o.d>=0?'+':''}${o.d} vs class)</span></span></li>`;
+document.getElementById('strongList').innerHTML=ranked.slice(0,3).map(li).join('');
+document.getElementById('weakList').innerHTML=ranked.slice(-3).reverse().map(li).join('');
+function renderTerm(){
+  const v=document.getElementById('termSel').value;
+  const pending=v==='t3';
+  document.getElementById('pending').classList.toggle('hidden',!pending);
+  document.getElementById('published').classList.toggle('hidden',pending);
+  document.getElementById('dlBtn').classList.toggle('hidden',pending);
+  if(!pending){document.getElementById('termName').textContent=v==='t2'?'Second Term 2025/26':'First Term 2025/26';
+    document.getElementById('sAvg').textContent=v==='t2'?'85.4%':'83.1%';document.getElementById('sPos').textContent=v==='t2'?'5th':'6th';}
+}
+renderTerm();
+</script>
+</body>
+</html>

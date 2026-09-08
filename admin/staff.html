@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Edsynk — Staff</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&family=Noto+Naskh+Arabic:wght@500&display=swap" rel="stylesheet">
+<script>tailwind.config={theme:{extend:{colors:{canvas:'#F7F9FC',ink:'#0B2A56',charcoal:'#18181B',steel:'#64748B',whisper:'#E2E8F0',blue:'#2177EF',wash:'#EAF2FE',mist:'#D3E4FD',confirm:'#16A34A',caution:'#D97706',alert:'#DC2626',excused:'#7C8DA6'},fontFamily:{sans:['Geist','sans-serif'],mono:['"Geist Mono"','monospace'],arabic:['"Noto Naskh Arabic"','serif']},boxShadow:{soft:'0 1px 2px rgba(11,42,86,0.04), 0 6px 24px rgba(11,42,86,0.05)',lift:'0 1px 3px rgba(11,42,86,0.10), 0 12px 32px rgba(11,42,86,0.12)'}}}}</script>
+<style>@keyframes rise{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}.rise{animation:rise .45s cubic-bezier(.2,.8,.2,1) both}</style>
+</head>
+<body data-active="Staff" data-persona="admin" class="bg-canvas font-sans text-charcoal antialiased">
+<div class="flex min-h-screen">
+  <div id="sidebar-root"></div>
+  <div class="flex-1 min-w-0">
+    <header class="h-[60px] bg-white/80 backdrop-blur-md border-b border-whisper/70 flex items-center justify-between px-4 sm:px-7 sticky top-0 z-20">
+      <div class="flex items-center gap-3">
+        <h1 class="text-[15px] font-semibold tracking-tight">Staff</h1>
+        <span class="font-mono text-[11.5px] text-steel">31 active</span>
+      </div>
+      <button onclick="document.getElementById('addS').classList.remove('hidden')" class="h-9 px-4 rounded-lg bg-blue text-white text-[13px] font-medium shadow-soft active:translate-y-px">+ Add staff</button>
+    </header>
+
+    <main class="p-4 sm:p-7 max-w-[1140px] space-y-4">
+
+      <!-- Activity strip -->
+      <section class="rise grid grid-cols-2 sm:grid-cols-4 gap-3">
+        <div class="bg-white border border-whisper/70 rounded-xl px-4 py-3.5 shadow-soft">
+          <p class="text-[10px] font-semibold uppercase tracking-wider text-steel">Submissions in</p>
+          <p class="font-mono text-[17px] font-semibold mt-1.5">86<span class="text-[12px] text-steel">/96</span></p></div>
+        <div class="bg-white border border-whisper/70 rounded-xl px-4 py-3.5 shadow-soft">
+          <p class="text-[10px] font-semibold uppercase tracking-wider text-steel">Registers today</p>
+          <p class="font-mono text-[17px] font-semibold mt-1.5">11<span class="text-[12px] text-steel">/12</span></p></div>
+        <div class="bg-white border border-whisper/70 rounded-xl px-4 py-3.5 shadow-soft">
+          <p class="text-[10px] font-semibold uppercase tracking-wider text-steel">Form teachers</p>
+          <p class="font-mono text-[17px] font-semibold mt-1.5">12<span class="text-[12px] text-steel"> classes ✓</span></p></div>
+        <div class="bg-white border border-whisper/70 rounded-xl px-4 py-3.5 shadow-soft">
+          <p class="text-[10px] font-semibold uppercase tracking-wider text-steel">Teaching / non-teaching</p>
+          <p class="font-mono text-[17px] font-semibold mt-1.5">26<span class="text-[12px] text-steel"> / 5</span></p></div>
+      </section>
+
+      <!-- filters -->
+      <section class="rise flex flex-wrap items-center gap-2" style="animation-delay:.03s">
+        <div class="flex items-center gap-2 h-10 flex-1 min-w-[200px] bg-white ring-1 ring-whisper rounded-xl px-3.5 text-[13px] text-steel">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+          <input id="sq" oninput="filt()" placeholder="Search staff by name or subject…" class="bg-transparent flex-1 focus:outline-none">
+        </div>
+        <div class="flex gap-1.5 text-[12px] font-medium" id="roleFilter">
+          <button data-r="all" class="h-10 px-3.5 rounded-xl bg-blue text-white">All</button>
+          <button data-r="Form" class="h-10 px-3.5 rounded-xl bg-white ring-1 ring-whisper text-steel">Form teachers</button>
+          <button data-r="Admin" class="h-10 px-3.5 rounded-xl bg-white ring-1 ring-whisper text-steel">Admin</button>
+          <button data-r="Islamiyyah" class="h-10 px-3.5 rounded-xl bg-white ring-1 ring-whisper text-steel">Islamiyyah</button>
+        </div>
+      </section>
+
+      <!-- Staff table -->
+      <section class="rise bg-white border border-whisper/70 rounded-2xl shadow-soft overflow-hidden" style="animation-delay:.05s">
+        <div class="overflow-x-auto"><table class="w-full text-[13px] min-w-[820px]">
+          <thead><tr class="text-left text-[10px] font-semibold uppercase tracking-wider text-steel border-b border-whisper/60 bg-canvas/60">
+            <th class="px-6 py-3 font-semibold">Staff <span class="normal-case text-steel/50 font-mono text-[9px] tracking-normal">A→Z</span></th>
+            <th class="px-3 py-3 font-semibold">Roles</th>
+            <th class="px-3 py-3 font-semibold">Teaching</th>
+            <th class="px-3 py-3 font-semibold">This term</th>
+            <th class="px-6 py-3 font-semibold text-right">Status</th></tr></thead>
+          <tbody id="staffBody" class="divide-y divide-whisper/60"></tbody>
+        </table></div>
+        <div class="px-6 py-3.5 bg-canvas border-t border-whisper/60 text-[11px] text-steel" id="countNote">
+          Staff are deactivated, never deleted — their signatures on published cards and audit history stay intact forever.
+        </div>
+      </section>
+    </main>
+  </div>
+</div>
+
+<!-- ADD STAFF modal -->
+<div id="addS" class="hidden fixed inset-0 z-50 grid place-items-center bg-ink/40 backdrop-blur-sm p-4" onclick="if(event.target===this)this.classList.add('hidden')">
+  <div class="bg-white rounded-2xl shadow-lift max-w-[540px] w-full p-6 max-h-[90vh] overflow-y-auto">
+    <h3 class="font-semibold tracking-tight text-[16px]">Add staff member</h3>
+    <div class="mt-4 grid grid-cols-2 gap-3 text-[13px]">
+      <input placeholder="Full name" class="h-10 rounded-lg border border-whisper bg-canvas px-3.5 col-span-2">
+      <input placeholder="Phone (required)" class="h-10 rounded-lg border border-whisper bg-canvas px-3.5 font-mono">
+      <input placeholder="Email (optional)" class="h-10 rounded-lg border border-whisper bg-canvas px-3.5">
+    </div>
+    <p class="text-[11px] font-semibold uppercase tracking-wider text-steel mt-4">Roles <span class="normal-case font-normal text-steel/70">— one person can hold several</span></p>
+    <div class="mt-1.5 flex flex-wrap gap-1.5">
+      <label class="text-[12px] font-medium rounded-full px-3 py-1.5 bg-blue text-white cursor-pointer"><input type="checkbox" checked class="hidden">Teacher</label>
+      <label class="text-[12px] font-medium rounded-full px-3 py-1.5 ring-1 ring-whisper text-steel cursor-pointer hover:bg-mist/40"><input type="checkbox" class="hidden">Exam officer</label>
+      <label class="text-[12px] font-medium rounded-full px-3 py-1.5 ring-1 ring-whisper text-steel cursor-pointer hover:bg-mist/40"><input type="checkbox" class="hidden">Admin</label>
+      <span class="text-[12px] rounded-full px-3 py-1.5 ring-1 ring-whisper text-steel/40">Bursar — with Finance</span>
+    </div>
+    <p class="text-[11px] font-semibold uppercase tracking-wider text-steel mt-4">Teaching assignments</p>
+    <div class="mt-1.5 rounded-xl ring-1 ring-whisper p-3.5 text-[12.5px] space-y-2">
+      <div class="flex items-center gap-2">
+        <select class="h-9 flex-1 rounded-lg border border-whisper bg-canvas px-2.5"><option>Physics</option><option>Mathematics</option><option>Qur'an</option></select>
+        <select class="h-9 flex-1 rounded-lg border border-whisper bg-canvas px-2.5"><option>SS 1 — both arms</option><option>JSS 2A</option></select>
+        <button class="h-9 w-9 grid place-items-center rounded-lg hover:bg-alert/10 text-steel">✕</button>
+      </div>
+      <button onclick="toast('Add another teaching assignment')" class="text-[11.5px] text-blue font-medium">+ Another subject</button>
+    </div>
+    <label class="mt-3 flex items-center gap-2.5 text-[12.5px] cursor-pointer">
+      <input type="checkbox" class="h-4 w-4 rounded accent-[#2177EF]">Make form teacher of
+      <select class="h-9 rounded-lg border border-whisper bg-canvas px-2.5 text-[12px]"><option>SS 1A</option><option>SS 1B</option></select>
+      <span class="text-steel text-[11px]">→ unlocks register + traits</span></label>
+    <p class="text-[11px] font-semibold uppercase tracking-wider text-steel mt-4">Login credentials</p>
+    <div class="mt-1.5 grid grid-cols-2 gap-2.5 text-[12.5px]">
+      <label class="rounded-xl ring-1 ring-whisper p-3.5 cursor-pointer hover:ring-mist"><input type="radio" name="cred" class="accent-[#2177EF] mr-2">Email invite<br><span class="text-steel text-[11px]">they set their own password</span></label>
+      <label class="rounded-xl ring-2 ring-blue bg-wash/50 p-3.5 cursor-pointer"><input type="radio" name="cred" checked class="accent-[#2177EF] mr-2">Printable slip<br><span class="text-steel text-[11px]">temp password · forced change · for staff without email</span></label>
+    </div>
+    <div class="flex justify-end gap-2.5 mt-6">
+      <button onclick="document.getElementById('addS').classList.add('hidden')" class="h-10 px-4 rounded-lg border border-whisper text-[13px] font-medium hover:bg-mist/30">Cancel</button>
+      <button onclick="document.getElementById('addS').classList.add('hidden')" class="h-10 px-5 rounded-lg bg-blue text-white text-[13px] font-medium active:translate-y-px">Add &amp; print slip</button>
+    </div>
+  </div>
+</div>
+<script src="../assets/shell.js"></script>
+<script>
+// roles: T=Teacher, X=Exam officer, A=Admin, P=Principal, B=Bursar; form='JSS 2A' etc; isl=Islamiyyah
+const ROLECHIP={T:['Teacher','text-blue bg-wash'],X:['Exam officer','text-ink bg-mist/60'],A:['Admin','text-caution bg-caution/10'],P:['Principal','text-white bg-ink'],B:['Bursar','text-steel bg-canvas ring-1 ring-whisper'],VP:['VP Academic','text-ink bg-mist/60']};
+// [name, initials, avatarClass, phone, lastActive, roles[], form(or null), teaching, term, status, isl]
+const STAFF=[
+ ['Ustadh Abdullahi Sani','AS','bg-ink text-white','0803 ··· 1001','5 min',['P','A'],null,'Oversight · signs all cards','—','active',0],
+ ['Mr. Audu Bappa','AuB','bg-wash text-blue','0807 ··· 4521','2 hr',['T'],null,'PHE — all JSS &amp; SS','reg ✓','active',0],
+ ['Mrs. Bisi Adeyemi','BA','bg-confirm/10 text-confirm','0802 ··· 7788','20 min',['VP','T'],'SS 1A','English — SS 1A·2A·3A','3/3 ✓','active',0],
+ ['Mr. Chinedu Okafor','CO','bg-mist text-ink','0812 ··· 9034','3 days',['T'],'JSS 2B','Basic Tech + English — 4 classes','2 not submitted','active',0],
+ ['Mr. Emeka Nwosu','EN','bg-wash text-blue','0806 ··· 2310','1 hr',['T'],'SS 3A','Economics — SS 1·2·3','3/3 ✓','active',0],
+ ['Mrs. Fatima Bala','FB','bg-confirm/10 text-confirm','0809 ··· 6654','45 min',['T'],null,'Basic Science — JSS 1·2·3','4/4 ✓','active',0],
+ ['Mrs. Grace Eze','GE','bg-wash text-blue','0815 ··· 3320','1 hr',['T'],'JSS 1B','Social Studies — JSS 1·2','2/2 ✓','active',0],
+ ['Ustadha Halima Yusuf','HY','bg-confirm/10 text-confirm','0816 ··· 7740','1 hr',['T'],"I'dadiyyah 1","Qur'an & Tajweed — Islamiyyah",'register 14-day streak','active',1],
+ ['Mrs. Hauwa Adamu','HA','bg-wash text-blue','0805 ··· 1190','30 min',['T'],'JSS 3B','Home Econ — JSS · SS','2/2 ✓','active',0],
+ ['Mr. Ibrahim Lawal','IL','bg-mist text-ink','0811 ··· 8841','4 hr',['T'],'SS 2A','Chemistry — SS 1·2·3','3/3 ✓','active',0],
+ ['Mallam Musa Ibrahim','MI','bg-wash text-blue','0803 ··· 1190','25 min',['T','X'],'JSS 2A','Mathematics — JSS 2A·2B·3A','3/3 ✓','active',0],
+ ['Mrs. Ngozi Okonkwo','NO','bg-confirm/10 text-confirm','0808 ··· 5567','2 hr',['T'],'SS 2B','Biology — SS 1·2·3','3/3 ✓','active',0],
+ ['Mr. Sani Bello','SB','bg-wash text-blue','0814 ··· 2093','1 day',['T'],'JSS 3A','Geography — JSS 3 · SS','2/2 ✓','active',0],
+ ['Ustadh Sani Garba','SG','bg-mist text-ink','0817 ··· 4408','3 hr',['T'],null,'Fiqh &amp; Arabic — Islamiyyah','3/3 ✓','active',1],
+ ['Mr. Tunde Bakare','TB','bg-wash text-blue','0810 ··· 6612','5 hr',['T'],'SS 1B','Further Maths + Physics — SS','2/3 in progress','active',0],
+ ['Mr. Yakubu Danjuma','YD','bg-confirm/10 text-confirm','0813 ··· 7791','1 hr',['T'],'JSS 1A','English — JSS 1·2','2/2 ✓','active',0],
+ ['Hajiya Zainab Aliyu','ZA','bg-mist text-ink','0804 ··· 3398','6 hr',['B','A'],null,'Bursary &amp; fees (Finance — Sept)','—','active',0],
+ ['Mrs. Amina Garba','AG','bg-canvas ring-1 ring-whisper text-steel','—','left Mar 2026',['T'],null,'— reassigned to Mr. Okafor','—','deactivated',0],
+];
+function roleChips(roles,form){
+  let h=roles.map(r=>`<span class="text-[10px] font-medium ${ROLECHIP[r][1]} rounded-full px-2 py-0.5">${ROLECHIP[r][0]}</span>`).join('');
+  if(form) h+=`<span class="text-[10px] font-medium text-caution bg-caution/10 rounded-full px-2 py-0.5">Form · ${form}</span>`;
+  return `<div class="flex flex-wrap gap-1">${h}</div>`;
+}
+function termPill(t){
+  if(t==='—') return '<span class="text-[12px] text-steel">—</span>';
+  if(t.indexOf('not submitted')>-1) return `<span class="text-[10.5px] font-medium text-alert bg-alert/10 rounded-full px-2 py-0.5">${t}</span>`;
+  if(t.indexOf('progress')>-1) return `<span class="text-[10.5px] font-medium text-caution bg-caution/10 rounded-full px-2 py-0.5">${t}</span>`;
+  return `<span class="text-[10.5px] font-medium text-confirm bg-confirm/10 rounded-full px-2 py-0.5">${t}</span>`;
+}
+function render(list){
+  document.getElementById('staffBody').innerHTML=list.map(s=>{
+    const dim=s[9]==='deactivated'?' opacity-60':(s[3]==='0812 ··· 9034'?' bg-alert/[0.02]':'');
+    const statusCell = s[9]==='deactivated'
+      ? '<span class="text-[10.5px] font-medium text-excused bg-excused/10 rounded-full px-2.5 py-1">Deactivated</span>'
+      : (s[8].indexOf('not submitted')>-1
+        ? '<div class="inline-flex gap-1.5"><button onclick="event.stopPropagation();toast(\'Reminder sent to submit scores\')" class="h-8 px-3 rounded-lg border border-whisper text-[11px] font-medium hover:bg-mist/30">Remind</button><span class="text-[10.5px] font-medium text-confirm bg-confirm/10 rounded-full px-2.5 py-1 self-center">Active</span></div>'
+        : '<span class="text-[10.5px] font-medium text-confirm bg-confirm/10 rounded-full px-2.5 py-1">Active</span>');
+    return `<tr onclick="location.href='staff-detail.html'" class="hover:bg-mist/15 cursor-pointer${dim}">
+      <td class="px-6 py-3.5"><div class="flex items-center gap-3">
+        <span class="h-9 w-9 rounded-full ${s[2]} grid place-items-center text-[11px] font-semibold shrink-0">${s[1]}</span>
+        <div><p class="font-medium">${s[0]}</p><p class="text-[11px] text-steel font-mono">${s[3]} · ${s[4]}</p></div></div></td>
+      <td class="px-3 py-3.5">${roleChips(s[5],s[6])}</td>
+      <td class="px-3 py-3.5 text-[12px] text-steel"><span class="${s[10]?'arabic ':''}">${s[7]}</span></td>
+      <td class="px-3 py-3.5">${termPill(s[8])}</td>
+      <td class="px-6 py-3.5 text-right">${statusCell}</td></tr>`;
+  }).join('');
+  document.getElementById('countNote').innerHTML=`Showing <span class="font-mono">${list.length}</span> of 31 staff. Staff are deactivated, never deleted — signatures on published cards &amp; audit history stay intact forever.`;
+}
+let curFilter='all';
+function apply(){
+  const q=document.getElementById('sq').value.toLowerCase();
+  render(STAFF.filter(s=>{
+    const matchQ=s[0].toLowerCase().includes(q)||s[7].toLowerCase().includes(q);
+    let matchR=true;
+    if(curFilter==='Form') matchR=!!s[6];
+    else if(curFilter==='Admin') matchR=s[5].includes('A')||s[5].includes('P');
+    else if(curFilter==='Islamiyyah') matchR=s[10]===1;
+    return matchQ&&matchR;
+  }));
+}
+function filt(){apply();}
+document.querySelectorAll('#roleFilter button').forEach(b=>b.onclick=()=>{
+  curFilter=b.dataset.r;
+  document.querySelectorAll('#roleFilter button').forEach(x=>x.className='h-10 px-3.5 rounded-xl bg-white ring-1 ring-whisper text-steel');
+  b.className='h-10 px-3.5 rounded-xl bg-blue text-white';
+  apply();
+});
+render(STAFF);
+</script>
+<div id="toast" class="hidden fixed bottom-5 left-1/2 -translate-x-1/2 z-[60] bg-ink text-white text-[12.5px] font-medium px-4 py-2.5 rounded-xl shadow-lift"></div>
+<script>function toast(m){var t=document.getElementById('toast');t.textContent=m;t.classList.remove('hidden');clearTimeout(window._tt);window._tt=setTimeout(function(){t.classList.add('hidden')},2200);}</script>
+</body>
+</html>

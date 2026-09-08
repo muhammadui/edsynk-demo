@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Edsynk HQ — Schools</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script>
+tailwind.config = { theme: { extend: {
+  colors: { canvas:'#F7F9FC', ink:'#0B2A56', charcoal:'#18181B', steel:'#64748B', whisper:'#E2E8F0',
+    blue:'#2177EF', skyblue:'#5C9DF5', wash:'#EAF2FE', mist:'#D3E4FD',
+    confirm:'#16A34A', caution:'#D97706', alert:'#DC2626', excused:'#7C8DA6' },
+  fontFamily: { sans:['Geist','sans-serif'], mono:['"Geist Mono"','monospace'] },
+  boxShadow: { soft:'0 1px 2px rgba(11,42,86,0.04), 0 6px 24px rgba(11,42,86,0.05)',
+               lift:'0 1px 3px rgba(11,42,86,0.10), 0 12px 32px rgba(11,42,86,0.12)' }
+}}}
+</script>
+<style>
+  @keyframes rise{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+  .rise{animation:rise .5s cubic-bezier(.2,.8,.2,1) both}
+  #drawer{transform:translateX(105%);transition:transform .28s cubic-bezier(.2,.8,.2,1)}
+  body.drawer-open #drawer{transform:none}
+  #drawer-bg{opacity:0;pointer-events:none;transition:opacity .2s}
+  body.drawer-open #drawer-bg{opacity:1;pointer-events:auto}
+</style>
+</head>
+<body data-active="Schools" data-persona="platform" class="bg-canvas font-sans text-charcoal antialiased">
+<div class="flex min-h-screen">
+
+  <div id="sidebar-root"></div>
+
+  <div class="flex-1 min-w-0">
+    <header class="h-[60px] bg-white/80 backdrop-blur-md border-b border-whisper/70 flex items-center justify-between px-4 sm:px-7 sticky top-0 z-20">
+      <div class="flex items-center gap-3">
+        <h1 class="text-[15px] font-semibold tracking-tight">Schools</h1>
+        <span class="font-mono text-[11.5px] font-medium text-blue bg-wash rounded-full px-2.5 py-1 hidden sm:inline">3 live · 2 onboarding</span>
+      </div>
+      <button onclick="toast('Provision school — opening wizard…')" class="h-9 px-4 rounded-lg bg-blue text-white text-[13px] font-medium shadow-soft active:translate-y-px flex items-center gap-1.5">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg><span class="hidden sm:inline">Provision school</span></button>
+    </header>
+
+    <main class="p-4 sm:p-7 max-w-[1240px] space-y-4">
+
+      <div class="rise flex flex-wrap items-center gap-2">
+        <div class="flex items-center gap-2 h-10 flex-1 min-w-[220px] bg-white ring-1 ring-whisper rounded-xl px-3.5 text-[13px] text-steel">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+          Search by name, subdomain, owner…
+        </div>
+        <div class="flex gap-1.5 text-[12px] font-medium" id="schoolFilters">
+          <button onclick="filt(this)" class="h-10 px-4 rounded-xl bg-blue text-white">All · 5</button>
+          <button onclick="filt(this)" class="h-10 px-4 rounded-xl bg-white ring-1 ring-whisper text-steel hover:bg-mist/30">Live · 3</button>
+          <button onclick="filt(this)" class="h-10 px-4 rounded-xl bg-white ring-1 ring-whisper text-steel hover:bg-mist/30">Onboarding · 2</button>
+          <button onclick="filt(this)" class="h-10 px-4 rounded-xl bg-white ring-1 ring-whisper text-steel hover:bg-mist/30">Overdue · 1</button>
+        </div>
+      </div>
+
+      <div class="rise bg-white ring-1 ring-whisper/80 rounded-2xl shadow-soft overflow-hidden" style="animation-delay:.08s">
+        <div class="overflow-x-auto">
+          <table class="w-full text-[12.5px]">
+            <thead><tr class="text-left text-[10.5px] uppercase tracking-wider text-steel border-b border-whisper/70 bg-canvas/60">
+              <th class="px-5 py-3 font-semibold">School</th><th class="px-3 py-3 font-semibold">Status</th>
+              <th class="px-3 py-3 font-semibold">Plan</th><th class="px-3 py-3 font-semibold">Students</th>
+              <th class="px-3 py-3 font-semibold">Term bill</th><th class="px-3 py-3 font-semibold hidden lg:table-cell">Owner</th>
+              <th class="px-3 py-3 font-semibold hidden md:table-cell">Live since</th><th class="px-5 py-3"></th></tr></thead>
+            <tbody class="divide-y divide-whisper/60">
+              <tr class="hover:bg-canvas/60 cursor-pointer" onclick="location.href='hq-school-detail.html'">
+                <td class="px-5 py-3.5"><div class="flex items-center gap-3"><span class="h-9 w-9 rounded-lg bg-blue text-white grid place-items-center text-[11px] font-bold shrink-0">AF</span>
+                  <div><p class="font-medium">Al-Furqan Academy</p><p class="font-mono text-[10.5px] text-steel">alfurqan.edsynk.ng · hybrid · Bauchi</p></div></div></td>
+                <td class="px-3 py-3.5"><span class="text-[10.5px] font-semibold text-confirm bg-confirm/10 rounded-full px-2 py-0.5">Live</span></td>
+                <td class="px-3 py-3.5"><span class="text-[10.5px] font-semibold text-blue bg-wash rounded-full px-2 py-0.5">Pro</span></td>
+                <td class="px-3 py-3.5 font-mono">412</td>
+                <td class="px-3 py-3.5 font-mono">₦824,000 <span class="text-confirm">✓</span></td>
+                <td class="px-3 py-3.5 text-steel hidden lg:table-cell">Ustadh Abdullahi</td>
+                <td class="px-3 py-3.5 text-steel hidden md:table-cell">Jan 2026</td>
+                <td class="px-5 py-3.5 text-right text-steel/60">›</td>
+              </tr>
+              <tr class="hover:bg-canvas/60 cursor-pointer" onclick="location.href='hq-school-detail.html'">
+                <td class="px-5 py-3.5"><div class="flex items-center gap-3"><span class="h-9 w-9 rounded-lg bg-skyblue text-white grid place-items-center text-[11px] font-bold shrink-0">SI</span>
+                  <div><p class="font-medium">Sunrise International College</p><p class="font-mono text-[10.5px] text-steel">sunrise.edsynk.ng · conventional · Bauchi</p></div></div></td>
+                <td class="px-3 py-3.5"><span class="text-[10.5px] font-semibold text-confirm bg-confirm/10 rounded-full px-2 py-0.5">Live</span></td>
+                <td class="px-3 py-3.5"><span class="text-[10.5px] font-semibold text-skyblue bg-wash rounded-full px-2 py-0.5">Plus</span></td>
+                <td class="px-3 py-3.5 font-mono">379</td>
+                <td class="px-3 py-3.5 font-mono">₦454,800 <span class="text-confirm">✓</span></td>
+                <td class="px-3 py-3.5 text-steel hidden lg:table-cell">Mrs. N. Adeyemi</td>
+                <td class="px-3 py-3.5 text-steel hidden md:table-cell">Mar 2026</td>
+                <td class="px-5 py-3.5 text-right text-steel/60">›</td>
+              </tr>
+              <tr class="hover:bg-canvas/60 cursor-pointer" onclick="location.href='hq-school-detail.html'">
+                <td class="px-5 py-3.5"><div class="flex items-center gap-3"><span class="h-9 w-9 rounded-lg bg-ink text-white grid place-items-center text-[11px] font-bold shrink-0">DH</span>
+                  <div><p class="font-medium">Daru-l-Hikma Islamiyyah</p><p class="font-mono text-[10.5px] text-steel">darulhikma.edsynk.ng · islamic · Bauchi</p></div></div></td>
+                <td class="px-3 py-3.5"><span class="text-[10.5px] font-semibold text-caution bg-caution/10 rounded-full px-2 py-0.5">Dunning 2/3</span></td>
+                <td class="px-3 py-3.5"><span class="text-[10.5px] font-semibold text-steel bg-canvas ring-1 ring-whisper rounded-full px-2 py-0.5">Core</span></td>
+                <td class="px-3 py-3.5 font-mono">456</td>
+                <td class="px-3 py-3.5 font-mono text-alert">₦228,000 · 9d</td>
+                <td class="px-3 py-3.5 text-steel hidden lg:table-cell">Sheikh Tijjani</td>
+                <td class="px-3 py-3.5 text-steel hidden md:table-cell">May 2026</td>
+                <td class="px-5 py-3.5 text-right text-steel/60">›</td>
+              </tr>
+              <tr class="hover:bg-canvas/60 cursor-pointer bg-canvas/40" onclick="location.href='hq-school-detail.html'">
+                <td class="px-5 py-3.5"><div class="flex items-center gap-3"><span class="h-9 w-9 rounded-lg bg-canvas ring-1 ring-whisper text-steel grid place-items-center text-[11px] font-bold shrink-0">BP</span>
+                  <div><p class="font-medium text-steel">Bright Path College</p><p class="font-mono text-[10.5px] text-steel/70">brightpath.edsynk.ng · reserved</p></div></div></td>
+                <td class="px-3 py-3.5"><span class="text-[10.5px] font-semibold text-caution bg-caution/10 rounded-full px-2 py-0.5">Data import</span></td>
+                <td class="px-3 py-3.5"><span class="text-[10.5px] text-steel">Plus (agreed)</span></td>
+                <td class="px-3 py-3.5 font-mono text-steel">~302</td>
+                <td class="px-3 py-3.5 font-mono text-steel">—</td>
+                <td class="px-3 py-3.5 text-steel hidden lg:table-cell">Mr. C. Okeke</td>
+                <td class="px-3 py-3.5 text-steel hidden md:table-cell">ETA 23 Jun</td>
+                <td class="px-5 py-3.5 text-right text-steel/60">›</td>
+              </tr>
+              <tr class="hover:bg-canvas/60 cursor-pointer bg-canvas/40" onclick="location.href='hq-school-detail.html'">
+                <td class="px-5 py-3.5"><div class="flex items-center gap-3"><span class="h-9 w-9 rounded-lg bg-canvas ring-1 ring-whisper text-steel grid place-items-center text-[11px] font-bold shrink-0">KH</span>
+                  <div><p class="font-medium text-steel">Khairul Huda Schools</p><p class="font-mono text-[10.5px] text-steel/70">demo Tue 4pm · ~620 students</p></div></div></td>
+                <td class="px-3 py-3.5"><span class="text-[10.5px] font-semibold text-blue bg-wash rounded-full px-2 py-0.5">Demo booked</span></td>
+                <td class="px-3 py-3.5 text-steel">—</td>
+                <td class="px-3 py-3.5 font-mono text-steel">~620</td>
+                <td class="px-3 py-3.5 font-mono text-steel">—</td>
+                <td class="px-3 py-3.5 text-steel hidden lg:table-cell">Alhaji Bello</td>
+                <td class="px-3 py-3.5 text-steel hidden md:table-cell">—</td>
+                <td class="px-5 py-3.5 text-right text-steel/60">›</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <p class="rise text-[11.5px] text-steel px-1" style="animation-delay:.15s">Click a school to open its record. Suspension is always <span class="font-medium text-charcoal">read-only</span> — exports never lock.</p>
+    </main>
+  </div>
+</div>
+
+<!-- slide-over drawer: Al-Furqan -->
+<div id="drawer-bg" class="fixed inset-0 z-40 bg-ink/30 backdrop-blur-[2px]" onclick="document.body.classList.remove('drawer-open')"></div>
+<aside id="drawer" class="fixed inset-y-0 right-0 z-50 w-full max-w-[440px] bg-white shadow-lift overflow-y-auto">
+  <div class="sticky top-0 bg-white/90 backdrop-blur border-b border-whisper/70 px-5 py-4 flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <span class="h-10 w-10 rounded-lg bg-blue text-white grid place-items-center text-[13px] font-bold">AF</span>
+      <div><p class="text-[14.5px] font-semibold">Al-Furqan Academy</p><p class="font-mono text-[10.5px] text-steel">alfurqan.edsynk.ng · tenant af_8k2q</p></div>
+    </div>
+    <button class="h-8 w-8 grid place-items-center rounded-lg hover:bg-mist/40 text-steel" onclick="document.body.classList.remove('drawer-open')">✕</button>
+  </div>
+  <div class="p-5 space-y-5 text-[12.5px]">
+    <div class="grid grid-cols-3 gap-2 text-center">
+      <div class="rounded-xl bg-canvas ring-1 ring-whisper/70 py-3"><p class="font-mono text-[16px] font-semibold">412</p><p class="text-[10px] text-steel mt-0.5">students</p></div>
+      <div class="rounded-xl bg-canvas ring-1 ring-whisper/70 py-3"><p class="font-mono text-[16px] font-semibold">31</p><p class="text-[10px] text-steel mt-0.5">staff</p></div>
+      <div class="rounded-xl bg-canvas ring-1 ring-whisper/70 py-3"><p class="font-mono text-[16px] font-semibold">2,114</p><p class="text-[10px] text-steel mt-0.5">cards sealed</p></div>
+    </div>
+    <div>
+      <p class="text-[11px] font-semibold uppercase tracking-wider text-steel mb-2">Subscription</p>
+      <div class="rounded-xl ring-1 ring-whisper/80 divide-y divide-whisper/60">
+        <div class="flex justify-between px-4 py-2.5"><span class="text-steel">Plan</span><span class="font-medium">Pro · ₦2,000/student/term</span></div>
+        <div class="flex justify-between px-4 py-2.5"><span class="text-steel">2026 T3 invoice</span><span class="font-mono">₦824,000 <span class="text-confirm">paid 4 Jun</span></span></div>
+        <div class="flex justify-between px-4 py-2.5"><span class="text-steel">Custom domain</span><span class="font-mono">portal.alfurqan.sch.ng <span class="text-confirm">✓ ssl</span></span></div>
+        <div class="flex justify-between px-4 py-2.5"><span class="text-steel">AI credits</span><span class="font-mono">₦18,400 remaining</span></div>
+      </div>
+    </div>
+    <div>
+      <p class="text-[11px] font-semibold uppercase tracking-wider text-steel mb-2">Usage · last 30 days</p>
+      <div class="rounded-xl ring-1 ring-whisper/80 divide-y divide-whisper/60">
+        <div class="flex justify-between px-4 py-2.5"><span class="text-steel">Active staff logins</span><span class="font-mono">28/31 weekly</span></div>
+        <div class="flex justify-between px-4 py-2.5"><span class="text-steel">Parent result views</span><span class="font-mono">1,893</span></div>
+        <div class="flex justify-between px-4 py-2.5"><span class="text-steel">QR verifications</span><span class="font-mono">214</span></div>
+        <div class="flex justify-between px-4 py-2.5"><span class="text-steel">EdAssess generations</span><span class="font-mono">47</span></div>
+      </div>
+    </div>
+    <div>
+      <p class="text-[11px] font-semibold uppercase tracking-wider text-steel mb-2">Support actions</p>
+      <div class="grid grid-cols-2 gap-2">
+        <button onclick="toast('Impersonation requires a ticket reference — consent-logged')" class="h-10 rounded-xl ring-1 ring-whisper bg-white hover:bg-mist/30 font-medium">Impersonate <span class="text-[9.5px] text-steel block font-normal">consent-logged</span></button>
+        <button onclick="toast('Preparing tenant data export…')" class="h-10 rounded-xl ring-1 ring-whisper bg-white hover:bg-mist/30 font-medium">Export tenant data</button>
+        <button onclick="toast('Invoice resent to owner')" class="h-10 rounded-xl ring-1 ring-whisper bg-white hover:bg-mist/30 font-medium">Resend invoice</button>
+        <button onclick="toast('Opening school portal as owner…')" class="h-10 rounded-xl ring-1 ring-whisper bg-white hover:bg-mist/30 font-medium">Open as owner →</button>
+      </div>
+    </div>
+    <div class="rounded-xl ring-1 ring-alert/20 bg-alert/[0.04] p-4">
+      <p class="text-[11px] font-semibold uppercase tracking-wider text-alert">Danger zone</p>
+      <div class="mt-2.5 flex items-center justify-between">
+        <span class="text-steel">Suspend (read-only)</span>
+        <button onclick="toast('Read-only suspension — confirm required')" class="h-8 px-3.5 rounded-lg ring-1 ring-alert/30 text-alert text-[12px] font-medium hover:bg-alert/5">Suspend…</button>
+      </div>
+      <p class="text-[10.5px] text-steel mt-2">Suspension never deletes or hides records. Owner keeps export access permanently.</p>
+    </div>
+  </div>
+</aside>
+
+<script src="../assets/shell.js"></script>
+<div id="toast" class="hidden fixed bottom-5 left-1/2 -translate-x-1/2 z-[60] bg-ink text-white text-[12.5px] font-medium px-4 py-2.5 rounded-xl shadow-lift"></div>
+<script>function toast(m){var t=document.getElementById('toast');t.textContent=m;t.classList.remove('hidden');clearTimeout(window._tt);window._tt=setTimeout(function(){t.classList.add('hidden')},2200);}
+function filt(btn){btn.parentNode.querySelectorAll('button').forEach(function(b){b.className='h-10 px-4 rounded-xl bg-white ring-1 ring-whisper text-steel hover:bg-mist/30';});btn.className='h-10 px-4 rounded-xl bg-blue text-white';}</script>
+</body>
+</html>

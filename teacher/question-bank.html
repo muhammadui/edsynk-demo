@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Edsynk — Question Bank</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script>tailwind.config={theme:{extend:{colors:{canvas:'#F7F9FC',ink:'#0B2A56',charcoal:'#18181B',steel:'#64748B',whisper:'#E2E8F0',blue:'#2177EF',skyblue:'#5C9DF5',wash:'#EAF2FE',mist:'#D3E4FD',confirm:'#16A34A',caution:'#D97706',alert:'#DC2626',excused:'#7C8DA6'},fontFamily:{sans:['Geist','sans-serif'],mono:['"Geist Mono"','monospace']},boxShadow:{soft:'0 1px 2px rgba(11,42,86,0.04), 0 6px 24px rgba(11,42,86,0.05)',lift:'0 1px 3px rgba(11,42,86,0.10), 0 12px 32px rgba(11,42,86,0.12)'}}}}</script>
+<style>
+@keyframes rise{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}.rise{animation:rise .45s cubic-bezier(.2,.8,.2,1) both}
+#qModal{opacity:0;pointer-events:none;transition:opacity .2s}body.qopen #qModal{opacity:1;pointer-events:auto}
+#qModal .sheet{transform:translateY(16px);transition:transform .25s cubic-bezier(.2,.8,.2,1)}body.qopen #qModal .sheet{transform:none}
+@media print{
+  @page{size:A4 portrait;margin:14mm}
+  body{background:#fff!important}
+  body *{visibility:hidden}
+  #paperDoc,#paperDoc *{visibility:visible}
+  #paperDoc{position:absolute;left:0;top:0;width:100%}
+  .no-print{display:none!important}
+}
+</style>
+</head>
+<body data-active="Question Bank" data-persona="teacher" class="bg-canvas font-sans text-charcoal antialiased">
+<div class="flex min-h-screen">
+  <div id="sidebar-root" class="no-print"></div>
+  <div class="flex-1 min-w-0">
+    <header class="no-print h-[60px] bg-white/80 backdrop-blur-md border-b border-whisper/70 flex items-center justify-between px-4 sm:px-7 sticky top-0 z-20">
+      <div class="flex items-center gap-3"><h1 class="text-[15px] font-semibold tracking-tight">Question Bank</h1>
+        <span class="font-mono text-[11px] font-medium text-blue bg-wash rounded-full px-2.5 py-1 hidden sm:inline" id="bankCount">142 questions</span></div>
+      <div class="flex items-center gap-2.5">
+        <a href="edassess.html" class="h-9 px-3.5 rounded-lg bg-white ring-1 ring-whisper text-[13px] font-medium text-steel hover:bg-mist/30 hidden sm:flex items-center gap-1.5"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l1.9 5.7L19.5 10l-5.6 1.3L12 17l-1.9-5.7L4.5 10l5.6-1.3z"/></svg>Draft with EdAssess</a>
+        <button onclick="openQ()" class="h-9 px-4 rounded-lg bg-blue text-white text-[13px] font-medium shadow-soft active:translate-y-px">+ Add question</button>
+      </div>
+    </header>
+
+    <main class="p-4 sm:p-7 max-w-[1240px] grid lg:grid-cols-[1fr_440px] gap-4 pb-12">
+
+      <!-- ============ LEFT: QUESTION BANK ============ -->
+      <section class="rise space-y-3 min-w-0">
+        <div class="rounded-2xl bg-wash/50 ring-1 ring-mist/60 px-4 py-3 text-[11.5px] text-ink">Your own question bank — author once, reuse every term. Pull questions into the paper on the right, or auto-pick a balanced set. No need to wait on the admin.</div>
+
+        <!-- filters -->
+        <div class="flex flex-wrap items-center gap-2">
+          <select id="fSubj" onchange="renderBank()" class="h-10 rounded-xl border border-whisper bg-white px-3 text-[12.5px] font-medium"><option value="">All subjects</option><option>Mathematics</option><option>Basic Science</option></select>
+          <select id="fTopic" onchange="renderBank()" class="h-10 rounded-xl border border-whisper bg-white px-3 text-[12.5px] font-medium"><option value="">All topics</option><option>Algebra</option><option>Geometry</option><option>Number &amp; numeration</option><option>Cell &amp; living things</option><option>Energy</option><option>Matter</option></select>
+          <select id="fType" onchange="renderBank()" class="h-10 rounded-xl border border-whisper bg-white px-3 text-[12.5px] font-medium"><option value="">All types</option><option value="obj">Objective</option><option value="tf">True / False</option><option value="theory">Theory</option></select>
+          <select id="fDiff" onchange="renderBank()" class="h-10 rounded-xl border border-whisper bg-white px-3 text-[12.5px] font-medium"><option value="">Any difficulty</option><option>Easy</option><option>Medium</option><option>Hard</option></select>
+          <div class="flex items-center gap-2 h-10 flex-1 min-w-[160px] bg-white ring-1 ring-whisper rounded-xl px-3.5">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#64748B" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+            <input id="fSearch" oninput="renderBank()" placeholder="Search questions…" class="flex-1 bg-transparent text-[13px] focus:outline-none">
+          </div>
+        </div>
+
+        <p class="text-[11px] text-steel" id="bankMeta">Showing all questions</p>
+
+        <div id="bank" class="space-y-2"></div>
+      </section>
+
+      <!-- ============ RIGHT: EXAM BUILDER ============ -->
+      <section class="rise lg:sticky lg:top-[76px] h-fit space-y-3" style="animation-delay:.05s">
+        <div class="bg-white ring-1 ring-whisper/80 rounded-2xl shadow-soft overflow-hidden">
+          <div class="px-5 py-3.5 border-b border-whisper/60 flex items-center justify-between">
+            <p class="text-[13.5px] font-semibold">Exam paper</p>
+            <span class="text-[10.5px] font-semibold text-caution bg-caution/10 rounded-full px-2.5 py-1">Draft</span>
+          </div>
+
+          <!-- meta -->
+          <div class="px-5 py-4 space-y-3 border-b border-whisper/60">
+            <div><label class="text-[11px] font-semibold text-steel">Exam title</label><input id="mTitle" value="Mathematics — Third Term Examination" class="mt-1.5 w-full h-10 rounded-lg border border-whisper bg-canvas px-3 text-[12.5px]"></div>
+            <div class="grid grid-cols-2 gap-2">
+              <div><label class="text-[11px] font-semibold text-steel">Class</label><select class="mt-1.5 w-full h-10 rounded-lg border border-whisper bg-canvas px-2.5 text-[12.5px]"><option>JSS 2A</option><option>JSS 2B</option><option>JSS 2 (all)</option></select></div>
+              <div><label class="text-[11px] font-semibold text-steel">Duration (min)</label><input value="60" class="mt-1.5 w-full h-10 rounded-lg border border-whisper bg-canvas px-3 font-mono text-[12.5px]"></div>
+            </div>
+            <div><label class="text-[11px] font-semibold text-steel">Instructions to candidates</label><textarea rows="2" class="mt-1.5 w-full rounded-lg border border-whisper bg-canvas px-3 py-2 text-[12px] resize-none focus:outline-none focus:ring-2 focus:ring-blue/50">Answer ALL objective questions in Section A and any TWO theory questions in Section B. Show all working.</textarea></div>
+          </div>
+
+          <!-- auto-pick -->
+          <div class="px-5 py-3 border-b border-whisper/60 bg-canvas/40">
+            <p class="text-[11px] font-semibold uppercase tracking-wider text-steel mb-2">Build it for me</p>
+            <div class="flex flex-wrap gap-1.5">
+              <button onclick="autoPick('algebra')" class="h-8 px-3 rounded-lg bg-white ring-1 ring-whisper text-[11.5px] font-medium text-steel hover:bg-mist/30">10 obj + 2 theory · Algebra</button>
+              <button onclick="autoPick('mixed')" class="h-8 px-3 rounded-lg bg-white ring-1 ring-whisper text-[11.5px] font-medium text-steel hover:bg-mist/30">Mixed · whole term</button>
+              <button onclick="clearPaper()" class="h-8 px-3 rounded-lg bg-white ring-1 ring-whisper text-[11.5px] font-medium text-steel hover:bg-mist/30">Clear</button>
+            </div>
+          </div>
+
+          <!-- paper list -->
+          <div id="paper" class="divide-y divide-whisper/60 max-h-[44vh] overflow-y-auto"></div>
+          <div id="paperEmpty" class="px-5 py-10 text-center text-[12.5px] text-steel">No questions yet. Tap <span class="font-medium text-charcoal">Add to paper</span> on the left, or use a build-it-for-me preset.</div>
+
+          <!-- totals -->
+          <div class="px-5 py-3 border-t border-whisper/60 bg-canvas flex items-center justify-between text-[12.5px]">
+            <div class="flex gap-4"><span class="text-steel">Questions <span class="font-mono font-semibold text-charcoal" id="pCount">0</span></span><span class="text-steel">Sections <span class="font-mono font-semibold text-charcoal" id="pSec">0</span></span></div>
+            <span class="text-steel">Total marks <span class="font-mono font-semibold text-charcoal" id="pMarks">0</span></span>
+          </div>
+        </div>
+
+        <!-- actions -->
+        <div class="grid grid-cols-2 gap-2">
+          <button onclick="toast('Paper saved to your bank as a template')" class="h-11 rounded-xl bg-white ring-1 ring-whisper text-[13px] font-medium text-steel hover:bg-mist/30">Save to bank</button>
+          <button onclick="window.print()" class="h-11 rounded-xl bg-white ring-1 ring-whisper text-[13px] font-medium text-steel hover:bg-mist/30">Print paper</button>
+          <button onclick="toast('Exam saved as draft')" class="h-11 rounded-xl bg-white ring-1 ring-whisper text-[13px] font-medium text-steel hover:bg-mist/30">Save exam</button>
+          <button onclick="sendCBT()" class="h-11 rounded-xl bg-blue text-white text-[13px] font-semibold shadow-soft active:translate-y-px">Send to CBT</button>
+        </div>
+        <p class="text-[10.5px] text-steel text-center px-2">Send to CBT publishes the paper to <span class="font-medium">CBT Exams</span> for the admin to schedule — it then appears in each student's exam list.</p>
+      </section>
+    </main>
+  </div>
+</div>
+
+<!-- ============ PRINTABLE PAPER (print only) ============ -->
+<div id="paperDoc" class="hidden">
+  <div style="text-align:center;border-bottom:2px solid #0B2A56;padding-bottom:8px;margin-bottom:12px">
+    <h2 style="font-size:18px;font-weight:700;color:#0B2A56;letter-spacing:-.3px">AL-FURQAN ACADEMY, Bauchi</h2>
+    <p style="font-size:11px;color:#64748B">Third Term Examination · 2025/2026 Session</p>
+    <p id="dTitle" style="font-size:13px;font-weight:600;margin-top:4px"></p>
+    <p id="dMeta" style="font-size:11px;color:#64748B"></p>
+  </div>
+  <p style="font-size:11px;font-style:italic;color:#334155;margin-bottom:10px">Name: ............................................ &nbsp; Class: JSS 2A &nbsp; Adm No: ................</p>
+  <div id="dQs" style="font-size:12px"></div>
+</div>
+
+<!-- ============ ADD QUESTION MODAL ============ -->
+<div id="qModal" class="fixed inset-0 z-50 bg-ink/40 backdrop-blur-sm grid place-items-end sm:place-items-center p-0 sm:p-4 no-print" onclick="if(event.target===this)closeQ()">
+  <div class="sheet bg-white w-full sm:max-w-[520px] rounded-t-3xl sm:rounded-3xl shadow-lift max-h-[92vh] overflow-y-auto">
+    <div class="sticky top-0 bg-white border-b border-whisper/70 px-5 py-3.5 flex items-center justify-between">
+      <p class="text-[14px] font-semibold">Add a question to your bank</p>
+      <button onclick="closeQ()" class="h-8 w-8 grid place-items-center rounded-lg hover:bg-mist/40 text-steel">✕</button>
+    </div>
+    <div class="p-5 space-y-3.5">
+      <div class="flex gap-1.5 text-[11.5px] font-medium">
+        <button onclick="setType('obj')" id="tobj" class="h-8 px-3 rounded-lg bg-blue text-white">Objective</button>
+        <button onclick="setType('tf')" id="ttf" class="h-8 px-3 rounded-lg bg-white ring-1 ring-whisper text-steel">True / False</button>
+        <button onclick="setType('theory')" id="ttheory" class="h-8 px-3 rounded-lg bg-white ring-1 ring-whisper text-steel">Theory</button>
+      </div>
+      <div class="grid grid-cols-2 gap-2">
+        <div><label class="text-[11px] font-semibold text-steel">Subject</label><select id="nSubj" class="mt-1.5 w-full h-10 rounded-lg border border-whisper bg-canvas px-2.5 text-[12.5px]"><option>Mathematics</option><option>Basic Science</option></select></div>
+        <div><label class="text-[11px] font-semibold text-steel">Topic</label><input id="nTopic" value="Algebra" class="mt-1.5 w-full h-10 rounded-lg border border-whisper bg-canvas px-3 text-[12.5px]"></div>
+      </div>
+      <div><label class="text-[11px] font-semibold text-steel">Question</label><textarea id="nText" rows="2" class="mt-1.5 w-full rounded-lg border border-whisper bg-canvas px-3 py-2.5 text-[13px] resize-none focus:outline-none focus:ring-2 focus:ring-blue/50" placeholder="Type the question…"></textarea></div>
+      <div id="nOpts"></div>
+      <div class="grid grid-cols-2 gap-2">
+        <div><label class="text-[11px] font-semibold text-steel">Marks</label><input id="nMarks" value="1" class="mt-1.5 w-full h-10 rounded-lg border border-whisper bg-canvas px-3 font-mono text-[12.5px]"></div>
+        <div><label class="text-[11px] font-semibold text-steel">Difficulty</label><select id="nDiff" class="mt-1.5 w-full h-10 rounded-lg border border-whisper bg-canvas px-2.5 text-[12.5px]"><option>Easy</option><option selected>Medium</option><option>Hard</option></select></div>
+      </div>
+      <div class="flex gap-2 pt-1">
+        <button onclick="closeQ()" class="h-11 px-4 rounded-xl ring-1 ring-whisper text-steel text-[13px] font-medium">Cancel</button>
+        <button onclick="saveQ()" class="flex-1 h-11 rounded-xl bg-confirm text-white text-[13.5px] font-semibold shadow-soft active:translate-y-px">Save to bank</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="../assets/shell.js"></script>
+<div id="toast" class="hidden fixed bottom-5 left-1/2 -translate-x-1/2 z-[60] bg-ink text-white text-[12.5px] font-medium px-4 py-2.5 rounded-xl shadow-lift"></div>
+<script>function toast(m){var t=document.getElementById('toast');t.textContent=m;t.classList.remove('hidden');clearTimeout(window._tt);window._tt=setTimeout(function(){t.classList.add('hidden')},2200);}</script>
+<script>
+// ---- BANK DATA ----  id, type, subject, topic, difficulty, marks, text, options, correct/scheme
+const TYC={obj:['OBJ','text-blue bg-wash'],tf:['T/F','text-confirm bg-confirm/10'],theory:['THEORY','text-caution bg-caution/10']};
+const DIFFC={Easy:'text-confirm bg-confirm/10',Medium:'text-caution bg-caution/10',Hard:'text-alert bg-alert/10'};
+let nid=200;
+let BANK=[
+ {id:1,t:'obj',s:'Mathematics',tp:'Algebra',d:'Easy',m:1,q:'Simplify: 3x + 5x − 2x',o:['6x','10x','8x','4x'],a:'6x'},
+ {id:2,t:'obj',s:'Mathematics',tp:'Algebra',d:'Easy',m:1,q:'Expand: 2(x + 4)',o:['2x + 4','2x + 8','x + 8','2x + 6'],a:'2x + 8'},
+ {id:3,t:'obj',s:'Mathematics',tp:'Algebra',d:'Medium',m:1,q:'If x = 3, find the value of 4x − 5',o:['12','17','7','2'],a:'7'},
+ {id:4,t:'tf',s:'Mathematics',tp:'Algebra',d:'Easy',m:1,q:'Like terms can always be added together.',o:['True','False'],a:'True'},
+ {id:5,t:'obj',s:'Mathematics',tp:'Algebra',d:'Hard',m:1,q:'Solve for x: 3x − 7 = 2x + 5',o:['x = 12','x = 2','x = −2','x = 5'],a:'x = 12'},
+ {id:6,t:'theory',s:'Mathematics',tp:'Algebra',d:'Medium',m:5,q:'A pencil costs ₦x and a pen costs ₦(x+20). Kemi buys 3 pencils and 2 pens for ₦240. Form an equation and find x.',a:'5x + 40 = 240 → x = 40. Pencil ₦40, pen ₦60. Marks: equation (2) · simplify (1) · solve (1) · answer with units (1).'},
+ {id:7,t:'obj',s:'Mathematics',tp:'Geometry',d:'Easy',m:1,q:'The sum of angles on a straight line is…',o:['90°','180°','270°','360°'],a:'180°'},
+ {id:8,t:'obj',s:'Mathematics',tp:'Geometry',d:'Medium',m:1,q:'A triangle has angles 50° and 60°. Find the third angle.',o:['60°','70°','80°','110°'],a:'70°'},
+ {id:9,t:'theory',s:'Mathematics',tp:'Geometry',d:'Medium',m:6,q:'A rectangular field is 24 m long and 15 m wide. Find (a) its perimeter (b) its area.',a:'(a) Perimeter = 2(24+15) = 78 m. (b) Area = 24 × 15 = 360 m². Marks: each formula (1), substitution (1), answer with units (1).'},
+ {id:10,t:'obj',s:'Mathematics',tp:'Number & numeration',d:'Easy',m:1,q:'Express 0.25 as a fraction in its lowest term.',o:['1/2','1/4','2/5','1/5'],a:'1/4'},
+ {id:11,t:'obj',s:'Mathematics',tp:'Number & numeration',d:'Medium',m:1,q:'Find the LCM of 6 and 8.',o:['12','24','48','14'],a:'24'},
+ {id:12,t:'tf',s:'Mathematics',tp:'Number & numeration',d:'Easy',m:1,q:'Every prime number is an odd number.',o:['True','False'],a:'False'},
+ {id:13,t:'obj',s:'Basic Science',tp:'Cell & living things',d:'Easy',m:1,q:'The cell organelle responsible for respiration is the…',o:['Nucleus','Mitochondrion','Ribosome','Vacuole'],a:'Mitochondrion'},
+ {id:14,t:'obj',s:'Basic Science',tp:'Cell & living things',d:'Medium',m:1,q:'Which part of the plant cell carries out photosynthesis?',o:['Cell wall','Chloroplast','Cytoplasm','Nucleus'],a:'Chloroplast'},
+ {id:15,t:'tf',s:'Basic Science',tp:'Cell & living things',d:'Easy',m:1,q:'Animal cells have a cell wall.',o:['True','False'],a:'False'},
+ {id:16,t:'theory',s:'Basic Science',tp:'Cell & living things',d:'Medium',m:5,q:'State three differences between a plant cell and an animal cell.',a:'Plant cell has a cell wall / chloroplast / large central vacuole; animal cell lacks these and has a regular round shape. Any 3 valid points, marks per point.'},
+ {id:17,t:'obj',s:'Basic Science',tp:'Energy',d:'Easy',m:1,q:'The SI unit of energy is the…',o:['Watt','Joule','Newton','Volt'],a:'Joule'},
+ {id:18,t:'obj',s:'Basic Science',tp:'Energy',d:'Medium',m:1,q:'Energy from the sun reaches the earth mainly by…',o:['Conduction','Convection','Radiation','Insulation'],a:'Radiation'},
+ {id:19,t:'theory',s:'Basic Science',tp:'Energy',d:'Hard',m:6,q:'Explain, with one example each, the difference between renewable and non-renewable energy sources.',a:'Renewable: replenished naturally (e.g. solar, wind, hydro). Non-renewable: finite, depletes (e.g. coal, petroleum, natural gas). Definition (2 each) + valid example (1 each).'},
+ {id:20,t:'obj',s:'Basic Science',tp:'Matter',d:'Easy',m:1,q:'Which of these is a change of state from solid to gas directly?',o:['Melting','Sublimation','Condensation','Freezing'],a:'Sublimation'},
+ {id:21,t:'tf',s:'Basic Science',tp:'Matter',d:'Easy',m:1,q:'Evaporation takes place only at the boiling point of a liquid.',o:['True','False'],a:'False'},
+ {id:22,t:'obj',s:'Mathematics',tp:'Algebra',d:'Medium',m:1,q:'Factorise: 6a + 9',o:['3(2a + 3)','6(a + 9)','3(2a + 9)','9(a + 6)'],a:'3(2a + 3)'},
+];
+
+let PAPER=[]; // array of bank items copied in
+
+// ---------- LEFT BANK ----------
+function renderBank(){
+  const s=document.getElementById('fSubj').value, tp=document.getElementById('fTopic').value,
+        ty=document.getElementById('fType').value, df=document.getElementById('fDiff').value,
+        q=document.getElementById('fSearch').value.trim().toLowerCase();
+  const list=BANK.filter(b=>(!s||b.s===s)&&(!tp||b.tp===tp)&&(!ty||b.t===ty)&&(!df||b.d===df)&&(!q||b.q.toLowerCase().includes(q)));
+  document.getElementById('bankMeta').textContent=list.length+' of '+BANK.length+' questions';
+  const inPaper=id=>PAPER.some(p=>p.id===id);
+  document.getElementById('bank').innerHTML=list.map(b=>`
+    <div class="bg-white ring-1 ring-whisper/80 rounded-2xl shadow-soft px-4 py-3.5">
+      <div class="flex items-start justify-between gap-3">
+        <div class="flex items-start gap-2.5 min-w-0">
+          <span class="text-[9.5px] font-semibold ${TYC[b.t][1]} rounded-full px-2 py-0.5 mt-0.5 shrink-0">${TYC[b.t][0]}</span>
+          <div class="min-w-0"><p class="text-[13px] font-medium">${b.q}</p>
+            ${b.t!=='theory'?`<p class="text-[11px] text-steel mt-1 font-mono truncate">${b.o.map(o=>o===b.a?'<span class="text-confirm font-semibold">'+o+'</span>':o).join('  ·  ')}</p>`:`<p class="text-[11px] text-steel mt-1 italic">Marking scheme attached</p>`}
+            <div class="flex flex-wrap items-center gap-2 mt-2 text-[10px]"><span class="text-steel">${b.s} · ${b.tp}</span><span class="${DIFFC[b.d]} rounded-full px-2 py-0.5 font-medium">${b.d}</span><span class="font-mono text-steel">${b.m} mark${b.m>1?'s':''}</span></div>
+          </div>
+        </div>
+        <div class="flex flex-col items-end gap-1.5 shrink-0">
+          <button onclick="addToPaper(${b.id})" ${inPaper(b.id)?'disabled':''} class="${inPaper(b.id)?'bg-confirm/10 text-confirm ring-confirm/30':'bg-white text-steel ring-whisper hover:bg-mist/30'} h-8 px-3 rounded-lg ring-1 text-[11.5px] font-medium">${inPaper(b.id)?'✓ Added':'+ Add to paper'}</button>
+          <div class="flex gap-2 text-[11px]"><button onclick="toast('Edit question — opens the editor')" class="text-steel hover:text-blue">Edit</button><button onclick="delQ(${b.id})" class="text-steel hover:text-alert">Delete</button></div>
+        </div>
+      </div>
+    </div>`).join('')||'<p class="text-center text-[12.5px] text-steel py-10">No questions match these filters.</p>';
+}
+function delQ(id){BANK=BANK.filter(b=>b.id!==id);PAPER=PAPER.filter(p=>p.id!==id);document.getElementById('bankCount').textContent=BANK.length+' questions';renderBank();renderPaper();toast('Question deleted from bank');}
+
+// ---------- RIGHT PAPER ----------
+function addToPaper(id){if(PAPER.some(p=>p.id===id))return;const b=BANK.find(x=>x.id===id);PAPER.push(b);renderBank();renderPaper();toast('Added to paper');}
+function rmPaper(id){PAPER=PAPER.filter(p=>p.id!==id);renderBank();renderPaper();}
+function moveUp(i){if(i<=0)return;const a=PAPER;[a[i-1],a[i]]=[a[i],a[i-1]];renderPaper();}
+function moveDown(i){const a=PAPER;if(i>=a.length-1)return;[a[i+1],a[i]]=[a[i],a[i+1]];renderPaper();}
+function clearPaper(){PAPER=[];renderBank();renderPaper();}
+function autoPick(kind){
+  PAPER=[];
+  if(kind==='algebra'){
+    const obj=BANK.filter(b=>b.tp==='Algebra'&&(b.t==='obj'||b.t==='tf')).slice(0,10);
+    const th=BANK.filter(b=>b.tp==='Algebra'&&b.t==='theory').slice(0,2);
+    PAPER=obj.concat(th);
+    toast(PAPER.length+' Algebra questions pulled in');
+  }else{
+    const obj=BANK.filter(b=>b.t==='obj'||b.t==='tf').slice(0,12);
+    const th=BANK.filter(b=>b.t==='theory').slice(0,3);
+    PAPER=obj.concat(th);
+    toast(PAPER.length+' mixed questions pulled in');
+  }
+  renderBank();renderPaper();
+}
+function renderPaper(){
+  const objs=PAPER.filter(p=>p.t!=='theory'), thy=PAPER.filter(p=>p.t==='theory');
+  document.getElementById('paperEmpty').style.display=PAPER.length?'none':'block';
+  document.getElementById('pCount').textContent=PAPER.length;
+  document.getElementById('pMarks').textContent=PAPER.reduce((s,p)=>s+p.m,0);
+  document.getElementById('pSec').textContent=(objs.length?1:0)+(thy.length?1:0);
+  const row=(p,i)=>`<div class="px-4 py-3 flex items-start gap-2.5">
+    <span class="h-6 w-6 rounded-lg bg-canvas ring-1 ring-whisper grid place-items-center font-mono text-[11px] font-semibold shrink-0">${i+1}</span>
+    <div class="flex-1 min-w-0"><div class="flex items-center gap-1.5 mb-0.5"><span class="text-[9px] font-semibold ${TYC[p.t][1]} rounded-full px-1.5 py-0.5">${TYC[p.t][0]}</span><span class="text-[10px] text-steel font-mono">${p.m} mk</span></div>
+      <p class="text-[12.5px] leading-snug">${p.q}</p></div>
+    <div class="flex flex-col gap-0.5 shrink-0 text-steel">
+      <button onclick="moveUp(${i})" class="hover:text-blue leading-none text-[12px]">▲</button>
+      <button onclick="moveDown(${i})" class="hover:text-blue leading-none text-[12px]">▼</button>
+      <button onclick="rmPaper(${p.id})" class="hover:text-alert leading-none text-[13px]">✕</button>
+    </div></div>`;
+  let html='';
+  if(objs.length){html+='<div class="px-4 pt-3 pb-1 text-[10px] font-semibold uppercase tracking-wider text-steel bg-canvas/40">Section A · Objectives</div>';html+=objs.map((p,i)=>row(p,PAPER.indexOf(p))).join('');}
+  if(thy.length){html+='<div class="px-4 pt-3 pb-1 text-[10px] font-semibold uppercase tracking-wider text-steel bg-canvas/40">Section B · Theory</div>';html+=thy.map((p)=>row(p,PAPER.indexOf(p))).join('');}
+  document.getElementById('paper').innerHTML=html;
+}
+function sendCBT(){
+  if(!PAPER.length){toast('Add at least one question first');return;}
+  toast('Sent to CBT Exams — admin can now schedule it');
+}
+
+// ---------- PRINT ----------
+function buildPrint(){
+  const objs=PAPER.filter(p=>p.t!=='theory'), thy=PAPER.filter(p=>p.t==='theory');
+  document.getElementById('dTitle').textContent=document.getElementById('mTitle').value;
+  document.getElementById('dMeta').textContent='Class JSS 2A · Duration 60 minutes · Total '+PAPER.reduce((s,p)=>s+p.m,0)+' marks';
+  let h='';
+  if(objs.length){h+='<p style="font-weight:600;margin:10px 0 4px">SECTION A — Answer ALL questions</p>';
+    objs.forEach((p,i)=>{h+=`<p style="margin:6px 0">${i+1}. ${p.q} <span style="color:#64748B">(${p.m})</span></p>`;
+      if(p.t!=='theory')h+='<p style="margin:0 0 4px 16px;color:#334155">'+p.o.map((o,j)=>String.fromCharCode(65+j)+') '+o).join('&nbsp;&nbsp; ')+'</p>';});}
+  if(thy.length){h+='<p style="font-weight:600;margin:14px 0 4px">SECTION B — Answer any TWO questions</p>';
+    thy.forEach((p,i)=>{h+=`<p style="margin:8px 0">${i+1}. ${p.q} <span style="color:#64748B">(${p.m} marks)</span></p>`;});}
+  if(!PAPER.length)h='<p style="color:#64748B">No questions added to the paper yet.</p>';
+  document.getElementById('dQs').innerHTML=h;
+}
+window.addEventListener('beforeprint',buildPrint);
+
+// ---------- ADD MODAL ----------
+let nType='obj';
+function setType(t){nType=t;['obj','tf','theory'].forEach(x=>document.getElementById('t'+x).className='h-8 px-3 rounded-lg '+(x===t?'bg-blue text-white':'bg-white ring-1 ring-whisper text-steel'));renderNOpts();}
+function renderNOpts(){
+  const w=document.getElementById('nOpts');
+  if(nType==='theory'){w.innerHTML='<label class="text-[11px] font-semibold text-steel">Marking scheme / model answer</label><textarea id="nScheme" rows="3" class="mt-1.5 w-full rounded-lg border border-whisper bg-canvas px-3 py-2 text-[12px] resize-none" placeholder="What earns marks…"></textarea>';return;}
+  const opts=nType==='tf'?['True','False']:['','','',''];
+  w.innerHTML='<label class="text-[11px] font-semibold text-steel">Options <span class="font-normal text-steel/70">(tick the correct one)</span></label>'+
+    opts.map((o,i)=>`<div class="flex items-center gap-2.5 mt-1.5"><input type="radio" name="ncorrect" ${i===0?'checked':''} class="accent-[#16A34A]"><input value="${o}" ${nType==='tf'?'readonly':''} class="nopt flex-1 h-10 rounded-lg border border-whisper bg-canvas px-3 text-[13px]" placeholder="Option ${String.fromCharCode(65+i)}"></div>`).join('');
+}
+function openQ(){document.body.classList.add('qopen');setType('obj');document.getElementById('nText').value='';}
+function closeQ(){document.body.classList.remove('qopen');}
+function saveQ(){
+  const text=document.getElementById('nText').value.trim();
+  if(!text){toast('Type the question first');return;}
+  const item={id:++nid,t:nType,s:document.getElementById('nSubj').value,tp:document.getElementById('nTopic').value||'General',d:document.getElementById('nDiff').value,m:+document.getElementById('nMarks').value||1,q:text};
+  if(nType==='theory'){item.a=(document.getElementById('nScheme')||{}).value||'Marking scheme attached.';}
+  else{const opts=[...document.querySelectorAll('.nopt')].map(i=>i.value).filter(Boolean);const ci=[...document.querySelectorAll('input[name=ncorrect]')].findIndex(r=>r.checked);item.o=opts.length?opts:['True','False'];item.a=item.o[ci]||item.o[0];}
+  BANK.unshift(item);
+  document.getElementById('bankCount').textContent=BANK.length+' questions';
+  closeQ();renderBank();toast('Question saved to your bank');
+}
+
+renderBank();renderPaper();
+</script>
+</body>
+</html>

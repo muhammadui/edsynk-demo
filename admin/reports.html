@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Edsynk — Reports & Analytics</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&family=Noto+Naskh+Arabic:wght@500&display=swap" rel="stylesheet">
+<script>tailwind.config={theme:{extend:{colors:{canvas:'#F7F9FC',ink:'#0B2A56',charcoal:'#18181B',steel:'#64748B',whisper:'#E2E8F0',blue:'#2177EF',skyblue:'#5C9DF5',wash:'#EAF2FE',mist:'#D3E4FD',confirm:'#16A34A',caution:'#D97706',alert:'#DC2626',excused:'#7C8DA6'},fontFamily:{sans:['Geist','sans-serif'],mono:['"Geist Mono"','monospace'],arabic:['"Noto Naskh Arabic"','serif']},boxShadow:{soft:'0 1px 2px rgba(11,42,86,0.04), 0 6px 24px rgba(11,42,86,0.05)',lift:'0 1px 3px rgba(11,42,86,0.10), 0 12px 32px rgba(11,42,86,0.12)'}}}}</script>
+<style>
+@keyframes rise{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}.rise{animation:rise .45s cubic-bezier(.2,.8,.2,1) both}
+.draw{stroke-dasharray:1400;stroke-dashoffset:1400;animation:draw 1.8s cubic-bezier(.3,.7,.3,1) forwards}@keyframes draw{to{stroke-dashoffset:0}}
+.gw{transform:scaleY(0);transform-origin:bottom;animation:gw .9s cubic-bezier(.2,.8,.2,1) forwards}@keyframes gw{to{transform:scaleY(1)}}
+.don{animation:don 1.4s cubic-bezier(.3,.7,.3,1) forwards}
+</style>
+</head>
+<body data-active="Reports" data-persona="admin" class="bg-canvas font-sans text-charcoal antialiased">
+<div class="flex min-h-screen">
+  <div id="sidebar-root"></div>
+  <div class="flex-1 min-w-0">
+    <header class="h-[60px] bg-white/80 backdrop-blur-md border-b border-whisper/70 flex items-center justify-between px-4 sm:px-7 sticky top-0 z-20">
+      <div class="flex items-center gap-3"><h1 class="text-[15px] font-semibold tracking-tight">Reports &amp; Analytics</h1>
+        <span class="font-mono text-[11px] font-medium text-blue bg-wash rounded-full px-2.5 py-1 hidden sm:flex items-center gap-1.5"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l1.9 5.7L19.5 10l-5.6 1.3L12 17l-1.9-5.7L4.5 10l5.6-1.3z"/></svg>EdInsight</span></div>
+      <div class="flex items-center gap-2.5"><select class="h-9 rounded-lg border border-whisper bg-white px-3 text-[12.5px] font-medium"><option>Whole school</option><option>JSS 2A</option></select><button onclick="toast('Preparing analytics report (PDF)…')" class="h-9 px-4 rounded-lg bg-blue text-white text-[13px] font-medium shadow-soft">Export PDF</button></div>
+    </header>
+    <main class="p-4 sm:p-7 max-w-[1240px] space-y-5 pb-12">
+
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-3">
+        <div class="rise bg-white ring-1 ring-whisper/80 rounded-2xl p-4 shadow-soft"><p class="text-[10.5px] font-semibold uppercase tracking-wider text-steel">School average</p><p class="font-mono text-[22px] font-semibold mt-1.5">72.4%</p><p class="text-[11.5px] text-confirm mt-1">▲ 2.1 vs last term</p></div>
+        <div class="rise bg-white ring-1 ring-whisper/80 rounded-2xl p-4 shadow-soft" style="animation-delay:.04s"><p class="text-[10.5px] font-semibold uppercase tracking-wider text-steel">Pass rate</p><p class="font-mono text-[22px] font-semibold mt-1.5">88%</p><p class="text-[11.5px] text-confirm mt-1">▲ 3 pts</p></div>
+        <div class="rise bg-white ring-1 ring-whisper/80 rounded-2xl p-4 shadow-soft" style="animation-delay:.08s"><p class="text-[10.5px] font-semibold uppercase tracking-wider text-steel">Attendance</p><p class="font-mono text-[22px] font-semibold mt-1.5">90.5%</p><p class="text-[11.5px] text-steel mt-1">term to date</p></div>
+        <div class="rise bg-white ring-1 ring-whisper/80 rounded-2xl p-4 shadow-soft" style="animation-delay:.12s"><p class="text-[10.5px] font-semibold uppercase tracking-wider text-steel">At-risk students</p><p class="font-mono text-[22px] font-semibold mt-1.5 text-alert">14</p><p class="text-[11.5px] text-steel mt-1">flagged by EdInsight</p></div>
+      </div>
+
+      <div class="rise bg-white ring-1 ring-whisper/80 rounded-2xl p-5 shadow-soft" style="animation-delay:.16s">
+        <div class="flex items-center justify-between flex-wrap gap-2"><div><p class="text-[13.5px] font-semibold">Performance trend</p><p class="text-[11.5px] text-steel mt-0.5">school average across the last 6 terms</p></div>
+          <div class="flex gap-3 text-[11px]"><span class="flex items-center gap-1.5"><i class="inline-block h-2 w-4 rounded bg-blue"></i>School avg</span><span class="flex items-center gap-1.5"><i class="inline-block h-2 w-4 rounded bg-skyblue/60"></i>Top class (SS1A)</span></div></div>
+        <svg viewBox="0 0 700 220" class="w-full mt-4" style="height:auto">
+          <defs><linearGradient id="ar" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#2177EF" stop-opacity=".18"/><stop offset="100%" stop-color="#2177EF" stop-opacity="0"/></linearGradient></defs>
+          <g stroke="#EEF2F7" stroke-width="1"><line x1="40" y1="20" x2="700" y2="20"/><line x1="40" y1="70" x2="700" y2="70"/><line x1="40" y1="120" x2="700" y2="120"/><line x1="40" y1="170" x2="700" y2="170"/></g>
+          <g fill="#9AA6B5" font-size="10" font-family="Geist Mono"><text x="6" y="24">90</text><text x="6" y="74">75</text><text x="6" y="124">60</text><text x="6" y="174">45</text></g>
+          <path d="M70,150 L196,138 L322,120 L448,108 L574,92 L680,84 L680,190 L70,190 Z" fill="url(#ar)"/>
+          <path class="draw" d="M70,150 L196,138 L322,120 L448,108 L574,92 L680,84" fill="none" stroke="#2177EF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+          <path class="draw" style="animation-delay:.3s" d="M70,128 L196,118 L322,100 L448,96 L574,74 L680,66" fill="none" stroke="#5C9DF5" stroke-width="2.5" stroke-dasharray="5 5" stroke-linecap="round"/>
+          <circle cx="680" cy="84" r="4" fill="#2177EF" stroke="#fff" stroke-width="2"/>
+          <g fill="#9AA6B5" font-size="10" font-family="Geist Mono"><text x="58" y="210">24·T1</text><text x="184" y="210">24·T2</text><text x="310" y="210">24·T3</text><text x="436" y="210">25·T1</text><text x="560" y="210">25·T2</text><text x="660" y="210">26·T3</text></g>
+        </svg>
+      </div>
+
+      <div class="grid lg:grid-cols-5 gap-4">
+        <div class="rise lg:col-span-3 bg-white ring-1 ring-whisper/80 rounded-2xl p-5 shadow-soft" style="animation-delay:.2s">
+          <p class="text-[13.5px] font-semibold">Subject averages</p>
+          <div class="mt-4 grid grid-cols-9 gap-2 items-end h-[160px]" id="bars"></div>
+        </div>
+        <div class="rise lg:col-span-2 bg-white ring-1 ring-whisper/80 rounded-2xl p-5 shadow-soft" style="animation-delay:.24s">
+          <p class="text-[13.5px] font-semibold">Grade distribution</p>
+          <div class="flex items-center gap-5 mt-3">
+            <svg viewBox="0 0 120 120" class="h-[130px] w-[130px] shrink-0"><g transform="rotate(-90 60 60)" fill="none" stroke-width="18" id="donut"></g><text x="60" y="58" text-anchor="middle" font-size="20" font-weight="700" font-family="Geist Mono" fill="#0B2A56">412</text><text x="60" y="74" text-anchor="middle" font-size="9" fill="#64748B">students</text></svg>
+            <div class="space-y-1.5 text-[11.5px]" id="legend"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- at-risk students -->
+      <div class="rise bg-white ring-1 ring-alert/20 rounded-2xl shadow-soft overflow-hidden" style="animation-delay:.26s">
+        <div class="flex items-center justify-between px-5 pt-4 pb-3"><div class="flex items-center gap-2"><span class="h-7 w-7 rounded-lg bg-alert/10 text-alert grid place-items-center"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><path d="M12 9v4M12 17h.01"/></svg></span><div><p class="text-[13.5px] font-semibold">At-risk students <span class="font-mono text-alert">14</span></p><p class="text-[11px] text-steel">EdInsight flags these from attendance + score + fee signals — for early intervention</p></div></div><button onclick="toast('Exporting at-risk student list…')" class="h-9 px-3.5 rounded-lg bg-white ring-1 ring-whisper text-[12px] font-medium text-steel hover:bg-mist/30 hidden sm:block">Export list</button></div>
+        <div class="overflow-x-auto"><table class="w-full text-[12.5px]"><thead><tr class="text-left text-[10px] uppercase tracking-wider text-steel border-y border-whisper/70 bg-canvas/60"><th class="px-5 py-2.5 font-semibold">Student</th><th class="px-3 py-2.5 font-semibold">Class</th><th class="px-3 py-2.5 font-semibold text-right">Avg</th><th class="px-3 py-2.5 font-semibold text-right">Attend.</th><th class="px-3 py-2.5 font-semibold">Risk</th><th class="px-5 py-2.5 font-semibold">Why</th></tr></thead><tbody id="risk" class="divide-y divide-whisper/60"></tbody></table></div>
+        <p class="px-5 py-3 border-t border-whisper/70 bg-canvas/50 text-[11.5px] text-steel">Click a student to open their record, message the guardian, or log an intervention.</p>
+      </div>
+
+      <div class="grid lg:grid-cols-2 gap-4">
+        <div class="rise bg-white ring-1 ring-whisper/80 rounded-2xl shadow-soft overflow-hidden" style="animation-delay:.28s">
+          <p class="text-[13.5px] font-semibold px-5 pt-4 pb-3">Class performance</p>
+          <div class="overflow-x-auto"><table class="w-full text-[12.5px]"><thead><tr class="text-left text-[10.5px] uppercase tracking-wider text-steel border-y border-whisper/70 bg-canvas/60"><th class="px-5 py-2.5 font-semibold">Class</th><th class="px-3 py-2.5 font-semibold text-right">Avg</th><th class="px-3 py-2.5 font-semibold text-right">Pass</th><th class="px-3 py-2.5 font-semibold">Trend</th></tr></thead><tbody id="ctab" class="divide-y divide-whisper/60"></tbody></table></div>
+        </div>
+        <div class="rise bg-white ring-1 ring-whisper/80 rounded-2xl p-5 shadow-soft" style="animation-delay:.32s">
+          <p class="text-[13.5px] font-semibold">Generate a report</p>
+          <div class="mt-3 grid grid-cols-2 gap-2.5 text-[12.5px]">
+            <button onclick="toast('Generating class broadsheet (PDF + Excel)…')" class="rounded-xl ring-1 ring-whisper hover:ring-mist p-3.5 text-left"><p class="font-semibold">Class broadsheet</p><p class="text-[10.5px] text-steel mt-0.5">PDF + Excel</p></button>
+            <button onclick="toast('Generating bulk report cards…')" class="rounded-xl ring-1 ring-whisper hover:ring-mist p-3.5 text-left"><p class="font-semibold">Report cards (bulk)</p><p class="text-[10.5px] text-steel mt-0.5">sealed PDF</p></button>
+            <button onclick="toast('Generating position / merit list…')" class="rounded-xl ring-1 ring-whisper hover:ring-mist p-3.5 text-left"><p class="font-semibold">Position / merit list</p><p class="text-[10.5px] text-steel mt-0.5">tie-aware</p></button>
+            <button onclick="toast('Generating attendance report…')" class="rounded-xl ring-1 ring-whisper hover:ring-mist p-3.5 text-left"><p class="font-semibold">Attendance report</p><p class="text-[10.5px] text-steel mt-0.5">WAEC eligibility</p></button>
+          </div>
+          <div class="mt-3 rounded-xl bg-wash/50 ring-1 ring-mist/60 px-4 py-3 text-[11.5px] text-ink"><span class="font-semibold">EdInsight:</span> Basic Tech is the weakest subject (62%) and correlates with Thursday absences — 5 students drive most of the dip.</div>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+<script src="../assets/shell.js"></script>
+<script>
+const SUB=[['Eng',74],['Maths',69],['B.Sci',71],['Qur\'an',88],['B.Tech',62],['Social',76],['Civic',79],['Arabic',83],['Agric',70]];
+document.getElementById('bars').innerHTML=SUB.map((s,i)=>`<div class="flex flex-col items-center gap-1.5 h-full justify-end"><span class="font-mono text-[9px] text-steel">${s[1]}</span><div class="gw w-full max-w-[34px] rounded-t-md ${s[1]>=80?'bg-confirm':s[1]>=70?'bg-blue':'bg-caution'}" style="height:${s[1]}%;animation-delay:${(.25+i*.05).toFixed(2)}s"></div><span class="text-[8.5px] text-steel/70">${s[0]}</span></div>`).join('');
+const G=[['A',132,'#16A34A'],['B',118,'#2177EF'],['C',96,'#5C9DF5'],['D',42,'#D97706'],['E/F',24,'#DC2626']];
+const tot=G.reduce((a,b)=>a+b[1],0);const C=2*Math.PI*41;let off=0;let dh='';
+G.forEach((g,i)=>{const len=g[1]/tot*C;dh+=`<circle class="don" cx="60" cy="60" r="41" stroke="${g[2]}" stroke-dasharray="${len.toFixed(1)} ${(C-len).toFixed(1)}" stroke-dashoffset="${(-off).toFixed(1)}" style="animation-delay:${(i*.15).toFixed(2)}s"/>`;off+=len;});
+document.getElementById('donut').innerHTML=dh;
+document.getElementById('legend').innerHTML=G.map(g=>`<div class="flex items-center justify-between gap-4"><span class="flex items-center gap-1.5"><i class="inline-block h-2.5 w-2.5 rounded-sm" style="background:${g[2]}"></i>Grade ${g[0]}</span><span class="font-mono text-steel">${g[1]}</span></div>`).join('');
+const CT=[['SS 1A',81,94,'up'],['JSS 1A',78,92,'up'],['JSS 2A',76,90,'up'],['JSS 2B',71,86,'flat'],['JSS 3A',69,84,'down'],["I'dad. 1",74,88,'up']];
+const tr={up:['▲','text-confirm'],down:['▼','text-alert'],flat:['▬','text-steel']};
+document.getElementById('ctab').innerHTML=CT.map(c=>`<tr class="hover:bg-canvas/60"><td class="px-5 py-2.5 font-medium ${c[0].indexOf("'")>-1?'arabic':''}">${c[0]}</td><td class="px-3 py-2.5 text-right font-mono">${c[1]}%</td><td class="px-3 py-2.5 text-right font-mono text-steel">${c[2]}%</td><td class="px-3 py-2.5"><span class="${tr[c[3]][1]} font-semibold">${tr[c[3]][0]}</span></td></tr>`).join('');
+const RISK=[
+ ['Bashir Nuhu','BN','JSS 3A',44,71,'high','Failing 5 subjects · attendance 71% · fees owing'],
+ ['Yusuf Musa','YM','JSS 2A',51,68,'high','Attendance 68% (Thursdays) · scores dropping'],
+ ['Amina Kabir','AK','JSS 1B',49,73,'med','Below pass mark in Maths &amp; English · late often'],
+ ['Tobi Okeke','TO','JSS 2B',47,82,'med','Maths &amp; Basic Sci weak · part-paid fees'],
+ ['Zara Idris','ZI','SS 2A',55,79,'med','Sharp drop from last term (−12%)'],
+ ['Musa Lawal','ML','JSS 1A',58,64,'high','Chronic absence 64% · WAEC-eligibility risk'],
+];
+const rk={high:['High','text-alert bg-alert/10'],med:['Medium','text-caution bg-caution/10']};
+document.getElementById('risk').innerHTML=RISK.map(r=>`<tr class="hover:bg-canvas/60 cursor-pointer" onclick="location.href='student-detail.html'"><td class="px-5 py-2.5"><div class="flex items-center gap-2.5"><span class="h-8 w-8 rounded-full bg-wash text-blue grid place-items-center text-[9.5px] font-bold">${r[1]}</span><span class="font-medium">${r[0]}</span></div></td><td class="px-3 py-2.5 text-steel">${r[2]}</td><td class="px-3 py-2.5 text-right font-mono ${r[3]<50?'text-alert':'text-steel'}">${r[3]}%</td><td class="px-3 py-2.5 text-right font-mono ${r[4]<75?'text-alert':'text-steel'}">${r[4]}%</td><td class="px-3 py-2.5"><span class="text-[10px] font-semibold ${rk[r[5]][1]} rounded-full px-2 py-0.5">${rk[r[5]][0]}</span></td><td class="px-5 py-2.5 text-steel text-[11.5px]">${r[6]}</td></tr>`).join('');
+function toast(m){var t=document.getElementById('toast');t.textContent=m;t.classList.remove('hidden');clearTimeout(window._tt);window._tt=setTimeout(function(){t.classList.add('hidden')},2200);}
+</script>
+<div id="toast" class="hidden fixed bottom-5 left-1/2 -translate-x-1/2 z-[60] bg-ink text-white text-[12.5px] font-medium px-4 py-2.5 rounded-xl shadow-lift"></div>
+</body>
+</html>

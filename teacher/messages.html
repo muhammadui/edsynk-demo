@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Edsynk — Messages</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script>
+tailwind.config = { theme: { extend: {
+  colors: { canvas:'#F7F9FC', ink:'#0B2A56', charcoal:'#18181B', steel:'#64748B', whisper:'#E2E8F0',
+    blue:'#2177EF', skyblue:'#5C9DF5', wash:'#EAF2FE', mist:'#D3E4FD',
+    confirm:'#16A34A', caution:'#D97706', alert:'#DC2626', excused:'#7C8DA6' },
+  fontFamily: { sans:['Geist','sans-serif'], mono:['"Geist Mono"','monospace'] },
+  boxShadow: { soft:'0 1px 2px rgba(11,42,86,0.04), 0 6px 24px rgba(11,42,86,0.05)',
+               lift:'0 1px 3px rgba(11,42,86,0.10), 0 12px 32px rgba(11,42,86,0.12)' }
+}}}
+</script>
+<style>
+  @keyframes rise{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+  .rise{animation:rise .5s cubic-bezier(.2,.8,.2,1) both}
+</style>
+</head>
+<body data-active="Messages" data-persona="teacher" class="bg-canvas font-sans text-charcoal antialiased">
+<div class="flex min-h-screen">
+
+  <div id="sidebar-root"></div>
+
+  <div class="flex-1 min-w-0 flex flex-col">
+    <header class="h-[60px] bg-white/80 backdrop-blur-md border-b border-whisper/70 flex items-center justify-between px-4 sm:px-7 sticky top-0 z-20">
+      <div class="flex items-center gap-3">
+        <h1 class="text-[15px] font-semibold tracking-tight">Messages</h1>
+        <span class="font-mono text-[11.5px] font-medium text-blue bg-wash rounded-full px-2.5 py-1 hidden sm:inline">JSS 2A parents</span>
+      </div>
+      <div class="flex items-center gap-2.5">
+        <button onclick="toast('Office hours: replies shown 8am–4pm. Tap to configure.')" class="h-9 px-4 rounded-lg bg-white ring-1 ring-whisper text-[13px] font-medium text-steel hover:bg-mist/30 hidden sm:flex items-center gap-1.5">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Office hours</button>
+        <button onclick="toast('New message — only JSS 2A parents can be reached')" class="h-9 px-4 rounded-lg bg-blue text-white text-[13px] font-medium shadow-soft active:translate-y-px">New message</button>
+      </div>
+    </header>
+
+    <main class="flex-1 p-4 sm:p-7 grid lg:grid-cols-[330px_1fr] gap-4 max-w-[1100px] w-full">
+
+      <!-- thread list -->
+      <div class="rise bg-white ring-1 ring-whisper/80 rounded-2xl shadow-soft overflow-hidden h-fit">
+        <div class="px-4 py-3 border-b border-whisper/70 flex items-center justify-between">
+          <p class="text-[11px] font-semibold uppercase tracking-[0.08em] text-steel">Parents · my class</p>
+          <span class="text-[10px] font-semibold text-alert bg-alert/10 rounded-full px-2 py-0.5">2 unread</span>
+        </div>
+        <div id="threadList" class="divide-y divide-whisper/50"></div>
+        <div class="px-4 py-3 border-t border-whisper/70 bg-canvas/40">
+          <p class="text-[10.5px] text-steel leading-relaxed">Only parents of <span class="font-medium text-charcoal">your JSS 2A students</span> can reach you. For school-wide notices, use <span class="text-blue font-medium">Announcements</span> instead.</p>
+        </div>
+      </div>
+
+      <!-- conversation -->
+      <div class="rise bg-white ring-1 ring-whisper/80 rounded-2xl shadow-soft flex flex-col" style="animation-delay:.06s">
+        <div class="px-5 py-3.5 border-b border-whisper/70 flex items-center gap-3">
+          <span id="cvAvatar" class="h-10 w-10 rounded-full grid place-items-center text-[12px] font-bold"></span>
+          <div class="flex-1 min-w-0">
+            <p id="cvName" class="text-[14px] font-semibold"></p>
+            <p id="cvMeta" class="text-[11px] text-steel"></p>
+          </div>
+          <button id="cvView" onclick="viewStudent()" class="h-9 px-3 rounded-lg ring-1 ring-whisper text-[12px] font-medium text-steel hover:bg-mist/30 hidden sm:block"></button>
+        </div>
+
+        <div class="mx-5 mt-4 flex items-center gap-2 rounded-xl bg-canvas ring-1 ring-whisper/70 px-3.5 py-2.5 text-[11px] text-steel">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-steel shrink-0"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+          This conversation is visible to school administration. Keep it professional and about the student.
+        </div>
+
+        <div id="cvMessages" class="flex-1 p-5 space-y-4 overflow-y-auto" style="max-height:46vh"></div>
+
+        <div class="px-5 pb-4">
+          <div id="quickReplies" class="flex items-center gap-2 mb-2 flex-wrap"></div>
+          <div class="flex items-end gap-2 rounded-2xl ring-1 ring-whisper bg-canvas px-4 py-2.5">
+            <button onclick="attachFile()" title="Attach a PDF" class="h-9 w-9 grid place-items-center rounded-xl text-steel hover:bg-mist/40 shrink-0"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"/></svg></button>
+            <button onclick="voiceNote()" title="Record a voice note" class="h-9 w-9 grid place-items-center rounded-xl text-steel hover:bg-mist/40 shrink-0"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10v1a7 7 0 0014 0v-1M12 18v4"/></svg></button>
+            <textarea id="composer" rows="1" placeholder="Reply…" class="flex-1 bg-transparent text-[12.5px] text-charcoal py-1.5 resize-none focus:outline-none placeholder:text-steel"></textarea>
+            <button onclick="sendMsg()" class="h-9 w-9 grid place-items-center rounded-xl bg-blue text-white shadow-soft active:translate-y-px shrink-0"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg></button>
+          </div>
+          <p class="text-[10px] text-steel mt-2">Replies are recorded. Outside school hours, parents see "Mallam Musa usually replies in the morning."</p>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+<script src="../assets/shell.js"></script>
+<div id="toast" class="hidden fixed bottom-5 left-1/2 -translate-x-1/2 z-[60] bg-ink text-white text-[12.5px] font-medium px-4 py-2.5 rounded-xl shadow-lift"></div>
+<script>
+function toast(m){var t=document.getElementById('toast');t.textContent=m;t.classList.remove('hidden');clearTimeout(window._tt);window._tt=setTimeout(function(){t.classList.add('hidden')},2200);}
+
+// Admin-gated feature flags — admin will toggle these in school settings.
+var FEATURES={attachments:false,voiceNotes:false};
+
+// Thread data model — parents of Mallam Musa's JSS 2A students
+var THREADS=[
+ {id:'maryam',name:'Hajiya Maryam Abubakar',initials:'MA',avatar:'bg-caution/15 text-caution',parentOf:'Fatima Abubakar',roleClass:'text-blue',role:"Fatima's parent",
+  reg:'AFA/2024/0117',time:'2:16pm',unread:0,preview:"Jazakallahu khairan. That's very reassuring…",
+  quick:['Noted, thank you',"Let's discuss after school"],
+  msgs:[
+   {from:'them','t':'1:58pm',body:"Assalamu alaikum Mallam. I noticed Fatima's Maths CA looks lower this term. Is everything alright with her in class?"},
+   {from:'me',t:'2:11pm',body:'Wa alaikumus salam. Fatima is doing very well overall — top 5 in the class. The CA2 covered a topic she missed the Thursday she was absent. Nothing to worry about.'},
+   {from:'me',t:'2:14pm',body:"I'll send revision notes for that topic home with her tomorrow, insha Allah. She'll catch up quickly."},
+   {from:'them',t:'2:16pm',body:'Jazakallahu khairan. That\'s very reassuring, thank you Mallam.'}
+  ]},
+ {id:'bello',name:'Alhaji Bello Sani',initials:'AB',avatar:'bg-wash text-blue ring-1 ring-mist',parentOf:'Ibrahim Sani',roleClass:'text-skyblue',role:"Ibrahim's parent",
+  reg:'AFA/2024/0103',time:'11:40am',unread:2,preview:'Will Ibrahim need the textbook for the exam on…',
+  quick:['Yes, please bring it','Past questions are on Edsynk'],
+  msgs:[
+   {from:'them',t:'11:38am',body:'Assalamu alaikum Mallam. Ibrahim says exams start next week.'},
+   {from:'them',t:'11:40am',body:'Will Ibrahim need the textbook for the exam on Monday, or is everything on Edsynk?'}
+  ]},
+ {id:'okafor',name:'Mrs. Okafor',initials:'CO',avatar:'bg-wash text-blue ring-1 ring-mist',parentOf:'Chiamaka Okafor',roleClass:'text-skyblue',role:"Chiamaka's parent",
+  reg:'AFA/2024/0131',time:'Yesterday',unread:0,preview:"Thank you, I've signed the trip consent form.",
+  quick:['You\'re welcome','Received, thank you'],
+  msgs:[
+   {from:'me',t:'Yesterday',body:'Good afternoon ma. Kindly remember the JSS 2 excursion consent form is due Friday.'},
+   {from:'them',t:'Yesterday',body:"Thank you, I've signed the trip consent form."}
+  ]}
+];
+var activeId='maryam';
+
+function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function curThread(){return THREADS.find(function(t){return t.id===activeId;});}
+
+function renderThreads(){
+ document.getElementById('threadList').innerHTML=THREADS.map(function(t){
+  var sel=t.id===activeId;
+  var badge=t.unread?'<span class="absolute -top-0.5 -right-0.5 h-4 w-4 rounded-full bg-alert text-white text-[8.5px] font-bold grid place-items-center ring-2 ring-white">'+t.unread+'</span>':'';
+  var prevCls=t.unread?'text-charcoal font-medium':'text-steel';
+  return '<button onclick="selectThread(\''+t.id+'\')" class="w-full text-left px-4 py-3 flex gap-3 '+(sel?'bg-wash':'hover:bg-canvas/70')+'">'+
+   '<span class="h-10 w-10 rounded-full '+t.avatar+' grid place-items-center text-[11px] font-bold shrink-0 relative">'+t.initials+badge+'</span>'+
+   '<div class="min-w-0 flex-1"><div class="flex items-center justify-between gap-2"><p class="text-[12.5px] font-semibold truncate '+(sel?'text-ink':'')+'">'+t.name+'</p><span class="text-[9.5px] text-steel shrink-0">'+t.time+'</span></div>'+
+   '<p class="text-[10.5px] '+t.roleClass+' font-medium">'+t.role+'</p>'+
+   '<p class="text-[11.5px] '+prevCls+' truncate mt-0.5">'+esc(t.preview)+'</p></div></button>';
+ }).join('');
+}
+
+function renderConversation(){
+ var t=curThread();
+ var av=document.getElementById('cvAvatar');
+ av.className='h-10 w-10 rounded-full grid place-items-center text-[12px] font-bold '+t.avatar;
+ av.textContent=t.initials;
+ document.getElementById('cvName').textContent=t.name;
+ document.getElementById('cvMeta').innerHTML='Parent of <span class="font-medium text-charcoal">'+t.parentOf+'</span> · JSS 2A · <span class="font-mono">'+t.reg+'</span>';
+ document.getElementById('cvView').textContent='View '+t.parentOf.split(' ')[0]+' →';
+ var html='<p class="text-center text-[10px] font-medium text-steel/70 uppercase tracking-wider">Today</p>';
+ t.msgs.forEach(function(m){
+  if(m.from==='me'){
+   html+='<div class="flex gap-2.5 flex-row-reverse"><span class="h-7 w-7 rounded-full bg-blue text-white grid place-items-center text-[9px] font-bold shrink-0">MI</span>'+
+    '<div class="max-w-[78%]"><div class="rounded-2xl rounded-tr-md bg-blue text-white px-3.5 py-2.5 text-[12.5px] leading-relaxed">'+esc(m.body)+'</div><p class="text-[9.5px] text-steel mt-1 text-right">You · '+m.t+'</p></div></div>';
+  }else{
+   html+='<div class="flex gap-2.5"><span class="h-7 w-7 rounded-full '+t.avatar+' grid place-items-center text-[9px] font-bold shrink-0">'+t.initials+'</span>'+
+    '<div class="max-w-[78%]"><div class="rounded-2xl rounded-tl-md bg-canvas ring-1 ring-whisper/80 px-3.5 py-2.5 text-[12.5px] leading-relaxed">'+esc(m.body)+'</div><p class="text-[9.5px] text-steel mt-1">'+t.name.split(' ').slice(0,2).join(' ')+' · '+m.t+'</p></div></div>';
+  }
+ });
+ var mc=document.getElementById('cvMessages');
+ mc.innerHTML=html;mc.scrollTop=mc.scrollHeight;
+ // quick replies
+ document.getElementById('quickReplies').innerHTML=t.quick.map(function(q){
+  return '<button onclick="insertQuick(this)" data-q="'+esc(q)+'" class="text-[11px] font-medium text-blue bg-wash rounded-full px-2.5 py-1 hover:bg-mist/50">Quick: &quot;'+esc(q)+'&quot;</button>';
+ }).join('');
+ document.getElementById('composer').placeholder='Reply to '+t.name.split(' ').slice(0,2).join(' ')+'…';
+}
+
+function selectThread(id){
+ activeId=id;var t=curThread();t.unread=0;
+ renderThreads();renderConversation();
+}
+function nowTime(){var d=new Date();var h=d.getHours(),m=d.getMinutes();var ap=h<12?'am':'pm';h=h%12;if(h===0)h=12;return h+':'+(m<10?'0'+m:m)+ap;}
+function sendMsg(){
+ var c=document.getElementById('composer');var v=c.value.trim();
+ if(!v){toast('Type a message first');return;}
+ curThread().msgs.push({from:'me',t:nowTime(),body:v});
+ curThread().preview='You: '+v;
+ c.value='';renderConversation();renderThreads();
+}
+function insertQuick(b){
+ var c=document.getElementById('composer');
+ c.value=(c.value?c.value.replace(/\s*$/,' '):'')+b.dataset.q;
+ c.focus();
+}
+function attachFile(){
+ if(FEATURES.attachments){toast('Choose a PDF to attach');}
+ else{toast('Attachments are enabled by your school');}
+}
+function voiceNote(){
+ if(FEATURES.voiceNotes){toast('Recording voice note…');}
+ else{toast('Voice notes are enabled by your school');}
+}
+function viewStudent(){toast('Opening '+curThread().parentOf+'\'s profile');setTimeout(function(){location.href='student-profile.html';},600);}
+
+document.getElementById('composer').addEventListener('keydown',function(e){
+ if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMsg();}
+});
+renderThreads();renderConversation();
+</script>
+</body>
+</html>

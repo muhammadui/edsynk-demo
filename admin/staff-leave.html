@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Edsynk — Staff Leave</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script>tailwind.config={theme:{extend:{colors:{canvas:'#F7F9FC',ink:'#0B2A56',charcoal:'#18181B',steel:'#64748B',whisper:'#E2E8F0',blue:'#2177EF',skyblue:'#5C9DF5',wash:'#EAF2FE',mist:'#D3E4FD',confirm:'#16A34A',caution:'#D97706',alert:'#DC2626',excused:'#7C8DA6'},fontFamily:{sans:['Geist','sans-serif'],mono:['"Geist Mono"','monospace']},boxShadow:{soft:'0 1px 2px rgba(11,42,86,0.04), 0 6px 24px rgba(11,42,86,0.05)',lift:'0 1px 3px rgba(11,42,86,0.10), 0 12px 32px rgba(11,42,86,0.12)'}}}}</script>
+<style>@keyframes rise{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}.rise{animation:rise .45s cubic-bezier(.2,.8,.2,1) both}.modal.open{opacity:1!important;pointer-events:auto!important}</style>
+</head>
+<body data-active="Staff Leave" data-persona="admin" class="bg-canvas font-sans text-charcoal antialiased">
+<div class="flex min-h-screen">
+  <div id="sidebar-root"></div>
+  <div class="flex-1 min-w-0">
+    <header class="h-[60px] bg-white/80 backdrop-blur-md border-b border-whisper/70 flex items-center justify-between px-4 sm:px-7 sticky top-0 z-20">
+      <div class="flex items-center gap-3"><h1 class="text-[15px] font-semibold tracking-tight">Staff leave</h1>
+        <span class="font-mono text-[11.5px] text-steel hidden sm:inline">Term 3 · 2025/26</span></div>
+      <div class="flex items-center gap-2.5">
+        <button onclick="openM('policyM')" class="h-9 px-3.5 rounded-lg border border-whisper bg-white text-[13px] font-medium hover:bg-mist/30 hidden sm:block">Leave policy</button>
+        <button onclick="openM('applyM')" class="h-9 px-4 rounded-lg bg-blue text-white text-[13px] font-medium shadow-soft active:translate-y-px">+ Apply on behalf</button>
+      </div>
+    </header>
+    <main class="p-4 sm:p-7 max-w-[1180px] space-y-5 pb-12">
+
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-3">
+        <div class="rise bg-white ring-1 ring-whisper/80 rounded-2xl p-4 shadow-soft" style="animation-delay:.04s"><p class="text-[10.5px] font-semibold uppercase tracking-wider text-steel">Pending requests</p><p class="font-mono text-[22px] font-semibold mt-1.5 text-caution">4</p><p class="text-[11.5px] text-steel mt-1">awaiting approval</p></div>
+        <div class="rise bg-white ring-1 ring-whisper/80 rounded-2xl p-4 shadow-soft" style="animation-delay:.08s"><p class="text-[10.5px] font-semibold uppercase tracking-wider text-steel">On leave today</p><p class="font-mono text-[22px] font-semibold mt-1.5">3</p><p class="text-[11.5px] text-steel mt-1">of 31 staff</p></div>
+        <div class="rise bg-white ring-1 ring-whisper/80 rounded-2xl p-4 shadow-soft" style="animation-delay:.12s"><p class="text-[10.5px] font-semibold uppercase tracking-wider text-steel">Leave days used</p><p class="font-mono text-[22px] font-semibold mt-1.5">68</p><p class="text-[11.5px] text-steel mt-1">this term</p></div>
+        <div class="rise bg-white ring-1 ring-whisper/80 rounded-2xl p-4 shadow-soft" style="animation-delay:.16s"><p class="text-[10.5px] font-semibold uppercase tracking-wider text-steel">Available</p><p class="font-mono text-[22px] font-semibold mt-1.5 text-confirm">28</p><p class="text-[11.5px] text-steel mt-1">staff on site</p></div>
+      </div>
+
+      <!-- Out this week -->
+      <div class="rise bg-white ring-1 ring-whisper/80 rounded-2xl p-5 shadow-soft" style="animation-delay:.2s">
+        <p class="text-[13.5px] font-semibold mb-3">Out this week <span class="font-normal text-steel text-[12px]">· 22–26 Jun</span></p>
+        <div class="space-y-2.5" id="calRows"></div>
+        <p class="text-[11px] text-steel mt-3">Cover is auto-suggested from staff teaching the same subject. Tap a bar to reassign classes for the day.</p>
+      </div>
+
+      <!-- Pending requests -->
+      <div class="rise bg-white ring-1 ring-whisper/80 rounded-2xl shadow-soft overflow-hidden" style="animation-delay:.24s">
+        <div class="px-5 pt-4 pb-3"><p class="text-[13.5px] font-semibold">Leave requests</p></div>
+        <div class="overflow-x-auto"><table class="w-full text-[13px] min-w-[920px]">
+          <thead><tr class="text-left text-[10.5px] font-semibold uppercase tracking-[0.07em] text-steel border-y border-whisper/60 bg-canvas/60">
+            <th class="pl-5 pr-3 py-3">Staff</th><th class="px-3 py-3">Type</th><th class="px-3 py-3">Dates</th><th class="px-3 py-3">Days</th><th class="px-3 py-3">Reason</th><th class="px-3 py-3">Status</th><th class="px-5 py-3 text-right">Action</th></tr></thead>
+          <tbody id="leaveRows" class="divide-y divide-whisper/60"></tbody>
+        </table></div>
+      </div>
+
+      <!-- Leave balances -->
+      <div class="rise bg-white ring-1 ring-whisper/80 rounded-2xl p-5 shadow-soft" style="animation-delay:.28s">
+        <p class="text-[13.5px] font-semibold mb-3">Leave balances <span class="font-normal text-steel text-[12px]">· annual entitlement 21 days/year</span></p>
+        <div class="grid sm:grid-cols-2 gap-3" id="balRows"></div>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<!-- Apply modal -->
+<div id="applyM" class="modal fixed inset-0 z-50 bg-ink/40 backdrop-blur-sm grid place-items-center p-4" style="opacity:0;pointer-events:none;transition:opacity .2s" onclick="if(event.target===this)closeM('applyM')">
+  <div class="bg-white rounded-2xl shadow-lift max-w-[480px] w-full p-6 max-h-[90vh] overflow-y-auto">
+    <div class="flex items-center justify-between mb-3"><p class="text-[15px] font-semibold">Apply for leave on behalf</p><button onclick="closeM('applyM')" class="h-8 w-8 grid place-items-center rounded-lg hover:bg-mist/40 text-steel">✕</button></div>
+    <div class="grid grid-cols-2 gap-3 text-[12.5px]">
+      <div class="col-span-2"><label class="text-[11.5px] font-semibold text-steel">Staff</label><select class="mt-1.5 w-full h-10 rounded-lg border border-whisper bg-canvas px-2.5"><option>Mallam Musa Ibrahim</option><option>Ustadha Halima Yusuf</option><option>Mr. Chinedu Okafor</option><option>Mrs. Ngozi Okonkwo</option></select></div>
+      <div class="col-span-2"><label class="text-[11.5px] font-semibold text-steel">Leave type</label><select class="mt-1.5 w-full h-10 rounded-lg border border-whisper bg-canvas px-2.5"><option>Annual</option><option>Sick</option><option>Maternity</option><option>Casual</option><option>Study</option><option>Hajj / Umrah</option><option>Compassionate</option></select></div>
+      <div><label class="text-[11.5px] font-semibold text-steel">From</label><input type="date" value="2026-06-29" class="mt-1.5 w-full h-10 rounded-lg border border-whisper bg-canvas px-2.5 font-mono text-[12px]"></div>
+      <div><label class="text-[11.5px] font-semibold text-steel">To</label><input type="date" value="2026-07-03" class="mt-1.5 w-full h-10 rounded-lg border border-whisper bg-canvas px-2.5 font-mono text-[12px]"></div>
+      <div class="col-span-2"><label class="text-[11.5px] font-semibold text-steel">Reason</label><textarea rows="2" placeholder="Optional note…" class="mt-1.5 w-full rounded-lg border border-whisper bg-canvas px-3.5 py-2"></textarea></div>
+    </div>
+    <div class="flex justify-end gap-2 mt-5"><button onclick="closeM('applyM')" class="h-10 px-4 rounded-lg ring-1 ring-whisper text-[13px] font-medium text-steel">Cancel</button><button onclick="closeM('applyM');toast('Leave request submitted')" class="h-10 px-5 rounded-lg bg-blue text-white text-[13px] font-semibold shadow-soft">Submit request</button></div>
+  </div>
+</div>
+
+<!-- Policy modal -->
+<div id="policyM" class="modal fixed inset-0 z-50 bg-ink/40 backdrop-blur-sm grid place-items-center p-4" style="opacity:0;pointer-events:none;transition:opacity .2s" onclick="if(event.target===this)closeM('policyM')">
+  <div class="bg-white rounded-2xl shadow-lift max-w-[460px] w-full p-6">
+    <div class="flex items-center justify-between mb-3"><p class="text-[15px] font-semibold">Leave policy</p><button onclick="closeM('policyM')" class="h-8 w-8 grid place-items-center rounded-lg hover:bg-mist/40 text-steel">✕</button></div>
+    <div class="space-y-2.5 text-[12.5px]">
+      <div class="flex items-center justify-between"><label class="text-steel">Annual entitlement</label><div class="flex items-center gap-1"><input value="21" class="w-16 h-9 rounded-lg border border-whisper bg-canvas px-2.5 font-mono text-right"><span class="text-steel">days/yr</span></div></div>
+      <div class="flex items-center justify-between"><label class="text-steel">Sick (paid)</label><div class="flex items-center gap-1"><input value="14" class="w-16 h-9 rounded-lg border border-whisper bg-canvas px-2.5 font-mono text-right"><span class="text-steel">days/yr</span></div></div>
+      <div class="flex items-center justify-between"><label class="text-steel">Maternity</label><div class="flex items-center gap-1"><input value="84" class="w-16 h-9 rounded-lg border border-whisper bg-canvas px-2.5 font-mono text-right"><span class="text-steel">days</span></div></div>
+      <div class="flex items-center justify-between"><label class="text-steel">Hajj / Umrah</label><div class="flex items-center gap-1"><input value="21" class="w-16 h-9 rounded-lg border border-whisper bg-canvas px-2.5 font-mono text-right"><span class="text-steel">days, once</span></div></div>
+      <p class="text-[11px] text-steel pt-1">Hajj/Umrah leave granted once per staff tenure. Approvals route to the registrar.</p>
+    </div>
+    <div class="flex justify-end gap-2 mt-5"><button onclick="closeM('policyM')" class="h-10 px-4 rounded-lg ring-1 ring-whisper text-[13px] font-medium text-steel">Cancel</button><button onclick="closeM('policyM');toast('Leave policy updated')" class="h-10 px-5 rounded-lg bg-blue text-white text-[13px] font-semibold shadow-soft">Save policy</button></div>
+  </div>
+</div>
+
+<script src="../assets/shell.js"></script>
+<div id="toast" class="hidden fixed bottom-5 left-1/2 -translate-x-1/2 z-[60] bg-ink text-white text-[12.5px] font-medium px-4 py-2.5 rounded-xl shadow-lift"></div>
+<script>function toast(m){var t=document.getElementById('toast');t.textContent=m;t.classList.remove('hidden');clearTimeout(window._tt);window._tt=setTimeout(function(){t.classList.add('hidden')},2200);}
+function openM(id){document.getElementById(id).classList.add('open');}
+function closeM(id){document.getElementById(id).classList.remove('open');}
+
+// Out this week — [name, type, typeColor, daySpan(start col 1-5, len)]
+const OUT=[
+ ['Mrs. Hauwa Adamu','Maternity','bg-skyblue',[1,5]],
+ ['Ustadh Sani Garba','Hajj / Umrah','bg-confirm',[1,5]],
+ ['Mr. Tunde Bakare','Sick','bg-alert',[3,2]],
+];
+const DAYS=['Mon','Tue','Wed','Thu','Fri'];
+document.getElementById('calRows').innerHTML=
+  `<div class="grid grid-cols-[160px_repeat(5,1fr)] gap-1 text-[10.5px] font-semibold uppercase tracking-wider text-steel mb-1"><span></span>${DAYS.map(d=>`<span class="text-center">${d}</span>`).join('')}</div>`+
+  OUT.map(o=>`<div class="grid grid-cols-[160px_repeat(5,1fr)] gap-1 items-center">
+    <span class="text-[12.5px] font-medium truncate">${o[0]} <span class="block text-[10.5px] text-steel font-normal">${o[1]}</span></span>
+    ${DAYS.map((d,i)=>{const col=i+1;const inSpan=col>=o[3][0]&&col<o[3][0]+o[3][1];return `<div class="h-7 rounded-md ${inSpan?o[2]+' cursor-pointer hover:opacity-80':'bg-canvas ring-1 ring-whisper/60'}" ${inSpan?`onclick="toast('Reassign cover for ${o[0].replace(/'/g,"\\'")} · ${d}')"`:''}></div>`}).join('')}
+  </div>`).join('');
+
+// [name, role, type, typeColor, dates, days, reason, status]
+const LEAVE=[
+ ['Mallam Musa Ibrahim','Maths · Exam officer','Hajj / Umrah','text-confirm bg-confirm/10','29 Jun – 19 Jul','21','Performing Hajj this season','Pending'],
+ ['Mrs. Ngozi Okonkwo','Biology teacher','Maternity','text-blue bg-wash','01 Jul – 22 Sep','84','Expecting; doctor\\'s note attached','Pending'],
+ ['Mr. Chinedu Okafor','Basic Tech · Form JSS 2B','Casual','text-caution bg-caution/10','25 Jun – 26 Jun','2','Personal — family matter','Pending'],
+ ['Mr. Ibrahim Lawal','Chemistry · Form SS 2A','Study','text-excused bg-excused/10','30 Jun – 04 Jul','5','PGDE exams at BUK','Pending'],
+ ['Mrs. Hauwa Adamu','Home Econ · Form JSS 3B','Maternity','text-blue bg-wash','02 Jun – 25 Aug','84','—','Approved'],
+ ['Ustadh Sani Garba','Fiqh & Arabic','Hajj / Umrah','text-confirm bg-confirm/10','15 Jun – 06 Jul','21','—','Approved'],
+ ['Mrs. Grace Eze','Social Studies · Form JSS 1B','Sick','text-alert bg-alert/10','12 Jun – 13 Jun','2','Malaria — recovered','Declined'],
+];
+function lpill(s){
+  if(s==='Pending') return '<span class="text-[10.5px] font-medium text-caution bg-caution/10 rounded-full px-2 py-0.5">Pending</span>';
+  if(s==='Approved') return '<span class="text-[10.5px] font-medium text-confirm bg-confirm/10 rounded-full px-2 py-0.5">Approved</span>';
+  return '<span class="text-[10.5px] font-medium text-steel bg-mist/50 rounded-full px-2 py-0.5">Declined</span>';
+}
+function laction(r){
+  if(r[7]==='Pending') return '<div class="inline-flex gap-1.5"><button onclick="event.stopPropagation();this.closest(\'tr\').remove();toast(\'Leave approved · staff notified\')" class="h-8 px-2.5 rounded-lg bg-confirm/10 text-confirm text-[11px] font-medium hover:bg-confirm/20">Approve</button><button onclick="event.stopPropagation();this.closest(\'tr\').remove();toast(\'Leave declined\')" class="h-8 px-2.5 rounded-lg border border-whisper text-[11px] font-medium hover:bg-mist/30">Decline</button></div>';
+  return '<button onclick="event.stopPropagation();toast(\'Opening leave record…\')" class="h-8 px-2.5 rounded-lg border border-whisper text-[11px] font-medium hover:bg-mist/30">View</button>';
+}
+document.getElementById('leaveRows').innerHTML=LEAVE.map(r=>`<tr class="hover:bg-mist/15">
+  <td class="pl-5 pr-3 py-3"><a href="staff-detail.html" class="font-medium hover:text-blue">${r[0]}</a><span class="block text-[11px] text-steel">${r[1]}</span></td>
+  <td class="px-3 py-3"><span class="text-[10.5px] font-medium ${r[3]} rounded-full px-2 py-0.5">${r[2]}</span></td>
+  <td class="px-3 py-3 font-mono text-steel text-[12px]">${r[4]}</td>
+  <td class="px-3 py-3 font-mono">${r[5]}</td>
+  <td class="px-3 py-3 text-steel">${r[6]}</td>
+  <td class="px-3 py-3">${lpill(r[7])}</td>
+  <td class="px-5 py-3 text-right">${laction(r)}</td></tr>`).join('');
+
+// balances [name, annualUsed, annualTotal, sickUsed]
+const BAL=[
+ ['Mallam Musa Ibrahim',6,21,2],
+ ['Ustadha Halima Yusuf',4,21,0],
+ ['Mr. Chinedu Okafor',11,21,3],
+ ['Mrs. Bisi Adeyemi',8,21,1],
+ ['Mr. Emeka Nwosu',2,21,0],
+ ['Mrs. Ngozi Okonkwo',9,21,4],
+];
+document.getElementById('balRows').innerHTML=BAL.map(b=>{const pct=Math.round(b[1]/b[2]*100);const left=b[2]-b[1];return `<div class="rounded-xl ring-1 ring-whisper/80 bg-canvas/50 p-3.5">
+  <div class="flex items-center justify-between"><a href="staff-detail.html" class="text-[13px] font-medium hover:text-blue">${b[0]}</a><span class="font-mono text-[11.5px] text-steel">${left} days left</span></div>
+  <div class="h-2 rounded-full bg-mist/50 overflow-hidden mt-2"><div class="h-full ${pct>80?'bg-alert':pct>50?'bg-caution':'bg-blue'}" style="width:${pct}%"></div></div>
+  <p class="text-[11px] text-steel mt-1.5">Annual <span class="font-mono">${b[1]}/${b[2]}</span> used · Sick <span class="font-mono">${b[3]}</span></p>
+</div>`}).join('');
+</script>
+</body>
+</html>

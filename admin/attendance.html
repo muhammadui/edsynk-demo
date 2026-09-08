@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Edsynk — Attendance</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&family=Noto+Naskh+Arabic:wght@500&display=swap" rel="stylesheet">
+<script>
+tailwind.config = { theme: { extend: {
+  colors: { canvas:'#F7F9FC', ink:'#0B2A56', charcoal:'#18181B', steel:'#64748B', whisper:'#E2E8F0',
+    blue:'#2177EF', skyblue:'#5C9DF5', wash:'#EAF2FE', mist:'#D3E4FD',
+    confirm:'#16A34A', caution:'#D97706', alert:'#DC2626', excused:'#7C8DA6' },
+  fontFamily: { sans:['Geist','sans-serif'], mono:['"Geist Mono"','monospace'], arabic:['"Noto Naskh Arabic"','serif'] },
+  boxShadow: { soft:'0 1px 2px rgba(11,42,86,0.04), 0 6px 24px rgba(11,42,86,0.05)',
+               lift:'0 1px 3px rgba(11,42,86,0.10), 0 12px 32px rgba(11,42,86,0.12)' }
+}}}
+</script>
+<style>
+  @keyframes rise{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+  .rise{animation:rise .5s cubic-bezier(.2,.8,.2,1) both}
+  @keyframes fillw{from{width:0}} .hbar{animation:fillw 1s cubic-bezier(.2,.8,.2,1) both}
+  @keyframes grow{from{transform:scaleY(0)}to{transform:scaleY(1)}} .vbar{transform-origin:bottom;animation:grow .8s cubic-bezier(.2,.8,.2,1) both}
+</style>
+</head>
+<body data-active="Attendance" data-persona="admin" class="bg-canvas font-sans text-charcoal antialiased">
+<div class="flex min-h-screen">
+  <div id="sidebar-root"></div>
+  <div class="flex-1 min-w-0">
+    <header class="h-[60px] bg-white/80 backdrop-blur-md border-b border-whisper/70 flex items-center justify-between px-4 sm:px-7 sticky top-0 z-20">
+      <div class="flex items-center gap-3">
+        <h1 class="text-[15px] font-semibold tracking-tight">Attendance</h1>
+        <span class="font-mono text-[11.5px] font-medium text-confirm bg-confirm/10 rounded-full px-2.5 py-1 hidden sm:inline">92.5&#37; today</span>
+      </div>
+      <div class="flex items-center gap-2.5"><button class="h-9 px-4 rounded-lg bg-blue text-white text-[13px] font-medium shadow-soft active:translate-y-px">Message form teachers</button></div>
+    </header>
+    <main class="p-4 sm:p-7 max-w-[1240px] space-y-5 pb-12">
+<div class="rise flex items-center justify-between flex-wrap gap-3"><p class="text-[12.5px] text-steel" id="dateLine">Friday, 12 June 2026 · morning register</p><button class="h-9 px-4 rounded-lg bg-white ring-1 ring-whisper text-[13px] font-medium text-steel hover:bg-mist/30 hidden sm:block">Export term report</button></div>
+
+<!-- session segmented control -->
+<div class="rise bg-white ring-1 ring-whisper/80 rounded-2xl p-3.5 shadow-soft flex flex-wrap items-center justify-between gap-3" style="animation-delay:.02s">
+  <div class="inline-flex rounded-xl bg-canvas ring-1 ring-whisper p-1">
+    <button id="seg-morning" onclick="setSession('morning')" class="st h-9 px-4 rounded-lg text-[12.5px] font-semibold bg-blue text-white shadow-soft">Morning register <span class="font-normal opacity-80">· by 8:00am</span></button>
+    <button id="seg-afternoon" onclick="setSession('afternoon')" class="st h-9 px-4 rounded-lg text-[12.5px] font-semibold text-steel">Afternoon register <span class="font-normal opacity-80">· after 2nd break</span></button>
+  </div>
+  <p class="text-[11px] text-steel flex items-center gap-1.5"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Morning cut-off (8:00am) &amp; afternoon trigger (2nd break, ~12:55pm) are set in <a href="settings.html" class="text-blue font-medium hover:underline">Settings</a>.</p>
+</div>
+
+<div class="grid grid-cols-2 lg:grid-cols-4 gap-3"><div class="rise bg-white ring-1 ring-whisper/80 rounded-2xl p-4 shadow-soft" style="animation-delay:.04s"><p class="text-[10.5px] font-semibold uppercase tracking-wider text-steel">Present today</p><p class="font-mono text-[22px] font-semibold mt-1.5" id="stPresent">381</p><p class="text-[11.5px] text-steel mt-1" id="stPresentSub">of 412 · 92.5&#37;</p></div><div class="rise bg-white ring-1 ring-whisper/80 rounded-2xl p-4 shadow-soft" style="animation-delay:.08s"><p class="text-[10.5px] font-semibold uppercase tracking-wider text-caution">Latecomers today</p><p class="font-mono text-[22px] font-semibold mt-1.5 text-caution" id="stLate">17</p><p class="text-[11.5px] text-steel mt-1" id="stLateSub">arrived after 8:00am cut-off</p></div><div class="rise bg-white ring-1 ring-whisper/80 rounded-2xl p-4 shadow-soft" style="animation-delay:.12s"><p class="text-[10.5px] font-semibold uppercase tracking-wider text-steel">Absent today</p><p class="font-mono text-[22px] font-semibold mt-1.5" id="stAbsent">24</p><p class="text-[11.5px] text-steel mt-1">5 excused</p></div><div class="rise bg-white ring-1 ring-whisper/80 rounded-2xl p-4 shadow-soft" style="animation-delay:.16s"><p class="text-[10.5px] font-semibold uppercase tracking-wider text-steel">Chronic absentees</p><p class="font-mono text-[22px] font-semibold mt-1.5">3</p><p class="text-[11.5px] text-steel mt-1">below 75&#37; this term</p></div></div>
+
+<!-- session register (per-student, twice daily) -->
+<div class="rise bg-white ring-1 ring-whisper/80 rounded-2xl shadow-soft overflow-hidden" style="animation-delay:.2s"><div class="flex items-center justify-between px-5 pt-4 pb-3 flex-wrap gap-2"><div><p class="text-[13.5px] font-semibold"><span id="regTitle">Morning</span> register · JSS 2A</p><p class="text-[11px] text-steel mt-0.5" id="regSub">Form teacher: Mallam Musa Ibrahim · cut-off 8:00am</p></div><select id="regClass" onchange="renderRegister()" class="h-8 rounded-lg border border-whisper bg-white px-2.5 text-[11.5px] font-medium"><option>JSS 1A</option><option>JSS 1B</option><option selected>JSS 2A</option><option>JSS 2B</option><option>JSS 3A</option><option>SS 1A</option></select></div><div class="overflow-x-auto"><table class="w-full text-[12.5px]"><thead><tr class="text-left text-[10.5px] uppercase tracking-wider text-steel border-y border-whisper/70 bg-canvas/60"><th class="px-4 py-2.5 font-semibold">Student</th><th class="px-4 py-2.5 font-semibold">Adm. no.</th><th class="px-4 py-2.5 font-semibold">Status</th><th class="px-4 py-2.5 font-semibold">Arrival</th></tr></thead><tbody class="divide-y divide-whisper/60" id="regBody"></tbody></table></div><p class="px-5 py-3 border-t border-whisper/70 bg-canvas/50 text-[11.5px] text-steel">Late students are auto-flagged when they sign in after the configured cut-off. Both sessions feed the report card and parent portal automatically.</p></div><div class="rise rounded-2xl bg-caution/[0.06] ring-1 ring-caution/25 p-4 flex items-center justify-between gap-3" style="animation-delay:.18s"><div class="flex items-center gap-3"><span class="h-9 w-9 rounded-lg bg-caution/15 text-caution grid place-items-center shrink-0"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span><div><p class="text-[13px] font-semibold">JSS 3B hasn't taken the register</p><p class="text-[11.5px] text-steel">Form teacher: Mrs. Adeyemi · normally done by 8:30am</p></div></div><button class="h-9 px-4 rounded-lg bg-caution text-white text-[12.5px] font-medium">Send reminder</button></div><div class="rise bg-white ring-1 ring-whisper/80 rounded-2xl shadow-soft overflow-hidden" style="animation-delay:.22s"><div class="flex items-center justify-between px-5 pt-4 pb-3"><p class="text-[13.5px] font-semibold">Today by class</p><button class="h-9 px-4 rounded-lg bg-blue text-white text-[13px] font-medium shadow-soft active:translate-y-px">View trends</button></div><div class="overflow-x-auto"><table class="w-full text-[12.5px]"><thead><tr class="text-left text-[10.5px] uppercase tracking-wider text-steel border-y border-whisper/70 bg-canvas/60"><th class="px-4 py-2.5 font-semibold">Class</th><th class="px-4 py-2.5 font-semibold">Form teacher</th><th class="px-4 py-2.5 font-semibold">Roll</th><th class="px-4 py-2.5 font-semibold">Present</th><th class="px-4 py-2.5 font-semibold">Rate</th><th class="px-4 py-2.5 font-semibold">&nbsp;</th></tr></thead><tbody class="divide-y divide-whisper/60"><tr class="hover:bg-canvas/60 cursor-pointer"><td class="px-4 py-3"><p class="font-medium">JSS 1A</p></td><td class="px-4 py-3"><span class="text-steel">Mallam Yusuf</span></td><td class="px-4 py-3"><span class="font-mono">40</span></td><td class="px-4 py-3"><span class="font-mono">39</span></td><td class="px-4 py-3"><span class="text-[10.5px] font-semibold text-confirm bg-confirm/10 rounded-full px-2 py-0.5">97.5&#37;</span></td><td class="px-4 py-3"><div class="h-1.5 w-24 rounded-full bg-canvas ring-1 ring-whisper/60 overflow-hidden"><div class="hbar h-full bg-blue rounded-full" style="width:97.5%"></div></div></td></tr><tr class="hover:bg-canvas/60 cursor-pointer"><td class="px-4 py-3"><p class="font-medium">JSS 1B</p></td><td class="px-4 py-3"><span class="text-steel">Hauwa Adamu</span></td><td class="px-4 py-3"><span class="font-mono">38</span></td><td class="px-4 py-3"><span class="font-mono">36</span></td><td class="px-4 py-3"><span class="text-[10.5px] font-semibold text-confirm bg-confirm/10 rounded-full px-2 py-0.5">94.7&#37;</span></td><td class="px-4 py-3"><div class="h-1.5 w-24 rounded-full bg-canvas ring-1 ring-whisper/60 overflow-hidden"><div class="hbar h-full bg-blue rounded-full" style="width:94.7%"></div></div></td></tr><tr class="hover:bg-canvas/60 cursor-pointer"><td class="px-4 py-3"><p class="font-medium">JSS 2A</p></td><td class="px-4 py-3"><span class="text-steel">Mallam Musa</span></td><td class="px-4 py-3"><span class="font-mono">38</span></td><td class="px-4 py-3"><span class="font-mono">35</span></td><td class="px-4 py-3"><span class="text-[10.5px] font-semibold text-confirm bg-confirm/10 rounded-full px-2 py-0.5">92.1&#37;</span></td><td class="px-4 py-3"><div class="h-1.5 w-24 rounded-full bg-canvas ring-1 ring-whisper/60 overflow-hidden"><div class="hbar h-full bg-blue rounded-full" style="width:92.1%"></div></div></td></tr><tr class="hover:bg-canvas/60 cursor-pointer"><td class="px-4 py-3"><p class="font-medium">JSS 2B</p></td><td class="px-4 py-3"><span class="text-steel">Mr. Okafor</span></td><td class="px-4 py-3"><span class="font-mono">36</span></td><td class="px-4 py-3"><span class="font-mono">34</span></td><td class="px-4 py-3"><span class="text-[10.5px] font-semibold text-confirm bg-confirm/10 rounded-full px-2 py-0.5">94.4&#37;</span></td><td class="px-4 py-3"><div class="h-1.5 w-24 rounded-full bg-canvas ring-1 ring-whisper/60 overflow-hidden"><div class="hbar h-full bg-blue rounded-full" style="width:94.4%"></div></div></td></tr><tr class="hover:bg-canvas/60 cursor-pointer"><td class="px-4 py-3"><p class="font-medium">JSS 3A</p></td><td class="px-4 py-3"><span class="text-steel">Mr. Nuhu</span></td><td class="px-4 py-3"><span class="font-mono">35</span></td><td class="px-4 py-3"><span class="font-mono">30</span></td><td class="px-4 py-3"><span class="text-[10.5px] font-semibold text-caution bg-caution/10 rounded-full px-2 py-0.5">85.7&#37;</span></td><td class="px-4 py-3"><div class="h-1.5 w-24 rounded-full bg-canvas ring-1 ring-whisper/60 overflow-hidden"><div class="hbar h-full bg-blue rounded-full" style="width:85.7%"></div></div></td></tr><tr class="hover:bg-canvas/60 cursor-pointer"><td class="px-4 py-3"><p class="font-medium">JSS 3B</p></td><td class="px-4 py-3"><span class="text-steel">Mrs. Adeyemi</span></td><td class="px-4 py-3"><span class="font-mono">37</span></td><td class="px-4 py-3"><span class="font-mono">—</span></td><td class="px-4 py-3"><span class="text-[10.5px] font-semibold text-alert bg-alert/10 rounded-full px-2 py-0.5">not taken</span></td><td class="px-4 py-3"></td></tr><tr class="hover:bg-canvas/60 cursor-pointer"><td class="px-4 py-3"><p class="font-medium">SS 1A</p></td><td class="px-4 py-3"><span class="text-steel">Mrs. Bello</span></td><td class="px-4 py-3"><span class="font-mono">34</span></td><td class="px-4 py-3"><span class="font-mono">33</span></td><td class="px-4 py-3"><span class="text-[10.5px] font-semibold text-confirm bg-confirm/10 rounded-full px-2 py-0.5">97.1&#37;</span></td><td class="px-4 py-3"><div class="h-1.5 w-24 rounded-full bg-canvas ring-1 ring-whisper/60 overflow-hidden"><div class="hbar h-full bg-blue rounded-full" style="width:97.1%"></div></div></td></tr></tbody></table></div><p class="px-5 py-3 border-t border-whisper/70 bg-canvas/50 text-[11.5px] text-steel">Attendance is taken by form teachers and feeds the report card automatically — you never re-key it.</p></div><div class="grid lg:grid-cols-[1fr_340px] gap-4"><div class="rise bg-white ring-1 ring-whisper/80 rounded-2xl p-5 shadow-soft" style="animation-delay:.26s"><div class="flex items-center justify-between gap-2"><p class="text-[13.5px] font-semibold">Attendance trend <span id="trendName" class="font-normal text-steel">· whole school</span></p><select id="trendClass" onchange="renderTrend()" class="h-8 rounded-lg border border-whisper bg-white px-2.5 text-[11.5px] font-medium"><option value="all">Whole school</option><option>JSS 1A</option><option>JSS 1B</option><option>JSS 2A</option><option>JSS 2B</option><option>JSS 3A</option><option>SS 1A</option></select></div><div id="trendBars" class="mt-4 grid grid-cols-6 gap-3 items-end h-[150px]"><div class="flex flex-col items-center gap-1.5 h-full justify-end"><div class="vbar w-full max-w-[40px] rounded-t-md bg-blue/60" style="height:88%;animation-delay:.3s"></div><span class="font-mono text-[9.5px] text-steel/70">W1</span></div><div class="flex flex-col items-center gap-1.5 h-full justify-end"><div class="vbar w-full max-w-[40px] rounded-t-md bg-blue/60" style="height:90%;animation-delay:.4s"></div><span class="font-mono text-[9.5px] text-steel/70">W2</span></div><div class="flex flex-col items-center gap-1.5 h-full justify-end"><div class="vbar w-full max-w-[40px] rounded-t-md bg-blue/60" style="height:91%;animation-delay:.5s"></div><span class="font-mono text-[9.5px] text-steel/70">W3</span></div><div class="flex flex-col items-center gap-1.5 h-full justify-end"><div class="vbar w-full max-w-[40px] rounded-t-md bg-blue/60" style="height:89%;animation-delay:.6s"></div><span class="font-mono text-[9.5px] text-steel/70">W4</span></div><div class="flex flex-col items-center gap-1.5 h-full justify-end"><div class="vbar w-full max-w-[40px] rounded-t-md bg-blue/60" style="height:93%;animation-delay:.7s"></div><span class="font-mono text-[9.5px] text-steel/70">W5</span></div><div class="flex flex-col items-center gap-1.5 h-full justify-end"><div class="vbar w-full max-w-[40px] rounded-t-md bg-blue/80" style="height:92%;animation-delay:.8s"></div><span class="font-mono text-[9.5px] text-steel/70">W6</span></div></div><p class="text-[11.5px] text-steel mt-3">School average <span class="font-mono font-medium text-charcoal">90.5&#37;</span> · WAEC recommends &gt;75&#37; for exam eligibility.</p></div><div class="rise bg-white ring-1 ring-whisper/80 rounded-2xl p-5 shadow-soft" style="animation-delay:.3s"><p class="text-[13.5px] font-semibold">Needs follow-up</p><div class="mt-3 space-y-2.5 text-[12.5px]"><div class="flex items-center justify-between"><div class="flex items-center gap-2.5"><span class="h-7 w-7 rounded-full bg-wash text-blue grid place-items-center text-[9.5px] font-bold">YM</span><div><p class="font-medium">Yusuf Musa</p><p class="text-[10px] text-steel">JSS 2A</p></div></div><span class="text-[10.5px] font-semibold text-alert bg-alert/10 rounded-full px-2 py-0.5">68&#37;</span></div><div class="flex items-center justify-between"><div class="flex items-center gap-2.5"><span class="h-7 w-7 rounded-full bg-wash text-blue grid place-items-center text-[9.5px] font-bold">BN</span><div><p class="font-medium">Bashir Nuhu</p><p class="text-[10px] text-steel">JSS 3A</p></div></div><span class="text-[10.5px] font-semibold text-alert bg-alert/10 rounded-full px-2 py-0.5">71&#37;</span></div><div class="flex items-center justify-between"><div class="flex items-center gap-2.5"><span class="h-7 w-7 rounded-full bg-wash text-blue grid place-items-center text-[9.5px] font-bold">AK</span><div><p class="font-medium">Amina Kabir</p><p class="text-[10px] text-steel">JSS 1B</p></div></div><span class="text-[10.5px] font-semibold text-alert bg-alert/10 rounded-full px-2 py-0.5">73&#37;</span></div></div><p class="text-[11px] text-steel mt-3">EdInsight flags students whose attendance correlates with score drops.</p></div></div>
+    </main>
+  </div>
+</div>
+<div id="toast" class="hidden fixed bottom-5 left-1/2 -translate-x-1/2 z-50 bg-ink text-white text-[12.5px] font-medium px-4 py-2.5 rounded-xl shadow-lift"></div>
+<script src="../assets/shell.js"></script>
+<script>
+function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.remove('hidden');clearTimeout(window._t);window._t=setTimeout(()=>t.classList.add('hidden'),2200);}
+const TREND={all:[88,90,91,89,93,92],'JSS 1A':[95,96,97,94,98,97],'JSS 1B':[92,93,91,95,94,95],'JSS 2A':[90,91,93,89,92,92],'JSS 2B':[93,94,92,95,94,94],'JSS 3A':[82,85,84,80,86,85],'SS 1A':[96,95,97,96,98,97]};
+function renderTrend(){
+  const c=document.getElementById('trendClass').value;const d=TREND[c]||TREND.all;const avg=Math.round(d.reduce((a,b)=>a+b,0)/d.length*10)/10;
+  document.getElementById('trendName').textContent='· '+(c==='all'?'whole school':c);
+  document.getElementById('trendBars').innerHTML=d.map((v,i)=>`<div class="flex flex-col items-center gap-1.5 h-full justify-end"><span class="font-mono text-[9px] text-steel">${v}</span><div class="vbar w-full max-w-[40px] rounded-t-md ${v>=90?'bg-blue/80':v>=80?'bg-blue/60':'bg-caution/70'}" style="height:${v}%;animation-delay:${(i*.06).toFixed(2)}s"></div><span class="font-mono text-[9.5px] text-steel/70">W${i+1}</span></div>`).join('');
+}
+renderTrend();
+
+// ---- twice-daily session register ----
+let SESSION='morning';
+const REG={
+ morning:{
+  'JSS 1A':[['Abdulrahman Aliyu','AFA/2024/0102','P',''],['Hauwa Adamu','AFA/2024/0104','P',''],['Sani Lawal','AFA/2024/0108','L','8:14am'],['Grace Eze','AFA/2024/0111','P',''],['Musa Tijjani','AFA/2024/0115','A','']],
+  'JSS 1B':[['Amina Kabir','AFA/2024/0118','L','8:21am'],['Tunde Bello','AFA/2024/0120','P',''],['Khadija Sule','AFA/2024/0123','P',''],['Peter Obi','AFA/2024/0126','E',''],['Halima Idris','AFA/2024/0128','P','']],
+  'JSS 2A':[['Fatima Abubakar','AFA/2024/0117','P',''],['Yusuf Musa','AFA/2024/0149','A',''],['Ibrahim Sani','AFA/2024/0129','L','8:17am'],['Chiamaka Okafor','AFA/2024/0133','L','8:32am'],['Aisha Garba','AFA/2024/0136','P',''],['Maryam Shehu','AFA/2024/0140','P',''],['Zainab Umar','AFA/2024/0144','E','']],
+  'JSS 2B':[['Emeka Eze','AFA/2024/0150','P',''],['Saadiya Bala','AFA/2024/0153','P',''],['Bashir Nuhu','AFA/2024/0156','L','8:09am'],['Ngozi Okonkwo','AFA/2024/0159','P',''],['Sadiq Garba','AFA/2024/0162','A','']],
+  'JSS 3A':[['Aliyu Danjuma','AFA/2024/0165','L','8:41am'],['Rakiya Sani','AFA/2024/0168','A',''],['Chidi Nwosu','AFA/2024/0171','P',''],['Bashir Nuhu','AFA/2024/0174','P',''],['Hadiza Yakubu','AFA/2024/0177','P','']],
+  'SS 1A':[['Aisha Garba','AFA/2024/0180','P',''],['Daniel Okeke','AFA/2024/0183','P',''],['Fatima Lawan','AFA/2024/0186','L','8:12am'],['Usman Bello','AFA/2024/0189','P',''],['Joy Adeyemi','AFA/2024/0192','E','']]
+ },
+ afternoon:{
+  'JSS 1A':[['Abdulrahman Aliyu','AFA/2024/0102','P',''],['Hauwa Adamu','AFA/2024/0104','P',''],['Sani Lawal','AFA/2024/0108','P',''],['Grace Eze','AFA/2024/0111','A',''],['Musa Tijjani','AFA/2024/0115','A','']],
+  'JSS 1B':[['Amina Kabir','AFA/2024/0118','P',''],['Tunde Bello','AFA/2024/0120','P',''],['Khadija Sule','AFA/2024/0123','P',''],['Peter Obi','AFA/2024/0126','E',''],['Halima Idris','AFA/2024/0128','L','1:08pm']],
+  'JSS 2A':[['Fatima Abubakar','AFA/2024/0117','P',''],['Yusuf Musa','AFA/2024/0149','A',''],['Ibrahim Sani','AFA/2024/0129','P',''],['Chiamaka Okafor','AFA/2024/0133','P',''],['Aisha Garba','AFA/2024/0136','P',''],['Maryam Shehu','AFA/2024/0140','L','1:04pm'],['Zainab Umar','AFA/2024/0144','E','']],
+  'JSS 2B':[['Emeka Eze','AFA/2024/0150','P',''],['Saadiya Bala','AFA/2024/0153','P',''],['Bashir Nuhu','AFA/2024/0156','P',''],['Ngozi Okonkwo','AFA/2024/0159','L','1:11pm'],['Sadiq Garba','AFA/2024/0162','A','']],
+  'JSS 3A':[['Aliyu Danjuma','AFA/2024/0165','P',''],['Rakiya Sani','AFA/2024/0168','A',''],['Chidi Nwosu','AFA/2024/0171','P',''],['Bashir Nuhu','AFA/2024/0174','P',''],['Hadiza Yakubu','AFA/2024/0177','P','']],
+  'SS 1A':[['Aisha Garba','AFA/2024/0180','P',''],['Daniel Okeke','AFA/2024/0183','L','1:02pm'],['Fatima Lawan','AFA/2024/0186','P',''],['Usman Bello','AFA/2024/0189','P',''],['Joy Adeyemi','AFA/2024/0192','E','']]
+ }
+};
+const TEACHERS={'JSS 1A':'Mallam Yusuf','JSS 1B':'Hauwa Adamu','JSS 2A':'Mallam Musa Ibrahim','JSS 2B':'Mr. Chinedu Okafor','JSS 3A':'Mr. Nuhu','SS 1A':'Mrs. Bello'};
+const STMETA={P:['confirm','Present'],L:['caution','Late'],A:['alert','Absent'],E:['excused','Excused']};
+const SCHOOL={morning:{present:381,sub:'of 412 · 92.5&#37;',late:17,lateSub:'arrived after 8:00am cut-off',absent:24},afternoon:{present:389,sub:'of 412 · 94.4&#37;',late:6,lateSub:'returned late after 2nd break',absent:17}};
+function setSession(s){
+  SESSION=s;
+  document.getElementById('seg-morning').className='st h-9 px-4 rounded-lg text-[12.5px] font-semibold '+(s==='morning'?'bg-blue text-white shadow-soft':'text-steel');
+  document.getElementById('seg-afternoon').className='st h-9 px-4 rounded-lg text-[12.5px] font-semibold '+(s==='afternoon'?'bg-blue text-white shadow-soft':'text-steel');
+  document.getElementById('dateLine').textContent='Friday, 12 June 2026 · '+s+' register';
+  document.getElementById('regTitle').textContent=s==='morning'?'Morning':'Afternoon';
+  const m=SCHOOL[s];
+  document.getElementById('stPresent').textContent=m.present;
+  document.getElementById('stPresentSub').innerHTML=m.sub;
+  document.getElementById('stLate').textContent=m.late;
+  document.getElementById('stLateSub').textContent=m.lateSub;
+  document.getElementById('stAbsent').textContent=m.absent;
+  renderRegister();
+}
+function renderRegister(){
+  const cls=document.getElementById('regClass').value;
+  const rows=REG[SESSION][cls]||[];
+  document.getElementById('regSub').textContent='Form teacher: '+(TEACHERS[cls]||'—')+' · '+(SESSION==='morning'?'cut-off 8:00am':'trigger after 2nd break (~12:55pm)');
+  document.getElementById('regBody').innerHTML=rows.map(([name,reg,st,time])=>{
+    const [tone,label]=STMETA[st];
+    const ini=name.split(' ').map(w=>w[0]).slice(0,2).join('');
+    return `<tr class="hover:bg-canvas/60"><td class="px-4 py-3"><div class="flex items-center gap-2.5"><span class="h-7 w-7 rounded-full bg-wash text-blue grid place-items-center text-[9.5px] font-bold shrink-0">${ini}</span><span class="font-medium">${name}</span></div></td><td class="px-4 py-3"><span class="font-mono text-[11px] text-steel">${reg}</span></td><td class="px-4 py-3"><span class="text-[10.5px] font-semibold text-${tone} bg-${tone}/10 rounded-full px-2.5 py-0.5">${label}</span></td><td class="px-4 py-3">${time?`<span class="font-mono text-[11.5px] text-caution">${time}</span>`:`<span class="text-steel/50">—</span>`}</td></tr>`;
+  }).join('');
+}
+setSession('morning');
+
+document.querySelectorAll('button').forEach(b=>{
+  const x=b.textContent.trim();
+  if(x==='Send reminder'){b.addEventListener('click',()=>{b.textContent='Reminder sent ✓';b.disabled=true;b.className=b.className.replace('bg-caution','bg-confirm');toast('WhatsApp reminder sent to Mrs. Adeyemi to take the JSS 3B register.');});}
+  if(x==='Message form teachers'){b.addEventListener('click',()=>toast('Opening a message to all 12 form teachers…'));}
+  if(x==='View trends'){b.addEventListener('click',()=>toast('Loading full attendance trend report…'));}
+  if(x==='Export term report'){b.addEventListener('click',()=>toast('Preparing attendance report (PDF + Excel)…'));}
+});
+</script>
+</body>
+</html>

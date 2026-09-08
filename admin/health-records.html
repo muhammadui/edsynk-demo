@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Edsynk — Health Records</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script>tailwind.config={theme:{extend:{colors:{canvas:'#F7F9FC',ink:'#0B2A56',charcoal:'#18181B',steel:'#64748B',whisper:'#E2E8F0',blue:'#2177EF',skyblue:'#5C9DF5',wash:'#EAF2FE',mist:'#D3E4FD',confirm:'#16A34A',caution:'#D97706',alert:'#DC2626',excused:'#7C8DA6'},fontFamily:{sans:['Geist','sans-serif'],mono:['"Geist Mono"','monospace']},boxShadow:{soft:'0 1px 2px rgba(11,42,86,0.04), 0 6px 24px rgba(11,42,86,0.05)',lift:'0 1px 3px rgba(11,42,86,0.10), 0 12px 32px rgba(11,42,86,0.12)'}}}}</script>
+<style>@keyframes rise{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}.rise{animation:rise .45s cubic-bezier(.2,.8,.2,1) both}.modal.open{opacity:1!important;pointer-events:auto!important}</style>
+</head>
+<body data-active="Health Records" data-persona="admin" class="bg-canvas font-sans text-charcoal antialiased">
+<div class="flex min-h-screen">
+  <div id="sidebar-root"></div>
+  <div class="flex-1 min-w-0">
+    <header class="h-[60px] bg-white/80 backdrop-blur-md border-b border-whisper/70 flex items-center justify-between px-4 sm:px-7 sticky top-0 z-20">
+      <div class="flex items-center gap-3"><h1 class="text-[15px] font-semibold tracking-tight">Health records</h1>
+        <span class="font-mono text-[11.5px] font-medium text-alert bg-alert/10 rounded-full px-2.5 py-1 hidden sm:inline">Confidential</span></div>
+      <div class="flex items-center gap-2.5">
+        <button onclick="toast('Exporting flagged conditions to the school nurse…')" class="h-9 px-3.5 rounded-lg border border-whisper bg-white text-[13px] font-medium hover:bg-mist/30 hidden sm:block">Export to nurse</button>
+        <button onclick="openM('visitM')" class="h-9 px-4 rounded-lg bg-blue text-white text-[13px] font-medium shadow-soft active:translate-y-px">+ Log clinic visit</button>
+      </div>
+    </header>
+    <main class="p-4 sm:p-7 max-w-[1180px] space-y-5 pb-12">
+
+      <div class="rise rounded-2xl bg-alert/[0.05] ring-1 ring-alert/20 px-4 py-3 flex items-center gap-3">
+        <span class="h-8 w-8 rounded-lg bg-alert/15 text-alert grid place-items-center shrink-0"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></span>
+        <p class="text-[12px] text-charcoal">These records are <span class="font-semibold">confidential</span> — visible to the school nurse and admin only. Form teachers see emergency flags but not the full clinic log.</p>
+      </div>
+
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-3">
+        <div class="rise bg-white ring-1 ring-whisper/80 rounded-2xl p-4 shadow-soft" style="animation-delay:.04s"><p class="text-[10.5px] font-semibold uppercase tracking-wider text-steel">Clinic visits</p><p class="font-mono text-[22px] font-semibold mt-1.5">47</p><p class="text-[11.5px] text-steel mt-1">this term</p></div>
+        <div class="rise bg-white ring-1 ring-whisper/80 rounded-2xl p-4 shadow-soft" style="animation-delay:.08s"><p class="text-[10.5px] font-semibold uppercase tracking-wider text-steel">Chronic conditions</p><p class="font-mono text-[22px] font-semibold mt-1.5">8</p><p class="text-[11.5px] text-steel mt-1">flagged students</p></div>
+        <div class="rise bg-white ring-1 ring-whisper/80 rounded-2xl p-4 shadow-soft" style="animation-delay:.12s"><p class="text-[10.5px] font-semibold uppercase tracking-wider text-steel">Immunizations due</p><p class="font-mono text-[22px] font-semibold mt-1.5 text-caution">5</p><p class="text-[11.5px] text-steel mt-1">need follow-up</p></div>
+        <div class="rise bg-white ring-1 ring-whisper/80 rounded-2xl p-4 shadow-soft" style="animation-delay:.16s"><p class="text-[10.5px] font-semibold uppercase tracking-wider text-steel">Sent home</p><p class="font-mono text-[22px] font-semibold mt-1.5">6</p><p class="text-[11.5px] text-steel mt-1">this term</p></div>
+      </div>
+
+      <!-- Flagged conditions -->
+      <div class="rise bg-white ring-1 ring-whisper/80 rounded-2xl p-5 shadow-soft" style="animation-delay:.2s">
+        <div class="flex items-center justify-between mb-3">
+          <p class="text-[13.5px] font-semibold">Flagged conditions</p>
+          <button onclick="openM('noteM')" class="h-8 px-3.5 rounded-lg border border-whisper text-[12px] font-medium hover:bg-mist/30">+ Add medical note</button>
+        </div>
+        <div class="grid sm:grid-cols-2 gap-3">
+          <div class="rounded-xl ring-1 ring-whisper/80 bg-canvas/50 p-3.5">
+            <div class="flex items-center justify-between"><a href="student-detail.html" class="text-[13px] font-semibold hover:text-blue">Yusuf Abubakar</a><span class="text-[10.5px] font-medium text-alert bg-alert/10 rounded-full px-2 py-0.5">Asthma</span></div>
+            <p class="text-[11.5px] text-steel mt-1.5">SS 1 Science · Inhaler kept with house master. Avoid strenuous PE in harmattan.</p>
+            <p class="text-[11px] text-steel mt-1.5">Emergency: Hajiya Maryam Abubakar · <span class="font-mono">0705 ··· 2281</span></p>
+          </div>
+          <div class="rounded-xl ring-1 ring-whisper/80 bg-canvas/50 p-3.5">
+            <div class="flex items-center justify-between"><a href="student-detail.html" class="text-[13px] font-semibold hover:text-blue">Aisha Garba</a><span class="text-[10.5px] font-medium text-alert bg-alert/10 rounded-full px-2 py-0.5">Sickle cell (SS)</span></div>
+            <p class="text-[11.5px] text-steel mt-1.5">JSS 3A · Keep hydrated; report joint pain early. Folic acid daily.</p>
+            <p class="text-[11px] text-steel mt-1.5">Emergency: Mallam Garba Sani · <span class="font-mono">0813 ··· 6620</span></p>
+          </div>
+          <div class="rounded-xl ring-1 ring-whisper/80 bg-canvas/50 p-3.5">
+            <div class="flex items-center justify-between"><a href="student-detail.html" class="text-[13px] font-semibold hover:text-blue">Chiamaka Okafor</a><span class="text-[10.5px] font-medium text-caution bg-caution/10 rounded-full px-2 py-0.5">Peanut allergy</span></div>
+            <p class="text-[11.5px] text-steel mt-1.5">SS 2 Arts · No groundnut snacks. EpiPen in clinic fridge.</p>
+            <p class="text-[11px] text-steel mt-1.5">Emergency: Mrs. Adaeze Okafor · <span class="font-mono">0802 ··· 4471</span></p>
+          </div>
+          <div class="rounded-xl ring-1 ring-whisper/80 bg-canvas/50 p-3.5">
+            <div class="flex items-center justify-between"><a href="student-detail.html" class="text-[13px] font-semibold hover:text-blue">Ibrahim Sani</a><span class="text-[10.5px] font-medium text-caution bg-caution/10 rounded-full px-2 py-0.5">Epilepsy</span></div>
+            <p class="text-[11.5px] text-steel mt-1.5">SS 1 Science · On medication. Notify nurse if seizure observed.</p>
+            <p class="text-[11px] text-steel mt-1.5">Emergency: Mallam Sani Bello · <span class="font-mono">0816 ··· 9032</span></p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Visit log -->
+      <div class="rise bg-white ring-1 ring-whisper/80 rounded-2xl shadow-soft overflow-hidden" style="animation-delay:.26s">
+        <div class="flex items-center justify-between px-5 pt-4 pb-3 flex-wrap gap-2">
+          <p class="text-[13.5px] font-semibold">Clinic visit log</p>
+          <div class="relative max-w-xs">
+            <svg class="absolute left-3.5 top-1/2 -translate-y-1/2 text-steel" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+            <input id="q" oninput="filterV()" placeholder="Search student…" class="w-full h-9 rounded-xl border border-whisper bg-white pl-10 pr-4 text-[13px] focus:outline-none focus:ring-2 focus:ring-blue/50">
+          </div>
+        </div>
+        <div class="overflow-x-auto"><table class="w-full text-[13px] min-w-[860px]">
+          <thead><tr class="text-left text-[10.5px] font-semibold uppercase tracking-[0.07em] text-steel border-y border-whisper/60 bg-canvas/60">
+            <th class="pl-5 pr-3 py-3">Date</th><th class="px-3 py-3">Student</th><th class="px-3 py-3">Complaint</th><th class="px-3 py-3">Treatment</th><th class="px-3 py-3">Nurse</th><th class="px-5 py-3 text-center">Sent home</th></tr></thead>
+          <tbody id="visitRows" class="divide-y divide-whisper/60"></tbody>
+        </table></div>
+        <p class="px-5 py-3 border-t border-whisper/60 bg-canvas/50 text-[11.5px] text-steel">When a student is sent home, the guardian receives an automatic WhatsApp note from the clinic.</p>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<!-- Log visit modal -->
+<div id="visitM" class="modal fixed inset-0 z-50 bg-ink/40 backdrop-blur-sm grid place-items-center p-4" style="opacity:0;pointer-events:none;transition:opacity .2s" onclick="if(event.target===this)closeM('visitM')">
+  <div class="bg-white rounded-2xl shadow-lift max-w-[480px] w-full p-6 max-h-[90vh] overflow-y-auto">
+    <div class="flex items-center justify-between mb-3"><p class="text-[15px] font-semibold">Log a clinic visit</p><button onclick="closeM('visitM')" class="h-8 w-8 grid place-items-center rounded-lg hover:bg-mist/40 text-steel">✕</button></div>
+    <div class="grid grid-cols-2 gap-3 text-[12.5px]">
+      <div class="col-span-2"><label class="text-[11.5px] font-semibold text-steel">Student</label><input placeholder="Name or reg number" class="mt-1.5 w-full h-10 rounded-lg border border-whisper bg-canvas px-3.5"></div>
+      <div><label class="text-[11.5px] font-semibold text-steel">Date</label><input type="date" value="2026-06-20" class="mt-1.5 w-full h-10 rounded-lg border border-whisper bg-canvas px-2.5 font-mono text-[12px]"></div>
+      <div><label class="text-[11.5px] font-semibold text-steel">Nurse</label><select class="mt-1.5 w-full h-10 rounded-lg border border-whisper bg-canvas px-2.5"><option>Nurse Grace Eze</option><option>Nurse Fatima Sani</option></select></div>
+      <div class="col-span-2"><label class="text-[11.5px] font-semibold text-steel">Complaint</label><input placeholder="e.g. Headache, malaria symptoms" class="mt-1.5 w-full h-10 rounded-lg border border-whisper bg-canvas px-3.5"></div>
+      <div class="col-span-2"><label class="text-[11.5px] font-semibold text-steel">Treatment given</label><textarea rows="2" placeholder="Medication, observation, referral…" class="mt-1.5 w-full rounded-lg border border-whisper bg-canvas px-3.5 py-2"></textarea></div>
+      <label class="col-span-2 flex items-center gap-2 text-[12.5px]"><input type="checkbox" class="h-4 w-4 rounded border-whisper accent-[#2177EF]">Sent home / guardian notified</label>
+    </div>
+    <div class="flex justify-end gap-2 mt-5"><button onclick="closeM('visitM')" class="h-10 px-4 rounded-lg ring-1 ring-whisper text-[13px] font-medium text-steel">Cancel</button><button onclick="closeM('visitM');toast('Clinic visit logged')" class="h-10 px-5 rounded-lg bg-blue text-white text-[13px] font-semibold shadow-soft">Save visit</button></div>
+  </div>
+</div>
+
+<!-- Medical note modal -->
+<div id="noteM" class="modal fixed inset-0 z-50 bg-ink/40 backdrop-blur-sm grid place-items-center p-4" style="opacity:0;pointer-events:none;transition:opacity .2s" onclick="if(event.target===this)closeM('noteM')">
+  <div class="bg-white rounded-2xl shadow-lift max-w-[460px] w-full p-6">
+    <div class="flex items-center justify-between mb-3"><p class="text-[15px] font-semibold">Add a medical note</p><button onclick="closeM('noteM')" class="h-8 w-8 grid place-items-center rounded-lg hover:bg-mist/40 text-steel">✕</button></div>
+    <div class="space-y-3 text-[12.5px]">
+      <div><label class="text-[11.5px] font-semibold text-steel">Student</label><input placeholder="Name or reg number" class="mt-1.5 w-full h-10 rounded-lg border border-whisper bg-canvas px-3.5"></div>
+      <div><label class="text-[11.5px] font-semibold text-steel">Condition</label><input placeholder="e.g. Asthma, allergy" class="mt-1.5 w-full h-10 rounded-lg border border-whisper bg-canvas px-3.5"></div>
+      <div><label class="text-[11.5px] font-semibold text-steel">Care note</label><textarea rows="2" placeholder="Instructions for staff…" class="mt-1.5 w-full rounded-lg border border-whisper bg-canvas px-3.5 py-2"></textarea></div>
+      <div><label class="text-[11.5px] font-semibold text-steel">Emergency contact</label><input placeholder="Name · phone" class="mt-1.5 w-full h-10 rounded-lg border border-whisper bg-canvas px-3.5"></div>
+    </div>
+    <div class="flex justify-end gap-2 mt-5"><button onclick="closeM('noteM')" class="h-10 px-4 rounded-lg ring-1 ring-whisper text-[13px] font-medium text-steel">Cancel</button><button onclick="closeM('noteM');toast('Medical note saved')" class="h-10 px-5 rounded-lg bg-blue text-white text-[13px] font-semibold shadow-soft">Save note</button></div>
+  </div>
+</div>
+
+<script src="../assets/shell.js"></script>
+<div id="toast" class="hidden fixed bottom-5 left-1/2 -translate-x-1/2 z-[60] bg-ink text-white text-[12.5px] font-medium px-4 py-2.5 rounded-xl shadow-lift"></div>
+<script>function toast(m){var t=document.getElementById('toast');t.textContent=m;t.classList.remove('hidden');clearTimeout(window._tt);window._tt=setTimeout(function(){t.classList.add('hidden')},2200);}
+function openM(id){document.getElementById(id).classList.add('open');}
+function closeM(id){document.getElementById(id).classList.remove('open');}
+
+const VISITS=[
+ ['20 Jun','Fatima Abubakar','JSS 2A','Headache','Paracetamol, rest 1hr','Nurse Grace Eze',0],
+ ['20 Jun','Ibrahim Sani','SS 1 Science','Routine medication','Anti-epileptic dose given','Nurse Grace Eze',0],
+ ['19 Jun','Bashir Nuhu','JSS 3A','Malaria symptoms','ACT, sent home','Nurse Fatima Sani',1],
+ ['18 Jun','Yusuf Abubakar','SS 1 Science','Mild asthma flare','Inhaler, observed 30min','Nurse Grace Eze',0],
+ ['17 Jun','Halima Yusuf','JSS 2A','Sprained ankle (PE)','Cold compress, bandage','Nurse Fatima Sani',0],
+ ['16 Jun','Chiamaka Okafor','SS 2 Arts','Stomach upset','ORS, rest','Nurse Grace Eze',0],
+ ['15 Jun','Aisha Garba','JSS 3A','Joint pain (SS)','Pain relief, hydration, monitored','Nurse Fatima Sani',1],
+];
+function renderVisits(){
+  document.getElementById('visitRows').innerHTML=VISITS.map(v=>`<tr class="vrow hover:bg-mist/15"><td class="pl-5 pr-3 py-3 font-mono text-steel">${v[0]}</td><td class="px-3 py-3"><a href="student-detail.html" class="font-medium name hover:text-blue">${v[1]}</a><span class="block text-[11px] text-steel">${v[2]}</span></td><td class="px-3 py-3">${v[3]}</td><td class="px-3 py-3 text-steel">${v[4]}</td><td class="px-3 py-3 text-steel">${v[5]}</td><td class="px-5 py-3 text-center">${v[6]?'<span class="text-[10.5px] font-medium text-alert bg-alert/10 rounded-full px-2 py-0.5">Yes</span>':'<span class="text-[10.5px] font-medium text-steel bg-mist/50 rounded-full px-2 py-0.5">No</span>'}</td></tr>`).join('');
+}
+function filterV(){const q=document.getElementById('q').value.toLowerCase();document.querySelectorAll('#visitRows .vrow').forEach(r=>{r.style.display=r.querySelector('.name').textContent.toLowerCase().includes(q)?'':'none';});}
+renderVisits();
+</script>
+</body>
+</html>

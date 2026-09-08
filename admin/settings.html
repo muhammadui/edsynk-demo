@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Edsynk — Settings</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&family=Caveat:wght@600&display=swap" rel="stylesheet">
+<script>tailwind.config={theme:{extend:{colors:{canvas:'#F7F9FC',ink:'#0B2A56',charcoal:'#18181B',steel:'#64748B',whisper:'#E2E8F0',blue:'#2177EF',wash:'#EAF2FE',mist:'#D3E4FD',confirm:'#16A34A',caution:'#D97706',alert:'#DC2626',excused:'#7C8DA6'},fontFamily:{sans:['Geist','sans-serif'],mono:['"Geist Mono"','monospace']},boxShadow:{soft:'0 1px 2px rgba(11,42,86,0.04), 0 6px 24px rgba(11,42,86,0.05)',lift:'0 1px 3px rgba(11,42,86,0.10), 0 12px 32px rgba(11,42,86,0.12)'}}}}</script>
+<style>@keyframes rise{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}.rise{animation:rise .45s cubic-bezier(.2,.8,.2,1) both}</style>
+</head>
+<body data-active="Settings" data-persona="admin" class="bg-canvas font-sans text-charcoal antialiased">
+<div class="flex min-h-screen">
+  <div id="sidebar-root"></div>
+  <div class="flex-1 min-w-0">
+    <header class="h-[60px] bg-white/80 backdrop-blur-md border-b border-whisper/70 flex items-center justify-between px-4 sm:px-7 sticky top-0 z-20">
+      <div class="flex items-center gap-3"><h1 class="text-[15px] font-semibold tracking-tight">Settings</h1></div>
+      <button class="h-9 px-4 rounded-lg bg-blue text-white text-[13px] font-medium shadow-soft active:translate-y-px">Save changes</button>
+    </header>
+
+    <main class="p-4 sm:p-7 max-w-[1100px] grid grid-cols-1 lg:grid-cols-[220px_1fr] gap-6 items-start">
+
+      <!-- Settings rail -->
+      <nav class="rise bg-white border border-whisper/70 rounded-2xl shadow-soft p-2 text-[13px] font-medium lg:sticky lg:top-[84px]">
+        <button onclick="st(0)" class="stb w-full text-left px-3.5 py-2.5 rounded-lg bg-blue text-white">Academic setup</button>
+        <button onclick="st(1)" class="stb w-full text-left px-3.5 py-2.5 rounded-lg text-steel hover:bg-mist/40 mt-0.5">Edsynk AI</button>
+        <button onclick="st(2)" class="stb w-full text-left px-3.5 py-2.5 rounded-lg text-steel hover:bg-mist/40 mt-0.5">School profile</button>
+        <button onclick="st(3)" class="stb w-full text-left px-3.5 py-2.5 rounded-lg text-steel hover:bg-mist/40 mt-0.5">Signatures &amp; stamp</button>
+        <button onclick="st(4)" class="stb w-full text-left px-3.5 py-2.5 rounded-lg text-steel hover:bg-mist/40 mt-0.5">Users &amp; roles</button>
+        <div class="mt-1 pt-1 border-t border-whisper/60">
+          <button onclick="st(5)" class="stb w-full text-left px-3.5 py-2.5 rounded-lg text-steel hover:bg-mist/40 mt-0.5">Comment bank</button>
+          <button onclick="st(6)" class="stb w-full text-left px-3.5 py-2.5 rounded-lg text-steel hover:bg-mist/40 mt-0.5">Audit log</button>
+          <button onclick="st(7)" class="stb w-full text-left px-3.5 py-2.5 rounded-lg text-steel hover:bg-mist/40 mt-0.5">Billing &amp; plan</button>
+          <button onclick="document.getElementById('expDone').classList.remove('hidden')" class="w-full text-left px-3.5 py-2.5 rounded-lg text-blue hover:bg-mist/40 mt-0.5 text-[13px] font-medium">Data export ↓</button>
+          <p id="expDone" class="hidden px-3.5 py-2 text-[11px] text-confirm">✓ Preparing full export — emailed when ready.</p>
+        </div>
+      </nav>
+
+      <!-- PANEL 0: Academic -->
+      <section id="p0" class="rise space-y-4">
+        <div class="bg-white border border-whisper/70 rounded-2xl shadow-soft p-6">
+          <h2 class="font-semibold tracking-tight text-[15px]">Assessment scheme <span class="text-[11px] text-steel font-normal ml-1">JSS &amp; SS levels</span></h2>
+          <div class="mt-4 space-y-2">
+            <div class="grid grid-cols-[1fr_110px_40px] gap-2 items-center">
+              <input value="CA 1" class="h-10 rounded-lg border border-whisper bg-canvas px-3.5 text-[13px]">
+              <div class="flex items-center gap-1.5"><input value="20" class="h-10 w-16 text-center font-mono rounded-lg border border-whisper bg-canvas"><span class="text-[12px] text-steel">marks</span></div>
+              <button class="h-9 w-9 grid place-items-center rounded-lg hover:bg-alert/10 text-steel hover:text-alert">✕</button></div>
+            <div class="grid grid-cols-[1fr_110px_40px] gap-2 items-center">
+              <input value="CA 2" class="h-10 rounded-lg border border-whisper bg-canvas px-3.5 text-[13px]">
+              <div class="flex items-center gap-1.5"><input value="20" class="h-10 w-16 text-center font-mono rounded-lg border border-whisper bg-canvas"><span class="text-[12px] text-steel">marks</span></div>
+              <button class="h-9 w-9 grid place-items-center rounded-lg hover:bg-alert/10 text-steel hover:text-alert">✕</button></div>
+            <div class="grid grid-cols-[1fr_110px_40px] gap-2 items-center">
+              <input value="Examination" class="h-10 rounded-lg border border-whisper bg-canvas px-3.5 text-[13px]">
+              <div class="flex items-center gap-1.5"><input value="60" class="h-10 w-16 text-center font-mono rounded-lg border border-whisper bg-canvas"><span class="text-[12px] text-steel">marks</span></div>
+              <button class="h-9 w-9 grid place-items-center rounded-lg hover:bg-alert/10 text-steel hover:text-alert">✕</button></div>
+          </div>
+          <div class="flex items-center justify-between mt-3">
+            <button class="text-[12.5px] font-medium text-blue">+ Add component</button>
+            <span class="text-[12px] font-medium text-confirm bg-confirm/10 rounded-full px-2.5 py-1">Total = 100 ✓</span>
+          </div>
+        </div>
+
+        <div class="bg-white border border-whisper/70 rounded-2xl shadow-soft p-6">
+          <h2 class="font-semibold tracking-tight text-[15px]">Sessional result policy</h2>
+          <p class="text-[12px] text-steel mt-0.5">How the year-end result is computed from the three terms</p>
+          <div class="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-2.5 text-[12.5px]">
+            <label class="rounded-xl ring-1 ring-whisper p-3.5 cursor-pointer hover:ring-mist"><input type="radio" name="pol" class="accent-[#2177EF] mr-2">Equal average<br><span class="text-steel font-mono text-[11px]">33.3 / 33.3 / 33.4</span></label>
+            <label class="rounded-xl ring-2 ring-blue bg-wash/50 p-3.5 cursor-pointer"><input type="radio" name="pol" checked class="accent-[#2177EF] mr-2">Weighted<br><span class="text-steel font-mono text-[11px]">10 / 30 / 60</span></label>
+            <label class="rounded-xl ring-1 ring-whisper p-3.5 cursor-pointer hover:ring-mist"><input type="radio" name="pol" class="accent-[#2177EF] mr-2">Third term only<br><span class="text-steel font-mono text-[11px]">0 / 0 / 100</span></label>
+          </div>
+          <div class="mt-4 grid grid-cols-2 gap-4 text-[12.5px]">
+            <div><p class="text-[11px] font-semibold uppercase tracking-wider text-steel">Promotion pass mark</p>
+              <div class="flex items-center gap-2 mt-1.5"><input value="50" class="h-10 w-20 text-center font-mono rounded-lg border border-whisper bg-canvas"><span class="text-steel">% sessional average</span></div></div>
+            <div><p class="text-[11px] font-semibold uppercase tracking-wider text-steel">Position ties</p>
+              <select class="mt-1.5 w-full h-10 rounded-lg border border-whisper bg-canvas px-3"><option>Competition — joint 2nd, next is 4th</option><option>Dense — 2nd, 2nd, 3rd</option></select></div>
+          </div>
+        </div>
+
+        <div class="bg-white border border-whisper/70 rounded-2xl shadow-soft p-6">
+          <h2 class="font-semibold tracking-tight text-[15px]">School week — operating days</h2>
+          <p class="text-[12px] text-steel mt-0.5">Which days the school runs. Sets the timetable columns and the days attendance is taken. Islamiyyah schools often run <span class="font-medium text-charcoal">Saturday–Wednesday</span>.</p>
+          <div class="mt-4 flex flex-wrap gap-2 text-[12px] font-medium">
+            <button type="button" onclick="setWeek([1,2,3,4,5])" class="h-8 px-3 rounded-lg ring-1 ring-whisper bg-white text-steel hover:bg-mist/30">Mon–Fri</button>
+            <button type="button" onclick="setWeek([6,0,1,2,3])" class="h-8 px-3 rounded-lg ring-1 ring-whisper bg-white text-steel hover:bg-mist/30">Sat–Wed</button>
+            <button type="button" onclick="setWeek([1,2,3,4,5,6])" class="h-8 px-3 rounded-lg ring-1 ring-whisper bg-white text-steel hover:bg-mist/30">Mon–Sat</button>
+          </div>
+          <div id="weekDays" class="mt-3 flex flex-wrap gap-1.5"></div>
+          <p class="text-[11.5px] text-ink mt-3" id="weekSummary"></p>
+          <p class="text-[10.5px] text-steel mt-1">Changing this updates timetable day columns and which days register as school days.</p>
+        </div>
+
+        <!-- Grading scale choice -->
+        <div class="bg-white border border-whisper/70 rounded-2xl shadow-soft p-6">
+          <div class="flex items-center justify-between flex-wrap gap-2">
+            <div><h2 class="font-semibold tracking-tight text-[15px]">Grading scale</h2>
+            <p class="text-[12px] text-steel mt-0.5">The standard used to turn scores into grades on every report card.</p></div>
+            <button onclick="toast('Grading scale saved')" class="h-9 px-3.5 rounded-lg bg-blue text-white text-[12.5px] font-medium shrink-0">Save scale</button>
+          </div>
+          <div class="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-2.5 text-[12.5px]">
+            <label onclick="setScale('waec')" class="gsc rounded-xl ring-2 ring-blue bg-wash/50 p-3.5 cursor-pointer" data-scale="waec"><input type="radio" name="gscale" checked class="accent-[#2177EF] mr-2"><span class="font-semibold">WAEC standard</span><br><span class="text-steel font-mono text-[11px]">A1, B2 … F9</span></label>
+            <label onclick="setScale('simple')" class="gsc rounded-xl ring-1 ring-whisper p-3.5 cursor-pointer hover:ring-mist" data-scale="simple"><input type="radio" name="gscale" class="accent-[#2177EF] mr-2"><span class="font-semibold">Simple letters</span><br><span class="text-steel font-mono text-[11px]">A, B, C, D, E, F</span></label>
+            <label onclick="setScale('custom')" class="gsc rounded-xl ring-1 ring-whisper p-3.5 cursor-pointer hover:ring-mist" data-scale="custom"><input type="radio" name="gscale" class="accent-[#2177EF] mr-2"><span class="font-semibold">Custom bands</span><br><span class="text-steel font-mono text-[11px]">your own labels</span></label>
+          </div>
+          <div class="mt-4 rounded-xl ring-1 ring-whisper/80 overflow-hidden">
+            <div class="grid grid-cols-[70px_1fr_1fr_1.4fr_40px] gap-2 px-3 py-2 bg-canvas text-[10.5px] font-semibold uppercase tracking-wider text-steel">
+              <span>Grade</span><span>Min %</span><span>Max %</span><span>Remark</span><span></span>
+            </div>
+            <div id="bandRows" class="divide-y divide-whisper/50"></div>
+          </div>
+          <div class="flex items-center justify-between mt-3">
+            <button onclick="addBand()" class="text-[12.5px] font-medium text-blue">+ Add band</button>
+            <span id="scaleName" class="text-[11px] text-steel"></span>
+          </div>
+        </div>
+
+        <!-- Report-card traits -->
+        <div class="bg-white border border-whisper/70 rounded-2xl shadow-soft p-6">
+          <div class="flex items-center justify-between flex-wrap gap-2">
+            <div><h2 class="font-semibold tracking-tight text-[15px]">Report-card traits</h2>
+            <p class="text-[12px] text-steel mt-0.5">Tick the affective &amp; psychomotor traits that print on the report card. These drive what shows on student / parent cards.</p></div>
+            <button onclick="toast('Report card traits updated')" class="h-9 px-3.5 rounded-lg bg-blue text-white text-[12.5px] font-medium shrink-0">Save traits</button>
+          </div>
+          <div class="mt-4">
+            <p class="text-[11px] font-semibold uppercase tracking-wider text-steel">Rating scale</p>
+            <div class="mt-1.5 grid grid-cols-3 gap-2 max-w-[420px] text-[12.5px] font-medium" id="traitScale">
+              <button type="button" onclick="setTraitScale(this,'15')" class="trs h-10 rounded-xl bg-blue text-white shadow-soft" data-ts="15">1 – 5</button>
+              <button type="button" onclick="setTraitScale(this,'ae')" class="trs h-10 rounded-xl bg-white ring-1 ring-whisper text-steel" data-ts="ae">A – E</button>
+              <button type="button" onclick="setTraitScale(this,'desc')" class="trs h-10 rounded-xl bg-white ring-1 ring-whisper text-steel" data-ts="desc">Descriptive</button>
+            </div>
+            <p class="text-[11px] text-steel mt-1.5" id="traitScaleHint">Each ticked trait is rated 1 (lowest) to 5 (highest) on the card.</p>
+          </div>
+          <div id="traitGrid" class="mt-4 grid grid-cols-2 sm:grid-cols-3 gap-2"></div>
+          <p class="text-[10.5px] text-steel mt-3">Unticked traits are hidden from every report card and from teachers' entry screens.</p>
+        </div>
+
+        <!-- Class-average context toggle -->
+        <div class="bg-white border border-whisper/70 rounded-2xl shadow-soft p-6">
+          <div class="flex items-center justify-between gap-4">
+            <div><h2 class="font-semibold tracking-tight text-[15px]">Class context on report cards</h2>
+            <p class="text-[12px] text-steel mt-0.5">Show class highest / average / lowest beside each subject. Helps parents interpret their child's result.</p></div>
+            <button type="button" id="tgCtx" onclick="tg(this);toast('Report card settings saved')" class="tg shrink-0" data-on="true"></button>
+          </div>
+        </div>
+
+        <!-- Attendance timing -->
+        <div class="bg-white border border-whisper/70 rounded-2xl shadow-soft p-6">
+          <div class="flex items-center justify-between flex-wrap gap-2">
+            <div><h2 class="font-semibold tracking-tight text-[15px]">Attendance timing</h2>
+            <p class="text-[12px] text-steel mt-0.5">When registers open and what counts as late.</p></div>
+            <button onclick="toast('Attendance timing saved')" class="h-9 px-3.5 rounded-lg bg-blue text-white text-[12.5px] font-medium shrink-0">Save timing</button>
+          </div>
+          <div class="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4 text-[12.5px]">
+            <div><p class="text-[11px] font-semibold uppercase tracking-wider text-steel">Morning register cutoff</p>
+              <div class="flex items-center gap-2 mt-1.5"><input type="time" value="08:00" class="h-10 w-32 font-mono rounded-lg border border-whisper bg-canvas px-3"><span class="text-steel text-[12px]">after this = Late</span></div></div>
+            <div><p class="text-[11px] font-semibold uppercase tracking-wider text-steel">Afternoon register trigger</p>
+              <div class="flex items-center gap-2 mt-1.5"><input type="time" value="12:55" class="h-10 w-32 font-mono rounded-lg border border-whisper bg-canvas px-3"><span class="text-steel text-[12px]">after 2nd break</span></div></div>
+          </div>
+          <div class="mt-4 flex items-center justify-between gap-4 rounded-xl bg-canvas ring-1 ring-whisper/80 px-4 py-3.5">
+            <div><p class="text-[12.5px] font-medium">Twice-daily register</p>
+            <p class="text-[11px] text-steel mt-0.5">Take both a morning and an afternoon register each school day.</p></div>
+            <button type="button" id="tgTwice" onclick="tg(this)" class="tg shrink-0" data-on="true"></button>
+          </div>
+        </div>
+
+        <!-- Messaging controls -->
+        <div class="bg-white border border-whisper/70 rounded-2xl shadow-soft p-6">
+          <div class="flex items-center justify-between flex-wrap gap-2">
+            <div><h2 class="font-semibold tracking-tight text-[15px]">Messaging controls</h2>
+            <p class="text-[12px] text-steel mt-0.5">Gate what the in-app messaging allows across the school.</p></div>
+            <button onclick="toast('Messaging settings saved')" class="h-9 px-3.5 rounded-lg bg-blue text-white text-[12.5px] font-medium shrink-0">Save messaging</button>
+          </div>
+          <div class="mt-4 divide-y divide-whisper/60 text-[12.5px]">
+            <div class="flex items-center justify-between gap-4 py-3"><div><p class="font-medium">Allow voice notes in messages</p><p class="text-[11px] text-steel mt-0.5">Staff and parents can record short audio clips.</p></div><button type="button" onclick="tg(this)" class="tg shrink-0" data-on="true"></button></div>
+            <div class="flex items-center justify-between gap-4 py-3"><div><p class="font-medium">Allow PDF / file attachments</p><p class="text-[11px] text-steel mt-0.5">Attach documents and images to messages.</p></div><button type="button" onclick="tg(this)" class="tg shrink-0" data-on="true"></button></div>
+            <div class="flex items-center justify-between gap-4 py-3"><div><p class="font-medium">Parents can message teachers</p><p class="text-[11px] text-steel mt-0.5">If off, parents can only message the school office.</p></div><button type="button" onclick="tg(this)" class="tg shrink-0" data-on="true"></button></div>
+            <div class="flex items-center justify-between gap-4 py-3"><div><p class="font-medium">Restrict messaging to school hours</p><p class="text-[11px] text-steel mt-0.5">Messages can only be sent during operating hours.</p></div><button type="button" onclick="tg(this)" class="tg shrink-0" data-on="false"></button></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- PANEL 1: AI -->
+      <section id="p1" class="rise hidden space-y-4">
+        <div class="bg-white border border-whisper/70 rounded-2xl shadow-soft p-6">
+          <h2 class="font-semibold tracking-tight text-[15px]">Edsynk AI billing</h2>
+          <div class="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-3 text-[12.5px]">
+            <label class="rounded-xl ring-2 ring-blue bg-wash/50 p-4 cursor-pointer">
+              <input type="radio" name="ai" checked class="accent-[#2177EF] mr-2"><span class="font-semibold">Platform credits</span>
+              <p class="text-steel mt-1.5">Prepaid blocks — never a surprise bill. We route everything for quality and cost.</p></label>
+            <label class="rounded-xl ring-1 ring-whisper p-4 cursor-pointer hover:ring-mist">
+              <input type="radio" name="ai" class="accent-[#2177EF] mr-2"><span class="font-semibold">Bring your own keys</span>
+              <p class="text-steel mt-1.5">Use your own AI provider accounts. Keys encrypted, never shown again.</p></label>
+          </div>
+          <div class="mt-4 flex items-center justify-between rounded-xl bg-canvas ring-1 ring-whisper/80 px-4 py-3.5">
+            <div><p class="text-[11px] font-semibold uppercase tracking-wider text-steel">Credit balance</p>
+            <p class="font-mono text-[20px] font-semibold mt-1">₦14,200</p></div>
+            <button class="h-10 px-4 rounded-lg bg-ink text-white text-[12.5px] font-medium">Top up — ₦20,000 block</button>
+          </div>
+        </div>
+        <div class="bg-white border border-whisper/70 rounded-2xl shadow-soft p-6">
+          <h2 class="font-semibold tracking-tight text-[15px]">Usage this term</h2>
+          <div class="mt-4 space-y-3 text-[12.5px]">
+            <div><div class="flex justify-between"><span>EdInsight — comments &amp; summaries</span><span class="font-mono">₦3,840</span></div>
+              <div class="h-1.5 bg-mist/60 rounded-full mt-1.5"><div class="h-1.5 w-[38%] bg-blue rounded-full"></div></div></div>
+            <div><div class="flex justify-between"><span>EdAssess — question generation</span><span class="font-mono">₦1,260</span></div>
+              <div class="h-1.5 bg-mist/60 rounded-full mt-1.5"><div class="h-1.5 w-[13%] bg-blue rounded-full"></div></div></div>
+            <div><div class="flex justify-between"><span>EdMentor — student sessions <span class="text-[10px] font-medium text-blue bg-wash rounded-full px-1.5 py-0.5 ml-1">Sept</span></span><span class="font-mono text-steel">—</span></div>
+              <div class="h-1.5 bg-mist/40 rounded-full mt-1.5"></div></div>
+          </div>
+          <p class="text-[11px] text-steel mt-4">Comment tone: <select class="h-8 rounded-lg border border-whisper bg-canvas px-2 text-[12px] ml-1"><option>Warm</option><option>Formal</option></select> · No AI ever touches scores or grades — it only drafts words your staff approve.</p>
+        </div>
+      </section>
+
+      <!-- PANEL 3: Signatures & stamp -->
+      <section id="p3" class="rise hidden space-y-4">
+        <div class="bg-white border border-whisper/70 rounded-2xl shadow-soft p-6">
+          <h2 class="font-semibold tracking-tight text-[15px]">Signatures &amp; stamp</h2>
+          <p class="text-[12px] text-steel mt-0.5">Placed on every report card and transcript — upload clear images on white</p>
+          <div class="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <div class="rounded-xl ring-1 ring-whisper/80 p-4 text-center">
+              <p class="font-sig text-[26px] text-ink -rotate-2" style="font-family:'Caveat',cursive">A. Abdullahi</p>
+              <p class="text-[11px] font-medium mt-2">Principal</p>
+              <p class="text-[10.5px] text-steel">Ustadh Ahmad Abdullahi</p>
+              <button class="mt-2 h-8 px-3 rounded-lg border border-whisper text-[11px] font-medium hover:bg-mist/30">Replace</button></div>
+            <div class="rounded-xl ring-1 ring-whisper/80 p-4 text-center">
+              <p class="font-sig text-[24px] text-ink rotate-1" style="font-family:'Caveat',cursive">M. Ibrahim</p>
+              <p class="text-[11px] font-medium mt-2">Exam officer</p>
+              <p class="text-[10.5px] text-steel">Mallam Musa Ibrahim</p>
+              <button class="mt-2 h-8 px-3 rounded-lg border border-whisper text-[11px] font-medium hover:bg-mist/30">Replace</button></div>
+            <div class="rounded-xl ring-1 ring-dashed ring-whisper p-4 text-center grid place-items-center">
+              <div class="h-12 w-12 rounded-full border-2 border-ink/20 grid place-items-center -rotate-12">
+                <p class="text-[5.5px] text-center font-semibold uppercase text-ink/40 leading-tight">School<br>Stamp</p></div>
+              <p class="text-[11px] font-medium mt-2">School stamp</p>
+              <button class="mt-2 h-8 px-3 rounded-lg bg-blue text-white text-[11px] font-medium">Upload</button></div>
+          </div>
+          <p class="text-[10.5px] text-steel mt-4">Tip: photograph the signature/stamp on plain white paper in good light — Edsynk trims the background.</p>
+        </div>
+      </section>
+
+      <!-- PANEL 4: Users & roles -->
+      <section id="p4" class="rise hidden bg-white border border-whisper/70 rounded-2xl shadow-soft overflow-hidden">
+        <div class="px-6 py-4 border-b border-whisper/60 flex items-center justify-between">
+          <h2 class="font-semibold tracking-tight text-[15px]">Users &amp; roles</h2>
+          <a href="staff.html" class="text-[12px] font-medium text-blue">Manage staff →</a>
+        </div>
+        <ul class="divide-y divide-whisper/60 text-[13px]">
+          <li class="px-6 py-3.5 flex items-center justify-between">
+            <div><p class="font-medium">Ustadh Abdullahi <span class="text-[10px] font-medium text-ink bg-mist/60 rounded-full px-2 py-0.5 ml-1">Owner</span></p>
+            <p class="text-[11px] text-steel mt-0.5">MFA enabled ✓ · last login today</p></div>
+            <span class="text-[10.5px] font-medium text-confirm bg-confirm/10 rounded-full px-2.5 py-1">Secure</span></li>
+          <li class="px-6 py-3.5 flex items-center justify-between">
+            <div><p class="font-medium">Mrs. Ngozi Adeyemi <span class="text-[10px] font-medium text-blue bg-wash rounded-full px-2 py-0.5 ml-1">Admin</span></p>
+            <p class="text-[11px] text-steel mt-0.5">MFA not set — recommended for admins</p></div>
+            <button class="h-8 px-3 rounded-lg border border-whisper text-[11px] font-medium hover:bg-mist/30">Require MFA</button></li>
+          <li class="px-6 py-3.5 flex items-center justify-between">
+            <div><p class="font-medium">16 teachers</p>
+            <p class="text-[11px] text-steel mt-0.5">password logins · resets via admin</p></div>
+            <span class="text-[10.5px] text-steel">see Staff page</span></li>
+        </ul>
+        <div class="px-6 py-3.5 bg-canvas border-t border-whisper/60 text-[11px] text-steel">Every role change is audit-logged · permissions follow the role matrix exactly.</div>
+      </section>
+
+      <!-- PANEL 2: School profile -->
+      <section id="p2" class="rise hidden bg-white border border-whisper/70 rounded-2xl shadow-soft p-6 space-y-4">
+        <h2 class="font-semibold tracking-tight text-[15px]">School profile</h2>
+        <div class="flex items-center gap-4">
+          <div class="h-16 w-16 rounded-2xl bg-blue grid place-items-center text-white text-[20px] font-bold">AF</div>
+          <button class="h-9 px-3.5 rounded-lg border border-whisper text-[12.5px] font-medium hover:bg-mist/30">Change logo</button>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div><p class="text-[11px] font-semibold uppercase tracking-wider text-steel">School name</p>
+            <input value="Al-Furqan Academy, Bauchi" class="mt-1.5 w-full h-10 rounded-lg border border-whisper bg-canvas px-3.5 text-[13px]"></div>
+          <div><p class="text-[11px] font-semibold uppercase tracking-wider text-steel">Motto</p>
+            <input value="Knowledge · Faith · Excellence" class="mt-1.5 w-full h-10 rounded-lg border border-whisper bg-canvas px-3.5 text-[13px]"></div>
+          <div><p class="text-[11px] font-semibold uppercase tracking-wider text-steel">Web address</p>
+            <div class="mt-1.5 flex items-center"><input value="alfurqan" class="h-10 w-32 rounded-l-lg border border-whisper bg-canvas px-3.5 text-[13px] font-mono"><span class="h-10 grid place-items-center rounded-r-lg border border-l-0 border-whisper bg-mist/40 px-3 text-[12px] text-steel font-mono">.edsynk.ng</span></div></div>
+          <div><p class="text-[11px] font-semibold uppercase tracking-wider text-steel">Custom domain <span class="text-blue normal-case">Pro ✓</span></p>
+            <input value="portal.alfurqan.edu.ng" class="mt-1.5 w-full h-10 rounded-lg border border-whisper bg-canvas px-3.5 text-[13px] font-mono"></div>
+        </div>
+        <div class="rounded-xl bg-canvas ring-1 ring-whisper/80 px-4 py-3.5 flex items-center justify-between">
+          <div><p class="text-[12.5px] font-medium">Your data is yours — always</p>
+          <p class="text-[11px] text-steel mt-0.5">Download a complete export of every record, any time. No lock-in, in writing.</p></div>
+          <button class="h-9 px-3.5 rounded-lg border border-whisper text-[12px] font-medium hover:bg-mist/30 shrink-0">Export everything</button>
+        </div>
+      </section>
+      <!-- PANEL 5: Comment bank -->
+      <section id="p5" class="rise hidden bg-white border border-whisper/70 rounded-2xl shadow-soft p-6">
+        <div class="flex items-center justify-between"><h2 class="font-semibold tracking-tight text-[15px]">Comment bank</h2><button class="h-9 px-3.5 rounded-lg bg-blue text-white text-[12.5px] font-medium">+ Add comment</button></div>
+        <p class="text-[12px] text-steel mt-0.5">Reusable report-card remarks teachers can pick from (EdInsight also pulls tone from these).</p>
+        <div class="mt-4 space-y-2 text-[12.5px]">
+          <div class="flex items-center justify-between rounded-xl ring-1 ring-whisper bg-canvas px-4 py-2.5"><span>"A diligent and respectful student; keep it up."</span><span class="text-[10px] text-steel">excellent</span></div>
+          <div class="flex items-center justify-between rounded-xl ring-1 ring-whisper bg-canvas px-4 py-2.5"><span>"Capable, but must be more consistent with homework."</span><span class="text-[10px] text-steel">average</span></div>
+          <div class="flex items-center justify-between rounded-xl ring-1 ring-whisper bg-canvas px-4 py-2.5"><span>"Needs to improve attendance to catch up."</span><span class="text-[10px] text-steel">attention</span></div>
+        </div>
+      </section>
+
+      <!-- PANEL 6: Audit log -->
+      <section id="p6" class="rise hidden bg-white border border-whisper/70 rounded-2xl shadow-soft overflow-hidden">
+        <div class="px-6 py-4 border-b border-whisper/60"><h2 class="font-semibold tracking-tight text-[15px]">Audit log</h2><p class="text-[11.5px] text-steel mt-0.5">Append-only record of sensitive actions in your school.</p></div>
+        <div class="divide-y divide-whisper/60 text-[12px]">
+          <div class="px-6 py-3 flex items-center justify-between"><span><span class="font-mono text-steel">14:32</span> · <span class="font-medium">results.publish</span> JSS 2A (38 cards)</span><span class="text-steel">Ustadh Abdullahi</span></div>
+          <div class="px-6 py-3 flex items-center justify-between"><span><span class="font-mono text-steel">11:47</span> · <span class="font-medium">result.republish</span> Emeka Eze v1→v2</span><span class="text-steel">exam office</span></div>
+          <div class="px-6 py-3 flex items-center justify-between"><span><span class="font-mono text-steel">08:55</span> · <span class="font-medium">grading_scheme.update</span> SS 4th CA</span><span class="text-steel">owner</span></div>
+        </div>
+        <div class="px-6 py-3 bg-canvas border-t border-whisper/60 text-[11px] text-steel">Retention 7 years · NDPA 2023. Nothing here can be edited or deleted.</div>
+      </section>
+
+      <!-- PANEL 7: Billing & plan -->
+      <section id="p7" class="rise hidden bg-white border border-whisper/70 rounded-2xl shadow-soft p-6">
+        <h2 class="font-semibold tracking-tight text-[15px]">Billing &amp; plan</h2>
+        <div class="mt-4 rounded-xl ring-1 ring-blue/30 bg-wash/40 p-4 flex items-center justify-between flex-wrap gap-3">
+          <div><p class="text-[13px] font-semibold text-blue">Pro plan · ₦2,000 / student / term</p><p class="text-[11.5px] text-steel mt-0.5">412 students · next invoice Sept 2026</p></div>
+          <button class="h-9 px-4 rounded-lg bg-white ring-1 ring-whisper text-[12.5px] font-medium text-steel hover:bg-mist/30">Change plan</button>
+        </div>
+        <div class="mt-3 rounded-xl ring-1 ring-whisper/80 divide-y divide-whisper/60 text-[12.5px]">
+          <div class="flex justify-between px-4 py-2.5"><span class="text-steel">2026 T3 invoice</span><span class="font-mono">₦824,000 · <span class="text-confirm">paid ✓</span></span></div>
+          <div class="flex justify-between px-4 py-2.5"><span class="text-steel">Custom domain</span><span class="font-medium">portal.alfurqan.edu.ng ✓</span></div>
+          <div class="flex justify-between px-4 py-2.5"><span class="text-steel">Payment method</span><span class="font-medium">Bank transfer · Moniepoint</span></div>
+        </div>
+      </section>
+    </main>
+  </div>
+</div>
+<div id="toast" class="hidden fixed bottom-5 left-1/2 -translate-x-1/2 z-50 bg-ink text-white text-[12.5px] font-medium px-4 py-2.5 rounded-xl shadow-lift"></div>
+<style>.tg{position:relative;width:42px;height:24px;border-radius:9999px;background:#E2E8F0;transition:background .18s}.tg::after{content:'';position:absolute;top:2px;left:2px;width:20px;height:20px;border-radius:9999px;background:#fff;box-shadow:0 1px 2px rgba(11,42,86,.2);transition:transform .18s}.tg[data-on="true"]{background:#2177EF}.tg[data-on="true"]::after{transform:translateX(18px)}</style>
+<script src="../assets/shell.js"></script>
+<script>function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.remove('hidden');clearTimeout(window._t);window._t=setTimeout(()=>t.classList.add('hidden'),2200);}
+function tg(b){b.dataset.on=b.dataset.on==='true'?'false':'true';}
+function st(n){for(let i=0;i<=7;i++){const el=document.getElementById('p'+i);if(el)el.classList.toggle('hidden',i!==n);}
+document.querySelectorAll('.stb').forEach((b,i)=>{b.className='stb w-full text-left px-3.5 py-2.5 rounded-lg mt-0.5 '+(i===n?'bg-blue text-white':'text-steel hover:bg-mist/40');});}
+const DAYNAMES=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];let WEEK=[1,2,3,4,5];
+function renderWeek(){const w=document.getElementById('weekDays');if(!w)return;w.innerHTML=DAYNAMES.map((d,i)=>{const on=WEEK.includes(i);return `<button type="button" onclick="toggleDay(${i})" class="h-9 w-12 rounded-lg text-[12px] font-semibold ${on?'bg-blue text-white shadow-soft':'bg-white ring-1 ring-whisper text-steel'}">${d}</button>`;}).join('');
+  const days=WEEK.slice().sort((a,b)=>a-b).map(i=>DAYNAMES[i]);document.getElementById('weekSummary').innerHTML=days.length?`School runs <span class="font-semibold">${days.join(', ')}</span> (${days.length} days).`:'Pick at least one day.';}
+function toggleDay(i){WEEK=WEEK.includes(i)?WEEK.filter(x=>x!==i):WEEK.concat(i);renderWeek();}
+function setWeek(a){WEEK=a.slice();renderWeek();}
+renderWeek();
+
+// ── Grading scale ──────────────────────────────
+const SCALES={
+  waec:{name:'WAEC standard (A1–F9)',bands:[['A1',75,100,'Excellent'],['B2',70,74,'Very good'],['B3',65,69,'Good'],['C4',60,64,'Credit'],['C5',55,59,'Credit'],['C6',50,54,'Credit'],['D7',45,49,'Pass'],['E8',40,44,'Pass'],['F9',0,39,'Fail']]},
+  simple:{name:'Simple letters (A–F)',bands:[['A',70,100,'Excellent'],['B',60,69,'Very good'],['C',50,59,'Good'],['D',45,49,'Fair'],['E',40,44,'Pass'],['F',0,39,'Fail']]},
+  custom:{name:'Custom bands',bands:[['Distinction',75,100,'Outstanding'],['Merit',60,74,'Strong'],['Pass',40,59,'Satisfactory'],['Fail',0,39,'Below standard']]}
+};
+let curScale='waec';
+function bandRowHTML(b){return `<div class="grid grid-cols-[70px_1fr_1fr_1.4fr_40px] gap-2 px-3 py-2 items-center bg-white">
+  <input value="${b[0]}" class="h-9 rounded-lg border border-whisper bg-canvas px-2 text-[12.5px] font-semibold font-mono">
+  <input type="number" value="${b[1]}" class="h-9 rounded-lg border border-whisper bg-canvas px-2 text-center font-mono text-[12.5px]">
+  <input type="number" value="${b[2]}" class="h-9 rounded-lg border border-whisper bg-canvas px-2 text-center font-mono text-[12.5px]">
+  <input value="${b[3]}" class="h-9 rounded-lg border border-whisper bg-canvas px-2 text-[12.5px]">
+  <button onclick="this.closest('div').remove()" class="h-8 w-8 grid place-items-center rounded-lg hover:bg-alert/10 text-steel hover:text-alert">✕</button></div>`;}
+function renderBands(){const s=SCALES[curScale];document.getElementById('bandRows').innerHTML=s.bands.map(bandRowHTML).join('');document.getElementById('scaleName').textContent=s.name;}
+function setScale(key){curScale=key;
+  document.querySelectorAll('.gsc').forEach(l=>{const on=l.dataset.scale===key;l.className='gsc rounded-xl p-3.5 cursor-pointer '+(on?'ring-2 ring-blue bg-wash/50':'ring-1 ring-whisper hover:ring-mist');l.querySelector('input').checked=on;});
+  renderBands();}
+function addBand(){document.getElementById('bandRows').insertAdjacentHTML('beforeend',bandRowHTML(['',0,0,'']));}
+renderBands();
+
+// ── Report-card traits ─────────────────────────
+const TRAITS=['Punctuality','Neatness','Politeness','Honesty','Leadership','Attentiveness','Cooperation','Handwriting','Sports','Drawing','Music','Handling tools','Fluency','Reliability','Self-control'];
+const TRAIT_ON=['Punctuality','Neatness','Politeness','Honesty','Attentiveness','Cooperation','Handwriting','Sports'];
+document.getElementById('traitGrid').innerHTML=TRAITS.map(t=>{const on=TRAIT_ON.includes(t);return `<label class="flex items-center gap-2.5 rounded-xl ring-1 ring-whisper bg-canvas px-3 py-2.5 cursor-pointer hover:ring-mist text-[12.5px]"><input type="checkbox" ${on?'checked':''} class="h-4 w-4 rounded accent-[#2177EF]"><span>${t}</span></label>`;}).join('');
+const TS_HINT={'15':'Each ticked trait is rated 1 (lowest) to 5 (highest) on the card.','ae':'Each ticked trait is rated A (highest) to E (lowest) on the card.','desc':'Each ticked trait shows a word — e.g. Excellent / Good / Fair — on the card.'};
+function setTraitScale(btn,key){document.querySelectorAll('.trs').forEach(b=>{const on=b===btn;b.className='trs h-10 rounded-xl '+(on?'bg-blue text-white shadow-soft':'bg-white ring-1 ring-whisper text-steel');});document.getElementById('traitScaleHint').textContent=TS_HINT[key];}
+</script>
+</body>
+</html>

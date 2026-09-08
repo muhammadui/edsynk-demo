@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Edsynk — Result Analysis</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&family=Noto+Naskh+Arabic:wght@500&display=swap" rel="stylesheet">
+<script>tailwind.config={theme:{extend:{colors:{canvas:'#F7F9FC',ink:'#0B2A56',charcoal:'#18181B',steel:'#64748B',whisper:'#E2E8F0',blue:'#2177EF',skyblue:'#5C9DF5',wash:'#EAF2FE',mist:'#D3E4FD',confirm:'#16A34A',caution:'#D97706',alert:'#DC2626',excused:'#7C8DA6'},fontFamily:{sans:['Geist','sans-serif'],mono:['"Geist Mono"','monospace'],arabic:['"Noto Naskh Arabic"','serif']},boxShadow:{soft:'0 1px 2px rgba(11,42,86,0.04), 0 6px 24px rgba(11,42,86,0.05)',lift:'0 1px 3px rgba(11,42,86,0.10), 0 12px 32px rgba(11,42,86,0.12)'}}}}</script>
+<style>@keyframes rise{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}.rise{animation:rise .45s cubic-bezier(.2,.8,.2,1) both}</style>
+</head>
+<body data-active="Result Analysis" data-persona="admin" class="bg-canvas font-sans text-charcoal antialiased">
+<div class="flex min-h-screen">
+  <div id="sidebar-root"></div>
+  <div class="flex-1 min-w-0">
+    <header class="h-[60px] bg-white/80 backdrop-blur-md border-b border-whisper/70 flex items-center justify-between px-4 sm:px-7 sticky top-0 z-20">
+      <div class="flex items-center gap-3">
+        <h1 class="text-[15px] font-semibold tracking-tight flex items-center gap-2">
+          <span class="h-6 w-6 rounded-lg bg-blue grid place-items-center text-white"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M7 14l3-3 3 2 5-6"/></svg></span>
+          Result Analysis</h1>
+      </div>
+      <div class="flex items-center gap-2">
+        <button onclick="toast('Exporting analysis to Excel…')" class="h-9 px-3.5 rounded-lg bg-white ring-1 ring-whisper text-[12.5px] font-medium text-steel hover:bg-mist/30 hidden sm:block">Export</button>
+        <button onclick="toast('Preparing the analysis pack for print…')" class="h-9 px-4 rounded-lg bg-ink text-white text-[12.5px] font-medium active:translate-y-px">Print pack</button>
+      </div>
+    </header>
+
+    <main class="p-4 sm:p-7 max-w-[1180px] space-y-5 pb-12">
+
+      <!-- selectors -->
+      <section class="rise bg-white ring-1 ring-whisper/80 rounded-2xl shadow-soft p-4 flex items-end gap-3 flex-wrap">
+        <div><label class="block text-[10px] font-semibold uppercase tracking-wider text-steel mb-1">Class</label>
+          <select id="selClass" onchange="render()" class="h-9 rounded-lg border border-whisper bg-white px-3 text-[13px] font-medium"><option value="2a">JSS 2A</option><option value="2b">JSS 2B</option><option value="1a">JSS 1A</option></select></div>
+        <div><label class="block text-[10px] font-semibold uppercase tracking-wider text-steel mb-1">Term</label>
+          <select id="selTerm" onchange="render()" class="h-9 rounded-lg border border-whisper bg-white px-3 text-[13px] font-medium"><option value="t2">Second Term · 2025/26</option><option value="t1">First Term · 2025/26</option></select></div>
+        <div><label class="block text-[10px] font-semibold uppercase tracking-wider text-steel mb-1">Subject</label>
+          <select id="selSubj" onchange="render()" class="h-9 rounded-lg border border-whisper bg-white px-3 text-[13px] font-medium"><option value="all">All subjects</option><option>Mathematics</option><option>English Language</option><option>Basic Science</option><option>Qur'an</option><option>Basic Technology</option></select></div>
+        <div class="ml-auto flex items-center gap-2 text-[11px] text-steel"><span class="h-2 w-2 rounded-full bg-confirm"></span>Sealed &amp; published · 38 of 38 students scored</div>
+      </section>
+
+      <!-- headline numbers -->
+      <section class="rise grid grid-cols-2 xl:grid-cols-5 gap-3" style="animation-delay:.03s">
+        <div class="bg-white ring-1 ring-whisper/80 rounded-2xl shadow-soft p-4">
+          <p class="text-[10.5px] font-semibold uppercase tracking-wider text-steel">Class average</p>
+          <p class="font-mono text-[24px] font-semibold mt-2 leading-none" id="kAvg">64.3<span class="text-[13px] text-steel">%</span></p>
+          <p class="text-[11px] mt-2"><span class="text-confirm font-medium" id="kAvgTrend">↑ 2.2%</span> <span class="text-steel">vs last term</span></p></div>
+        <div class="bg-white ring-1 ring-confirm/30 bg-confirm/[0.04] rounded-2xl p-4 shadow-soft">
+          <p class="text-[10.5px] font-semibold uppercase tracking-wider text-confirm">Class highest</p>
+          <p class="font-mono text-[24px] font-semibold text-confirm mt-2 leading-none" id="kHigh">91.2<span class="text-[13px]">%</span></p>
+          <p class="text-[11px] mt-2 text-steel" id="kHighWho">Aisha Bello · 1st</p></div>
+        <div class="bg-white ring-1 ring-whisper/80 rounded-2xl shadow-soft p-4">
+          <p class="text-[10.5px] font-semibold uppercase tracking-wider text-steel">Class lowest</p>
+          <p class="font-mono text-[24px] font-semibold text-steel mt-2 leading-none" id="kLow">38.0<span class="text-[13px]">%</span></p>
+          <p class="text-[11px] mt-2 text-steel" id="kLowWho">1 student · intervention flagged</p></div>
+        <div class="bg-white ring-1 ring-whisper/80 rounded-2xl shadow-soft p-4">
+          <p class="text-[10.5px] font-semibold uppercase tracking-wider text-steel">Pass rate</p>
+          <p class="font-mono text-[24px] font-semibold mt-2 leading-none" id="kPass">86<span class="text-[13px] text-steel">%</span></p>
+          <p class="text-[11px] mt-2 text-steel">≥ 50% · <span id="kPassN">33 of 38</span></p></div>
+        <div class="bg-white ring-1 ring-whisper/80 rounded-2xl shadow-soft p-4 col-span-2 xl:col-span-1">
+          <p class="text-[10.5px] font-semibold uppercase tracking-wider text-steel">Spread (std dev)</p>
+          <p class="font-mono text-[24px] font-semibold mt-2 leading-none" id="kSpread">12.4</p>
+          <p class="text-[11px] mt-2 text-steel">moderate — most cluster 55–75</p></div>
+      </section>
+
+      <!-- grade distribution + AI narrative -->
+      <section class="rise grid lg:grid-cols-3 gap-5" style="animation-delay:.06s">
+        <div class="lg:col-span-2 bg-white ring-1 ring-whisper/80 rounded-2xl shadow-soft p-5">
+          <div class="flex items-center justify-between gap-2 flex-wrap">
+            <p class="text-[13.5px] font-semibold">Grade distribution</p>
+            <p class="text-[10.5px] text-steel">WAEC bands · 38 students</p>
+          </div>
+          <div class="mt-5 grid grid-cols-9 gap-2 items-end h-44" id="gradeBars"></div>
+          <div class="mt-2 grid grid-cols-9 gap-2 text-center text-[10px] text-steel font-mono" id="gradeLabels"></div>
+        </div>
+        <div class="bg-ink text-white rounded-2xl shadow-soft p-5 flex flex-col">
+          <p class="text-[10px] font-semibold uppercase tracking-wider text-skyblue flex items-center gap-1.5"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l1.9 5.7L19.5 10l-5.6 1.3L12 17l-1.9-5.7L4.5 10l5.6-1.3z"/></svg>Edsynk AI · class narrative</p>
+          <p class="text-[13px] leading-relaxed mt-3 flex-1" id="aiNarr">JSS 2A averaged 64.3% this term, up 2.2 points — the strongest second-term result in two years. Qur'an and Arabic carry the class; Basic Technology is the clear drag, pulled down by five students who also share Thursday absences. The exam-vs-CA gap widened in English, suggesting exam technique rather than understanding. No student is at risk of repeating, but three need targeted support before third term.</p>
+          <p class="text-[10px] text-white/55 mt-3 pt-3 border-t border-white/10">Computed from sealed scores. AI summarises the data — it never sets or changes a grade.</p>
+        </div>
+      </section>
+
+      <!-- subject averages + pass rates -->
+      <section class="rise bg-white ring-1 ring-whisper/80 rounded-2xl shadow-soft p-5" style="animation-delay:.09s">
+        <div class="flex items-center justify-between gap-2 flex-wrap">
+          <p class="text-[13.5px] font-semibold">Subject averages &amp; pass rates</p>
+          <p class="text-[10.5px] text-steel flex items-center gap-3"><span class="flex items-center gap-1.5"><span class="h-2 w-4 rounded-full bg-blue inline-block"></span>average</span><span class="flex items-center gap-1.5"><span class="h-2 w-4 rounded-full bg-mist inline-block"></span>last term</span></p>
+        </div>
+        <div class="mt-4 space-y-3" id="subjBars"></div>
+        <p class="text-[10.5px] text-steel mt-4">Pass rate = share of class scoring ≥ 50%. Numbers are computed from records.</p>
+      </section>
+
+      <!-- top5 / bottom5 / improved / declined -->
+      <section class="rise grid md:grid-cols-2 gap-5" style="animation-delay:.12s">
+        <div class="bg-white ring-1 ring-whisper/80 rounded-2xl shadow-soft overflow-hidden">
+          <p class="text-[13px] font-semibold px-5 py-3.5 border-b border-whisper/60 bg-confirm/[0.05] text-confirm">Top 5 students</p>
+          <ul class="divide-y divide-whisper/60" id="topList"></ul>
+        </div>
+        <div class="bg-white ring-1 ring-whisper/80 rounded-2xl shadow-soft overflow-hidden">
+          <p class="text-[13px] font-semibold px-5 py-3.5 border-b border-whisper/60 bg-caution/[0.06] text-caution">Bottom 5 — needs support</p>
+          <ul class="divide-y divide-whisper/60" id="bottomList"></ul>
+        </div>
+        <div class="bg-white ring-1 ring-whisper/80 rounded-2xl shadow-soft overflow-hidden">
+          <p class="text-[13px] font-semibold px-5 py-3.5 border-b border-whisper/60">Most improved</p>
+          <ul class="divide-y divide-whisper/60" id="impList"></ul>
+        </div>
+        <div class="bg-white ring-1 ring-whisper/80 rounded-2xl shadow-soft overflow-hidden">
+          <p class="text-[13px] font-semibold px-5 py-3.5 border-b border-whisper/60">Most declined</p>
+          <ul class="divide-y divide-whisper/60" id="decList"></ul>
+        </div>
+      </section>
+
+      <!-- correlations -->
+      <section class="rise grid lg:grid-cols-2 gap-5" style="animation-delay:.15s">
+        <!-- CA vs exam scatter-ish -->
+        <div class="bg-white ring-1 ring-whisper/80 rounded-2xl shadow-soft p-5">
+          <div class="flex items-center justify-between gap-2 flex-wrap">
+            <p class="text-[13.5px] font-semibold">CA vs Exam correlation</p>
+            <span class="text-[10.5px] font-mono text-confirm bg-confirm/10 rounded-full px-2.5 py-0.5">r = 0.78 · strong</span>
+          </div>
+          <div class="relative mt-4 h-48 border-l border-b border-whisper rounded-bl">
+            <div class="absolute inset-x-0 bottom-0 top-0">
+              <svg viewBox="0 0 100 100" preserveAspectRatio="none" class="absolute inset-0 w-full h-full"><line x1="0" y1="100" x2="100" y2="0" stroke="#D3E4FD" stroke-width="1" stroke-dasharray="3 3"/></svg>
+              <span class="absolute h-2.5 w-2.5 rounded-full bg-blue/70" style="left:20%;bottom:24%"></span>
+              <span class="absolute h-2.5 w-2.5 rounded-full bg-blue/70" style="left:35%;bottom:40%"></span>
+              <span class="absolute h-2.5 w-2.5 rounded-full bg-blue/70" style="left:52%;bottom:48%"></span>
+              <span class="absolute h-2.5 w-2.5 rounded-full bg-blue/70" style="left:60%;bottom:66%"></span>
+              <span class="absolute h-2.5 w-2.5 rounded-full bg-blue/70" style="left:72%;bottom:70%"></span>
+              <span class="absolute h-2.5 w-2.5 rounded-full bg-blue/70" style="left:84%;bottom:88%"></span>
+              <span class="absolute h-2.5 w-2.5 rounded-full bg-alert/80 ring-2 ring-white" style="left:78%;bottom:30%" title="Exam below CA — exam-technique flag"></span>
+            </div>
+          </div>
+          <div class="flex justify-between text-[9.5px] text-steel font-mono mt-1.5"><span>low CA →</span><span>high CA</span></div>
+          <p class="text-[10.5px] text-steel mt-2">Most students sit on the line. <span class="text-alert font-medium">Red</span> = exam far below CA — usually exam technique, worth a conversation.</p>
+        </div>
+        <!-- attendance vs performance -->
+        <div class="bg-white ring-1 ring-whisper/80 rounded-2xl shadow-soft p-5">
+          <div class="flex items-center justify-between gap-2 flex-wrap">
+            <p class="text-[13.5px] font-semibold">Attendance vs performance</p>
+            <span class="text-[10.5px] font-mono text-confirm bg-confirm/10 rounded-full px-2.5 py-0.5">r = 0.64</span>
+          </div>
+          <div class="mt-4 space-y-3 text-[12px]">
+            <div class="grid grid-cols-[120px_1fr_46px] gap-3 items-center"><span class="text-steel">≥ 95% present</span><div class="relative h-4"><div class="absolute inset-y-0 left-0 rounded-full bg-confirm" style="width:73%"></div></div><span class="font-mono text-right">72.8</span></div>
+            <div class="grid grid-cols-[120px_1fr_46px] gap-3 items-center"><span class="text-steel">85–94%</span><div class="relative h-4"><div class="absolute inset-y-0 left-0 rounded-full bg-blue" style="width:63%"></div></div><span class="font-mono text-right">62.5</span></div>
+            <div class="grid grid-cols-[120px_1fr_46px] gap-3 items-center"><span class="text-steel">75–84%</span><div class="relative h-4"><div class="absolute inset-y-0 left-0 rounded-full bg-caution" style="width:54%"></div></div><span class="font-mono text-right">53.9</span></div>
+            <div class="grid grid-cols-[120px_1fr_46px] gap-3 items-center"><span class="text-steel">&lt; 75%</span><div class="relative h-4"><div class="absolute inset-y-0 left-0 rounded-full bg-alert" style="width:44%"></div></div><span class="font-mono text-right">44.1</span></div>
+          </div>
+          <p class="text-[10.5px] text-steel mt-3 rounded-lg bg-wash/70 ring-1 ring-mist/50 px-3 py-2">Hint: students below 75% attendance average <span class="font-semibold text-ink">~29 points lower</span>. Attendance is the strongest lever you have.</p>
+        </div>
+      </section>
+
+      <!-- term-over-term class trend -->
+      <section class="rise bg-white ring-1 ring-whisper/80 rounded-2xl shadow-soft p-5" style="animation-delay:.18s">
+        <p class="text-[13.5px] font-semibold">Class average — term over term</p>
+        <div class="mt-4 relative h-48">
+          <svg viewBox="0 0 600 180" preserveAspectRatio="none" class="w-full h-full overflow-visible">
+            <line x1="0" y1="45" x2="600" y2="45" stroke="#E2E8F0" stroke-width="1"/>
+            <line x1="0" y1="90" x2="600" y2="90" stroke="#E2E8F0" stroke-width="1"/>
+            <line x1="0" y1="135" x2="600" y2="135" stroke="#E2E8F0" stroke-width="1"/>
+            <polyline points="40,128 200,118 360,100 520,84" fill="none" stroke="#2177EF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+            <circle cx="40" cy="128" r="5" fill="#fff" stroke="#2177EF" stroke-width="3"/>
+            <circle cx="200" cy="118" r="5" fill="#fff" stroke="#2177EF" stroke-width="3"/>
+            <circle cx="360" cy="100" r="5" fill="#fff" stroke="#2177EF" stroke-width="3"/>
+            <circle cx="520" cy="84" r="6" fill="#2177EF"/>
+          </svg>
+        </div>
+        <div class="grid grid-cols-4 text-center text-[11px] mt-2">
+          <div><p class="font-mono font-semibold">59.4%</p><p class="text-steel text-[10px]">T3 last yr</p></div>
+          <div><p class="font-mono font-semibold">61.0%</p><p class="text-steel text-[10px]">T1 25/26</p></div>
+          <div><p class="font-mono font-semibold">62.1%</p><p class="text-steel text-[10px]">T1 25/26</p></div>
+          <div><p class="font-mono font-semibold text-confirm">64.3%</p><p class="text-steel text-[10px]">T2 25/26</p></div>
+        </div>
+      </section>
+
+      <!-- compare classes -->
+      <section class="rise bg-white ring-1 ring-whisper/80 rounded-2xl shadow-soft overflow-hidden" style="animation-delay:.21s">
+        <div class="px-5 py-4 border-b border-whisper/60 flex items-center justify-between gap-2 flex-wrap">
+          <p class="text-[13.5px] font-semibold">Compare classes — JSS 2A vs 2B</p>
+          <button onclick="toast('Open full cross-class report…')" class="h-8 px-3 rounded-lg border border-whisper text-[12px] font-medium hover:bg-mist/30">Add a class</button>
+        </div>
+        <div class="overflow-x-auto"><table class="w-full text-[12.5px]">
+          <thead><tr class="text-left text-[10px] uppercase tracking-wider text-steel border-b border-whisper/70 bg-canvas/60">
+            <th class="px-5 py-2.5 font-semibold">Metric</th><th class="px-4 py-2.5 font-semibold text-center">JSS 2A</th><th class="px-4 py-2.5 font-semibold text-center">JSS 2B</th><th class="px-4 py-2.5 font-semibold text-center">Gap</th></tr></thead>
+          <tbody class="divide-y divide-whisper/60" id="cmpBody"></tbody>
+        </table></div>
+        <p class="px-5 py-3 bg-canvas border-t border-whisper/60 text-[10.5px] text-steel">A leads on average and pass rate; B has a tighter spread and stronger attendance. Use this to balance streaming next session.</p>
+      </section>
+
+    </main>
+  </div>
+</div>
+<div id="toast" class="hidden fixed bottom-5 left-1/2 -translate-x-1/2 z-[60] bg-ink text-white text-[12.5px] font-medium px-4 py-2.5 rounded-xl shadow-lift"></div>
+<script>function toast(m){var t=document.getElementById('toast');t.textContent=m;t.classList.remove('hidden');clearTimeout(window._tt);window._tt=setTimeout(function(){t.classList.add('hidden')},2200);}</script>
+<script src="../assets/shell.js"></script>
+<script>
+// grade distribution counts (A1..F9) — 38 students
+const GRADES=[['A1',6,'bg-confirm'],['B2',5,'bg-confirm/70'],['B3',5,'bg-blue'],['C4',6,'bg-blue/70'],['C5',5,'bg-skyblue'],['C6',6,'bg-caution/70'],['D7',3,'bg-caution'],['E8',1,'bg-alert/70'],['F9',1,'bg-alert']];
+const maxG=Math.max(...GRADES.map(g=>g[1]));
+document.getElementById('gradeBars').innerHTML=GRADES.map(g=>`<div class="flex flex-col items-center justify-end h-full"><span class="text-[10px] font-mono font-semibold text-steel mb-1">${g[1]}</span><div class="w-full ${g[2]} rounded-t-md" style="height:${Math.round(g[1]/maxG*100)}%"></div></div>`).join('');
+document.getElementById('gradeLabels').innerHTML=GRADES.map(g=>`<span>${g[0]}</span>`).join('');
+
+// subject averages [name, avg, lastTerm, passRate]
+const SUBJ=[
+ ["Qur'an",72.8,70.1,97],['Arabic',66.1,64.3,92],['Basic Science',63.2,61.0,84],['Mathematics',61.4,56.0,79],
+ ['Social Studies',60.5,59.2,82],['Civic Education',59.8,58.1,84],['English',58.9,57.2,76],['Basic Technology',52.8,57.1,63],
+];
+document.getElementById('subjBars').innerHTML=SUBJ.map(s=>{const d=(s[1]-s[2]).toFixed(1),up=s[1]>=s[2],low=s[1]<55;
+  return `<div class="grid grid-cols-[120px_1fr_120px] gap-3 items-center text-[12.5px]">
+    <span class="font-medium truncate ${/[؀-ۿ]/.test(s[0])?'arabic text-[14px]':''}">${s[0]}</span>
+    <div class="relative h-5">
+      <div class="absolute inset-y-1.5 left-0 rounded-full bg-mist/70" style="width:${s[2]}%"></div>
+      <div class="absolute inset-y-0.5 left-0 rounded-full ${low?'bg-alert':'bg-blue'}" style="width:${s[1]}%"></div>
+    </div>
+    <span class="font-mono text-right">${s[1].toFixed(1)} <span class="${up?'text-confirm':'text-alert'} text-[10.5px]">${up?'↑':'↓'}${Math.abs(d)}</span> <span class="text-steel text-[10px]">· ${s[3]}% pass</span></span>
+  </div>`;}).join('');
+
+// student lists
+function row(name,score,meta,extra){return `<li class="px-5 py-2.5 flex items-center justify-between hover:bg-mist/10"><a href="../admin/student-detail.html" class="text-[12.5px] font-medium hover:text-blue">${name}</a><span class="flex items-center gap-2.5"><span class="font-mono text-[12px]">${score}</span>${extra||''}<span class="text-[11px] text-steel">${meta}</span></span></li>`;}
+const TOP=[['Aisha Bello','91.2%','1st'],['Khadija Sani','89.5%','2nd'],['Fatima Abubakar','85.4%','3rd'],['Maryam Idris','83.1%','4th'],['Zainab Musa','81.7%','5th']];
+const BOT=[['Suleiman Garba','38.0%','38th'],['Ibrahim Lawal','44.2%','37th'],['Nuhu Adamu','46.8%','36th'],['Sadiq Bala','48.1%','35th'],['Usman Bello','49.6%','34th']];
+const IMP=[['Fatima Abubakar','+4.6','5th → 3rd'],['Aisha Bello','+3.8','3rd → 1st'],['Maryam Idris','+3.1','7th → 4th'],['Zainab Musa','+2.4','8th → 5th'],['Halima Yusuf','+2.0','15th → 12th']];
+const DEC=[['Usman Bello','−6.2','22nd → 34th'],['Sadiq Bala','−4.1','29th → 35th'],['Nuhu Adamu','−3.5','30th → 36th'],['Bashir Tijani','−2.8','18th → 24th'],['Yakubu Ali','−2.1','20th → 25th']];
+document.getElementById('topList').innerHTML=TOP.map(s=>row(s[0],s[1],s[2])).join('');
+document.getElementById('bottomList').innerHTML=BOT.map(s=>row(s[0],s[1],s[2])).join('');
+document.getElementById('impList').innerHTML=IMP.map(s=>row(s[0],s[2],'',`<span class="text-[10.5px] font-mono font-semibold text-confirm">${s[1]}</span>`)).join('');
+document.getElementById('decList').innerHTML=DEC.map(s=>row(s[0],s[2],'',`<span class="text-[10.5px] font-mono font-semibold text-alert">${s[1]}</span>`)).join('');
+
+// compare classes
+const CMP=[['Class average','64.3%','61.8%','+2.5'],['Highest','91.2%','88.0%','+3.2'],['Lowest','38.0%','44.5%','−6.5'],['Pass rate (≥50%)','86%','89%','−3'],['Spread (std dev)','12.4','9.8','+2.6'],['Attendance','93%','95%','−2']];
+document.getElementById('cmpBody').innerHTML=CMP.map(c=>{const pos=c[3].startsWith('+');
+  return `<tr class="hover:bg-canvas/60"><td class="px-5 py-2.5 font-medium">${c[0]}</td><td class="px-4 py-2.5 text-center font-mono font-semibold">${c[1]}</td><td class="px-4 py-2.5 text-center font-mono text-steel">${c[2]}</td><td class="px-4 py-2.5 text-center font-mono text-[11.5px] ${pos?'text-confirm':'text-alert'}">${c[3]}</td></tr>`;}).join('');
+
+// selectors are illustrative — keep the dashboard coherent and toast on change
+function render(){const c=document.getElementById('selClass').value,t=document.getElementById('selTerm').value,s=document.getElementById('selSubj').value;
+  toast('Analysis updated for the selected filters');}
+</script>
+</body>
+</html>

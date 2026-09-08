@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Edsynk — Ward Results</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&family=Noto+Naskh+Arabic:wght@500&display=swap" rel="stylesheet">
+<script>tailwind.config={theme:{extend:{colors:{canvas:'#F7F9FC',ink:'#0B2A56',charcoal:'#18181B',steel:'#64748B',whisper:'#E2E8F0',blue:'#2177EF',skyblue:'#5C9DF5',wash:'#EAF2FE',mist:'#D3E4FD',confirm:'#16A34A',caution:'#D97706',alert:'#DC2626',excused:'#7C8DA6'},fontFamily:{sans:['Geist','sans-serif'],mono:['"Geist Mono"','monospace'],arabic:['"Noto Naskh Arabic"','serif']},boxShadow:{soft:'0 1px 2px rgba(11,42,86,0.04), 0 6px 24px rgba(11,42,86,0.05)',lift:'0 1px 3px rgba(11,42,86,0.10), 0 12px 32px rgba(11,42,86,0.12)'}}}}</script>
+<style>@keyframes rise{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}.rise{animation:rise .45s cubic-bezier(.2,.8,.2,1) both}
+@keyframes grow{from{height:0}}.tbar{animation:grow .9s cubic-bezier(.2,.8,.2,1) both}</style>
+</head>
+<body data-active="Results" data-persona="parent" class="bg-canvas font-sans text-charcoal antialiased">
+<div class="flex min-h-screen">
+  <div id="sidebar-root"></div>
+  <div class="flex-1 min-w-0">
+    <header class="h-[60px] bg-white/80 backdrop-blur-md border-b border-whisper/70 flex items-center justify-between px-4 sm:px-7 sticky top-0 z-20">
+      <div class="flex items-center gap-3">
+        <h1 class="text-[15px] font-semibold tracking-tight">My Ward's Results</h1>
+        <select id="termSel" onchange="render()" class="h-9 rounded-lg border border-whisper bg-white px-3 text-[12.5px] font-medium">
+          <option value="t3">Third Term · 2025/26</option>
+          <option value="t2" selected>Second Term · 2025/26</option>
+          <option value="t1">First Term · 2025/26</option>
+          <option value="p3">Third Term · 2024/25</option>
+        </select>
+      </div>
+      <div class="flex items-center gap-2.5">
+        <button id="dlBtn" onclick="location.href='report-card.html'" class="h-9 px-4 rounded-lg bg-blue text-white text-[13px] font-medium shadow-soft active:translate-y-px hidden sm:block">Download report card</button>
+        <button onclick="window.print()" class="h-9 w-9 grid place-items-center rounded-lg hover:bg-mist/40 text-steel border border-transparent hover:border-whisper"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9V2h12v7M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg></button>
+      </div>
+    </header>
+
+    <main class="p-4 sm:p-7 max-w-[1000px] space-y-5 pb-10">
+
+      <!-- friendly intro -->
+      <div class="rise rounded-2xl bg-wash/50 ring-1 ring-mist/60 px-4 py-3 text-[12px] text-ink leading-relaxed">This is your child's full term report, explained simply. Tap a child below to switch. If a figure looks wrong, you can raise it with the school from the report card.</div>
+
+      <!-- child switcher -->
+      <section class="rise flex gap-2.5 overflow-x-auto pb-1" id="kids">
+        <button onclick="kid(0)" class="kbtn shrink-0 flex items-center gap-3 rounded-2xl px-4 py-3 min-w-[190px] bg-ink text-white shadow-lift">
+          <span class="kAv h-10 w-10 rounded-full bg-skyblue/30 ring-1 ring-skyblue/40 grid place-items-center text-[12px] font-semibold text-skyblue">FA</span>
+          <span class="text-left"><span class="block text-[14px] font-semibold leading-tight">Fatima</span><span class="kSub block text-[10.5px] text-white/60 mt-0.5">JSS 2A</span></span>
+        </button>
+        <button onclick="kid(1)" class="kbtn shrink-0 flex items-center gap-3 rounded-2xl px-4 py-3 min-w-[190px] bg-white ring-1 ring-whisper/80 shadow-soft">
+          <span class="kAv h-10 w-10 rounded-full bg-wash grid place-items-center text-[12px] font-semibold text-blue">YA</span>
+          <span class="text-left"><span class="block text-[14px] font-semibold leading-tight">Yusuf</span><span class="kSub block text-[10.5px] text-steel mt-0.5">SS1 Science</span></span>
+        </button>
+      </section>
+
+      <!-- LOCKED state (fees owed) -->
+      <section id="locked" class="rise hidden">
+        <div class="bg-white ring-1 ring-caution/30 rounded-2xl shadow-soft p-7 text-center">
+          <div class="h-14 w-14 rounded-2xl bg-caution/10 text-caution grid place-items-center mx-auto"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></div>
+          <p class="text-[16px] font-semibold mt-4">Yusuf's result is ready, but on hold</p>
+          <p class="text-[13px] text-steel mt-1.5 max-w-[46ch] mx-auto leading-relaxed">There is an outstanding balance of <span class="font-mono font-semibold text-charcoal">₦38,500</span> on Yusuf's account. The school has placed a temporary hold on viewing. Clear the balance to unlock the full report instantly.</p>
+          <div class="flex gap-2 justify-center mt-5 flex-wrap">
+            <button onclick="location.href='fees.html'" class="h-11 px-5 rounded-xl bg-blue text-white text-[13px] font-semibold shadow-soft active:translate-y-px">Pay ₦38,500 to unlock</button>
+            <button onclick="location.href='messages.html'" class="h-11 px-5 rounded-xl ring-1 ring-whisper bg-white text-[13px] font-medium text-steel hover:bg-mist/30">Message the office</button>
+          </div>
+          <p class="text-[11px] text-steel/80 mt-4">Note: by law results are never permanently withheld — this is a temporary courtesy hold you can lift yourself.</p>
+        </div>
+      </section>
+
+      <!-- pending (third term) -->
+      <section id="pending" class="rise hidden">
+        <div class="bg-white ring-1 ring-whisper/80 rounded-2xl shadow-soft p-8 text-center">
+          <div class="h-14 w-14 rounded-2xl bg-wash text-blue grid place-items-center mx-auto"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div>
+          <p class="text-[16px] font-semibold mt-4">Third term results aren't out yet</p>
+          <p class="text-[13px] text-steel mt-1.5 max-w-[42ch] mx-auto leading-relaxed">Exams run 23–27 June. The report card will appear here — sealed and verifiable — the moment the school publishes. You'll get a notification.</p>
+          <a href="timetable.html" class="inline-block mt-4 h-10 px-5 rounded-xl ring-1 ring-whisper bg-white text-[13px] font-medium text-steel hover:bg-mist/30 leading-[2.5rem]">See exam timetable</a>
+        </div>
+      </section>
+
+      <!-- PUBLISHED -->
+      <section id="published" class="space-y-5">
+        <!-- summary card -->
+        <div class="rise bg-white ring-1 ring-whisper/80 rounded-2xl shadow-soft overflow-hidden">
+          <div class="bg-ink text-white px-5 sm:px-6 py-4 flex items-center justify-between gap-4 flex-wrap">
+            <div><p class="text-[12px] text-white/60">Al-Furqan Academy, Bauchi · <span id="termName">Second Term 2025/26</span></p>
+            <p class="text-[17px] font-semibold mt-0.5"><span id="sName">Fatima Abubakar</span> · <span id="sClass">JSS 2A</span></p></div>
+            <span class="flex items-center gap-1.5 text-[11px] font-semibold text-confirm bg-white/10 ring-1 ring-white/20 rounded-full px-2.5 py-1"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>Sealed &amp; verifiable</span>
+          </div>
+          <div class="grid grid-cols-2 sm:grid-cols-4 divide-x divide-whisper/60">
+            <div class="px-5 py-4 text-center"><p class="font-mono text-[22px] font-semibold" id="sAvg">85.4%</p><p class="text-[10.5px] text-steel uppercase tracking-wider mt-0.5">Average</p></div>
+            <div class="px-5 py-4 text-center"><p class="font-mono text-[22px] font-semibold" id="sPos">5th</p><p class="text-[10.5px] text-steel uppercase tracking-wider mt-0.5" id="sPosOf">of 38</p></div>
+            <div class="px-5 py-4 text-center"><p class="font-mono text-[22px] font-semibold text-confirm" id="sGrade">A1</p><p class="text-[10.5px] text-steel uppercase tracking-wider mt-0.5">Grade</p></div>
+            <div class="px-5 py-4 text-center"><p class="font-mono text-[22px] font-semibold" id="sAtt">95%</p><p class="text-[10.5px] text-steel uppercase tracking-wider mt-0.5">Attendance</p></div>
+          </div>
+          <div class="px-5 sm:px-6 py-3 bg-canvas/60 border-t border-whisper/60 text-[12px] text-steel" id="plainSummary">In plain terms: a strong term — top of the middle band of the class, with very good attendance.</div>
+        </div>
+
+        <!-- subjects -->
+        <div class="rise bg-white ring-1 ring-whisper/80 rounded-2xl shadow-soft overflow-hidden" style="animation-delay:.05s">
+          <p class="text-[13.5px] font-semibold px-5 pt-4 pb-1">Subjects</p>
+          <p class="text-[11px] text-steel px-5 pb-3">CA = continuous assessment (class work &amp; tests, max 40). Exam max 60. Total out of 100.</p>
+          <div class="overflow-x-auto"><table class="w-full text-[12.5px]">
+            <thead><tr class="text-left text-[10px] uppercase tracking-wider text-steel border-y border-whisper/70 bg-canvas/60">
+              <th class="px-5 py-2.5 font-semibold">Subject</th><th class="px-3 py-2.5 font-semibold text-center">CA /40</th><th class="px-3 py-2.5 font-semibold text-center">Exam /60</th><th class="px-3 py-2.5 font-semibold text-center">Total</th><th class="px-3 py-2.5 font-semibold text-center">Grade</th><th class="px-5 py-2.5 font-semibold">Remark</th></tr></thead>
+            <tbody id="subjBody" class="divide-y divide-whisper/60"></tbody>
+          </table></div>
+        </div>
+
+        <!-- trend -->
+        <div class="rise bg-white ring-1 ring-whisper/80 rounded-2xl shadow-soft p-5" style="animation-delay:.1s">
+          <p class="text-[13.5px] font-semibold">Performance across terms</p>
+          <p class="text-[11px] text-steel mt-0.5 mb-4">How the average has moved this session.</p>
+          <div class="flex items-end justify-around gap-4 h-40 px-2" id="trend"></div>
+        </div>
+
+        <!-- remarks -->
+        <div class="rise bg-white ring-1 ring-whisper/80 rounded-2xl shadow-soft p-5 space-y-3" style="animation-delay:.14s">
+          <div><p class="text-[10.5px] font-semibold uppercase tracking-wider text-steel">Class teacher's remark</p><p class="text-[12.5px] mt-1 leading-relaxed" id="tRemark">Fatima is diligent and respectful, and a quiet leader in class. With more confidence speaking up, she will shine even brighter. A pleasure to teach.</p><p class="text-[10.5px] text-steel mt-1" id="tName">— Mallam Musa Ibrahim</p></div>
+          <div class="pt-3 border-t border-whisper/60"><p class="text-[10.5px] font-semibold uppercase tracking-wider text-steel">Principal's remark</p><p class="text-[12.5px] mt-1 leading-relaxed" id="pRemark">An excellent result. Keep it up. <span class="font-arabic">بارك الله فيك</span></p><p class="text-[10.5px] text-steel mt-1">— Ustadh Abdullahi Sani</p></div>
+        </div>
+
+        <!-- verify strip -->
+        <div class="rise rounded-2xl bg-wash/60 ring-1 ring-mist/60 p-4 flex items-center justify-between gap-3 flex-wrap" style="animation-delay:.18s">
+          <div class="flex items-center gap-3">
+            <span class="h-11 w-11 rounded-xl bg-white ring-1 ring-whisper grid place-items-center"><svg width="22" height="22" viewBox="0 0 36 36" fill="#0B2A56"><rect x="2" y="2" width="9" height="9"/><rect x="4" y="4" width="5" height="5" fill="#fff"/><rect x="25" y="2" width="9" height="9"/><rect x="27" y="4" width="5" height="5" fill="#fff"/><rect x="2" y="25" width="9" height="9"/><rect x="4" y="27" width="5" height="5" fill="#fff"/><rect x="15" y="15" width="6" height="6"/></svg></span>
+            <div><p class="text-[12.5px] font-semibold text-ink">This result is sealed &amp; tamper-proof</p><p class="text-[11px] text-steel">Verify it yourself at alfurqan.edsynk.ng/v/8KQ2 — no login needed.</p></div>
+          </div>
+          <div class="flex gap-2"><button onclick="location.href='../public/verify-result.html'" class="h-10 px-4 rounded-xl ring-1 ring-whisper bg-white text-[12.5px] font-medium text-steel">Verify online</button><button onclick="location.href='report-card.html'" class="h-10 px-4 rounded-xl bg-blue text-white text-[12.5px] font-semibold">Full report card</button></div>
+        </div>
+      </section>
+    </main>
+  </div>
+</div>
+<div id="toast" class="hidden fixed bottom-5 left-1/2 -translate-x-1/2 z-[60] bg-ink text-white text-[12.5px] font-medium px-4 py-2.5 rounded-xl shadow-lift"></div>
+<script>function toast(m){var t=document.getElementById('toast');t.textContent=m;t.classList.remove('hidden');clearTimeout(window._tt);window._tt=setTimeout(function(){t.classList.add('hidden')},2200);}</script>
+<script src="../assets/shell.js"></script>
+<script>
+const KIDS=[
+ {name:'Fatima Abubakar',cls:'JSS 2A',av:'FA',owed:false,
+  t2:{avg:'85.4%',pos:'5th',of:'of 38',grade:'A1',att:'95%',plain:'In plain terms: a strong term — comfortably in the top group of the class, with very good attendance.',
+    tRemark:'Fatima is diligent and respectful, and a quiet leader in class. With more confidence speaking up, she will shine even brighter. A pleasure to teach.',
+    pRemark:'An excellent result. Keep it up. <span class="font-arabic">بارك الله فيك</span>',
+    subj:[['Mathematics',35,52,87,'A1','Excellent'],['English Language',31,47,78,'B2','Very good'],['Basic Science',35,47,82,'A1','Excellent'],['القرآن الكريم',37,53,90,'A1','Outstanding'],['Basic Technology',29,42,71,'B3','Good'],['Social Studies',31,45,76,'B2','Very good'],['Civic Education',31,48,79,'B2','Very good'],['اللغة العربية',33,50,83,'A1','Excellent']]},
+  t1:{avg:'83.1%',pos:'6th',of:'of 38',grade:'A1',att:'93%',plain:'A solid start to the year — already among the strongest in the class.',
+    tRemark:'A settled, hardworking start to the session. Fatima takes feedback well and is well-liked by her classmates.',
+    pRemark:'A good beginning — aim even higher next term.',
+    subj:[['Mathematics',33,49,82,'A1','Excellent'],['English Language',30,45,75,'B2','Very good'],['Basic Science',34,46,80,'A1','Excellent'],['القرآن الكريم',36,52,88,'A1','Outstanding'],['Basic Technology',28,40,68,'B3','Good'],['Social Studies',30,44,74,'B2','Very good'],['Civic Education',30,47,77,'B2','Very good'],['اللغة العربية',32,49,81,'A1','Excellent']]},
+  p3:{avg:'84.0%',pos:'4th',of:'of 36',grade:'A1',att:'96%',plain:'Closed last session (JSS 1) strongly and was promoted on merit.',
+    tRemark:'A wonderful year. Fatima was promoted to JSS 2 on merit and should be proud.',
+    pRemark:'Congratulations on a fine year. <span class="font-arabic">ما شاء الله</span>',
+    subj:[['Mathematics',34,50,84,'A1','Excellent'],['English Language',31,46,77,'B2','Very good'],['Basic Science',34,47,81,'A1','Excellent'],['القرآن الكريم',37,52,89,'A1','Outstanding'],['Basic Technology',29,41,70,'B3','Good'],['Social Studies',31,45,76,'B2','Very good'],['Civic Education',30,48,78,'B2','Very good'],['اللغة العربية',33,49,82,'A1','Excellent']]},
+  trend:[['T1',83.1],['T2',85.4],['T3',null]]},
+ {name:'Yusuf Abubakar',cls:'SS1 Science',av:'YA',owed:true,
+  t2:{avg:'74.8%',pos:'11th',of:'of 29',grade:'B2',att:'90%',plain:'A good term overall, with the sciences clearly his strength.',
+    tRemark:'Yusuf is capable and curious in the sciences. More consistency with homework will lift his average further.',
+    pRemark:'A promising result. Stay focused.',
+    subj:[['Mathematics',30,44,74,'B2','Very good'],['English Language',27,40,67,'B3','Good'],['Physics',33,47,80,'A1','Excellent'],['Chemistry',31,46,77,'B2','Very good'],['Biology',32,46,78,'B2','Very good'],['Further Maths',28,40,68,'B3','Good'],['القرآن الكريم',34,50,84,'A1','Excellent'],['Civic Education',29,43,72,'B2','Good']]},
+  t1:{avg:'72.3%',pos:'13th',of:'of 29',grade:'B3',att:'88%',plain:'A settling-in term in the senior school; sciences already showing promise.',
+    tRemark:'Yusuf is adjusting well to SS1. Encourage steadier study habits at home.',
+    pRemark:'A fair start. Build on it.',
+    subj:[['Mathematics',28,42,70,'B3','Good'],['English Language',26,38,64,'C4','Fair'],['Physics',31,45,76,'B2','Very good'],['Chemistry',30,44,74,'B2','Very good'],['Biology',31,44,75,'B2','Very good'],['Further Maths',26,38,64,'C4','Fair'],['القرآن الكريم',33,49,82,'A1','Excellent'],['Civic Education',28,41,69,'B3','Good']]},
+  p3:{avg:'76.0%',pos:'9th',of:'of 31',grade:'B2',att:'94%',plain:'Finished JSS 3 well and earned his place in the Science stream.',
+    tRemark:'A strong finish to junior school. Promoted to SS1 Science.',
+    pRemark:'Well done — a good foundation for the senior school.',
+    subj:[['Mathematics',31,45,76,'B2','Very good'],['English Language',28,42,70,'B3','Good'],['Basic Science',33,47,80,'A1','Excellent'],['القرآن الكريم',34,50,84,'A1','Excellent'],['Basic Technology',29,43,72,'B2','Good'],['Social Studies',30,44,74,'B2','Very good'],['Civic Education',30,45,75,'B2','Very good'],['اللغة العربية',31,46,77,'B2','Very good']]},
+  trend:[['T1',72.3],['T2',74.8],['T3',null]]},
+];
+let ci=0;
+function gradeTone(g){return g[0]==='A'?'text-confirm bg-confirm/10':g[0]==='B'?'text-blue bg-wash':g[0]==='C'?'text-caution bg-caution/10':'text-alert bg-alert/10';}
+function isAr(s){return /[؀-ۿ]/.test(s);}
+function kid(i){ci=i;
+  document.querySelectorAll('.kbtn').forEach((b,j)=>{const sel=j===i;
+    b.className='kbtn shrink-0 flex items-center gap-3 rounded-2xl px-4 py-3 min-w-[190px] '+(sel?'bg-ink text-white shadow-lift':'bg-white ring-1 ring-whisper/80 shadow-soft');
+    b.querySelector('.kSub').className='kSub block text-[10.5px] mt-0.5 '+(sel?'text-white/60':'text-steel');});
+  render();
+}
+function render(){
+  const k=KIDS[ci], v=document.getElementById('termSel').value;
+  const pending=(v==='t3');
+  const locked=k.owed && !pending;
+  document.getElementById('pending').classList.toggle('hidden',!pending);
+  document.getElementById('locked').classList.toggle('hidden',!locked);
+  document.getElementById('published').classList.toggle('hidden',pending||locked);
+  document.getElementById('dlBtn').classList.toggle('hidden',pending||locked);
+  if(pending||locked)return;
+  const d=k[v];
+  const tn={t2:'Second Term 2025/26',t1:'First Term 2025/26',p3:'Third Term 2024/25'}[v];
+  document.getElementById('termName').textContent=tn;
+  document.getElementById('sName').textContent=k.name;
+  document.getElementById('sClass').textContent=(v==='p3')?(ci===0?'JSS 1A':'JSS 3B'):k.cls;
+  document.getElementById('sAvg').textContent=d.avg;document.getElementById('sPos').textContent=d.pos;
+  document.getElementById('sPosOf').textContent=d.of;document.getElementById('sGrade').textContent=d.grade;
+  document.getElementById('sAtt').textContent=d.att;document.getElementById('plainSummary').textContent=d.plain;
+  document.getElementById('tRemark').textContent=d.tRemark;document.getElementById('pRemark').innerHTML=d.pRemark;
+  document.getElementById('subjBody').innerHTML=d.subj.map(s=>`<tr class="hover:bg-canvas/60">
+    <td class="px-5 py-2.5 font-medium ${isAr(s[0])?'arabic text-[14px]':''}">${s[0]}</td>
+    <td class="px-3 py-2.5 text-center font-mono text-steel">${s[1]}</td>
+    <td class="px-3 py-2.5 text-center font-mono text-steel">${s[2]}</td>
+    <td class="px-3 py-2.5 text-center font-mono font-semibold">${s[3]}</td>
+    <td class="px-3 py-2.5 text-center"><span class="text-[10.5px] font-semibold ${gradeTone(s[4])} rounded-full px-2 py-0.5">${s[4]}</span></td>
+    <td class="px-5 py-2.5 text-steel">${s[5]}</td></tr>`).join('');
+  const tr=k.trend;
+  document.getElementById('trend').innerHTML=tr.map(t=>{
+    if(t[1]===null)return `<div class="flex-1 flex flex-col items-center justify-end h-full"><div class="w-full max-w-[64px] rounded-t-lg border-2 border-dashed border-whisper" style="height:30%"></div><p class="text-[11px] text-steel mt-2">${t[0]}</p><p class="text-[10px] text-steel/60">pending</p></div>`;
+    const h=Math.round(t[1]); const sel=(v==='t1'&&t[0]==='T1')||(v==='t2'&&t[0]==='T2');
+    return `<div class="flex-1 flex flex-col items-center justify-end h-full"><p class="font-mono text-[11px] font-semibold mb-1">${t[1]}%</p><div class="tbar w-full max-w-[64px] rounded-t-lg ${sel?'bg-blue':'bg-mist'}" style="height:${h}%"></div><p class="text-[11px] ${sel?'font-semibold text-charcoal':'text-steel'} mt-2">${t[0]}</p></div>`;
+  }).join('');
+}
+kid(0);
+</script>
+</body>
+</html>

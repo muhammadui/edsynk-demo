@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Edsynk — CBT Exam</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script>
+tailwind.config = { theme: { extend: {
+  colors: { canvas:'#F7F9FC', ink:'#0B2A56', charcoal:'#18181B', steel:'#64748B', whisper:'#E2E8F0',
+    blue:'#2177EF', wash:'#EAF2FE', mist:'#D3E4FD',
+    confirm:'#16A34A', caution:'#D97706', alert:'#DC2626', excused:'#7C8DA6' },
+  fontFamily: { sans:['Geist','sans-serif'], mono:['"Geist Mono"','monospace'] },
+  boxShadow: { soft:'0 1px 2px rgba(11,42,86,0.04), 0 6px 24px rgba(11,42,86,0.05)',
+               lift:'0 1px 3px rgba(11,42,86,0.10), 0 12px 32px rgba(11,42,86,0.12)' }
+}}}
+</script>
+<style>
+@keyframes pulseAmber{0%,100%{opacity:1}50%{opacity:.55}}.timer-warn{animation:pulseAmber 1.6s ease-in-out infinite}
+@keyframes rise{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}.rise{animation:rise .35s cubic-bezier(.2,.8,.2,1) both}
+.seg{transition:background .2s}
+@keyframes recdot{0%,100%{opacity:1}50%{opacity:.25}}.recdot{animation:recdot 1.4s ease-in-out infinite}
+@keyframes shake{0%,100%{transform:none}25%{transform:translateX(-3px)}75%{transform:translateX(3px)}}.shake{animation:shake .35s ease-in-out}
+</style>
+</head>
+<!-- Exam runner lives inside the student portal shell (founder request). In production, nav can be locked during a live exam. -->
+<body data-active="My Exams" data-persona="student" class="bg-canvas font-sans text-charcoal antialiased">
+<div class="flex min-h-screen"><div id="sidebar-root"></div><div class="flex-1 min-w-0">
+
+<!-- ── AI PROCTORING: live camera tile (fixed, top-right) ── -->
+<!-- In production: a <video> element here, fed by navigator.mediaDevices.getUserMedia({video:true,audio:true}); face/noise detection runs on the stream. -->
+<div id="proctorTile" class="fixed top-16 right-3 sm:right-5 z-40 w-[148px] sm:w-[168px] rise">
+  <div id="camFrame" class="relative rounded-xl overflow-hidden ring-2 ring-confirm/70 shadow-lift bg-ink">
+    <!-- styled placeholder for the webcam feed -->
+    <div class="aspect-[4/3] grid place-items-center bg-gradient-to-br from-[#13294f] to-[#0B2A56]">
+      <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#5C9DF5" stroke-width="1.5" opacity="0.85"><circle cx="12" cy="9" r="4"/><path d="M4 20c0-4 4-6 8-6s8 2 8 6"/></svg>
+    </div>
+    <!-- record / proctoring-on indicator -->
+    <div class="absolute top-1.5 left-1.5 flex items-center gap-1.5 bg-black/45 backdrop-blur rounded-full pl-1.5 pr-2 py-0.5">
+      <span class="recdot h-2 w-2 rounded-full bg-alert"></span>
+      <span class="text-[9.5px] font-semibold text-white tracking-wide">Proctoring on</span>
+    </div>
+    <span class="absolute bottom-1.5 right-1.5 text-[9px] font-medium text-white/70 bg-black/40 rounded px-1.5 py-0.5">Camera</span>
+  </div>
+  <!-- proctoring status line -->
+  <div id="proctorStatus" class="mt-1.5 flex items-center gap-1.5 rounded-lg bg-confirm/10 text-confirm px-2 py-1.5 text-[10.5px] font-medium">
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+    <span id="proctorStatusText">Verified · 1 face</span>
+  </div>
+  <!-- strike counter -->
+  <p id="strikeLine" class="mt-1 text-[9.5px] text-steel text-center">Strikes <span class="font-mono font-semibold" id="strikeCount">0</span> / <span class="font-mono" id="strikeMax">3</span></p>
+  <!-- proctor demo controls (prototype only) -->
+  <div class="mt-1.5 rounded-lg border border-dashed border-whisper bg-white/80 backdrop-blur p-1.5">
+    <p class="text-[8.5px] uppercase tracking-wider text-steel/70 font-semibold text-center mb-1">Proctor demo</p>
+    <div class="grid grid-cols-1 gap-1">
+      <button onclick="simFaces()" class="h-7 rounded-md bg-canvas ring-1 ring-whisper text-[10px] font-medium text-charcoal hover:bg-mist/40 active:translate-y-px">Simulate 2nd face</button>
+      <button onclick="simNoise()" class="h-7 rounded-md bg-canvas ring-1 ring-whisper text-[10px] font-medium text-charcoal hover:bg-mist/40 active:translate-y-px">Simulate noise</button>
+      <button onclick="simReset()" class="h-7 rounded-md bg-canvas ring-1 ring-whisper text-[10px] font-medium text-steel hover:bg-mist/40 active:translate-y-px">Reset to verified</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── AI PROCTORING: warning banner ── -->
+<div id="proctorBanner" class="hidden fixed top-3 left-1/2 -translate-x-1/2 z-50 max-w-[92vw]">
+  <div class="flex items-center gap-2.5 bg-caution text-white rounded-xl px-4 py-2.5 shadow-lift text-[12.5px] font-medium">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4"/><path d="M12 17h.01"/><path d="M10.3 3.86l-8 14A1 1 0 003 19h18a1 1 0 00.87-1.5l-8-14a1 1 0 00-1.74 0z"/></svg>
+    <span id="proctorBannerText">Warning</span>
+  </div>
+</div>
+
+<!-- Exam topbar -->
+<header class="bg-white border-b border-whisper/70 sticky top-0 z-20">
+  <div class="h-14 max-w-[860px] mx-auto px-4 flex items-center justify-between">
+    <div class="min-w-0">
+      <p class="text-sm font-semibold tracking-tight truncate">Physics — SS 1 · Third Term Examination</p>
+      <p class="text-[11px] text-steel">Fatima Abubakar · AFA/2024/0117 · <span class="text-excused">Focus mode</span></p>
+    </div>
+    <div class="flex items-center gap-3 shrink-0">
+      <span id="syncPill" class="text-[11px] font-medium text-confirm bg-confirm/10 rounded-full px-2.5 py-1 hidden sm:inline">✓ Saved on device</span>
+      <div id="timerBox" class="timer-warn flex items-center gap-2 bg-caution/10 text-caution rounded-lg px-3 py-1.5">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+        <span id="timer" class="font-mono font-semibold text-sm tabular-nums">14:37</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── TOP PROGRESS LINE ── -->
+  <div class="max-w-[860px] mx-auto px-4 pb-3">
+    <div class="flex items-center justify-between text-[11.5px] mb-1.5">
+      <p class="font-medium">Question <span id="qNow" class="font-mono">1</span> of <span class="font-mono">10</span></p>
+      <p class="text-steel">
+        <span class="inline-flex items-center gap-1"><span class="h-2 w-2 rounded-sm bg-blue inline-block"></span><span id="cAns" class="font-mono">0</span> answered</span>
+        <span class="inline-flex items-center gap-1 ml-3"><span class="h-2 w-2 rounded-sm bg-caution inline-block"></span><span id="cFlag" class="font-mono">0</span> flagged</span>
+        <span class="inline-flex items-center gap-1 ml-3"><span class="h-2 w-2 rounded-sm bg-whisper inline-block"></span><span id="cLeft" class="font-mono">10</span> left</span>
+      </p>
+    </div>
+    <div id="segbar" class="grid grid-cols-10 gap-1"></div>
+  </div>
+</header>
+
+<!-- Question -->
+<main id="examMain" class="max-w-[860px] mx-auto p-4 sm:p-6">
+  <section class="bg-white border border-whisper/70 rounded-2xl shadow-soft p-5 sm:p-8">
+    <div class="flex items-center justify-between gap-3">
+      <p class="text-[11px] font-semibold uppercase tracking-[0.07em] text-steel"><span id="qType"></span> · <span id="qMarks" class="font-mono"></span> marks</p>
+      <button id="flagBtn" onclick="toggleFlag()" class="flex items-center gap-1.5 text-[13px] font-medium rounded-lg px-3 py-1.5 active:translate-y-px"></button>
+    </div>
+    <h1 id="qText" class="text-lg sm:text-xl font-medium leading-relaxed mt-4 max-w-[65ch]"></h1>
+    <div id="qBody" class="mt-6"></div>
+    <div class="flex items-center justify-between mt-8 pt-5 border-t border-whisper/60">
+      <button id="prevBtn" onclick="nav(-1)" class="h-11 px-5 rounded-lg border border-whisper font-medium text-sm hover:bg-mist/30 active:translate-y-px disabled:opacity-40">← Previous</button>
+      <button id="nextBtn" onclick="nav(1)" class="h-11 px-6 rounded-lg bg-blue text-white font-medium text-sm active:translate-y-px">Next →</button>
+    </div>
+  </section>
+  <div class="flex justify-center mt-5">
+    <button onclick="showReview()" class="h-11 px-6 rounded-xl bg-ink text-white font-medium text-sm shadow-soft active:translate-y-px">Review &amp; submit exam</button>
+  </div>
+  <p class="text-center text-[11px] text-steel mt-4 hidden sm:block">
+    Keyboard: press <kbd class="font-mono text-[10px] bg-white ring-1 ring-whisper rounded px-1.5 py-0.5">A</kbd>–<kbd class="font-mono text-[10px] bg-white ring-1 ring-whisper rounded px-1.5 py-0.5">D</kbd> to answer · <kbd class="font-mono text-[10px] bg-white ring-1 ring-whisper rounded px-1.5 py-0.5">T</kbd>/<kbd class="font-mono text-[10px] bg-white ring-1 ring-whisper rounded px-1.5 py-0.5">F</kbd> for True/False · <kbd class="font-mono text-[10px] bg-white ring-1 ring-whisper rounded px-1.5 py-0.5">←</kbd><kbd class="font-mono text-[10px] bg-white ring-1 ring-whisper rounded px-1.5 py-0.5">→</kbd> to move
+  </p>
+</main>
+
+<!-- Review screen -->
+<div id="reviewWrap" class="hidden max-w-[860px] mx-auto p-4 sm:p-6">
+  <section class="bg-white border border-whisper/70 rounded-2xl shadow-soft p-5 sm:p-8 rise">
+    <h1 class="text-xl font-semibold tracking-tight">Review before you submit</h1>
+    <p class="text-[13px] text-steel mt-1.5">Tap any question to go back to it. Once submitted, you cannot return.</p>
+    <div id="reviewList" class="mt-5 space-y-2"></div>
+    <div id="reviewWarn" class="mt-5 rounded-xl bg-caution/[0.08] border border-caution/25 px-4 py-3 text-[13px]"></div>
+    <div class="flex items-center justify-between mt-7">
+      <button onclick="hideReview()" class="h-11 px-5 rounded-lg border border-whisper font-medium text-sm hover:bg-mist/30">← Keep working</button>
+      <button onclick="submitExam()" class="h-11 px-6 rounded-lg bg-ink text-white font-medium text-sm shadow-soft active:translate-y-px">Submit exam now</button>
+    </div>
+  </section>
+</div>
+
+<!-- Submitted screen -->
+<div id="doneWrap" class="hidden max-w-[640px] mx-auto p-4 sm:p-6 pt-12">
+  <section class="bg-white border border-whisper/70 rounded-2xl shadow-soft p-8 text-center rise">
+    <div class="h-16 w-16 mx-auto rounded-full bg-confirm grid place-items-center text-white shadow-lift">
+      <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+    </div>
+    <h1 class="text-xl font-semibold tracking-tight mt-5">Exam submitted</h1>
+    <p class="text-[13px] text-steel mt-2 max-w-[42ch] mx-auto leading-relaxed">Well done, Fatima. Your answers are safely recorded — submitted at <span class="font-mono" id="subTime"></span>.</p>
+    <div class="mt-6 grid grid-cols-2 gap-3 text-left">
+      <div class="rounded-xl bg-canvas ring-1 ring-whisper/80 p-4">
+        <p class="text-[11px] font-semibold uppercase tracking-wider text-steel">Auto-marked now</p>
+        <p class="text-[13px] mt-1.5">Objectives &amp; True/False<br><span class="text-steel text-[12px]">8 questions · scored instantly</span></p>
+      </div>
+      <div class="rounded-xl bg-canvas ring-1 ring-whisper/80 p-4">
+        <p class="text-[11px] font-semibold uppercase tracking-wider text-steel">Marked by your teacher</p>
+        <p class="text-[13px] mt-1.5">Short answer &amp; essay<br><span class="text-steel text-[12px]">2 questions · with marking scheme</span></p>
+      </div>
+    </div>
+    <p class="text-[12px] text-steel mt-5">Results appear in your portal once your teacher releases them.</p>
+    <a href="edmentor-analysis.html" class="mt-5 inline-flex h-11 px-6 rounded-xl bg-blue text-white font-medium text-sm items-center gap-2 shadow-soft active:translate-y-px">
+      See EdMentor analysis when released →</a>
+  </section>
+</div>
+
+<!-- ── AI PROCTORING: auto-submit full-screen overlay ── -->
+<div id="autoSubmitOverlay" class="hidden fixed inset-0 z-[70] bg-ink/95 backdrop-blur-sm grid place-items-center p-6">
+  <div class="max-w-[440px] text-center rise">
+    <div class="h-16 w-16 mx-auto rounded-full bg-alert grid place-items-center text-white shadow-lift">
+      <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 9v4"/><path d="M12 17h.01"/><path d="M10.3 3.86l-8 14A1 1 0 003 19h18a1 1 0 00.87-1.5l-8-14a1 1 0 00-1.74 0z"/></svg>
+    </div>
+    <h1 class="text-xl font-semibold tracking-tight text-white mt-5">Exam auto-submitted</h1>
+    <p class="text-[13.5px] text-white/80 mt-2.5 leading-relaxed max-w-[36ch] mx-auto" id="autoSubmitReason">Proctoring flagged multiple faces in the camera frame. Your answers so far have been recorded and submitted automatically.</p>
+    <p class="text-[12px] text-skyblue mt-4">This incident has been logged for your invigilator to review.</p>
+    <button id="autoSubmitContinue" class="mt-6 h-11 px-6 rounded-xl bg-white text-ink font-medium text-sm shadow-soft active:translate-y-px">Continue to review screen →</button>
+  </div>
+</div>
+
+</div></div>
+<script src="../assets/shell.js"></script>
+
+<script>
+// ── 10 questions: 6 MCQ · 2 True/False · 1 short answer · 1 essay ──
+const Q = [
+ {t:'mcq', m:2, q:'A ray of light passes from air into water. Why does a straw in a glass of water appear bent at the surface?',
+  o:['Light is reflected entirely at the water surface','Light changes speed and bends entering a denser medium','Water molecules absorb part of the light spectrum','The straw expands slightly in water']},
+ {t:'mcq', m:2, q:'Which of the following is a vector quantity?', o:['Speed','Distance','Velocity','Mass']},
+ {t:'tf',  m:1, q:'True or False: The refractive index of glass is always less than 1 for light entering from air.'},
+ {t:'mcq', m:2, q:'The SI unit of electric current is the…', o:['Volt','Ampere','Ohm','Watt']},
+ {t:'mcq', m:2, q:'A body moving in a circle at constant speed is…', o:['Not accelerating','Accelerating, because direction changes','Moving with uniform velocity','In equilibrium']},
+ {t:'tf',  m:1, q:'True or False: Sound waves can travel through a vacuum.'},
+ {t:'mcq', m:2, q:'Total internal reflection occurs when light moves from…', o:['Less dense to denser medium at any angle','Denser to less dense medium beyond the critical angle','Any medium into a vacuum','A solid into another solid']},
+ {t:'mcq', m:2, q:'Which colour of light bends MOST when passing through a prism?', o:['Red','Yellow','Green','Violet']},
+ {t:'short', m:4, q:'State Snell\'s Law in your own words.'},
+ {t:'essay', m:6, q:'Describe an experiment to determine the refractive index of a glass block. Include the apparatus, procedure, and how you would calculate the result.'},
+];
+let cur=0; const A=Q.map(()=>({ans:null,flag:false}));
+const TYPES={mcq:'Objective',tf:'True / False',short:'Short answer',essay:'Essay'};
+
+function segColor(i){
+  if(i===cur && !document.getElementById('examMain').classList.contains('hidden')) return 'bg-ink';
+  if(A[i].flag) return 'bg-caution';
+  if(A[i].ans!==null && A[i].ans!=='') return 'bg-blue';
+  return 'bg-whisper';
+}
+function renderTop(){
+  document.getElementById('segbar').innerHTML=Q.map((_,i)=>
+    `<button onclick="goto(${i})" title="Question ${i+1}" class="seg h-2.5 rounded-full ${segColor(i)} hover:opacity-80"></button>`).join('');
+  const ans=A.filter(a=>a.ans!==null&&a.ans!=='').length, fl=A.filter(a=>a.flag).length;
+  document.getElementById('cAns').textContent=ans;
+  document.getElementById('cFlag').textContent=fl;
+  document.getElementById('cLeft').textContent=Q.length-ans;
+  document.getElementById('qNow').textContent=cur+1;
+}
+const optCls=s=>s
+ ?'w-full text-left flex items-center gap-3 bg-blue text-white border border-blue rounded-xl px-4 py-4 min-h-[52px] shadow-soft font-medium'
+ :'w-full text-left flex items-center gap-3 bg-white border border-whisper rounded-xl px-4 py-4 min-h-[52px] hover:bg-mist/20 active:scale-[0.995]';
+const kCls=s=>s?'h-7 w-7 rounded-lg bg-white/20 grid place-items-center font-mono text-[12px] font-semibold text-white shrink-0'
+              :'h-7 w-7 rounded-lg bg-canvas border border-whisper grid place-items-center font-mono text-[12px] font-semibold text-steel shrink-0';
+const tick='<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>';
+
+function render(){
+  const q=Q[cur], a=A[cur];
+  document.getElementById('qType').textContent=TYPES[q.t];
+  document.getElementById('qMarks').textContent=q.m;
+  document.getElementById('qText').textContent=q.q;
+  const fb=document.getElementById('flagBtn');
+  fb.className='flex items-center gap-1.5 text-[13px] font-medium rounded-lg px-3 py-1.5 active:translate-y-px '+(a.flag?'text-white bg-caution':'text-caution bg-caution/10');
+  fb.innerHTML='<svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M4 22V4a2 2 0 012-2h12l-3 5 3 5H6v10z"/></svg>'+(a.flag?'Flagged':'Flag for review');
+  let h='';
+  if(q.t==='mcq'){
+    h=q.o.map((o,i)=>{const s=a.ans===i;return `<button onclick="setAns(${i})" class="${optCls(s)} mb-3">
+      <span class="${kCls(s)}">${'ABCD'[i]}</span><span class="text-[0.9375rem] flex-1">${o}</span>
+      <span class="shrink-0 ${s?'':'hidden'}">${tick}</span></button>`}).join('');
+  } else if(q.t==='tf'){
+    h='<div class="grid grid-cols-2 gap-3">'+['True','False'].map((o,i)=>{const s=a.ans===i;
+      return `<button onclick="setAns(${i})" class="${optCls(s)} justify-center text-center !px-2"><span class="text-[1rem] flex-none">${o}</span><span class="${s?'':'hidden'}">${tick}</span></button>`}).join('')+'</div>';
+  } else {
+    const rows=q.t==='essay'?8:3;
+    h=`<textarea oninput="setAns(this.value)" rows="${rows}" placeholder="Type your answer…" class="w-full rounded-xl border border-whisper bg-canvas p-4 text-[14px] leading-relaxed focus:outline-none focus:ring-2 focus:ring-blue/50">${a.ans||''}</textarea>
+    <div class="flex items-center justify-between mt-2 text-[11px] text-steel">
+      <span>Marked by your teacher with the marking scheme · partial marks possible</span>
+      <span class="font-mono" id="wc">${(a.ans||'').trim()?(a.ans.trim().split(/\\s+/).length):0} words</span></div>`;
+  }
+  document.getElementById('qBody').innerHTML=h;
+  document.getElementById('prevBtn').disabled=cur===0;
+  document.getElementById('nextBtn').textContent=cur===Q.length-1?'Review →':'Next →';
+  renderTop();
+}
+function setAns(v){A[cur].ans=v; if(typeof v==='string'){const wc=document.getElementById('wc'); if(wc) wc.textContent=(v.trim()?v.trim().split(/\s+/).length:0)+' words'; renderTop();} else render();
+  const p=document.getElementById('syncPill'); p.textContent='⟳ syncing…'; p.className='text-[11px] font-medium text-caution bg-caution/10 rounded-full px-2.5 py-1 hidden sm:inline';
+  setTimeout(()=>{p.textContent='✓ Saved on device'; p.className='text-[11px] font-medium text-confirm bg-confirm/10 rounded-full px-2.5 py-1 hidden sm:inline'},600);}
+function toggleFlag(){A[cur].flag=!A[cur].flag; render();}
+function nav(d){ if(cur===Q.length-1&&d===1){showReview();return;} cur=Math.min(Q.length-1,Math.max(0,cur+d)); render(); }
+function goto(i){cur=i; hideReview(); render(); window.scrollTo({top:0,behavior:'smooth'});}
+
+function showReview(){
+  document.getElementById('examMain').classList.add('hidden');
+  document.getElementById('reviewWrap').classList.remove('hidden');
+  const st=i=>{const a=A[i]; if(a.flag) return ['Flagged','text-caution bg-caution/10'];
+    if(a.ans!==null&&a.ans!=='') return ['Answered','text-confirm bg-confirm/10']; return ['Not answered','text-alert bg-alert/10'];};
+  const ansText=(q,a)=>{
+    if(a.ans===null||a.ans==='') return '<span class="text-alert font-medium">— no answer —</span>';
+    if(q.t==='mcq') return '<span class="font-mono font-semibold mr-1">'+'ABCD'[a.ans]+'</span>'+q.o[a.ans];
+    if(q.t==='tf') return '<span class="font-medium">'+(a.ans===0?'True':'False')+'</span>';
+    return '<span class="italic">"'+String(a.ans).slice(0,70)+(String(a.ans).length>70?'…':'')+'"</span>';
+  };
+  document.getElementById('reviewList').innerHTML=Q.map((q,i)=>{const[s,c]=st(i);
+    return `<button onclick="goto(${i})" class="w-full flex items-start gap-3 rounded-xl ring-1 ring-whisper/80 hover:bg-mist/20 px-4 py-3 text-left">
+      <span class="font-mono text-[12px] font-semibold text-steel w-8 pt-0.5">Q${i+1}</span>
+      <span class="flex-1 min-w-0"><span class="text-[13px] block">${q.q}</span><span class="text-[11.5px] text-steel block mt-1">Your answer: ${ansText(q,A[i])}</span></span>
+      <span class="text-[10.5px] font-medium rounded-full px-2.5 py-1 ${c} shrink-0">${s}</span></button>`}).join('');
+  const un=A.filter(a=>a.ans===null||a.ans==='').length, fl=A.filter(a=>a.flag).length;
+  document.getElementById('reviewWarn').innerHTML= un||fl
+    ? `<p class="font-medium text-caution">Before you submit:</p><p class="mt-1 text-charcoal/80">${un?`<span class="font-mono">${un}</span> unanswered`:''}${un&&fl?' · ':''}${fl?`<span class="font-mono">${fl}</span> still flagged`:''} — unanswered questions score zero.</p>`
+    : '<p class="font-medium text-confirm">All 10 questions answered. You\'re good to submit.</p>';
+  renderTop(); window.scrollTo({top:0});
+}
+function hideReview(){document.getElementById('reviewWrap').classList.add('hidden');document.getElementById('examMain').classList.remove('hidden');}
+function submitExam(){
+  document.getElementById('reviewWrap').classList.add('hidden');
+  document.querySelector('header .max-w-\\[860px\\].px-4.pb-3').style.display='none';
+  document.getElementById('timerBox').style.display='none';
+  document.getElementById('subTime').textContent=new Date().toLocaleTimeString('en-NG',{hour:'2-digit',minute:'2-digit'});
+  document.getElementById('doneWrap').classList.remove('hidden');
+  window.scrollTo({top:0});
+}
+
+// Server-authoritative timer (display only on client)
+let secs=14*60+37;
+setInterval(()=>{ if(secs<=0||!document.getElementById('doneWrap').classList.contains('hidden')) return;
+  secs--; document.getElementById('timer').textContent=`${String(Math.floor(secs/60)).padStart(2,'0')}:${String(secs%60).padStart(2,'0')}`;
+  if(secs<300){const b=document.getElementById('timerBox'); b.classList.remove('bg-caution/10','text-caution'); b.classList.add(secs<60?'bg-alert/10':'bg-caution/10', secs<60?'text-alert':'text-caution');}
+},1000);
+render();
+
+// ── Keyboard answering: A–D selects options, T/F for True/False, ←/→ navigate ──
+document.addEventListener('keydown', e=>{
+  if(!document.getElementById('doneWrap').classList.contains('hidden')) return;
+  if(e.target.tagName==='TEXTAREA' || e.target.tagName==='INPUT') return;   // typing an essay
+  const q=Q[cur], k=e.key.toUpperCase();
+  if(q.t==='mcq' && 'ABCD'.includes(k) && 'ABCD'.indexOf(k)<q.o.length){ setAns('ABCD'.indexOf(k)); }
+  else if(q.t==='tf' && (k==='T'||k==='F')){ setAns(k==='T'?0:1); }
+  else if(e.key==='ArrowRight'){ nav(1); }
+  else if(e.key==='ArrowLeft'){ nav(-1); }
+});
+
+// ── Lightweight toast (this immersive page has no shell toast) ──
+function toast(m,kind){
+  let t=document.getElementById('examToast');
+  if(!t){t=document.createElement('div');t.id='examToast';t.className='fixed bottom-5 left-1/2 -translate-x-1/2 z-[80] text-white text-[12.5px] font-medium px-4 py-2.5 rounded-xl shadow-lift hidden';document.body.appendChild(t);}
+  t.textContent=m;
+  t.className='fixed bottom-5 left-1/2 -translate-x-1/2 z-[80] text-white text-[12.5px] font-medium px-4 py-2.5 rounded-xl shadow-lift '+(kind==='warn'?'bg-caution':kind==='alert'?'bg-alert':'bg-ink');
+  clearTimeout(window._tt);window._tt=setTimeout(()=>t.classList.add('hidden'),2600);t.classList.remove('hidden');
+}
+
+// ── AI PROCTORING demo: face-count + noise simulation, strikes, auto-submit ──
+// Build note: replace simFaces()/simNoise() triggers with real signals from a
+// face-detection model (e.g. faces.length>2) and a mic RMS threshold on the
+// getUserMedia stream feeding the <video> in #proctorTile.
+const PROCTOR={maxStrikes:3, strikes:0, ended:false};
+document.getElementById('strikeMax').textContent=PROCTOR.maxStrikes;
+
+function setProctorState(state){ // 'ok' | 'faces' | 'noise'
+  const box=document.getElementById('proctorStatus');
+  const txt=document.getElementById('proctorStatusText');
+  const frame=document.getElementById('camFrame');
+  if(state==='ok'){
+    box.className='mt-1.5 flex items-center gap-1.5 rounded-lg bg-confirm/10 text-confirm px-2 py-1.5 text-[10.5px] font-medium';
+    txt.textContent='Verified · 1 face';
+    frame.className='relative rounded-xl overflow-hidden ring-2 ring-confirm/70 shadow-lift bg-ink';
+  } else {
+    box.className='mt-1.5 flex items-center gap-1.5 rounded-lg bg-caution/15 text-caution px-2 py-1.5 text-[10.5px] font-medium';
+    txt.textContent= state==='faces' ? 'More than one face detected' : 'High background noise';
+    frame.className='relative rounded-xl overflow-hidden ring-2 ring-caution shadow-lift bg-ink shake';
+    setTimeout(()=>frame.classList.remove('shake'),400);
+  }
+}
+function showBanner(msg){
+  const b=document.getElementById('proctorBanner');
+  document.getElementById('proctorBannerText').textContent=msg;
+  b.classList.remove('hidden');
+  clearTimeout(window._pb);window._pb=setTimeout(()=>b.classList.add('hidden'),3200);
+}
+function addStrike(reason,stateMsg){
+  if(PROCTOR.ended||!document.getElementById('doneWrap').classList.contains('hidden')) return;
+  PROCTOR.strikes++;
+  document.getElementById('strikeCount').textContent=PROCTOR.strikes;
+  showBanner(stateMsg+' — strike '+PROCTOR.strikes+' of '+PROCTOR.maxStrikes);
+  toast('Proctoring: '+stateMsg,'warn');
+  if(PROCTOR.strikes>=PROCTOR.maxStrikes) autoSubmit(reason);
+}
+function simFaces(){ setProctorState('faces'); addStrike('faces','More than one face detected'); }
+function simNoise(){ setProctorState('noise'); addStrike('noise','High background noise'); }
+function simReset(){ if(PROCTOR.ended) return; setProctorState('ok'); toast('Proctoring: back to verified'); }
+
+function autoSubmit(reason){
+  if(PROCTOR.ended) return; PROCTOR.ended=true;
+  document.getElementById('proctorBanner').classList.add('hidden');
+  document.getElementById('autoSubmitReason').textContent = reason==='noise'
+    ? 'Proctoring detected sustained high background noise during your exam. Your answers so far have been recorded and submitted automatically.'
+    : 'Proctoring flagged more than one face in the camera frame. Your answers so far have been recorded and submitted automatically.';
+  document.getElementById('autoSubmitOverlay').classList.remove('hidden');
+}
+document.getElementById('autoSubmitContinue').addEventListener('click',()=>{
+  document.getElementById('autoSubmitOverlay').classList.add('hidden');
+  document.getElementById('proctorTile').style.display='none';
+  // route into the normal submit/review flow
+  showReview();
+});
+</script>
+</body>
+</html>

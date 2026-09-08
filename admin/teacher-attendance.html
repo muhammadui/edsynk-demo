@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Edsynk — Teacher Attendance</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&family=Noto+Naskh+Arabic:wght@500&display=swap" rel="stylesheet">
+<script>
+tailwind.config = { theme: { extend: {
+  colors: { canvas:'#F7F9FC', ink:'#0B2A56', charcoal:'#18181B', steel:'#64748B', whisper:'#E2E8F0',
+    blue:'#2177EF', skyblue:'#5C9DF5', wash:'#EAF2FE', mist:'#D3E4FD',
+    confirm:'#16A34A', caution:'#D97706', alert:'#DC2626', excused:'#7C8DA6' },
+  fontFamily: { sans:['Geist','sans-serif'], mono:['"Geist Mono"','monospace'], arabic:['"Noto Naskh Arabic"','serif'] },
+  boxShadow: { soft:'0 1px 2px rgba(11,42,86,0.04), 0 6px 24px rgba(11,42,86,0.05)',
+               lift:'0 1px 3px rgba(11,42,86,0.10), 0 12px 32px rgba(11,42,86,0.12)' }
+}}}
+</script>
+<style>
+  @keyframes rise{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+  .rise{animation:rise .5s cubic-bezier(.2,.8,.2,1) both}
+  .st{transition:background .12s,color .12s,box-shadow .12s}
+</style>
+</head>
+<body data-active="Teacher Attendance" data-persona="admin" class="bg-canvas font-sans text-charcoal antialiased">
+<div class="flex min-h-screen">
+  <div id="sidebar-root"></div>
+  <div class="flex-1 min-w-0">
+    <header class="h-[60px] bg-white/80 backdrop-blur-md border-b border-whisper/70 flex items-center justify-between px-4 sm:px-7 sticky top-0 z-20">
+      <div class="flex items-center gap-3">
+        <h1 class="text-[15px] font-semibold tracking-tight">Teacher Attendance</h1>
+        <span class="font-mono text-[11.5px] font-medium text-confirm bg-confirm/10 rounded-full px-2.5 py-1 hidden sm:inline">28/32 clocked in</span>
+      </div>
+      <div class="flex items-center gap-2.5">
+        <button id="btnExport" class="h-9 px-4 rounded-lg bg-white ring-1 ring-whisper text-[13px] font-medium text-steel hover:bg-mist/30">Export</button>
+        <button id="btnPolicy" class="h-9 px-4 rounded-lg bg-blue text-white text-[13px] font-medium shadow-soft active:translate-y-px">Set attendance policy</button>
+      </div>
+    </header>
+    <main class="p-4 sm:p-7 max-w-[1240px] space-y-5 pb-12">
+
+      <div class="rise flex items-center justify-between flex-wrap gap-3">
+        <p class="text-[12.5px] text-steel">Friday, 12 June 2026 · staff clock-in for 2025/26 session</p>
+        <span class="text-[11px] text-steel flex items-center gap-1.5"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Clock-in window: 6:45am – 8:00am · geofence radius 120m</span>
+      </div>
+
+      <!-- stats -->
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-3">
+        <div class="rise bg-white ring-1 ring-whisper/80 rounded-2xl p-4 shadow-soft" style="animation-delay:.04s"><p class="text-[10.5px] font-semibold uppercase tracking-wider text-steel">Present today</p><p class="font-mono text-[22px] font-semibold mt-1.5 text-confirm">26</p><p class="text-[11.5px] text-steel mt-1">of 32 staff</p></div>
+        <div class="rise bg-white ring-1 ring-whisper/80 rounded-2xl p-4 shadow-soft" style="animation-delay:.08s"><p class="text-[10.5px] font-semibold uppercase tracking-wider text-caution">Late</p><p class="font-mono text-[22px] font-semibold mt-1.5 text-caution">2</p><p class="text-[11.5px] text-steel mt-1">clocked in after 8:00am</p></div>
+        <div class="rise bg-white ring-1 ring-whisper/80 rounded-2xl p-4 shadow-soft" style="animation-delay:.12s"><p class="text-[10.5px] font-semibold uppercase tracking-wider text-steel">Absent</p><p class="font-mono text-[22px] font-semibold mt-1.5 text-alert">1</p><p class="text-[11.5px] text-steel mt-1">no clock-in, no leave</p></div>
+        <div class="rise bg-white ring-1 ring-whisper/80 rounded-2xl p-4 shadow-soft" style="animation-delay:.16s"><p class="text-[10.5px] font-semibold uppercase tracking-wider text-steel">On leave</p><p class="font-mono text-[22px] font-semibold mt-1.5 text-excused">3</p><p class="text-[11.5px] text-steel mt-1">2 approved · 1 medical</p></div>
+      </div>
+
+      <!-- anti-fraud explainer -->
+      <div class="rise bg-ink text-white rounded-2xl p-5 shadow-lift" style="animation-delay:.18s">
+        <div class="flex items-start gap-3">
+          <span class="h-9 w-9 rounded-lg bg-white/10 grid place-items-center shrink-0"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l7 4v5c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V7z"/><path d="M9 12l2 2 4-4"/></svg></span>
+          <div class="min-w-0">
+            <p class="text-[14px] font-semibold">How we prevent buddy-punching</p>
+            <p class="text-[12px] text-white/70 mt-0.5">Staff can't clock in for each other. Every entry passes four checks before it counts.</p>
+            <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-2.5 mt-4">
+              <div class="rounded-xl bg-white/5 ring-1 ring-white/10 p-3"><p class="text-[12px] font-semibold flex items-center gap-1.5"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="9" r="3.5"/><path d="M5 20c0-3.5 3-5.5 7-5.5s7 2 7 5.5"/></svg>Selfie check-in</p><p class="text-[10.5px] text-white/60 mt-1">A live photo is taken at clock-in and face-matched to the staff record.</p></div>
+              <div class="rounded-xl bg-white/5 ring-1 ring-white/10 p-3"><p class="text-[12px] font-semibold flex items-center gap-1.5"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-5.5-7-11a7 7 0 0114 0c0 5.5-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>Geofence</p><p class="text-[10.5px] text-white/60 mt-1">Device GPS must be inside the school boundary, or the clock-in is rejected.</p></div>
+              <div class="rounded-xl bg-white/5 ring-1 ring-white/10 p-3"><p class="text-[12px] font-semibold flex items-center gap-1.5"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="6" y="3" width="12" height="18" rx="2"/><path d="M10 18h4"/></svg>Device binding</p><p class="text-[10.5px] text-white/60 mt-1">One registered phone per staff member — a new device needs admin approval.</p></div>
+              <div class="rounded-xl bg-white/5 ring-1 ring-white/10 p-3"><p class="text-[12px] font-semibold flex items-center gap-1.5"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Time window</p><p class="text-[10.5px] text-white/60 mt-1">Clock-in is only accepted 6:45am–8:00am. Outside the window it is flagged.</p></div>
+            </div>
+            <p class="text-[10.5px] text-white/50 mt-3">Manual entries and exceptions also require <span class="text-white/80 font-medium">supervisor co-sign</span> before they post to payroll.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- clock-in log -->
+      <div class="rise bg-white ring-1 ring-whisper/80 rounded-2xl shadow-soft overflow-hidden" style="animation-delay:.24s">
+        <div class="flex items-center justify-between px-5 pt-4 pb-3 flex-wrap gap-2">
+          <p class="text-[13.5px] font-semibold">Clock-in log · today</p>
+          <select id="logFilter" onchange="renderLog()" class="h-8 rounded-lg border border-whisper bg-white px-2.5 text-[11.5px] font-medium">
+            <option value="all">All staff</option>
+            <option value="late">Late only</option>
+            <option value="flag">Flagged only</option>
+            <option value="cosign">Awaiting co-sign</option>
+          </select>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-[12.5px]">
+            <thead><tr class="text-left text-[10.5px] uppercase tracking-wider text-steel border-y border-whisper/70 bg-canvas/60">
+              <th class="px-4 py-2.5 font-semibold">Staff</th>
+              <th class="px-4 py-2.5 font-semibold">Role</th>
+              <th class="px-4 py-2.5 font-semibold">Clock-in</th>
+              <th class="px-4 py-2.5 font-semibold">Clock-out</th>
+              <th class="px-4 py-2.5 font-semibold">Status</th>
+              <th class="px-4 py-2.5 font-semibold">Checks</th>
+              <th class="px-4 py-2.5 font-semibold">Method</th>
+              <th class="px-4 py-2.5 font-semibold">Verified by</th>
+              <th class="px-4 py-2.5 font-semibold">&nbsp;</th>
+            </tr></thead>
+            <tbody class="divide-y divide-whisper/60" id="logBody"></tbody>
+          </table>
+        </div>
+        <p class="px-5 py-3 border-t border-whisper/70 bg-canvas/50 text-[11.5px] text-steel">Approved staff clock-ins flow straight into payroll attendance — no re-keying. Flagged and manual rows are held until verified.</p>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<!-- policy modal -->
+<div id="policyModal" class="hidden fixed inset-0 z-50 grid place-items-center p-4">
+  <div class="absolute inset-0 bg-ink/40 backdrop-blur-sm" onclick="closePolicy()"></div>
+  <div class="relative bg-white ring-1 ring-whisper rounded-2xl shadow-lift w-full max-w-[460px] p-5 rise">
+    <div class="flex items-start justify-between gap-3">
+      <div><p class="text-[14.5px] font-semibold">Staff attendance policy</p><p class="text-[11.5px] text-steel mt-0.5">Anti-fraud controls applied to every clock-in.</p></div>
+      <button onclick="closePolicy()" class="h-8 w-8 grid place-items-center rounded-lg text-steel hover:bg-canvas">✕</button>
+    </div>
+    <div class="mt-4 space-y-3.5">
+      <div>
+        <label class="text-[11.5px] font-semibold text-steel">Clock-in window</label>
+        <div class="flex items-center gap-2 mt-1.5">
+          <input value="06:45" type="time" class="h-9 flex-1 rounded-lg border border-whisper bg-white px-2.5 text-[12.5px] font-mono">
+          <span class="text-steel text-[12px]">to</span>
+          <input value="08:00" type="time" class="h-9 flex-1 rounded-lg border border-whisper bg-white px-2.5 text-[12.5px] font-mono">
+        </div>
+      </div>
+      <div>
+        <label class="text-[11.5px] font-semibold text-steel">Geofence radius (metres)</label>
+        <input value="120" type="number" class="h-9 w-full rounded-lg border border-whisper bg-white px-2.5 text-[12.5px] font-mono mt-1.5">
+        <p class="text-[10.5px] text-steel mt-1">Clock-ins outside this radius from Al-Furqan Academy, Bauchi are rejected.</p>
+      </div>
+      <div class="space-y-2.5 pt-1">
+        <label class="flex items-center justify-between"><span class="text-[12.5px]">Require selfie check-in</span><span class="relative inline-flex h-5 w-9 items-center rounded-full bg-confirm"><span class="absolute right-0.5 h-4 w-4 rounded-full bg-white shadow"></span></span></label>
+        <label class="flex items-center justify-between"><span class="text-[12.5px]">Enforce geofence (GPS)</span><span class="relative inline-flex h-5 w-9 items-center rounded-full bg-confirm"><span class="absolute right-0.5 h-4 w-4 rounded-full bg-white shadow"></span></span></label>
+        <label class="flex items-center justify-between"><span class="text-[12.5px]">Bind to one device per staff</span><span class="relative inline-flex h-5 w-9 items-center rounded-full bg-confirm"><span class="absolute right-0.5 h-4 w-4 rounded-full bg-white shadow"></span></span></label>
+        <label class="flex items-center justify-between"><span class="text-[12.5px]">Require supervisor co-sign for manual entries</span><span class="relative inline-flex h-5 w-9 items-center rounded-full bg-confirm"><span class="absolute right-0.5 h-4 w-4 rounded-full bg-white shadow"></span></span></label>
+      </div>
+    </div>
+    <div class="mt-5 flex items-center justify-end gap-2.5">
+      <button onclick="closePolicy()" class="h-9 px-4 rounded-lg bg-white ring-1 ring-whisper text-[13px] font-medium text-steel hover:bg-canvas">Cancel</button>
+      <button onclick="closePolicy();toast('Attendance policy saved — applies from tomorrow\'s clock-in.')" class="h-9 px-4 rounded-lg bg-blue text-white text-[13px] font-medium shadow-soft active:translate-y-px">Save policy</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast" class="hidden fixed bottom-5 left-1/2 -translate-x-1/2 z-[60] bg-ink text-white text-[12.5px] font-medium px-4 py-2.5 rounded-xl shadow-lift"></div>
+<script src="../assets/shell.js"></script>
+<script>
+function toast(m){var t=document.getElementById('toast');t.textContent=m;t.classList.remove('hidden');clearTimeout(window._tt);window._tt=setTimeout(function(){t.classList.add('hidden')},2200);}
+function openPolicy(){document.getElementById('policyModal').classList.remove('hidden');}
+function closePolicy(){document.getElementById('policyModal').classList.add('hidden');}
+document.getElementById('btnPolicy').addEventListener('click',openPolicy);
+document.getElementById('btnExport').addEventListener('click',function(){toast('Exporting staff attendance log (PDF + Excel)…');});
+
+// ini,name,role,in,out,status(ontime/late/absent),geo(on/off),selfie(bool),device(bound/new),method,verifiedBy,cosign(bool)
+const LOG=[
+ ['MI','Mallam Musa Ibrahim','Form teacher · JSS 2A','7:12am','—','ontime','on',true,'bound','Selfie + GPS','System (auto)',false],
+ ['HY','Ustadha Halima Yusuf','Islamic studies','7:21am','—','ontime','on',true,'bound','Selfie + GPS','System (auto)',false],
+ ['CO','Mr. Chinedu Okafor','Maths · JSS 2B','8:09am','—','late','on',true,'bound','Selfie + GPS','System (auto)',false],
+ ['AB','Ustadh Abdullahi','Proprietor','6:58am','—','ontime','on',true,'bound','Selfie + GPS','System (auto)',false],
+ ['SY','Sadiya Yahaya','Science · SS 1A','8:17am','—','late','off',true,'bound','Selfie only','Held — off campus',false],
+ ['BG','Bilkisu Garba','Admin clerk','7:33am','—','ontime','on',true,'new','Selfie + GPS','New device — review',false],
+ ['MA','Musa Abdul','Security','7:02am','—','ontime','on',true,'bound','Selfie + GPS','System (auto)',false],
+ ['RN','Rabiu Nasir','PE master','—','—','manual','on',false,'bound','Manual (clerk)','Awaiting co-sign',true],
+ ['FU','Fatima Umar','English · JSS 3A','7:45am','—','ontime','on',true,'bound','Selfie + GPS','System (auto)',false],
+ ['KS','Kabiru Sani','Maths · SS 1A','—','—','absent','off',false,'bound','—','No clock-in',false]
+];
+const STATUS={ontime:['confirm','On time'],late:['caution','Late'],absent:['alert','Absent'],manual:['excused','Manual entry']};
+function pill(txt,tone){return `<span class="text-[10px] font-semibold text-${tone} bg-${tone}/10 rounded-full px-2 py-0.5 whitespace-nowrap">${txt}</span>`;}
+function renderLog(){
+  const f=document.getElementById('logFilter').value;
+  let rows=LOG.slice();
+  if(f==='late')rows=rows.filter(r=>r[5]==='late');
+  if(f==='flag')rows=rows.filter(r=>r[6]==='off'||r[8]==='new');
+  if(f==='cosign')rows=rows.filter(r=>r[11]);
+  document.getElementById('logBody').innerHTML=rows.map(r=>{
+    const [ini,name,role,tin,tout,st,geo,selfie,dev,method,vby,cosign]=r;
+    const [tone,label]=STATUS[st];
+    const flagged=(geo==='off'||dev==='new'||cosign);
+    // checks column: selfie thumb, geofence pill, device
+    const selfieThumb=selfie
+      ? `<span class="relative inline-block h-6 w-6 rounded-md bg-wash ring-1 ring-mist grid place-items-center text-[8px] font-bold text-blue" title="Selfie verified">${ini}<span class="absolute -bottom-1 -right-1 h-3 w-3 rounded-full bg-confirm grid place-items-center text-white text-[7px] ring-1 ring-white">✓</span></span>`
+      : `<span class="inline-block h-6 w-6 rounded-md bg-canvas ring-1 ring-whisper grid place-items-center text-steel/60 text-[10px]" title="No selfie on file">—</span>`;
+    const geoPill=geo==='on'
+      ? `<span class="text-[9.5px] font-semibold text-confirm bg-confirm/10 rounded-full px-2 py-0.5 whitespace-nowrap">On campus ✓</span>`
+      : `<span class="text-[9.5px] font-semibold text-alert bg-alert/10 rounded-full px-2 py-0.5 whitespace-nowrap">Off-site ✗</span>`;
+    const devPill=dev==='new'
+      ? `<span class="text-[9.5px] font-semibold text-caution bg-caution/10 rounded-full px-2 py-0.5 whitespace-nowrap" title="Unregistered device">New device</span>`
+      : `<span class="text-[9.5px] font-semibold text-steel bg-canvas ring-1 ring-whisper rounded-full px-2 py-0.5 whitespace-nowrap" title="Registered device">Bound</span>`;
+    const action=cosign
+      ? `<button onclick="rowAct(this,'cosign','${name}')" class="h-8 px-3 rounded-lg bg-blue text-white text-[11.5px] font-medium">Co-sign</button>`
+      : flagged
+        ? `<button onclick="rowAct(this,'verify','${name}')" class="h-8 px-3 rounded-lg bg-white ring-1 ring-whisper text-[11.5px] font-medium text-steel hover:bg-canvas">Verify</button>`
+        : `<button onclick="rowAct(this,'flag','${name}')" class="h-8 px-3 rounded-lg bg-white ring-1 ring-whisper text-[11.5px] font-medium text-steel hover:bg-canvas">Flag</button>`;
+    return `<tr class="hover:bg-canvas/60 ${flagged?'bg-caution/[0.04]':''}">
+      <td class="px-4 py-3"><a href="staff-detail.html" class="flex items-center gap-2.5 group"><span class="h-7 w-7 rounded-full bg-wash text-blue grid place-items-center text-[9.5px] font-bold shrink-0">${ini}</span><span class="font-medium group-hover:text-blue">${name}</span></a></td>
+      <td class="px-4 py-3"><span class="text-steel">${role}</span></td>
+      <td class="px-4 py-3"><span class="font-mono ${st==='late'?'text-caution':''}">${tin}</span></td>
+      <td class="px-4 py-3"><span class="font-mono text-steel">${tout}</span></td>
+      <td class="px-4 py-3">${pill(label,tone)}</td>
+      <td class="px-4 py-3"><div class="flex items-center gap-1.5">${selfieThumb}${geoPill}${devPill}</div></td>
+      <td class="px-4 py-3"><span class="text-steel">${method}</span></td>
+      <td class="px-4 py-3"><span class="${vby.indexOf('System')===0?'text-steel':'text-caution font-medium'}">${vby}</span></td>
+      <td class="px-4 py-3 text-right">${action}</td>
+    </tr>`;
+  }).join('');
+  if(!rows.length)document.getElementById('logBody').innerHTML='<tr><td colspan="9" class="px-4 py-8 text-center text-steel text-[12.5px]">No entries match this filter.</td></tr>';
+}
+function rowAct(btn,kind,name){
+  if(kind==='cosign'){btn.outerHTML='<span class="text-[10.5px] font-semibold text-confirm bg-confirm/10 rounded-full px-2.5 py-1">Co-signed ✓</span>';toast('Manual entry for '+name+' co-signed and posted.');}
+  else if(kind==='verify'){btn.outerHTML='<span class="text-[10.5px] font-semibold text-confirm bg-confirm/10 rounded-full px-2.5 py-1">Verified ✓</span>';toast(name+'\'s clock-in verified.');}
+  else{toast(name+' flagged for review — supervisor notified.');}
+}
+renderLog();
+</script>
+</body>
+</html>

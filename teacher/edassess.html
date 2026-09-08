@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Edsynk — EdAssess</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script>tailwind.config={theme:{extend:{colors:{canvas:'#F7F9FC',ink:'#0B2A56',charcoal:'#18181B',steel:'#64748B',whisper:'#E2E8F0',blue:'#2177EF',skyblue:'#5C9DF5',wash:'#EAF2FE',mist:'#D3E4FD',confirm:'#16A34A',caution:'#D97706',alert:'#DC2626',excused:'#7C8DA6'},fontFamily:{sans:['Geist','sans-serif'],mono:['"Geist Mono"','monospace']},boxShadow:{soft:'0 1px 2px rgba(11,42,86,0.04), 0 6px 24px rgba(11,42,86,0.05)',lift:'0 1px 3px rgba(11,42,86,0.10), 0 12px 32px rgba(11,42,86,0.12)'}}}}</script>
+<style>@keyframes rise{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}.rise{animation:rise .45s cubic-bezier(.2,.8,.2,1) both}@keyframes spin{to{transform:rotate(360deg)}}.spin{animation:spin .8s linear infinite}</style>
+</head>
+<body data-active="EdAssess" data-persona="teacher" class="bg-canvas font-sans text-charcoal antialiased">
+<div class="flex min-h-screen">
+  <div id="sidebar-root"></div>
+  <div class="flex-1 min-w-0">
+    <header class="h-[60px] bg-white/80 backdrop-blur-md border-b border-whisper/70 flex items-center justify-between px-4 sm:px-7 sticky top-0 z-20">
+      <div class="flex items-center gap-3"><h1 class="text-[15px] font-semibold tracking-tight">EdAssess</h1>
+        <span class="font-mono text-[11px] font-medium text-blue bg-wash rounded-full px-2.5 py-1 hidden sm:flex items-center gap-1.5"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l1.9 5.7L19.5 10l-5.6 1.3L12 17l-1.9-5.7L4.5 10l5.6-1.3z"/></svg>Edsynk AI</span></div>
+    </header>
+    <main class="p-4 sm:p-7 max-w-[1180px] grid lg:grid-cols-[380px_1fr] gap-4 pb-10">
+
+      <!-- input -->
+      <section class="rise bg-white ring-1 ring-whisper/80 rounded-2xl shadow-soft p-5 h-fit">
+        <p class="text-[13.5px] font-semibold">Generate questions from your notes</p>
+        <p class="text-[11.5px] text-steel mt-0.5">Paste lesson notes — EdAssess drafts questions &amp; marking schemes. You review &amp; approve every one.</p>
+        <div class="mt-4 space-y-3">
+          <div class="grid grid-cols-2 gap-2">
+            <div><label class="text-[11px] font-semibold text-steel">Subject</label><select class="mt-1.5 w-full h-10 rounded-lg border border-whisper bg-canvas px-3 text-[12.5px]"><option>Mathematics</option><option>Basic Science</option></select></div>
+            <div><label class="text-[11px] font-semibold text-steel">Class</label><select class="mt-1.5 w-full h-10 rounded-lg border border-whisper bg-canvas px-3 text-[12.5px]"><option>JSS 2A</option><option>JSS 2B</option><option>JSS 3A</option></select></div>
+          </div>
+          <div><label class="text-[11px] font-semibold text-steel">Topic</label><input value="Algebraic expressions" class="mt-1.5 w-full h-10 rounded-lg border border-whisper bg-canvas px-3 text-[12.5px]"></div>
+          <div><label class="text-[11px] font-semibold text-steel">Lesson notes</label><textarea rows="6" class="mt-1.5 w-full rounded-lg border border-whisper bg-canvas px-3 py-2.5 text-[12px] focus:outline-none focus:ring-2 focus:ring-blue/50 resize-none">Simplification of algebraic expressions; collecting like terms; expansion of brackets; substitution of values; word problems leading to linear equations…</textarea></div>
+          <div class="grid grid-cols-2 gap-2">
+            <div><label class="text-[11px] font-semibold text-steel"># Objectives</label><input value="15" class="mt-1.5 w-full h-10 rounded-lg border border-whisper bg-canvas px-3 text-[12.5px] font-mono"></div>
+            <div><label class="text-[11px] font-semibold text-steel"># Essay</label><input value="2" class="mt-1.5 w-full h-10 rounded-lg border border-whisper bg-canvas px-3 text-[12.5px] font-mono"></div>
+          </div>
+          <div class="flex flex-wrap gap-1.5 text-[11.5px] font-medium">
+            <button onclick="pickKind(this)" class="h-8 px-3 rounded-lg bg-blue text-white">Objective</button>
+            <button onclick="pickKind(this)" class="h-8 px-3 rounded-lg bg-white ring-1 ring-whisper text-steel">True/False</button>
+            <button onclick="pickKind(this)" class="h-8 px-3 rounded-lg bg-white ring-1 ring-whisper text-steel">Essay</button>
+          </div>
+          <button onclick="gen()" id="genBtn" class="w-full h-12 rounded-xl bg-blue text-white text-[14px] font-semibold shadow-soft active:translate-y-px">Generate questions</button>
+        </div>
+      </section>
+
+      <!-- output -->
+      <section class="rise space-y-3" style="animation-delay:.05s">
+        <div id="genState" class="hidden bg-white ring-1 ring-whisper/80 rounded-2xl shadow-soft p-10 text-center">
+          <div class="h-10 w-10 rounded-full border-mist border-t-blue mx-auto spin" style="border-width:3px"></div>
+          <p class="text-[13px] font-medium mt-4">EdAssess is drafting 17 questions…</p>
+          <p class="text-[11.5px] text-steel mt-1">Reading your notes · building a marking scheme</p>
+        </div>
+        <div id="result">
+          <div class="bg-white ring-1 ring-whisper/80 rounded-2xl shadow-soft overflow-hidden">
+            <div class="px-5 py-3.5 border-b border-whisper/60 flex items-center justify-between flex-wrap gap-2">
+              <div><p class="text-[13.5px] font-semibold">Algebraic expressions · JSS 2A</p><p class="text-[11px] text-steel">17 questions · draft · review before use</p></div>
+              <div class="flex gap-2"><button onclick="window.print()" class="h-9 px-3.5 rounded-lg ring-1 ring-whisper bg-white text-[12px] font-medium text-steel hover:bg-mist/30">Print paper</button><button onclick="toast('Sent to CBT exams')" class="h-9 px-4 rounded-lg bg-blue text-white text-[12px] font-semibold shadow-soft">Send to CBT</button></div>
+            </div>
+            <div class="divide-y divide-whisper/60" id="qlist"></div>
+            <div class="px-5 py-3 bg-canvas border-t border-whisper/60 text-[11px] text-steel">Edit any question inline. Nothing is used until you approve. Marking schemes are attached to each.</div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+</div>
+<script src="../assets/shell.js"></script>
+<div id="toast" class="hidden fixed bottom-5 left-1/2 -translate-x-1/2 z-[60] bg-ink text-white text-[12.5px] font-medium px-4 py-2.5 rounded-xl shadow-lift"></div>
+<script>
+const Q=[
+ ['obj','Simplify: 3x + 5x − 2x','6x','A) 6x  B) 10x  C) 8x  D) 4x','A'],
+ ['obj','Expand: 2(x + 4)','2x + 8','A) 2x+4  B) 2x+8  C) x+8  D) 2x+6','B'],
+ ['obj','If x = 3, find the value of 4x − 5','7','A) 12  B) 17  C) 7  D) 2','C'],
+ ['tf','Like terms can always be added together.','True','True / False','True'],
+ ['essay','A pencil costs ₦x and a pen costs ₦(x+20). Kemi buys 3 pencils and 2 pens for ₦240. Form an equation and find x.','5x + 40 = 240 → x = 40. Pencil ₦40, pen ₦60.','Marking: equation (2) · simplify (1) · solve (1) · answer with units (1)','—'],
+];
+function qrow(q,i){
+  const tag={obj:['OBJ','text-blue bg-wash'],tf:['T/F','text-confirm bg-confirm/10'],essay:['ESSAY','text-caution bg-caution/10']}[q[0]];
+  return `<div class="px-5 py-4">
+    <div class="flex items-start gap-3"><span class="h-6 w-6 rounded-lg bg-canvas ring-1 ring-whisper grid place-items-center font-mono text-[11px] font-semibold shrink-0">${i+1}</span>
+    <div class="flex-1 min-w-0"><div class="flex items-center gap-2 mb-1"><span class="text-[9.5px] font-semibold ${tag[1]} rounded-full px-2 py-0.5">${tag[0]}</span></div>
+    <p class="text-[13px] font-medium">${q[1]}</p>
+    ${q[0]!=='essay'?`<p class="text-[11.5px] text-steel mt-1.5 font-mono">${q[3]}</p>`:''}
+    <div class="mt-2 rounded-lg bg-confirm/[0.05] ring-1 ring-confirm/20 px-3 py-2 text-[11.5px]"><span class="font-semibold text-confirm">${q[0]==='essay'?'Marking scheme:':'Answer:'}</span> <span class="text-charcoal">${q[0]==='essay'?q[3]:q[2]}</span></div>
+    </div><button onclick="toast('Edit question inline')" class="text-steel/50 hover:text-steel text-[12px]">✎</button></div></div>`;
+}
+document.getElementById('qlist').innerHTML=Q.map(qrow).join('')+'<div class="px-5 py-3 text-center"><button onclick="toast(\'Showing all 17 questions\')" class="text-[12px] font-medium text-blue">Show all 17 questions ↓</button></div>';
+function gen(){const s=document.getElementById('genState'),r=document.getElementById('result');s.classList.remove('hidden');r.classList.add('hidden');setTimeout(()=>{s.classList.add('hidden');r.classList.remove('hidden');},1800);}
+function pickKind(b){b.parentElement.querySelectorAll('button').forEach(function(x){x.className='h-8 px-3 rounded-lg bg-white ring-1 ring-whisper text-steel';});b.className='h-8 px-3 rounded-lg bg-blue text-white';}
+function toast(m){var t=document.getElementById('toast');t.textContent=m;t.classList.remove('hidden');clearTimeout(window._tt);window._tt=setTimeout(function(){t.classList.add('hidden')},2200);}
+</script>
+</body>
+</html>

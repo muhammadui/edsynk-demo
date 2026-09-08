@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Edsynk — Roles & Access</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script>tailwind.config={theme:{extend:{colors:{canvas:'#F7F9FC',ink:'#0B2A56',charcoal:'#18181B',steel:'#64748B',whisper:'#E2E8F0',blue:'#2177EF',skyblue:'#5C9DF5',wash:'#EAF2FE',mist:'#D3E4FD',confirm:'#16A34A',caution:'#D97706',alert:'#DC2626',excused:'#7C8DA6'},fontFamily:{sans:['Geist','sans-serif'],mono:['"Geist Mono"','monospace']},boxShadow:{soft:'0 1px 2px rgba(11,42,86,0.04), 0 6px 24px rgba(11,42,86,0.05)',lift:'0 1px 3px rgba(11,42,86,0.10), 0 12px 32px rgba(11,42,86,0.12)'}}}}</script>
+<style>@keyframes rise{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}.rise{animation:rise .45s cubic-bezier(.2,.8,.2,1) both}
+.tabp{display:none}.tabp.on{display:block}
+.tg{width:36px;height:20px;border-radius:99px;position:relative;transition:background .15s;cursor:pointer}
+.tg.on{background:#2177EF}.tg.off{background:#E7ECF3}.tg b{position:absolute;top:2px;height:16px;width:16px;border-radius:99px;background:#fff;transition:left .15s;box-shadow:0 1px 2px rgba(0,0,0,.1)}.tg.on b{left:18px}.tg.off b{left:2px}</style>
+</head>
+<body data-active="Roles & Access" data-persona="admin" class="bg-canvas font-sans text-charcoal antialiased">
+<div class="flex min-h-screen">
+  <div id="sidebar-root"></div>
+  <div class="flex-1 min-w-0">
+    <header class="h-[60px] bg-white/80 backdrop-blur-md border-b border-whisper/70 flex items-center justify-between px-4 sm:px-7 sticky top-0 z-20">
+      <div class="flex items-center gap-3"><h1 class="text-[15px] font-semibold tracking-tight">Roles &amp; Access</h1>
+        <span class="font-mono text-[11.5px] font-medium text-blue bg-wash rounded-full px-2.5 py-1 hidden sm:inline">7 roles · 31 staff</span></div>
+      <button class="h-9 px-4 rounded-lg bg-blue text-white text-[13px] font-medium shadow-soft active:translate-y-px" onclick="openRole(true)">+ Custom role</button>
+    </header>
+    <main class="p-4 sm:p-7 max-w-[1240px] space-y-5 pb-12">
+
+      <div class="rise rounded-2xl bg-wash/60 ring-1 ring-mist/60 px-4 py-3 text-[12px] text-ink flex items-start gap-3">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-blue shrink-0 mt-0.5"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+        <span>Permissions are by <span class="font-semibold">role</span>, and one person can hold several — e.g. <span class="font-medium">Mallam Musa is a Teacher + Exam Officer</span>, so he gets both sets of permissions combined. Least-privilege by default.</span>
+      </div>
+
+      <div class="rise flex gap-1 border-b border-whisper/70 overflow-x-auto" id="tabs">
+        <button data-t="0" class="tb shrink-0 px-4 py-2.5 text-[12.5px] font-medium border-b-2 -mb-px text-ink border-blue">Roles</button>
+        <button data-t="1" class="tb shrink-0 px-4 py-2.5 text-[12.5px] font-medium border-b-2 -mb-px text-steel border-transparent hover:text-charcoal">Permission matrix</button>
+        <button data-t="2" class="tb shrink-0 px-4 py-2.5 text-[12.5px] font-medium border-b-2 -mb-px text-steel border-transparent hover:text-charcoal">Who has access</button>
+      </div>
+
+      <!-- TAB 0: role cards -->
+      <section class="tabp on" data-p="0">
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-3" id="roleCards"></div>
+      </section>
+
+      <!-- TAB 1: matrix -->
+      <section class="tabp" data-p="1">
+        <div class="rise bg-white ring-1 ring-whisper/80 rounded-2xl shadow-soft overflow-hidden">
+          <div class="flex items-center justify-between px-5 pt-4 pb-3"><p class="text-[13.5px] font-semibold">Permission matrix</p><span class="text-[11px] text-steel">tap to toggle</span></div>
+          <div class="overflow-x-auto"><table class="w-full text-[12px]">
+            <thead><tr class="border-y border-whisper/70 bg-canvas/60"><th class="text-left px-5 py-2.5 font-semibold text-[10.5px] uppercase tracking-wider text-steel sticky left-0 bg-canvas/60">Capability</th><th class="px-3 py-2.5 font-semibold text-[10px] uppercase text-steel">Owner</th><th class="px-3 py-2.5 font-semibold text-[10px] uppercase text-steel">Admin</th><th class="px-3 py-2.5 font-semibold text-[10px] uppercase text-steel">Exam off.</th><th class="px-3 py-2.5 font-semibold text-[10px] uppercase text-steel">Teacher</th><th class="px-3 py-2.5 font-semibold text-[10px] uppercase text-steel">Bursar</th></tr></thead>
+            <tbody id="matrix" class="divide-y divide-whisper/60"></tbody>
+          </table></div>
+          <p class="px-5 py-3 border-t border-whisper/70 bg-canvas/50 text-[11px] text-steel">Owner is all-powerful and can't be reduced below admin. Sensitive actions (refunds, impersonation, suspension) are owner/admin only and always audit-logged.</p>
+        </div>
+      </section>
+
+      <!-- TAB 2: who has access -->
+      <section class="tabp" data-p="2">
+        <div class="rise bg-white ring-1 ring-whisper/80 rounded-2xl shadow-soft overflow-hidden">
+          <p class="text-[13.5px] font-semibold px-5 pt-4 pb-3">Staff &amp; their roles</p>
+          <div class="overflow-x-auto"><table class="w-full text-[12.5px]">
+            <thead><tr class="text-left text-[10.5px] uppercase tracking-wider text-steel border-y border-whisper/70 bg-canvas/60"><th class="px-5 py-2.5 font-semibold">Staff</th><th class="px-3 py-2.5 font-semibold">Roles held</th><th class="px-3 py-2.5 font-semibold">Effective access</th><th class="px-5 py-2.5"></th></tr></thead>
+            <tbody id="who" class="divide-y divide-whisper/60"></tbody>
+          </table></div>
+        </div>
+      </section>
+    </main>
+  </div>
+</div>
+<script src="../assets/shell.js"></script>
+<script>
+const ROLES=[
+ ['Owner','Full control of everything, including billing &amp; danger zone','ink','1','locked'],
+ ['Admin','Run the school day-to-day; no billing danger zone','blue','2',''],
+ ['Exam Officer','Approve, publish &amp; seal results; assign supervision','caution','1',''],
+ ['Teacher','Enter scores for own classes; register &amp; traits if form teacher','confirm','24',''],
+ ['Form Teacher','Teacher + daily register + behaviour + traits for one class','confirm','12',''],
+ ['Bursar','Fees, invoices, payments &amp; refunds (with Finance)','steel','1',''],
+ ['Librarian','Library &amp; resources only','steel','1','custom'],
+];
+document.getElementById('roleCards').innerHTML=ROLES.map((r,i)=>`
+ <div class="rise bg-white ring-1 ring-whisper/80 rounded-2xl p-5 shadow-soft hover:ring-mist cursor-pointer" style="animation-delay:${i*.03}s">
+   <div class="flex items-center justify-between"><span class="h-9 w-9 rounded-xl bg-${r[2]==='ink'?'ink':r[2]+'/10'} ${r[2]==='ink'?'text-white':'text-'+r[2]} grid place-items-center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l2.4 7.4H22l-6 4.4 2.3 7.2L12 16.9 5.7 21l2.3-7.2-6-4.4h7.6z"/></svg></span>
+   ${r[4]==='locked'?'<span class="text-[9.5px] font-semibold text-steel bg-canvas ring-1 ring-whisper rounded-full px-2 py-0.5">protected</span>':r[4]==='custom'?'<span class="text-[9.5px] font-semibold text-blue bg-wash rounded-full px-2 py-0.5">custom</span>':''}</div>
+   <p class="text-[14px] font-semibold mt-3">${r[0]}</p><p class="text-[11.5px] text-steel mt-1 leading-relaxed">${r[1]}</p>
+   <div class="flex items-center justify-between mt-3 pt-3 border-t border-whisper/70"><span class="font-mono text-[11px] text-steel">${r[3]} staff</span><button onclick="openRole()" class="text-[11.5px] font-medium text-blue">Edit permissions →</button></div>
+ </div>`).join('');
+// matrix: capability × [owner,admin,exam,teacher,bursar]
+const CAP=[
+ ['View students &amp; records',[1,1,1,1,1]],
+ ['Edit student details',[1,1,0,0,0]],
+ ['Enter scores (own classes)',[1,1,1,1,0]],
+ ['Approve / reject results',[1,1,1,0,0]],
+ ['Publish &amp; seal results',[1,1,1,0,0]],
+ ['Take daily register',[1,1,0,1,0]],
+ ['Manage staff &amp; roles',[1,1,0,0,0]],
+ ['Fees: record payment',[1,1,0,0,1]],
+ ['Fees: issue refund',[1,1,0,0,0]],
+ ['Assign exam supervision',[1,1,1,0,0]],
+ ['School settings',[1,1,0,0,0]],
+ ['Impersonate / billing',[1,0,0,0,0]],
+];
+function tg(on){return `<span class="tg ${on?'on':'off'} mx-auto" onclick="this.classList.toggle('on');this.classList.toggle('off')"><b></b></span>`;}
+document.getElementById('matrix').innerHTML=CAP.map(c=>`<tr class="hover:bg-canvas/60"><td class="px-5 py-2.5 font-medium sticky left-0 bg-white">${c[0]}</td>${c[1].map(v=>`<td class="px-3 py-2.5"><div class="grid place-items-center">${tg(v)}</div></td>`).join('')}</tr>`).join('');
+// who
+const WHO=[
+ ['Ustadh Abdullahi Sani','AS','Owner','Everything'],
+ ['Mrs. Bisi Adeyemi','BA','VP Academic · Teacher · Form (SS 1A)','Run school + teach + register'],
+ ['Mallam Musa Ibrahim','MI','Teacher · Exam Officer · Form (JSS 2A)','Scores + approve/publish + register'],
+ ['Hajiya Zainab Aliyu','ZA','Bursar · Admin','Fees + refunds + admin'],
+ ['Ustadha Halima Yusuf','HY','Teacher · Form (I\'dadiyyah 1)','Teach + register'],
+];
+document.getElementById('who').innerHTML=WHO.map(w=>`<tr class="hover:bg-canvas/60"><td class="px-5 py-3"><div class="flex items-center gap-2.5"><span class="h-8 w-8 rounded-full bg-wash text-blue grid place-items-center text-[10px] font-bold">${w[1]}</span><span class="font-medium">${w[0]}</span></div></td><td class="px-3 py-3"><div class="flex flex-wrap gap-1">${w[2].split(' · ').map(r=>`<span class="text-[10px] font-medium text-blue bg-wash rounded-full px-2 py-0.5">${r}</span>`).join('')}</div></td><td class="px-3 py-3 text-steel text-[11.5px]">${w[3]}</td><td class="px-5 py-3 text-right"><button onclick="openRole()" class="text-blue text-[11.5px] font-medium">Manage</button></td></tr>`).join('');
+function tab(n){document.querySelectorAll('.tabp').forEach(p=>p.classList.toggle('on',+p.dataset.p===n));document.querySelectorAll('.tb').forEach(b=>{const on=+b.dataset.t===n;b.className='tb shrink-0 px-4 py-2.5 text-[12.5px] font-medium border-b-2 -mb-px '+(on?'text-ink border-blue':'text-steel border-transparent hover:text-charcoal');});}
+document.querySelectorAll('.tb').forEach(b=>b.onclick=()=>tab(+b.dataset.t));
+</script>
+
+<div id="roleM" class="fixed inset-0 z-50 bg-ink/40 backdrop-blur-sm grid place-items-center p-4" style="opacity:0;pointer-events:none;transition:opacity .2s" onclick="if(event.target===this)closeRole()">
+  <div class="bg-white rounded-2xl shadow-lift max-w-[460px] w-full p-6 max-h-[90vh] overflow-y-auto">
+    <div class="flex items-center justify-between mb-3"><p class="text-[15px] font-semibold" id="roleTitle">Edit role permissions</p><button onclick="closeRole()" class="h-8 w-8 grid place-items-center rounded-lg hover:bg-mist/40 text-steel">✕</button></div>
+    <div><label class="text-[11.5px] font-semibold text-steel">Role name</label><input id="roleName" value="Exam Officer" class="mt-1.5 w-full h-10 rounded-lg border border-whisper bg-canvas px-3.5 text-[13px]"></div>
+    <p class="text-[11px] font-semibold uppercase tracking-wider text-steel mt-4 mb-2">Permissions</p>
+    <div class="space-y-1.5" id="rolePerms"></div>
+    <div class="flex justify-end gap-2 mt-5"><button onclick="closeRole()" class="h-10 px-4 rounded-lg ring-1 ring-whisper text-[13px] font-medium text-steel">Cancel</button><button onclick="closeRole()" class="h-10 px-5 rounded-lg bg-blue text-white text-[13px] font-semibold shadow-soft">Save role</button></div>
+  </div>
+</div>
+<script>
+const RPERMS=[['View students & records',1],['Edit student details',0],['Enter scores',1],['Approve / reject results',1],['Publish & seal results',1],['Take daily register',0],['Manage staff & roles',0],['Fees: record payment',0],['Fees: issue refund',0],['Assign exam supervision',1],['School settings',0],['Impersonate / billing',0]];
+function openRole(blank){const t=document.getElementById('roleTitle');t.textContent=blank?'New custom role':'Edit role permissions';document.getElementById('roleName').value=blank?'':'Exam Officer';
+  document.getElementById('rolePerms').innerHTML=RPERMS.map(p=>`<label class="flex items-center justify-between rounded-lg ring-1 ring-whisper bg-canvas px-3.5 py-2 text-[12.5px]"><span>${p[0]}</span><span class="tg ${blank?'off':(p[1]?'on':'off')}" onclick="this.classList.toggle('on');this.classList.toggle('off')"><b></b></span></label>`).join('');
+  document.getElementById('roleM').style.opacity='1';document.getElementById('roleM').style.pointerEvents='auto';}
+function closeRole(){document.getElementById('roleM').style.opacity='0';document.getElementById('roleM').style.pointerEvents='none';}
+</script>
+
+</body>
+</html>

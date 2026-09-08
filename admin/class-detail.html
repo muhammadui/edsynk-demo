@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Edsynk — JSS 2A</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script>tailwind.config={theme:{extend:{colors:{canvas:'#F7F9FC',ink:'#0B2A56',charcoal:'#18181B',steel:'#64748B',whisper:'#E2E8F0',blue:'#2177EF',skyblue:'#5C9DF5',wash:'#EAF2FE',mist:'#D3E4FD',confirm:'#16A34A',caution:'#D97706',alert:'#DC2626',excused:'#7C8DA6'},fontFamily:{sans:['Geist','sans-serif'],mono:['"Geist Mono"','monospace']},boxShadow:{soft:'0 1px 2px rgba(11,42,86,0.04), 0 6px 24px rgba(11,42,86,0.05)',lift:'0 1px 3px rgba(11,42,86,0.10), 0 12px 32px rgba(11,42,86,0.12)'}}}}</script>
+<style>@keyframes rise{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}.rise{animation:rise .45s cubic-bezier(.2,.8,.2,1) both}</style>
+</head>
+<body data-active="Students" data-persona="admin" class="bg-canvas font-sans text-charcoal antialiased">
+<div class="flex min-h-screen">
+  <div id="sidebar-root"></div>
+  <div class="flex-1 min-w-0">
+    <header class="h-[60px] bg-white/80 backdrop-blur-md border-b border-whisper/70 flex items-center justify-between px-4 sm:px-7 sticky top-0 z-20">
+      <div class="flex items-center gap-3">
+        <a href="subjects-classes.html" class="h-8 w-8 grid place-items-center rounded-lg hover:bg-mist/40 text-steel" title="Back to classes"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg></a>
+        <h1 class="text-[15px] font-semibold tracking-tight">JSS 2A <span class="text-steel font-normal">· 2025/26</span></h1>
+        <span class="font-mono text-[11.5px] font-medium text-blue bg-wash rounded-full px-2.5 py-1 hidden sm:inline">Term 3</span>
+      </div>
+      <div class="flex items-center gap-2.5">
+        <button onclick="toast('Composing message to 38 parents…')" class="h-9 px-3.5 rounded-lg bg-white ring-1 ring-whisper text-[12.5px] font-medium text-steel hover:bg-mist/30 hidden sm:inline-flex items-center">Message class parents</button>
+        <button onclick="toast('Sending JSS 2A class list to printer…')" class="h-9 px-3.5 rounded-lg bg-white ring-1 ring-whisper text-[12.5px] font-medium text-steel hover:bg-mist/30">Print list</button>
+        <button onclick="toast('Exporting JSS 2A to Excel…')" class="h-9 px-4 rounded-lg bg-blue text-white text-[13px] font-medium shadow-soft active:translate-y-px">Export</button>
+      </div>
+    </header>
+
+    <main class="p-4 sm:p-7 max-w-[1180px] space-y-5">
+
+      <!-- Stat cards -->
+      <div class="rise grid grid-cols-2 lg:grid-cols-4 gap-3">
+        <div class="bg-white ring-1 ring-whisper/80 rounded-2xl shadow-soft p-4">
+          <p class="text-[11px] font-semibold uppercase tracking-wider text-steel">Enrolment</p>
+          <p class="font-mono text-[24px] font-semibold mt-1">38</p>
+          <p class="text-[11px] text-steel mt-0.5">21 boys · 17 girls</p></div>
+        <div class="bg-white ring-1 ring-whisper/80 rounded-2xl shadow-soft p-4">
+          <p class="text-[11px] font-semibold uppercase tracking-wider text-steel">Class average</p>
+          <p class="font-mono text-[24px] font-semibold mt-1">72.4<span class="text-[14px] text-steel">%</span></p>
+          <p class="text-[11px] text-confirm mt-0.5">+3.1 vs Term 2</p></div>
+        <div class="bg-white ring-1 ring-whisper/80 rounded-2xl shadow-soft p-4">
+          <p class="text-[11px] font-semibold uppercase tracking-wider text-steel">Attendance rate</p>
+          <p class="font-mono text-[24px] font-semibold mt-1">94<span class="text-[14px] text-steel">%</span></p>
+          <p class="text-[11px] text-steel mt-0.5">term to date</p></div>
+        <div class="bg-white ring-1 ring-whisper/80 rounded-2xl shadow-soft p-4">
+          <p class="text-[11px] font-semibold uppercase tracking-wider text-steel">Form teacher</p>
+          <p class="text-[14px] font-semibold mt-1.5 leading-tight">Mallam Musa Ibrahim</p>
+          <a href="staff-detail.html" class="text-[11px] text-blue mt-0.5 inline-block">View profile →</a></div>
+      </div>
+
+      <!-- Tabs -->
+      <div class="rise flex gap-1 bg-white border border-whisper/70 rounded-xl p-1 w-fit text-[13px] font-medium shadow-soft">
+        <button onclick="tab(0)" class="tabb px-4 py-2 rounded-lg bg-blue text-white shadow-soft">Students</button>
+        <button onclick="tab(1)" class="tabb px-4 py-2 rounded-lg text-steel hover:bg-mist/40">Performance</button>
+        <button onclick="tab(2)" class="tabb px-4 py-2 rounded-lg text-steel hover:bg-mist/40">Attendance</button>
+        <button onclick="tab(3)" class="tabb px-4 py-2 rounded-lg text-steel hover:bg-mist/40">Subjects</button>
+      </div>
+
+      <!-- TAB 0: Students -->
+      <section id="t0" class="rise bg-white border border-whisper/70 rounded-2xl shadow-soft overflow-hidden">
+        <div class="px-6 py-4 border-b border-whisper/60 flex items-center justify-between">
+          <h2 class="font-semibold tracking-tight text-[15px]">Class register <span class="font-mono text-[12px] text-steel ml-1">38</span></h2>
+          <input oninput="filterRows(this.value)" placeholder="Search name or admission no…" class="h-9 w-56 max-w-[40vw] rounded-lg border border-whisper bg-canvas px-3 text-[12.5px]">
+        </div>
+        <div class="overflow-x-auto"><table class="w-full text-[12.5px] min-w-[760px]">
+          <thead><tr class="text-left text-[10px] font-semibold uppercase tracking-wider text-steel border-b border-whisper/60 bg-canvas/60">
+            <th class="px-6 py-3">Student</th><th class="px-3 py-3">Admission no</th><th class="px-3 py-3">Gender</th><th class="px-3 py-3 text-right">Avg score</th><th class="px-3 py-3 text-right">Attendance</th><th class="px-3 py-3">Fees</th></tr></thead>
+          <tbody id="stuBody" class="divide-y divide-whisper/60"></tbody>
+        </table></div>
+        <div class="px-6 py-3.5 bg-canvas border-t border-whisper/60 text-[11px] text-steel">Tap any row to open the full student record.</div>
+      </section>
+
+      <!-- TAB 1: Performance -->
+      <section id="t1" class="rise hidden space-y-3">
+        <div class="bg-white border border-whisper/70 rounded-2xl shadow-soft p-6">
+          <h2 class="font-semibold tracking-tight text-[15px]">Score distribution <span class="text-[11px] text-steel font-normal ml-1">Term 3 averages</span></h2>
+          <div class="mt-5 grid grid-cols-5 gap-3 items-end h-44">
+            <div class="flex flex-col items-center justify-end h-full"><span class="text-[11px] font-mono text-steel mb-1">2</span><div class="w-full bg-alert/70 rounded-t-md" style="height:12%"></div><span class="text-[10px] text-steel mt-1.5">0–39</span></div>
+            <div class="flex flex-col items-center justify-end h-full"><span class="text-[11px] font-mono text-steel mb-1">5</span><div class="w-full bg-caution/70 rounded-t-md" style="height:28%"></div><span class="text-[10px] text-steel mt-1.5">40–49</span></div>
+            <div class="flex flex-col items-center justify-end h-full"><span class="text-[11px] font-mono text-steel mb-1">11</span><div class="w-full bg-skyblue rounded-t-md" style="height:62%"></div><span class="text-[10px] text-steel mt-1.5">50–64</span></div>
+            <div class="flex flex-col items-center justify-end h-full"><span class="text-[11px] font-mono text-steel mb-1">14</span><div class="w-full bg-blue rounded-t-md" style="height:100%"></div><span class="text-[10px] text-steel mt-1.5">65–79</span></div>
+            <div class="flex flex-col items-center justify-end h-full"><span class="text-[11px] font-mono text-steel mb-1">6</span><div class="w-full bg-confirm rounded-t-md" style="height:44%"></div><span class="text-[10px] text-steel mt-1.5">80–100</span></div>
+          </div>
+          <p class="text-[11px] text-steel mt-4">Class average 72.4% · highest 91.2% (Chiamaka Okafor) · lowest 34.6%. 2 students below the 50% promotion mark.</p>
+        </div>
+        <div class="bg-white border border-whisper/70 rounded-2xl shadow-soft p-6">
+          <h2 class="font-semibold tracking-tight text-[15px]">Subject averages</h2>
+          <div class="mt-4 space-y-3 text-[12.5px]">
+            <div><div class="flex justify-between"><span>Mathematics</span><span class="font-mono">68.2%</span></div><div class="h-2 bg-mist/60 rounded-full mt-1.5"><div class="h-2 bg-blue rounded-full" style="width:68%"></div></div></div>
+            <div><div class="flex justify-between"><span>English Language</span><span class="font-mono">74.5%</span></div><div class="h-2 bg-mist/60 rounded-full mt-1.5"><div class="h-2 bg-blue rounded-full" style="width:74%"></div></div></div>
+            <div><div class="flex justify-between"><span>Basic Science</span><span class="font-mono">71.0%</span></div><div class="h-2 bg-mist/60 rounded-full mt-1.5"><div class="h-2 bg-blue rounded-full" style="width:71%"></div></div></div>
+            <div><div class="flex justify-between"><span>Qur'an</span><span class="font-mono">82.7%</span></div><div class="h-2 bg-mist/60 rounded-full mt-1.5"><div class="h-2 bg-confirm rounded-full" style="width:82%"></div></div></div>
+            <div><div class="flex justify-between"><span>Social Studies</span><span class="font-mono">65.9%</span></div><div class="h-2 bg-mist/60 rounded-full mt-1.5"><div class="h-2 bg-skyblue rounded-full" style="width:66%"></div></div></div>
+          </div>
+          <a href="results-center.html" class="text-[12px] font-medium text-blue mt-4 inline-block">Open in Results Centre →</a>
+        </div>
+      </section>
+
+      <!-- TAB 2: Attendance -->
+      <section id="t2" class="rise hidden bg-white border border-whisper/70 rounded-2xl shadow-soft p-6">
+        <div class="flex items-center justify-between">
+          <h2 class="font-semibold tracking-tight text-[15px]">Attendance · Term 3</h2>
+          <a href="attendance.html" class="text-[12px] font-medium text-blue">Open register →</a>
+        </div>
+        <div class="mt-4 grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
+          <div class="rounded-xl ring-1 ring-whisper bg-canvas py-3"><p class="font-mono text-[20px] font-semibold text-confirm">94%</p><p class="text-[11px] text-steel">Present rate</p></div>
+          <div class="rounded-xl ring-1 ring-whisper bg-canvas py-3"><p class="font-mono text-[20px] font-semibold">3,182</p><p class="text-[11px] text-steel">Days present</p></div>
+          <div class="rounded-xl ring-1 ring-whisper bg-canvas py-3"><p class="font-mono text-[20px] font-semibold text-caution">142</p><p class="text-[11px] text-steel">Absences</p></div>
+          <div class="rounded-xl ring-1 ring-whisper bg-canvas py-3"><p class="font-mono text-[20px] font-semibold text-excused">61</p><p class="text-[11px] text-steel">Excused</p></div>
+        </div>
+        <h3 class="text-[11px] font-semibold uppercase tracking-wider text-steel mt-6">Students needing attention</h3>
+        <div class="mt-3 space-y-2 text-[12.5px]">
+          <div class="flex items-center justify-between rounded-xl ring-1 ring-whisper bg-canvas px-4 py-2.5"><span class="font-medium">Ibrahim Sani <span class="text-steel font-normal">AFA/2024/0143</span></span><span class="text-[11px] font-medium text-alert bg-alert/10 rounded-full px-2.5 py-1">78% · 14 absences</span></div>
+          <div class="flex items-center justify-between rounded-xl ring-1 ring-whisper bg-canvas px-4 py-2.5"><span class="font-medium">Yusuf Abubakar <span class="text-steel font-normal">AFA/2024/0118</span></span><span class="text-[11px] font-medium text-caution bg-caution/10 rounded-full px-2.5 py-1">86% · 9 absences</span></div>
+        </div>
+      </section>
+
+      <!-- TAB 3: Subjects -->
+      <section id="t3" class="rise hidden bg-white border border-whisper/70 rounded-2xl shadow-soft overflow-hidden">
+        <div class="px-6 py-4 border-b border-whisper/60 flex items-center justify-between">
+          <h2 class="font-semibold tracking-tight text-[15px]">Subjects taught in JSS 2A <span class="font-mono text-[12px] text-steel ml-1">9</span></h2>
+          <a href="subjects-classes.html" class="text-[12px] font-medium text-blue">Edit assignments →</a>
+        </div>
+        <ul class="divide-y divide-whisper/60 text-[13px]" id="subList"></ul>
+      </section>
+    </main>
+  </div>
+</div>
+<script src="../assets/shell.js"></script>
+<script>
+function tab(n){[0,1,2,3].forEach(i=>{document.getElementById('t'+i).classList.toggle('hidden',i!==n);
+  document.querySelectorAll('.tabb')[i].className='tabb px-4 py-2 rounded-lg '+(i===n?'bg-blue text-white shadow-soft':'text-steel hover:bg-mist/40');});}
+const STU=[
+ ['Chiamaka Okafor','AFA/2024/0131','F',91.2,98,'paid'],
+ ['Fatima Abubakar','AFA/2024/0117','F',85.4,96,'paid'],
+ ['Aisha Bello','AFA/2024/0125','F',79.8,95,'part'],
+ ['Yusuf Abubakar','AFA/2024/0118','M',74.1,86,'paid'],
+ ['Musa Aliyu','AFA/2024/0129','M',71.3,93,'paid'],
+ ['Hauwa Idris','AFA/2024/0134','F',69.0,97,'part'],
+ ['Tunde Adebayo','AFA/2024/0122','M',66.5,91,'paid'],
+ ['Ibrahim Sani','AFA/2024/0143','M',54.2,78,'owing'],
+ ['Zainab Lawal','AFA/2024/0137','F',61.7,94,'paid'],
+ ['Emeka Obi','AFA/2024/0140','M',34.6,82,'owing'],
+];
+function fee(s){if(s==='paid')return '<span class="text-[10.5px] font-medium text-confirm bg-confirm/10 rounded-full px-2.5 py-1">Paid</span>';if(s==='part')return '<span class="text-[10.5px] font-medium text-caution bg-caution/10 rounded-full px-2.5 py-1">Part</span>';return '<span class="text-[10.5px] font-medium text-alert bg-alert/10 rounded-full px-2.5 py-1">Owing</span>';}
+function attClr(a){return a>=90?'text-confirm':a>=85?'text-caution':'text-alert';}
+function scoreClr(s){return s>=80?'text-confirm':s>=50?'text-charcoal':'text-alert';}
+function renderStu(q){q=(q||'').toLowerCase();
+  document.getElementById('stuBody').innerHTML=STU.filter(s=>!q||s[0].toLowerCase().includes(q)||s[1].toLowerCase().includes(q)).map(s=>
+   `<tr onclick="location.href='student-detail.html'" class="cursor-pointer hover:bg-wash/40">
+     <td class="px-6 py-3 font-medium">${s[0]}</td>
+     <td class="px-3 py-3 font-mono text-[11.5px] text-steel">${s[1]}</td>
+     <td class="px-3 py-3 text-steel">${s[2]==='F'?'Female':'Male'}</td>
+     <td class="px-3 py-3 text-right font-mono ${scoreClr(s[3])}">${s[3].toFixed(1)}</td>
+     <td class="px-3 py-3 text-right font-mono ${attClr(s[4])}">${s[4]}%</td>
+     <td class="px-3 py-3">${fee(s[5])}</td></tr>`).join('')||'<tr><td colspan="6" class="px-6 py-8 text-center text-steel">No match.</td></tr>';}
+function filterRows(v){renderStu(v);}
+renderStu('');
+const SUBS=[
+ ['Mathematics','Mallam Musa Ibrahim','General'],
+ ['English Language','Mrs. Ngozi Adeyemi','General'],
+ ['Basic Science','Mr. Chinedu Okafor','Sciences'],
+ ['Social Studies','Mrs. Amina Sadiq','General'],
+ ['Basic Technology','Mr. Emeka Obi','General'],
+ ["Qur'an",'Ustadha Halima Yusuf','Islamic'],
+ ['Tajweed','Ustadh Bashir Lawal','Islamic'],
+ ['Civic Education','Mrs. Amina Sadiq','General'],
+ ['Computer Studies','Mr. Chinedu Okafor','General'],
+];
+function cat(c){const m={Islamic:'text-confirm bg-confirm/10',Sciences:'text-blue bg-wash'};return `<span class="text-[10px] font-medium ${m[c]||'text-steel bg-canvas ring-1 ring-whisper'} rounded-full px-2 py-0.5">${c}</span>`;}
+document.getElementById('subList').innerHTML=SUBS.map(s=>
+ `<li class="px-6 py-3.5 flex items-center justify-between"><div><p class="font-medium">${s[0]}</p><p class="text-[11px] text-steel mt-0.5">${s[1]}</p></div>${cat(s[2])}</li>`).join('');
+</script>
+<div id="toast" class="hidden fixed bottom-5 left-1/2 -translate-x-1/2 z-[60] bg-ink text-white text-[12.5px] font-medium px-4 py-2.5 rounded-xl shadow-lift"></div>
+<script>function toast(m){var t=document.getElementById('toast');t.textContent=m;t.classList.remove('hidden');clearTimeout(window._tt);window._tt=setTimeout(function(){t.classList.add('hidden')},2200);}</script>
+</body>
+</html>

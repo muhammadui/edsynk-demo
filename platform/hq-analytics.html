@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Edsynk HQ — Analytics</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script>
+tailwind.config = { theme: { extend: {
+  colors: { canvas:'#F7F9FC', ink:'#0B2A56', charcoal:'#18181B', steel:'#64748B', whisper:'#E2E8F0',
+    blue:'#2177EF', skyblue:'#5C9DF5', wash:'#EAF2FE', mist:'#D3E4FD',
+    confirm:'#16A34A', caution:'#D97706', alert:'#DC2626', excused:'#7C8DA6' },
+  fontFamily: { sans:['Geist','sans-serif'], mono:['"Geist Mono"','monospace'] },
+  boxShadow: { soft:'0 1px 2px rgba(11,42,86,0.04), 0 6px 24px rgba(11,42,86,0.05)',
+               lift:'0 1px 3px rgba(11,42,86,0.10), 0 12px 32px rgba(11,42,86,0.12)' }
+}}}
+</script>
+<style>
+  @keyframes rise{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+  .rise{animation:rise .5s cubic-bezier(.2,.8,.2,1) both}
+  @keyframes grow{from{transform:scaleY(0)}to{transform:scaleY(1)}}
+  .vbar{transform-origin:bottom;animation:grow .8s cubic-bezier(.2,.8,.2,1) both}
+  @keyframes fillw{from{width:0}}
+  .hbar{animation:fillw 1s cubic-bezier(.2,.8,.2,1) both}
+</style>
+</head>
+<body data-active="Analytics" data-persona="platform" class="bg-canvas font-sans text-charcoal antialiased">
+<div class="flex min-h-screen">
+  <div id="sidebar-root"></div>
+  <div class="flex-1 min-w-0">
+    <header class="h-[60px] bg-white/80 backdrop-blur-md border-b border-whisper/70 flex items-center justify-between px-4 sm:px-7 sticky top-0 z-20">
+      <div class="flex items-center gap-3">
+        <h1 class="text-[15px] font-semibold tracking-tight">Analytics</h1>
+        <span class="font-mono text-[11.5px] font-medium text-blue bg-wash rounded-full px-2.5 py-1 hidden sm:inline">platform-wide</span>
+      </div>
+      <div class="flex items-center gap-2.5">
+        <div class="flex gap-1 text-[12px] font-medium" id="rangeBtns">
+          <button onclick="rng(this)" class="h-9 px-3 rounded-lg bg-white ring-1 ring-whisper text-steel hover:bg-mist/30">90d</button>
+          <button onclick="rng(this)" class="h-9 px-3 rounded-lg bg-blue text-white">This term</button>
+          <button onclick="rng(this)" class="h-9 px-3 rounded-lg bg-white ring-1 ring-whisper text-steel hover:bg-mist/30">All time</button>
+        </div>
+        <button onclick="toast('Exporting analytics CSV…')" class="h-9 px-4 rounded-lg bg-blue text-white text-[13px] font-medium shadow-soft active:translate-y-px">Export</button>
+      </div>
+    </header>
+    <main class="p-4 sm:p-7 max-w-[1180px] space-y-5 pb-10">
+
+      <!-- KPI row -->
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+        <div class="rise bg-white ring-1 ring-whisper/80 rounded-2xl p-4 sm:p-5 shadow-soft" style="animation-delay:.04s">
+          <p class="text-[10.5px] font-semibold uppercase tracking-wider text-steel">Active schools</p>
+          <p class="font-mono text-[26px] font-semibold mt-2">3</p>
+          <p class="text-[11.5px] text-steel mt-1"><span class="text-confirm font-medium">+2</span> in onboarding</p>
+        </div>
+        <div class="rise bg-white ring-1 ring-whisper/80 rounded-2xl p-4 sm:p-5 shadow-soft" style="animation-delay:.08s">
+          <p class="text-[10.5px] font-semibold uppercase tracking-wider text-steel">Students on platform</p>
+          <p class="font-mono text-[26px] font-semibold mt-2">842</p>
+          <p class="text-[11.5px] text-steel mt-1">billed this term · 405 active weekly</p>
+        </div>
+        <div class="rise bg-white ring-1 ring-whisper/80 rounded-2xl p-4 sm:p-5 shadow-soft" style="animation-delay:.12s">
+          <p class="text-[10.5px] font-semibold uppercase tracking-wider text-steel">MRR</p>
+          <p class="font-mono text-[26px] font-semibold mt-2">₦1.6M</p>
+          <p class="text-[11.5px] text-steel mt-1">ARR run-rate <span class="font-mono">₦19.2M</span></p>
+        </div>
+        <div class="rise bg-white ring-1 ring-whisper/80 rounded-2xl p-4 sm:p-5 shadow-soft" style="animation-delay:.16s">
+          <p class="text-[10.5px] font-semibold uppercase tracking-wider text-steel">Churn · this quarter</p>
+          <p class="font-mono text-[26px] font-semibold mt-2">0</p>
+          <p class="text-[11.5px] text-steel mt-1">too early to be meaningful</p>
+        </div>
+      </div>
+
+      <!-- student growth + revenue -->
+      <div class="grid lg:grid-cols-2 gap-4 sm:gap-5">
+        <div class="rise bg-white ring-1 ring-whisper/80 rounded-2xl p-5 shadow-soft" style="animation-delay:.2s">
+          <div class="flex items-center justify-between">
+            <div><p class="text-[13.5px] font-semibold">Students on platform</p><p class="text-[11.5px] text-steel mt-0.5">cumulative · across all tenants</p></div>
+            <span class="font-mono text-[11px] text-steel bg-canvas ring-1 ring-whisper rounded-lg px-2.5 py-1">842 now</span>
+          </div>
+          <div class="mt-5 grid grid-cols-6 gap-3 items-end h-[140px]">
+            <div class="flex flex-col items-center gap-1.5 h-full justify-end"><div class="vbar w-full max-w-[40px] rounded-t-md bg-mist" style="height:49%;animation-delay:.3s"></div><span class="font-mono text-[9.5px] text-steel/70">Jan</span></div>
+            <div class="flex flex-col items-center gap-1.5 h-full justify-end"><div class="vbar w-full max-w-[40px] rounded-t-md bg-mist" style="height:49%;animation-delay:.36s"></div><span class="font-mono text-[9.5px] text-steel/70">Feb</span></div>
+            <div class="flex flex-col items-center gap-1.5 h-full justify-end"><div class="vbar w-full max-w-[40px] rounded-t-md bg-skyblue/60" style="height:78%;animation-delay:.42s"></div><span class="font-mono text-[9.5px] text-steel/70">Mar</span></div>
+            <div class="flex flex-col items-center gap-1.5 h-full justify-end"><div class="vbar w-full max-w-[40px] rounded-t-md bg-skyblue/70" style="height:78%;animation-delay:.48s"></div><span class="font-mono text-[9.5px] text-steel/70">Apr</span></div>
+            <div class="flex flex-col items-center gap-1.5 h-full justify-end"><div class="vbar w-full max-w-[40px] rounded-t-md bg-blue/70" style="height:100%;animation-delay:.54s"></div><span class="font-mono text-[9.5px] text-steel/70">May</span></div>
+            <div class="flex flex-col items-center gap-1.5 h-full justify-end"><div class="vbar w-full max-w-[40px] rounded-t-md bg-blue shadow-lift" style="height:100%;animation-delay:.6s"></div><span class="font-mono text-[9.5px] font-semibold text-blue">Jun</span></div>
+          </div>
+          <div class="flex items-center justify-between mt-4 pt-3 border-t border-whisper/70 text-[11.5px] text-steel">
+            <span>2 schools → 3 in May (Daru-l-Hikma live)</span><span>next: Bright Path +302</span>
+          </div>
+        </div>
+
+        <div class="rise bg-white ring-1 ring-whisper/80 rounded-2xl p-5 shadow-soft" style="animation-delay:.24s">
+          <div class="flex items-center justify-between">
+            <div><p class="text-[13.5px] font-semibold">Revenue trend</p><p class="text-[11.5px] text-steel mt-0.5">billed per term · ₦ thousands</p></div>
+            <span class="font-mono text-[11px] text-confirm bg-confirm/10 rounded-lg px-2.5 py-1">₦1.51M T3</span>
+          </div>
+          <div class="mt-5 grid grid-cols-6 gap-3 items-end h-[140px]">
+            <div class="flex flex-col items-center gap-1.5 h-full justify-end"><div class="vbar w-full max-w-[40px] rounded-t-md bg-mist" style="height:8%;animation-delay:.3s"></div><span class="font-mono text-[9.5px] text-steel/70">25T1</span></div>
+            <div class="flex flex-col items-center gap-1.5 h-full justify-end"><div class="vbar w-full max-w-[40px] rounded-t-md bg-mist" style="height:14%;animation-delay:.36s"></div><span class="font-mono text-[9.5px] text-steel/70">25T2</span></div>
+            <div class="flex flex-col items-center gap-1.5 h-full justify-end"><div class="vbar w-full max-w-[40px] rounded-t-md bg-skyblue/60" style="height:27%;animation-delay:.42s"></div><span class="font-mono text-[9.5px] text-steel/70">25T3</span></div>
+            <div class="flex flex-col items-center gap-1.5 h-full justify-end"><div class="vbar w-full max-w-[40px] rounded-t-md bg-skyblue/80" style="height:46%;animation-delay:.48s"></div><span class="font-mono text-[9.5px] text-steel/70">26T1</span></div>
+            <div class="flex flex-col items-center gap-1.5 h-full justify-end"><div class="vbar w-full max-w-[40px] rounded-t-md bg-blue/80" style="height:71%;animation-delay:.54s"></div><span class="font-mono text-[9.5px] text-steel/70">26T2</span></div>
+            <div class="flex flex-col items-center gap-1.5 h-full justify-end"><div class="vbar w-full max-w-[40px] rounded-t-md bg-blue shadow-lift" style="height:100%;animation-delay:.6s"></div><span class="font-mono text-[9.5px] font-semibold text-blue">26T3</span></div>
+          </div>
+          <div class="flex items-center justify-between mt-4 pt-3 border-t border-whisper/70 text-[11.5px] text-steel">
+            <span>net revenue retention <span class="font-mono text-charcoal">112%</span></span><span>milestone <span class="font-mono text-charcoal">₦2.5M/term</span></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- feature adoption + seat util -->
+      <div class="grid lg:grid-cols-2 gap-4 sm:gap-5">
+        <div class="rise bg-white ring-1 ring-whisper/80 rounded-2xl p-5 shadow-soft" style="animation-delay:.28s">
+          <p class="text-[13.5px] font-semibold">Module adoption</p>
+          <p class="text-[11.5px] text-steel mt-0.5">share of live schools using each module</p>
+          <div class="mt-4 space-y-3.5">
+            <div><div class="flex justify-between text-[11.5px] mb-1.5"><span class="font-medium">Results &amp; report cards</span><span class="font-mono text-steel">3/3 · 100%</span></div>
+              <div class="h-2.5 rounded-full bg-canvas ring-1 ring-whisper/60 overflow-hidden"><div class="hbar h-full rounded-full bg-blue" style="width:100%;animation-delay:.4s"></div></div></div>
+            <div><div class="flex justify-between text-[11.5px] mb-1.5"><span class="font-medium">Attendance</span><span class="font-mono text-steel">3/3 · 100%</span></div>
+              <div class="h-2.5 rounded-full bg-canvas ring-1 ring-whisper/60 overflow-hidden"><div class="hbar h-full rounded-full bg-blue" style="width:100%;animation-delay:.46s"></div></div></div>
+            <div><div class="flex justify-between text-[11.5px] mb-1.5"><span class="font-medium">EdAssess / EdInsight</span><span class="font-mono text-steel">2/3 · 67%</span></div>
+              <div class="h-2.5 rounded-full bg-canvas ring-1 ring-whisper/60 overflow-hidden"><div class="hbar h-full rounded-full bg-skyblue" style="width:67%;animation-delay:.52s"></div></div></div>
+            <div><div class="flex justify-between text-[11.5px] mb-1.5"><span class="font-medium">CBT exams <span class="font-mono text-[9.5px] text-blue/80">SEPT</span></span><span class="font-mono text-steel">1/3 · 33%</span></div>
+              <div class="h-2.5 rounded-full bg-canvas ring-1 ring-whisper/60 overflow-hidden"><div class="hbar h-full rounded-full bg-mist" style="width:33%;animation-delay:.58s"></div></div></div>
+            <div><div class="flex justify-between text-[11.5px] mb-1.5"><span class="font-medium text-steel">EdMentor <span class="font-mono text-[9.5px] text-blue/80">SEPT</span></span><span class="font-mono text-steel/70">0/3 · coming</span></div>
+              <div class="h-2.5 rounded-full bg-canvas ring-1 ring-whisper/60 overflow-hidden"></div></div>
+          </div>
+        </div>
+
+        <div class="rise bg-white ring-1 ring-whisper/80 rounded-2xl p-5 shadow-soft" style="animation-delay:.32s">
+          <p class="text-[13.5px] font-semibold">Seat utilisation</p>
+          <p class="text-[11.5px] text-steel mt-0.5">staff who logged in this week ÷ provisioned seats</p>
+          <div class="mt-4 space-y-3.5">
+            <div><div class="flex justify-between text-[11.5px] mb-1.5"><span class="font-medium">Al-Furqan Academy</span><span class="font-mono text-steel">28/31 · 90%</span></div>
+              <div class="h-2.5 rounded-full bg-canvas ring-1 ring-whisper/60 overflow-hidden"><div class="hbar h-full rounded-full bg-confirm" style="width:90%;animation-delay:.42s"></div></div></div>
+            <div><div class="flex justify-between text-[11.5px] mb-1.5"><span class="font-medium">Sunrise International</span><span class="font-mono text-steel">23/31 · 74%</span></div>
+              <div class="h-2.5 rounded-full bg-canvas ring-1 ring-whisper/60 overflow-hidden"><div class="hbar h-full rounded-full bg-blue" style="width:74%;animation-delay:.5s"></div></div></div>
+            <div><div class="flex justify-between text-[11.5px] mb-1.5"><span class="font-medium">Daru-l-Hikma</span><span class="font-mono text-steel">13/22 · 59%</span></div>
+              <div class="h-2.5 rounded-full bg-canvas ring-1 ring-whisper/60 overflow-hidden"><div class="hbar h-full rounded-full bg-caution" style="width:59%;animation-delay:.58s"></div></div></div>
+          </div>
+          <div class="mt-4 pt-3 border-t border-whisper/70 rounded-lg bg-wash/60 px-3 py-2.5 text-[11.5px] text-ink">
+            <span class="font-semibold">Watch:</span> Daru-l-Hikma adoption dipped during dunning — re-engage once invoice clears.
+          </div>
+        </div>
+      </div>
+
+      <!-- AI cost vs revenue callout -->
+      <div class="rise grid sm:grid-cols-3 gap-3" style="animation-delay:.36s">
+        <div class="sm:col-span-2 rounded-2xl ring-1 ring-whisper/80 bg-white p-5 shadow-soft flex flex-wrap items-center gap-x-8 gap-y-3">
+          <div><p class="text-[10.5px] font-semibold uppercase tracking-wider text-steel">AI credits sold</p><p class="font-mono text-[20px] font-semibold mt-1">₦96.4k</p></div>
+          <div><p class="text-[10.5px] font-semibold uppercase tracking-wider text-steel">Provider cost</p><p class="font-mono text-[20px] font-semibold mt-1">₦31.4k</p></div>
+          <div><p class="text-[10.5px] font-semibold uppercase tracking-wider text-steel">Gross margin</p><p class="font-mono text-[20px] font-semibold mt-1 text-confirm">67%</p></div>
+          <a href="hq-ai-usage.html" class="ml-auto text-[12px] font-medium text-blue hover:underline">AI usage detail →</a>
+        </div>
+        <div class="rounded-2xl ring-1 ring-whisper/80 bg-wash/60 p-5 text-[11.5px] text-ink">
+          <p class="font-semibold">AI pays for itself.</p>
+          <p class="text-steel mt-1 leading-relaxed">Credits are prepaid, so margin is locked before a single call runs. Floor is 55%.</p>
+        </div>
+      </div>
+
+      <!-- per-school health table -->
+      <div class="rise bg-white ring-1 ring-whisper/80 rounded-2xl shadow-soft overflow-hidden" style="animation-delay:.4s">
+        <div class="flex items-center justify-between px-5 pt-4 pb-3">
+          <p class="text-[13.5px] font-semibold">Per-school health</p>
+          <a href="hq-schools.html" class="text-[12px] font-medium text-blue hover:underline">All schools →</a>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-[12.5px]">
+            <thead><tr class="text-left text-[10.5px] uppercase tracking-wider text-steel border-y border-whisper/70 bg-canvas/60">
+              <th class="px-5 py-2.5 font-semibold">School</th><th class="px-3 py-2.5 font-semibold">Plan</th>
+              <th class="px-3 py-2.5 font-semibold">Students</th><th class="px-3 py-2.5 font-semibold">Term MRR</th>
+              <th class="px-3 py-2.5 font-semibold hidden md:table-cell">Last active</th><th class="px-5 py-2.5 font-semibold text-right">Health</th></tr></thead>
+            <tbody class="divide-y divide-whisper/60">
+              <tr class="hover:bg-canvas/60 cursor-pointer" onclick="location.href='hq-school-detail.html'">
+                <td class="px-5 py-3"><p class="font-medium">Al-Furqan Academy</p><p class="font-mono text-[10.5px] text-steel">alfurqan.edsynk.ng</p></td>
+                <td class="px-3 py-3"><span class="text-[10.5px] font-semibold text-blue bg-wash rounded-full px-2 py-0.5">Pro</span></td>
+                <td class="px-3 py-3 font-mono">412</td>
+                <td class="px-3 py-3 font-mono">₦274.7k</td>
+                <td class="px-3 py-3 text-steel hidden md:table-cell">4 min ago</td>
+                <td class="px-5 py-3 text-right"><span class="text-[10.5px] font-semibold text-confirm bg-confirm/10 rounded-full px-2 py-0.5">Healthy</span></td>
+              </tr>
+              <tr class="hover:bg-canvas/60 cursor-pointer" onclick="location.href='hq-school-detail.html'">
+                <td class="px-5 py-3"><p class="font-medium">Sunrise International</p><p class="font-mono text-[10.5px] text-steel">sunrise.edsynk.ng</p></td>
+                <td class="px-3 py-3"><span class="text-[10.5px] font-semibold text-skyblue bg-wash rounded-full px-2 py-0.5">Plus</span></td>
+                <td class="px-3 py-3 font-mono">379</td>
+                <td class="px-3 py-3 font-mono">₦151.6k</td>
+                <td class="px-3 py-3 text-steel hidden md:table-cell">38 min ago</td>
+                <td class="px-5 py-3 text-right"><span class="text-[10.5px] font-semibold text-confirm bg-confirm/10 rounded-full px-2 py-0.5">Healthy</span></td>
+              </tr>
+              <tr class="hover:bg-canvas/60 cursor-pointer" onclick="location.href='hq-school-detail.html'">
+                <td class="px-5 py-3"><p class="font-medium">Daru-l-Hikma</p><p class="font-mono text-[10.5px] text-steel">darulhikma.edsynk.ng</p></td>
+                <td class="px-3 py-3"><span class="text-[10.5px] font-semibold text-steel bg-canvas ring-1 ring-whisper rounded-full px-2 py-0.5">Core</span></td>
+                <td class="px-3 py-3 font-mono">456</td>
+                <td class="px-3 py-3 font-mono">₦76k</td>
+                <td class="px-3 py-3 text-steel hidden md:table-cell">2 hrs ago</td>
+                <td class="px-5 py-3 text-right"><span class="text-[10.5px] font-semibold text-caution bg-caution/10 rounded-full px-2 py-0.5">At risk · overdue</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="px-5 py-3 border-t border-whisper/70 bg-canvas/50 text-[11px] text-steel">Health blends seat utilisation, billing status and module use. With 3 schools, read it as a watchlist — not a statistic.</p>
+      </div>
+
+    </main>
+  </div>
+</div>
+<script src="../assets/shell.js"></script>
+<div id="toast" class="hidden fixed bottom-5 left-1/2 -translate-x-1/2 z-[60] bg-ink text-white text-[12.5px] font-medium px-4 py-2.5 rounded-xl shadow-lift"></div>
+<script>
+function toast(m){var t=document.getElementById('toast');t.textContent=m;t.classList.remove('hidden');clearTimeout(window._tt);window._tt=setTimeout(function(){t.classList.add('hidden')},2200);}
+function rng(btn){btn.parentNode.querySelectorAll('button').forEach(function(b){b.className='h-9 px-3 rounded-lg bg-white ring-1 ring-whisper text-steel hover:bg-mist/30';});btn.className='h-9 px-3 rounded-lg bg-blue text-white';toast('Range: '+btn.textContent.trim());}
+</script>
+</body>
+</html>

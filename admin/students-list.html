@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Edsynk — Students</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script>
+tailwind.config = { theme: { extend: {
+  colors: { canvas:'#F7F9FC', ink:'#0B2A56', charcoal:'#18181B', steel:'#64748B', whisper:'#E2E8F0',
+    blue:'#2177EF', skyblue:'#5C9DF5', wash:'#EAF2FE', mist:'#D3E4FD',
+    confirm:'#16A34A', caution:'#D97706', alert:'#DC2626', excused:'#7C8DA6' },
+  fontFamily: { sans:['Geist','sans-serif'], mono:['"Geist Mono"','monospace'] },
+  boxShadow: { soft:'0 1px 2px rgba(11,42,86,0.04), 0 6px 24px rgba(11,42,86,0.05)',
+               lift:'0 1px 3px rgba(11,42,86,0.10), 0 12px 32px rgba(11,42,86,0.12)' }
+}}}
+</script>
+<style>.sidebar-bg{background:radial-gradient(420px 220px at 18% -4%, rgba(33,119,239,0.22), transparent 60%),linear-gradient(178deg,#0D2A52 0%,#0A1F42 42%,#071630 100%)}
+@keyframes rise{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}.rise{animation:rise .5s cubic-bezier(.2,.8,.2,1) both}</style>
+</head>
+<body data-active="Students" class="bg-canvas font-sans text-charcoal antialiased">
+<div class="flex min-h-screen">
+
+  <div id="sidebar-root"></div>
+
+  <div class="flex-1 min-w-0">
+    <header class="h-[60px] bg-white/80 backdrop-blur-md border-b border-whisper/70 flex items-center justify-between px-4 sm:px-7 sticky top-0 z-20">
+      <div class="flex items-center gap-3">
+        <h1 class="text-[15px] font-semibold tracking-tight">Students</h1>
+        <span class="font-mono text-[11.5px] text-steel">412 active</span>
+      </div>
+      <div class="flex items-center gap-2.5">
+        <button class="h-9 px-3.5 rounded-lg border border-whisper bg-white text-[13px] font-medium hover:bg-mist/30 hidden sm:block" onclick="document.getElementById('addStuM').classList.add('open')">Import CSV</button>
+        <button onclick="toast('Generating result access code sheets…')" class="h-9 px-3.5 rounded-lg border border-whisper bg-white text-[13px] font-medium hover:bg-mist/30 hidden sm:block">Code sheets</button>
+        <button class="h-9 px-4 rounded-lg bg-blue text-white text-[13px] font-medium shadow-soft active:translate-y-px" onclick="document.getElementById('addStuM').classList.add('open')">+ Add student</button>
+      </div>
+    </header>
+
+    <main class="p-4 sm:p-7 max-w-[1100px] space-y-4">
+
+      <!-- Toolbar -->
+      <div class="rise flex flex-col sm:flex-row gap-3 sm:items-center">
+        <div class="relative flex-1 max-w-sm">
+          <svg class="absolute left-3.5 top-1/2 -translate-y-1/2 text-steel" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+          <input id="q" oninput="filterRows()" placeholder="Search name or reg number…" class="w-full h-10 rounded-xl border border-whisper bg-white pl-10 pr-4 text-[13px] focus:outline-none focus:ring-2 focus:ring-blue/50 shadow-soft">
+        </div>
+        <div class="flex gap-2 text-[12.5px] font-medium">
+          <button onclick="toast('Class filter — coming soon')" class="h-10 px-3.5 rounded-xl bg-white border border-whisper hover:bg-mist/30 flex items-center gap-2">Class: JSS 2A
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></button>
+          <button onclick="toast('Status filter — coming soon')" class="h-10 px-3.5 rounded-xl bg-white border border-whisper hover:bg-mist/30 flex items-center gap-2">Status: All
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></button>
+        </div>
+      </div>
+
+      <!-- Table -->
+      <div class="rise bg-white border border-whisper/70 rounded-2xl shadow-soft overflow-hidden" style="animation-delay:.05s">
+        <div class="overflow-x-auto">
+        <table class="w-full text-[13px] min-w-[760px]">
+          <thead><tr class="text-left text-[10.5px] font-semibold uppercase tracking-[0.07em] text-steel border-b border-whisper/60 bg-canvas/60">
+            <th class="pl-5 pr-3 py-3 w-10"><input type="checkbox" class="h-4 w-4 rounded border-whisper accent-[#2177EF]"></th>
+            <th class="px-3 py-3 font-semibold">Student</th>
+            <th class="px-3 py-3 font-semibold">Reg number</th>
+            <th class="px-3 py-3 font-semibold">Class</th>
+            <th class="px-3 py-3 font-semibold">Guardian phone</th>
+            <th class="px-3 py-3 font-semibold text-right">Attendance</th>
+            <th class="px-5 py-3 font-semibold text-right">Status</th></tr></thead>
+          <tbody id="rows" class="divide-y divide-whisper/60">
+            <tr onclick="openStudent(this)" class="row hover:bg-mist/15 cursor-pointer">
+              <td class="pl-5 pr-3 py-3"><input type="checkbox" class="h-4 w-4 rounded border-whisper accent-[#2177EF]"></td>
+              <td class="px-3 py-3"><div class="flex items-center gap-3">
+                <span class="h-8 w-8 rounded-full bg-wash text-blue grid place-items-center text-[11px] font-semibold shrink-0">AB</span>
+                <span class="font-medium name">Aisha Bello</span></div></td>
+              <td class="px-3 py-3 font-mono text-steel reg">AFA/2024/0102</td>
+              <td class="px-3 py-3">JSS 2A</td><td class="px-3 py-3 font-mono text-steel">0803 ··· 4417</td>
+              <td class="px-3 py-3 text-right font-mono">96%</td>
+              <td class="px-5 py-3 text-right"><span class="text-[11px] font-medium text-confirm bg-confirm/10 rounded-full px-2.5 py-1">Active</span></td></tr>
+            <tr onclick="openStudent(this)" class="row hover:bg-mist/15 cursor-pointer">
+              <td class="pl-5 pr-3 py-3"><input type="checkbox" class="h-4 w-4 rounded border-whisper accent-[#2177EF]"></td>
+              <td class="px-3 py-3"><div class="flex items-center gap-3">
+                <span class="h-8 w-8 rounded-full bg-confirm/10 text-confirm grid place-items-center text-[11px] font-semibold shrink-0">CO</span>
+                <span class="font-medium name">Chinedu Okafor</span></div></td>
+              <td class="px-3 py-3 font-mono text-steel reg">AFA/2024/0108</td>
+              <td class="px-3 py-3">JSS 2A</td><td class="px-3 py-3 font-mono text-steel">0812 ··· 9034</td>
+              <td class="px-3 py-3 text-right font-mono">91%</td>
+              <td class="px-5 py-3 text-right"><span class="text-[11px] font-medium text-confirm bg-confirm/10 rounded-full px-2.5 py-1">Active</span></td></tr>
+            <tr onclick="openStudent(this)" class="row hover:bg-mist/15 cursor-pointer">
+              <td class="pl-5 pr-3 py-3"><input type="checkbox" class="h-4 w-4 rounded border-whisper accent-[#2177EF]"></td>
+              <td class="px-3 py-3"><div class="flex items-center gap-3">
+                <span class="h-8 w-8 rounded-full bg-caution/10 text-caution grid place-items-center text-[11px] font-semibold shrink-0">FA</span>
+                <span class="font-medium name">Fatima Abubakar</span></div></td>
+              <td class="px-3 py-3 font-mono text-steel reg">AFA/2024/0117</td>
+              <td class="px-3 py-3">JSS 2A</td><td class="px-3 py-3 font-mono text-steel">0705 ··· 2281</td>
+              <td class="px-3 py-3 text-right font-mono">97%</td>
+              <td class="px-5 py-3 text-right"><span class="text-[11px] font-medium text-confirm bg-confirm/10 rounded-full px-2.5 py-1">Active</span></td></tr>
+            <tr onclick="openStudent(this)" class="row hover:bg-mist/15 cursor-pointer bg-alert/[0.02]">
+              <td class="pl-5 pr-3 py-3"><input type="checkbox" class="h-4 w-4 rounded border-whisper accent-[#2177EF]"></td>
+              <td class="px-3 py-3"><div class="flex items-center gap-3">
+                <span class="h-8 w-8 rounded-full bg-excused/15 text-excused grid place-items-center text-[11px] font-semibold shrink-0">UB</span>
+                <span class="font-medium name">Usman Bello</span></div></td>
+              <td class="px-3 py-3 font-mono text-steel reg">AFA/2024/0123</td>
+              <td class="px-3 py-3">JSS 2A</td><td class="px-3 py-3 font-mono text-steel">0809 ··· 5512</td>
+              <td class="px-3 py-3 text-right font-mono">74%</td>
+              <td class="px-5 py-3 text-right"><span class="text-[11px] font-medium text-alert bg-alert/10 rounded-full px-2.5 py-1">Suspended</span></td></tr>
+            <tr onclick="openStudent(this)" class="row hover:bg-mist/15 cursor-pointer">
+              <td class="pl-5 pr-3 py-3"><input type="checkbox" class="h-4 w-4 rounded border-whisper accent-[#2177EF]"></td>
+              <td class="px-3 py-3"><div class="flex items-center gap-3">
+                <span class="h-8 w-8 rounded-full bg-mist text-ink grid place-items-center text-[11px] font-semibold shrink-0">HY</span>
+                <span class="font-medium name">Halima Yusuf</span></div></td>
+              <td class="px-3 py-3 font-mono text-steel reg">AFA/2024/0121</td>
+              <td class="px-3 py-3">JSS 2A</td><td class="px-3 py-3 font-mono text-steel">0816 ··· 7740</td>
+              <td class="px-3 py-3 text-right font-mono">89%</td>
+              <td class="px-5 py-3 text-right"><span class="text-[11px] font-medium text-confirm bg-confirm/10 rounded-full px-2.5 py-1">Active</span></td></tr>
+            <tr onclick="openStudent(this)" class="row hover:bg-mist/15 cursor-pointer">
+              <td class="pl-5 pr-3 py-3"><input type="checkbox" class="h-4 w-4 rounded border-whisper accent-[#2177EF]"></td>
+              <td class="px-3 py-3"><div class="flex items-center gap-3">
+                <span class="h-8 w-8 rounded-full bg-wash text-blue grid place-items-center text-[11px] font-semibold shrink-0">IS</span>
+                <span class="font-medium name">Ibrahim Suleiman</span></div></td>
+              <td class="px-3 py-3 font-mono text-steel reg">AFA/2024/0125</td>
+              <td class="px-3 py-3">JSS 2A</td><td class="px-3 py-3 font-mono text-steel">0701 ··· 3318</td>
+              <td class="px-3 py-3 text-right font-mono">93%</td>
+              <td class="px-5 py-3 text-right"><span class="text-[11px] font-medium text-confirm bg-confirm/10 rounded-full px-2.5 py-1">Active</span></td></tr>
+          </tbody>
+        </table>
+        </div>
+        <div class="flex items-center justify-between px-5 py-3.5 border-t border-whisper/60 text-[12px] text-steel">
+          <p>Showing <span class="font-mono text-charcoal">1–38</span> of <span class="font-mono text-charcoal">38</span> in JSS 2A</p>
+          <div class="flex gap-1.5">
+            <button onclick="toast('Already on the first page')" class="h-8 w-8 rounded-lg border border-whisper grid place-items-center hover:bg-mist/30">←</button>
+            <button class="h-8 w-8 rounded-lg bg-blue text-white grid place-items-center font-mono text-[12px]">1</button>
+            <button onclick="toast('No more pages — showing all 38')" class="h-8 w-8 rounded-lg border border-whisper grid place-items-center hover:bg-mist/30">→</button>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+<script>
+function filterRows(){
+  const q=document.getElementById('q').value.toLowerCase();
+  document.querySelectorAll('#rows .row').forEach(r=>{
+    const t=(r.querySelector('.name').textContent+r.querySelector('.reg').textContent).toLowerCase();
+    r.style.display=t.includes(q)?'':'none';
+  });
+}
+</script>
+
+<!-- Student profile slide-over -->
+<div id="sdBackdrop" onclick="closeStudent()" class="fixed inset-0 z-40 bg-ink/35 backdrop-blur-[2px] opacity-0 pointer-events-none transition-opacity duration-200"></div>
+<aside id="sDrawer" class="fixed inset-y-0 right-0 z-50 w-full sm:w-[460px] bg-white shadow-lift translate-x-full transition-transform duration-300 flex flex-col" style="transition-timing-function:cubic-bezier(.2,.8,.2,1)">
+  <div class="flex items-center justify-between px-5 py-4 border-b border-whisper/70">
+    <p class="text-[13px] font-semibold tracking-tight">Student profile</p>
+    <button onclick="closeStudent()" class="h-9 w-9 grid place-items-center rounded-lg hover:bg-mist/40 text-steel">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+  </div>
+  <div class="flex-1 overflow-y-auto">
+    <div class="px-5 py-5 flex items-center gap-4 border-b border-whisper/60">
+      <div id="sdAvatar" class="h-14 w-14 rounded-2xl bg-wash text-blue grid place-items-center text-[18px] font-semibold"></div>
+      <div class="min-w-0">
+        <p id="sdName" class="text-[17px] font-semibold tracking-tight"></p>
+        <p class="text-[12px] text-steel font-mono mt-0.5"><span id="sdReg"></span> · <span id="sdClass"></span></p>
+        <span id="sdStatus" class="inline-block mt-1.5"></span>
+      </div>
+    </div>
+    <div class="grid grid-cols-3 divide-x divide-whisper/60 border-b border-whisper/60 text-center">
+      <div class="py-3.5"><p id="sdAtt" class="font-mono text-[17px] font-semibold"></p><p class="text-[10px] text-steel uppercase tracking-wider mt-0.5">Attendance</p></div>
+      <div class="py-3.5"><p id="sdAvg" class="font-mono text-[17px] font-semibold"></p><p class="text-[10px] text-steel uppercase tracking-wider mt-0.5">Term avg</p></div>
+      <div class="py-3.5"><p id="sdPos" class="font-mono text-[17px] font-semibold"></p><p class="text-[10px] text-steel uppercase tracking-wider mt-0.5">Position</p></div>
+    </div>
+    <div class="px-5 py-4 space-y-4">
+      <div>
+        <p class="text-[10.5px] font-semibold uppercase tracking-[0.07em] text-steel">Personal information</p>
+        <dl class="mt-2 grid grid-cols-2 gap-x-4 gap-y-2.5 text-[12.5px]">
+          <div><dt class="text-steel">Gender</dt><dd id="sdGender" class="font-medium mt-0.5"></dd></div>
+          <div><dt class="text-steel">Date of birth</dt><dd id="sdDob" class="font-medium mt-0.5 font-mono"></dd></div>
+          <div><dt class="text-steel">State of origin</dt><dd id="sdState" class="font-medium mt-0.5"></dd></div>
+          <div><dt class="text-steel">Admitted</dt><dd id="sdAdm" class="font-medium mt-0.5 font-mono"></dd></div>
+        </dl>
+      </div>
+      <div>
+        <p class="text-[10.5px] font-semibold uppercase tracking-[0.07em] text-steel">Guardian</p>
+        <div class="mt-2 flex items-center gap-3 rounded-xl bg-canvas ring-1 ring-whisper/80 px-3.5 py-3">
+          <div class="h-9 w-9 rounded-full bg-mist text-ink grid place-items-center text-[11px] font-semibold" id="sdGAvatar"></div>
+          <div class="min-w-0 flex-1">
+            <p id="sdGName" class="text-[13px] font-medium"></p>
+            <p class="text-[11px] text-steel"><span id="sdGRel"></span> · <span id="sdGPhone" class="font-mono"></span></p>
+          </div>
+          <span id="sdGPortal" class="text-[10px] font-medium rounded-full px-2 py-0.5"></span>
+        </div>
+      </div>
+      <div>
+        <p class="text-[10.5px] font-semibold uppercase tracking-[0.07em] text-steel">Result access</p>
+        <div class="mt-2 flex items-center justify-between rounded-xl bg-canvas ring-1 ring-whisper/80 px-3.5 py-3">
+          <div><p class="text-[11px] text-steel">Access code · 2025/26</p>
+          <p id="sdCode" class="font-mono text-[14px] font-semibold tracking-[0.12em] mt-0.5"></p></div>
+          <button onclick="toast('New access code generated')" class="h-8 px-3 rounded-lg border border-whisper text-[11.5px] font-medium hover:bg-mist/30">Regenerate</button>
+        </div>
+      </div>
+      <div>
+        <p class="text-[10.5px] font-semibold uppercase tracking-[0.07em] text-steel">Published results</p>
+        <div class="mt-2 space-y-1.5">
+          <a onclick="toast('Opening Third Term report card…')" class="cursor-pointer flex items-center justify-between rounded-xl hover:bg-mist/30 ring-1 ring-whisper/80 px-3.5 py-2.5 text-[12.5px]">
+            <span>Third Term · 2025/26</span><span class="text-[10.5px] font-medium text-blue bg-wash rounded-full px-2 py-0.5">Published ✓</span></a>
+          <a onclick="toast('Opening Second Term report card…')" class="cursor-pointer flex items-center justify-between rounded-xl hover:bg-mist/30 ring-1 ring-whisper/80 px-3.5 py-2.5 text-[12.5px]">
+            <span>Second Term · 2025/26</span><span class="text-[10.5px] font-medium text-blue bg-wash rounded-full px-2 py-0.5">Published ✓</span></a>
+        </div>
+      </div>
+      <p class="text-[10.5px] text-steel/70">Health information is restricted — visible to owner, admin and form teacher only.</p>
+    </div>
+  </div>
+  <div class="border-t border-whisper/70 p-4 space-y-2">
+    <a href="student-detail.html" class="flex items-center justify-center gap-1.5 h-10 rounded-lg bg-blue text-white text-[12.5px] font-medium active:translate-y-px">Open full record
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+    <div class="grid grid-cols-3 gap-2">
+      <button onclick="toast('Edit student — coming soon')" class="h-9 rounded-lg border border-whisper text-[12px] font-medium hover:bg-mist/30">Edit</button>
+      <button onclick="toast('Move class — coming soon')" class="h-9 rounded-lg border border-whisper text-[12px] font-medium hover:bg-mist/30">Move class</button>
+      <button onclick="toast('Preparing report card for print…')" class="h-9 rounded-lg border border-whisper text-[12px] font-medium hover:bg-mist/30">Print card</button>
+    </div>
+  </div>
+</aside>
+
+<script>
+const EXTRA = {
+ 'Aisha Bello':    {g:'Female', dob:'14 Mar 2012', st:'Bauchi', adm:'Sep 2024', avg:'80.4%', pos:'5th of 38', gn:'Alhaji Bello Usman', rel:'Father', code:'K7N4-XR2M', portal:1},
+ 'Chinedu Okafor': {g:'Male',   dob:'02 Aug 2011', st:'Anambra', adm:'Sep 2024', avg:'67.0%', pos:'14th of 38', gn:'Mrs. Adaeze Okafor', rel:'Mother', code:'P3W8-QT6H', portal:1},
+ 'Fatima Abubakar':{g:'Female', dob:'27 Jan 2012', st:'Bauchi', adm:'Sep 2024', avg:'87.2%', pos:'3rd of 38', gn:'Hajiya Maryam Abubakar', rel:'Mother', code:'M9C2-VK5D', portal:1},
+ 'Usman Bello':    {g:'Male',   dob:'09 Nov 2011', st:'Jigawa', adm:'Sep 2024', avg:'58.3%', pos:'29th of 38', gn:'Mallam Sani Bello', rel:'Father', code:'T4F7-NB3J', portal:0},
+ 'Halima Yusuf':   {g:'Female', dob:'21 May 2012', st:'Kaduna', adm:'Jan 2025', avg:'71.8%', pos:'11th of 38', gn:'Dr. Yusuf Ahmed', rel:'Father', code:'R8D1-LZ9S', portal:0},
+ 'Ibrahim Suleiman':{g:'Male',  dob:'30 Jun 2011', st:'Bauchi', adm:'Sep 2024', avg:'68.5%', pos:'13th of 38', gn:'Mrs. Zainab Suleiman', rel:'Mother', code:'W2H6-GY4P', portal:1},
+};
+function openStudent(row){
+  const name=row.querySelector('.name').textContent, reg=row.querySelector('.reg').textContent;
+  const tds=row.querySelectorAll('td'); const e=EXTRA[name]||{};
+  const initials=name.split(' ').map(w=>w[0]).join('');
+  sdAvatar.textContent=initials; sdName.textContent=name; sdReg.textContent=reg;
+  sdClass.textContent=tds[3].textContent; sdAtt.textContent=tds[5].textContent.trim();
+  sdStatus.outerHTML='<span id="sdStatus" class="inline-block mt-1.5">'+tds[6].innerHTML+'</span>';
+  sdGender.textContent=e.g||'—'; sdDob.textContent=e.dob||'—'; sdState.textContent=e.st||'—'; sdAdm.textContent=e.adm||'—';
+  sdAvg.textContent=e.avg||'—'; sdPos.textContent=(e.pos||'—').split(' ')[0];
+  sdGName.textContent=e.gn||'—'; sdGRel.textContent=e.rel||''; sdGPhone.textContent=tds[4].textContent;
+  sdGAvatar.textContent=(e.gn||'—').split(' ').slice(-2).map(w=>w[0]).join('');
+  sdCode.textContent=e.code||'····';
+  sdGPortal.textContent=e.portal?'Portal claimed ✓':'Not claimed';
+  sdGPortal.className='text-[10px] font-medium rounded-full px-2 py-0.5 '+(e.portal?'text-confirm bg-confirm/10':'text-steel bg-mist/60');
+  document.getElementById('sDrawer').classList.remove('translate-x-full');
+  const b=document.getElementById('sdBackdrop'); b.classList.remove('opacity-0','pointer-events-none');
+}
+function closeStudent(){
+  document.getElementById('sDrawer').classList.add('translate-x-full');
+  const b=document.getElementById('sdBackdrop'); b.classList.add('opacity-0','pointer-events-none');
+}
+</script>
+
+<script src="../assets/shell.js"></script>
+
+<div id="addStuM" class="modal fixed inset-0 z-50 bg-ink/40 backdrop-blur-sm grid place-items-center p-4" style="opacity:0;pointer-events:none;transition:opacity .2s" onclick="if(event.target===this)this.classList.remove('open')">
+  <div class="bg-white rounded-2xl shadow-lift max-w-[480px] w-full p-6 max-h-[90vh] overflow-y-auto">
+    <div class="flex items-center justify-between mb-3"><p class="text-[15px] font-semibold">Add students</p><button onclick="document.getElementById('addStuM').classList.remove('open')" class="h-8 w-8 grid place-items-center rounded-lg hover:bg-mist/40 text-steel">✕</button></div>
+    <div class="flex gap-1.5 mb-3 text-[12px] font-medium"><button onclick="stuTab(0)" id="su0" class="h-8 px-3 rounded-lg bg-blue text-white">One student</button><button onclick="stuTab(1)" id="su1" class="h-8 px-3 rounded-lg bg-white ring-1 ring-whisper text-steel">Import CSV</button></div>
+    <div id="suP0">
+      <div class="grid grid-cols-2 gap-3 text-[12.5px]">
+        <div class="col-span-2"><label class="text-[11.5px] font-semibold text-steel">Full name</label><input placeholder="Student name" class="mt-1.5 w-full h-10 rounded-lg border border-whisper bg-canvas px-3.5"></div>
+        <div><label class="text-[11.5px] font-semibold text-steel">Class</label><select class="mt-1.5 w-full h-10 rounded-lg border border-whisper bg-canvas px-2.5"><option>JSS 1A</option><option>JSS 2A</option></select></div>
+        <div><label class="text-[11.5px] font-semibold text-steel">Gender</label><select class="mt-1.5 w-full h-10 rounded-lg border border-whisper bg-canvas px-2.5"><option>Female</option><option>Male</option></select></div>
+        <div><label class="text-[11.5px] font-semibold text-steel">Date of birth</label><input type="date" class="mt-1.5 w-full h-10 rounded-lg border border-whisper bg-canvas px-2.5 font-mono text-[12px]"></div>
+        <div><label class="text-[11.5px] font-semibold text-steel">Guardian phone</label><input placeholder="080â¦" class="mt-1.5 w-full h-10 rounded-lg border border-whisper bg-canvas px-3 font-mono text-[12px]"></div>
+      </div>
+      <p class="text-[11px] text-steel mt-3">An admission number &amp; login slip are generated automatically on save.</p>
+    </div>
+    <div id="suP1" class="hidden">
+      <button onclick="toast('Choose a CSV file to upload')" class="w-full h-24 rounded-xl border border-dashed border-whisper bg-canvas text-[12.5px] text-steel hover:bg-mist/30">Drop your CSV here or click to upload</button>
+      <p class="text-[11px] text-steel mt-2">We clean the file &amp; map columns (name, class, DOB, guardian phone). Rows with issues are flagged before import. <button onclick="toast('Downloading CSV template…')" class="text-blue font-medium">Download template</button></p>
+    </div>
+    <div class="flex justify-end gap-2 mt-5"><button onclick="document.getElementById('addStuM').classList.remove('open')" class="h-10 px-4 rounded-lg ring-1 ring-whisper text-[13px] font-medium text-steel">Cancel</button><button onclick="document.getElementById('addStuM').classList.remove('open')" class="h-10 px-5 rounded-lg bg-blue text-white text-[13px] font-semibold shadow-soft">Add &amp; generate slip</button></div>
+  </div>
+</div>
+<style>.modal.open{opacity:1!important;pointer-events:auto!important}</style>
+<script>function stuTab(n){document.getElementById('suP0').classList.toggle('hidden',n!==0);document.getElementById('suP1').classList.toggle('hidden',n!==1);document.getElementById('su0').className='h-8 px-3 rounded-lg '+(n===0?'bg-blue text-white':'bg-white ring-1 ring-whisper text-steel');document.getElementById('su1').className='h-8 px-3 rounded-lg '+(n===1?'bg-blue text-white':'bg-white ring-1 ring-whisper text-steel');}</script>
+<div id="toast" class="hidden fixed bottom-5 left-1/2 -translate-x-1/2 z-[60] bg-ink text-white text-[12.5px] font-medium px-4 py-2.5 rounded-xl shadow-lift"></div>
+<script>function toast(m){var t=document.getElementById('toast');t.textContent=m;t.classList.remove('hidden');clearTimeout(window._tt);window._tt=setTimeout(function(){t.classList.add('hidden')},2200);}</script>
+
+</body>
+</html>

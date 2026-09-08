@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EdInsight — Comments & Insights</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script>tailwind.config={theme:{extend:{colors:{canvas:'#F7F9FC',ink:'#0B2A56',charcoal:'#18181B',steel:'#64748B',whisper:'#E2E8F0',blue:'#2177EF',wash:'#EAF2FE',mist:'#D3E4FD',confirm:'#16A34A',caution:'#D97706',alert:'#DC2626',excused:'#7C8DA6'},fontFamily:{sans:['Geist','sans-serif'],mono:['"Geist Mono"','monospace']},boxShadow:{soft:'0 1px 2px rgba(11,42,86,0.04), 0 6px 24px rgba(11,42,86,0.05)',lift:'0 1px 3px rgba(11,42,86,0.10), 0 12px 32px rgba(11,42,86,0.12)'}}}}</script>
+<style>@keyframes rise{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}.rise{animation:rise .45s cubic-bezier(.2,.8,.2,1) both}</style>
+</head>
+<body data-active="EdInsight" class="bg-canvas font-sans text-charcoal antialiased">
+<div class="flex min-h-screen">
+  <div id="sidebar-root"></div>
+  <div class="flex-1 min-w-0">
+    <header class="h-[60px] bg-white/80 backdrop-blur-md border-b border-whisper/70 flex items-center justify-between px-4 sm:px-7 sticky top-0 z-20">
+      <div class="flex items-center gap-3">
+        <h1 class="text-[15px] font-semibold tracking-tight flex items-center gap-2">
+          <span class="h-6 w-6 rounded-lg bg-blue grid place-items-center text-white"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l1.9 5.7L19.5 10l-5.6 1.3L12 17l-1.9-5.7L4.5 10l5.6-1.3z"/></svg></span>
+          EdInsight</h1>
+        <select class="h-9 rounded-lg border border-whisper bg-white px-3 text-[13px] font-medium"><option>JSS 2A · Third Term</option><option>JSS 1A · Third Term</option></select>
+      </div>
+      <button onclick="toast('Queued — whole-school comments will be ready by morning')" class="h-9 px-4 rounded-lg bg-ink text-white text-[12.5px] font-medium active:translate-y-px hidden sm:block">Generate whole school overnight</button>
+    </header>
+
+    <main class="p-4 sm:p-7 max-w-[1100px] space-y-5">
+
+      <!-- Class summary — data-first -->
+      <section class="rise space-y-4">
+        <div class="grid grid-cols-2 xl:grid-cols-4 gap-3">
+          <div class="bg-white border border-whisper/70 rounded-2xl p-4 shadow-soft">
+            <p class="text-[10.5px] font-semibold uppercase tracking-wider text-steel">Class average</p>
+            <p class="font-mono text-[24px] font-semibold mt-2 leading-none">64.8<span class="text-[13px] text-steel">%</span></p>
+            <p class="text-[11px] mt-2"><span class="text-confirm font-medium">↑ 2.1%</span> <span class="text-steel">vs term 2</span></p></div>
+          <div class="bg-white border border-whisper/70 rounded-2xl p-4 shadow-soft">
+            <p class="text-[10.5px] font-semibold uppercase tracking-wider text-steel">Best subject</p>
+            <p class="text-[15px] font-semibold mt-2 leading-tight">Qur'an</p>
+            <p class="text-[11px] mt-1.5"><span class="font-mono text-confirm">72.8</span> <span class="text-steel">· school's highest</span></p></div>
+          <div class="bg-white border border-caution/30 bg-caution/[0.04] rounded-2xl p-4 shadow-soft">
+            <p class="text-[10.5px] font-semibold uppercase tracking-wider text-caution">Needs attention</p>
+            <p class="text-[15px] font-semibold mt-2 leading-tight">Basic Technology</p>
+            <p class="text-[11px] mt-1.5"><span class="font-mono text-alert">↓ 4.3</span> <span class="text-steel">· 5 students drive it</span></p></div>
+          <div class="bg-white border border-whisper/70 rounded-2xl p-4 shadow-soft">
+            <p class="text-[10.5px] font-semibold uppercase tracking-wider text-steel">Pattern found</p>
+            <p class="text-[15px] font-semibold mt-2 leading-tight">Thursdays</p>
+            <p class="text-[11px] mt-1.5 text-steel">low attendance = the Tech dip</p></div>
+        </div>
+
+        <div class="bg-white border border-whisper/70 rounded-2xl shadow-soft p-6">
+          <div class="flex items-center justify-between">
+            <h2 class="font-semibold tracking-tight text-[15px]">Subject averages — term 3 vs term 2</h2>
+            <button onclick="toast('Recomputing subject averages…')" class="h-8 px-3 rounded-lg border border-whisper text-[12px] font-medium hover:bg-mist/30">Regenerate</button>
+          </div>
+          <div class="mt-5 space-y-3">
+            
+<div class="grid grid-cols-[110px_1fr_90px] gap-3 items-center text-[12.5px]">
+              <span class="font-medium truncate">Qur’an</span>
+              <div class="relative h-5">
+                <div class="absolute inset-y-1.5 left-0 rounded-full bg-mist/70" style="width:70.1%"></div>
+                <div class="absolute inset-y-0.5 left-0 rounded-full bg-blue" style="width:72.8%"></div>
+              </div>
+              <span class="font-mono text-right">72.8 <span class="text-confirm text-[10.5px]">↑2.7</span></span>
+            </div><div class="grid grid-cols-[110px_1fr_90px] gap-3 items-center text-[12.5px]">
+              <span class="font-medium truncate">Mathematics</span>
+              <div class="relative h-5">
+                <div class="absolute inset-y-1.5 left-0 rounded-full bg-mist/70" style="width:56.0%"></div>
+                <div class="absolute inset-y-0.5 left-0 rounded-full bg-blue" style="width:61.4%"></div>
+              </div>
+              <span class="font-mono text-right">61.4 <span class="text-confirm text-[10.5px]">↑5.4</span></span>
+            </div><div class="grid grid-cols-[110px_1fr_90px] gap-3 items-center text-[12.5px]">
+              <span class="font-medium truncate">English</span>
+              <div class="relative h-5">
+                <div class="absolute inset-y-1.5 left-0 rounded-full bg-mist/70" style="width:57.2%"></div>
+                <div class="absolute inset-y-0.5 left-0 rounded-full bg-blue" style="width:58.9%"></div>
+              </div>
+              <span class="font-mono text-right">58.9 <span class="text-confirm text-[10.5px]">↑1.7</span></span>
+            </div><div class="grid grid-cols-[110px_1fr_90px] gap-3 items-center text-[12.5px]">
+              <span class="font-medium truncate">Basic Science</span>
+              <div class="relative h-5">
+                <div class="absolute inset-y-1.5 left-0 rounded-full bg-mist/70" style="width:61.0%"></div>
+                <div class="absolute inset-y-0.5 left-0 rounded-full bg-blue" style="width:63.2%"></div>
+              </div>
+              <span class="font-mono text-right">63.2 <span class="text-confirm text-[10.5px]">↑2.2</span></span>
+            </div><div class="grid grid-cols-[110px_1fr_90px] gap-3 items-center text-[12.5px]">
+              <span class="font-medium truncate">Arabic</span>
+              <div class="relative h-5">
+                <div class="absolute inset-y-1.5 left-0 rounded-full bg-mist/70" style="width:64.3%"></div>
+                <div class="absolute inset-y-0.5 left-0 rounded-full bg-blue" style="width:66.1%"></div>
+              </div>
+              <span class="font-mono text-right">66.1 <span class="text-confirm text-[10.5px]">↑1.8</span></span>
+            </div><div class="grid grid-cols-[110px_1fr_90px] gap-3 items-center text-[12.5px]">
+              <span class="font-medium truncate">Basic Tech</span>
+              <div class="relative h-5">
+                <div class="absolute inset-y-1.5 left-0 rounded-full bg-mist/70" style="width:57.1%"></div>
+                <div class="absolute inset-y-0.5 left-0 rounded-full bg-alert" style="width:52.8%"></div>
+              </div>
+              <span class="font-mono text-right">52.8 <span class="text-alert text-[10.5px]">↓4.3</span></span>
+            </div>
+          </div>
+          <p class="text-[10.5px] text-steel mt-4 flex items-center gap-3"><span class="flex items-center gap-1.5"><span class="h-2 w-4 rounded-full bg-blue inline-block"></span>this term</span><span class="flex items-center gap-1.5"><span class="h-2 w-4 rounded-full bg-mist inline-block"></span>last term</span><span class="ml-auto">Numbers computed from records — AI writes words, never numbers</span></p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-[12.5px]">
+          <div class="rounded-2xl bg-confirm/[0.06] ring-1 ring-confirm/20 p-4">
+            <p class="font-semibold text-confirm text-[11px] uppercase tracking-wider">Celebrate</p>
+            <p class="mt-1.5 text-charcoal/85"><span class="font-medium">Fatima A.</span> &amp; <span class="font-medium">Aisha B.</span> — up 2+ positions</p></div>
+          <div class="rounded-2xl bg-caution/[0.07] ring-1 ring-caution/25 p-4">
+            <p class="font-semibold text-caution text-[11px] uppercase tracking-wider">Watch</p>
+            <p class="mt-1.5 text-charcoal/85"><span class="font-mono">5</span> students &lt;45 in Basic Tech — same Thursday absentees</p></div>
+          <div class="rounded-2xl bg-wash ring-1 ring-mist p-4">
+            <p class="font-semibold text-ink text-[11px] uppercase tracking-wider">Suggest</p>
+            <p class="mt-1.5 text-charcoal/85">Move the Tech double period off Thursday next term</p></div>
+        </div>
+      </section>
+
+      <!-- Comment drafts -->
+      <section class="rise bg-white border border-whisper/70 rounded-2xl shadow-soft overflow-hidden" style="animation-delay:.06s">
+        <div class="px-6 py-4 border-b border-whisper/60 flex items-center justify-between flex-wrap gap-2">
+          <div>
+            <h2 class="font-semibold tracking-tight text-[15px]">Report-card comment drafts</h2>
+            <p class="text-[11.5px] text-steel mt-0.5"><span class="font-mono text-confirm">34 drafted</span> · <span class="font-mono">2 edited</span> · 4 awaiting scores — teachers approve every word</p>
+          </div>
+          <div class="flex gap-2">
+            <select class="h-9 rounded-lg border border-whisper bg-white px-3 text-[12px] font-medium"><option>Tone: Warm</option><option>Tone: Formal</option></select>
+            <button onclick="alert('Drafting comments for 4 remaining students…')" class="h-9 px-3.5 rounded-lg bg-blue text-white text-[12px] font-medium active:translate-y-px">Draft remaining 4</button>
+          </div>
+        </div>
+        <ul class="divide-y divide-whisper/60">
+          <li class="px-6 py-4 hover:bg-mist/10">
+            <div class="flex items-center justify-between">
+              <p class="text-[13px] font-medium">Fatima Abubakar <span class="font-mono text-[11px] text-steel ml-1.5">87.2% · 3rd</span></p>
+              <span class="text-[10.5px] font-medium text-confirm bg-confirm/10 rounded-full px-2.5 py-1">AI draft</span>
+            </div>
+            <textarea rows="2" class="mt-2 w-full rounded-xl border border-whisper bg-canvas p-3 text-[13px] leading-relaxed focus:outline-none focus:ring-2 focus:ring-blue/50">An outstanding term — Fatima rose two positions to 3rd with distinction in seven subjects, and her Qur'an result is the best in the class. A little more practical work in Basic Technology will make next term complete.</textarea>
+            <div class="flex gap-1.5 mt-2 flex-wrap">
+              <span class="text-[10px] text-steel mr-1 pt-1">Quick-pick:</span>
+              <button onclick="qp(this)" class="text-[11px] rounded-full ring-1 ring-whisper px-2.5 py-1 hover:bg-wash hover:ring-mist">Excellent result — keep it up</button>
+              <button onclick="qp(this)" class="text-[11px] rounded-full ring-1 ring-whisper px-2.5 py-1 hover:bg-wash hover:ring-mist">A delight to teach</button>
+              <button onclick="qp(this)" class="text-[11px] rounded-full ring-1 ring-whisper px-2.5 py-1 hover:bg-wash hover:ring-mist">Strong across all subjects</button>
+            </div>
+          </li>
+          <li class="px-6 py-4 hover:bg-mist/10">
+            <div class="flex items-center justify-between">
+              <p class="text-[13px] font-medium">Usman Bello <span class="font-mono text-[11px] text-steel ml-1.5">58.3% · 29th</span></p>
+              <span class="text-[10.5px] font-medium text-blue bg-wash rounded-full px-2.5 py-1">Edited by you</span>
+            </div>
+            <textarea rows="2" class="mt-2 w-full rounded-xl border-2 border-mist bg-white p-3 text-[13px] leading-relaxed focus:outline-none focus:ring-2 focus:ring-blue/50">Usman has real ability — his Mathematics shows it — but missed classes are costing him marks, especially in Basic Technology. With steady attendance next term, a top-half finish is well within his reach.</textarea>
+            <div class="flex gap-1.5 mt-2 flex-wrap">
+              <span class="text-[10px] text-steel mr-1 pt-1">Quick-pick:</span>
+              <button onclick="qp(this)" class="text-[11px] rounded-full ring-1 ring-whisper px-2.5 py-1 hover:bg-wash hover:ring-mist">Capable of much more</button>
+              <button onclick="qp(this)" class="text-[11px] rounded-full ring-1 ring-whisper px-2.5 py-1 hover:bg-wash hover:ring-mist">Attendance is holding him back</button>
+            </div>
+          </li>
+          <li class="px-6 py-4 hover:bg-mist/10 opacity-60">
+            <div class="flex items-center justify-between">
+              <p class="text-[13px] font-medium">Halima Yusuf <span class="font-mono text-[11px] text-steel ml-1.5">awaiting Exam score</span></p>
+              <span class="text-[10.5px] font-medium text-excused bg-excused/10 rounded-full px-2.5 py-1">Pending scores</span>
+            </div>
+            <p class="mt-2 text-[12px] text-steel">Drafts generate once all components are scored — Mathematics exam still missing.</p>
+          </li>
+        </ul>
+        <div class="px-6 py-3.5 bg-canvas border-t border-whisper/60 text-[11px] text-steel flex items-center justify-between">
+          <span>School-wide bulk runs use the overnight queue — "ready within hours, we'll notify you."</span>
+          <span class="font-mono">AI credits: ₦14,200 left</span>
+        </div>
+      </section>
+    </main>
+  </div>
+</div>
+<script src="../assets/shell.js"></script>
+<div id="toast" class="hidden fixed bottom-5 left-1/2 -translate-x-1/2 z-[60] bg-ink text-white text-[12.5px] font-medium px-4 py-2.5 rounded-xl shadow-lift"></div>
+<script>function toast(m){var t=document.getElementById('toast');t.textContent=m;t.classList.remove('hidden');clearTimeout(window._tt);window._tt=setTimeout(function(){t.classList.add('hidden')},2200);}
+function qp(b){var li=b.closest('li');var ta=li&&li.querySelector('textarea');if(ta){ta.value=b.textContent.trim()+'.';ta.focus();}toast('Comment applied');}</script>
+</body>
+</html>

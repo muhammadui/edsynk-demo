@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Edsynk — Permission Slips</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script>tailwind.config={theme:{extend:{colors:{canvas:'#F7F9FC',ink:'#0B2A56',charcoal:'#18181B',steel:'#64748B',whisper:'#E2E8F0',blue:'#2177EF',skyblue:'#5C9DF5',wash:'#EAF2FE',mist:'#D3E4FD',confirm:'#16A34A',caution:'#D97706',alert:'#DC2626',excused:'#7C8DA6'},fontFamily:{sans:['Geist','sans-serif'],mono:['"Geist Mono"','monospace']},boxShadow:{soft:'0 1px 2px rgba(11,42,86,0.04), 0 6px 24px rgba(11,42,86,0.05)',lift:'0 1px 3px rgba(11,42,86,0.10), 0 12px 32px rgba(11,42,86,0.12)'}}}}</script>
+<style>@keyframes rise{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}.rise{animation:rise .45s cubic-bezier(.2,.8,.2,1) both}</style>
+</head>
+<body data-active="Permission Slips" data-persona="parent" class="bg-canvas font-sans text-charcoal antialiased">
+<div class="flex min-h-screen">
+  <div id="sidebar-root"></div>
+  <div class="flex-1 min-w-0">
+    <header class="h-[60px] bg-white/80 backdrop-blur-md border-b border-whisper/70 flex items-center justify-between px-4 sm:px-7 sticky top-0 z-20">
+      <div class="flex items-center gap-3"><h1 class="text-[15px] font-semibold tracking-tight">Permission Slips</h1>
+        <span id="needBadge" class="font-mono text-[11.5px] font-medium text-alert bg-alert/10 rounded-full px-2.5 py-1 hidden sm:inline">2 need a reply</span></div>
+      <button onclick="location.href='notifications.html'" class="h-9 w-9 grid place-items-center rounded-lg hover:bg-mist/40 text-steel border border-transparent hover:border-whisper"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 01-3.4 0"/></svg></button>
+    </header>
+
+    <main class="p-4 sm:p-7 max-w-[820px] space-y-4 pb-10">
+
+      <!-- intro -->
+      <section class="rise rounded-2xl bg-wash/50 ring-1 ring-mist/60 px-4 py-3 text-[12px] text-ink flex items-start gap-2.5">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-blue shrink-0 mt-0.5"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+        <span>When you tap <span class="font-semibold">Give permission</span> or <span class="font-semibold">Decline</span>, your answer is saved as a recorded consent under the Nigeria Data Protection Act (NDPA). You can change or withdraw it any time before the deadline.</span>
+      </section>
+
+      <!-- filters -->
+      <section class="rise flex gap-1.5 text-[12px] font-medium overflow-x-auto" id="filter" style="animation-delay:.04s">
+        <button data-f="all" class="h-9 px-3.5 rounded-xl bg-blue text-white shrink-0">All</button>
+        <button data-f="need" class="h-9 px-3.5 rounded-xl bg-white ring-1 ring-whisper text-steel shrink-0">Needs reply</button>
+        <button data-f="Fatima" class="h-9 px-3.5 rounded-xl bg-white ring-1 ring-whisper text-steel shrink-0">Fatima</button>
+        <button data-f="Yusuf" class="h-9 px-3.5 rounded-xl bg-white ring-1 ring-whisper text-steel shrink-0">Yusuf</button>
+        <button data-f="done" class="h-9 px-3.5 rounded-xl bg-white ring-1 ring-whisper text-steel shrink-0">Answered</button>
+      </section>
+
+      <div id="list" class="rise space-y-4" style="animation-delay:.07s"></div>
+
+      <p class="rise text-[11px] text-steel text-center px-4" style="animation-delay:.1s">Need to talk to the school about a slip? <a href="messages.html" class="text-blue font-medium">Message the office</a>.</p>
+    </main>
+  </div>
+</div>
+<div id="toast" class="hidden fixed bottom-5 left-1/2 -translate-x-1/2 z-[60] bg-ink text-white text-[12.5px] font-medium px-4 py-2.5 rounded-xl shadow-lift"></div>
+<script>function toast(m){var t=document.getElementById('toast');t.textContent=m;t.classList.remove('hidden');clearTimeout(window._tt);window._tt=setTimeout(function(){t.classList.add('hidden')},2200);}</script>
+<script src="../assets/shell.js"></script>
+<script>
+const TYPES={
+ excursion:['Excursion','text-blue bg-wash','<path d="M3 11l19-9-9 19-2-8-8-2z"/>'],
+ media:['Media consent','text-caution bg-caution/10','<rect x="2" y="6" width="14" height="12" rx="2"/><path d="M22 8l-6 4 6 4z"/>'],
+ medical:['Medical','text-alert bg-alert/10','<path d="M11 2h2v6h6v2h-6v6h-2v-6H5V8h6z"/>'],
+ sports:['Sports','text-confirm bg-confirm/10','<circle cx="12" cy="12" r="9"/><path d="M12 3v18M3 12h18"/>']
+};
+const SLIPS=[
+ {id:'PS-118',type:'excursion',child:'Fatima',cls:'JSS 2A',title:'JSS 2 Educational Excursion — Bauchi State History &amp; Civic Centre',
+  due:'Mon 30 Jun 2026',date:'Thursday, 3 July 2026 · 8:00am – 3:00pm',cost:'₦3,500 (transport + entry + lunch)',
+  desc:'The JSS 2 classes will visit the Bauchi State History &amp; Civic Centre and the Gidan Makama Museum as part of the Social Studies and Civic Education syllabus. Pupils travel together by hired coaster bus, accompanied by 4 teachers, and return to school by 3:00pm for normal dismissal.',
+  consents:['Travel by school-arranged transport to and from the venue','Participation in supervised activities at the venue','Basic first-aid to be administered by staff if needed'],
+  status:'need'},
+ {id:'PS-121',type:'media',child:'Fatima',cls:'JSS 2A',title:'Use of your child\'s photo in school materials',
+  due:'Fri 4 Jul 2026',date:'Ongoing — for the 2025/26 session',cost:null,
+  desc:'From time to time the school photographs pupils during lessons, events and prize-givings. We would like your permission to use Fatima\'s image in the school prospectus, noticeboards, the school website and the school\'s official social media pages. You may decline without any effect on your child.',
+  consents:['Photos/video on the school website and prospectus','Photos/video on the school\'s official WhatsApp &amp; Facebook pages','Display of class and event photos on school noticeboards'],
+  status:'need'},
+ {id:'PS-109',type:'sports',child:'Yusuf',cls:'SS1 Science',title:'Inter-house Sports — relay &amp; football team',
+  due:'closed',date:'Saturday, 21 June 2026',cost:'₦1,000 (house jersey)',
+  desc:'Yusuf was selected for the Green House relay and football teams for the annual Inter-house Sports. Practice held after school on Tuesdays and Thursdays leading up to the event.',
+  consents:['Participation in athletics and football events','Travel to the township stadium for the final'],
+  status:'done',decision:'consented',signed:'Signed by Hajiya Maryam Abubakar · 12 Jun 2026'},
+ {id:'PS-095',type:'medical',child:'Yusuf',cls:'SS1 Science',title:'Routine school health screening &amp; deworming',
+  due:'closed',date:'Wednesday, 28 May 2026',cost:null,
+  desc:'The State Primary Health Care Board conducts a routine screening (height, weight, eyesight) and administers deworming tablets to all students. Trained health workers attend with school staff present.',
+  consents:['Height, weight and basic eyesight check','Administration of a standard deworming tablet'],
+  status:'done',decision:'declined',signed:'Declined by Hajiya Maryam Abubakar · 26 May 2026 — handled at our family clinic'}
+];
+let f='all';
+
+function avatar(child){const c=child==='Fatima'?'bg-blue':'bg-skyblue';return `<span class="h-8 w-8 rounded-lg ${c} text-white grid place-items-center text-[11px] font-bold shrink-0">${child[0]}${child==='Fatima'?'A':'A'}</span>`;}
+function typePill(t){const T=TYPES[t];return `<span class="inline-flex items-center gap-1.5 text-[10.5px] font-semibold ${T[1]} rounded-full px-2.5 py-1"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">${T[2]}</svg>${T[0]}</span>`;}
+
+function card(s){
+  const statusPill = s.status==='need'
+    ? '<span class="text-[10.5px] font-semibold text-alert bg-alert/10 rounded-full px-2.5 py-1">Action needed</span>'
+    : s.decision==='consented'
+      ? '<span class="text-[10.5px] font-semibold text-confirm bg-confirm/10 rounded-full px-2.5 py-1">Consented ✓</span>'
+      : '<span class="text-[10.5px] font-semibold text-steel bg-canvas ring-1 ring-whisper rounded-full px-2.5 py-1">Declined</span>';
+  const consentList = s.consents.map(c=>`<li class="flex items-start gap-2"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="text-blue shrink-0 mt-0.5"><path d="M20 6L9 17l-5-5"/></svg><span>${c}</span></li>`).join('');
+  const meta = `<div class="grid sm:grid-cols-2 gap-x-6 gap-y-2 text-[12.5px] mt-3">
+      <div><p class="text-[10px] uppercase tracking-wider text-steel">When</p><p class="font-medium">${s.date}</p></div>
+      ${s.cost?`<div><p class="text-[10px] uppercase tracking-wider text-steel">Cost</p><p class="font-medium">${s.cost}</p></div>`:'<div><p class="text-[10px] uppercase tracking-wider text-steel">Cost</p><p class="font-medium text-confirm">No cost</p></div>'}
+      <div><p class="text-[10px] uppercase tracking-wider text-steel">Reply by</p><p class="font-medium ${s.status==='need'?'text-alert':''}">${s.due}</p></div>
+      <div><p class="text-[10px] uppercase tracking-wider text-steel">Reference</p><p class="font-mono font-medium">${s.id}</p></div>
+    </div>`;
+
+  let footer='';
+  if(s.status==='need'){
+    footer=`<div class="border-t border-whisper/60 px-5 py-4 bg-canvas/40">
+        <p class="text-[11.5px] text-steel mb-3">By giving permission you are recording your consent as <span class="font-medium text-charcoal">Hajiya Maryam Abubakar</span>, parent/guardian. This counts as your digital signature.</p>
+        <div class="flex flex-col sm:flex-row gap-2.5">
+          <button onclick="decide('${s.id}','consented',this)" class="flex-1 h-12 rounded-xl bg-confirm text-white text-[14px] font-semibold shadow-soft active:translate-y-px">Give permission</button>
+          <button onclick="decide('${s.id}','declined',this)" class="flex-1 sm:flex-none sm:px-6 h-12 rounded-xl bg-white ring-1 ring-whisper text-[14px] font-medium text-steel hover:bg-mist/30">Decline</button>
+        </div>
+      </div>`;
+  }else{
+    const tone=s.decision==='consented'?'bg-confirm/[0.05] ring-confirm/20':'bg-canvas ring-whisper';
+    const icon=s.decision==='consented'?'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#16A34A" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>':'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#64748B" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg>';
+    footer=`<div class="border-t border-whisper/60 px-5 py-4">
+        <div class="rounded-xl ring-1 ${tone} px-4 py-3 flex items-center gap-3">
+          <span class="h-9 w-9 rounded-lg ${s.decision==='consented'?'bg-confirm/10':'bg-white ring-1 ring-whisper'} grid place-items-center shrink-0">${icon}</span>
+          <div class="flex-1 min-w-0"><p class="text-[12.5px] font-semibold ${s.decision==='consented'?'text-confirm':'text-charcoal'}">${s.decision==='consented'?'Permission given':'Permission declined'}</p>
+          <p class="text-[11px] text-steel italic">${s.signed}</p></div>
+          <button onclick="withdraw('${s.id}')" class="text-[11.5px] font-medium text-blue shrink-0">Change</button>
+        </div>
+      </div>`;
+  }
+
+  return `<div id="${s.id}" class="bg-white ring-1 ${s.status==='need'?'ring-alert/20':'ring-whisper/80'} rounded-2xl shadow-soft overflow-hidden">
+    <div class="px-5 py-4 border-b border-whisper/60">
+      <div class="flex items-start justify-between gap-3">
+        <div class="flex items-center gap-2.5 min-w-0">${avatar(s.child)}<div class="min-w-0"><p class="text-[11px] text-steel">${s.child} · ${s.cls}</p><div class="mt-0.5">${typePill(s.type)}</div></div></div>
+        ${statusPill}
+      </div>
+      <p class="text-[15px] font-semibold mt-3 leading-snug">${s.title}</p>
+      <p class="text-[12.5px] text-steel mt-1.5 leading-relaxed">${s.desc}</p>
+      ${meta}
+      <div class="mt-3"><p class="text-[10px] uppercase tracking-wider text-steel mb-1.5">You are being asked to consent to</p>
+        <ul class="space-y-1.5 text-[12.5px]">${consentList}</ul></div>
+    </div>
+    ${footer}
+  </div>`;
+}
+
+function render(){
+  const items=SLIPS.filter(s=>f==='all'||(f==='need'&&s.status==='need')||(f==='done'&&s.status==='done')||s.child===f);
+  document.getElementById('list').innerHTML=items.map(card).join('')||'<p class="text-center text-[12.5px] text-steel py-10">Nothing here.</p>';
+}
+function decide(id,decision,btn){
+  const s=SLIPS.find(x=>x.id===id);
+  const today='22 Jun 2026';
+  s.status='done';s.decision=decision;
+  s.signed=(decision==='consented'?'Signed by ':'Declined by ')+'Hajiya Maryam Abubakar · '+today;
+  render();updateBadge();
+  toast(decision==='consented'?'Permission given — consent recorded':'Declined — the school has been notified');
+}
+function withdraw(id){
+  const s=SLIPS.find(x=>x.id===id);
+  if(s.due==='closed'){toast('This slip is closed — message the office to change it');return;}
+  s.status='need';s.decision=null;
+  render();updateBadge();
+  toast('Your previous answer was withdrawn — please choose again');
+}
+function updateBadge(){
+  const n=SLIPS.filter(s=>s.status==='need').length;
+  const b=document.getElementById('needBadge');
+  if(n){b.textContent=n+' need a repl'+(n===1?'y':'ies');b.classList.remove('hidden','sm:hidden');}
+  else b.classList.add('hidden');
+}
+document.querySelectorAll('#filter button').forEach(b=>b.onclick=()=>{f=b.dataset.f;document.querySelectorAll('#filter button').forEach(x=>x.className='h-9 px-3.5 rounded-xl bg-white ring-1 ring-whisper text-steel shrink-0');b.className='h-9 px-3.5 rounded-xl bg-blue text-white shrink-0';render();});
+render();
+</script>
+</body>
+</html>

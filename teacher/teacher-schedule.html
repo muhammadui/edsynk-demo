@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Edsynk — My Timetable</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&family=Noto+Naskh+Arabic:wght@500&display=swap" rel="stylesheet">
+<script>tailwind.config={theme:{extend:{colors:{canvas:'#F7F9FC',ink:'#0B2A56',charcoal:'#18181B',steel:'#64748B',whisper:'#E2E8F0',blue:'#2177EF',skyblue:'#5C9DF5',wash:'#EAF2FE',mist:'#D3E4FD',confirm:'#16A34A',caution:'#D97706',alert:'#DC2626',excused:'#7C8DA6'},fontFamily:{sans:['Geist','sans-serif'],mono:['"Geist Mono"','monospace'],arabic:['"Noto Naskh Arabic"','serif']},boxShadow:{soft:'0 1px 2px rgba(11,42,86,0.04), 0 6px 24px rgba(11,42,86,0.05)',lift:'0 1px 3px rgba(11,42,86,0.10), 0 12px 32px rgba(11,42,86,0.12)'}}}}</script>
+<style>@keyframes rise{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}.rise{animation:rise .45s cubic-bezier(.2,.8,.2,1) both}
+@media print{
+  body{background:#fff!important}
+  #sidebar-root,header .flex.gap-1,#headerActions,#dutyBanner,#examDutyBanner,.no-print{display:none!important}
+  header{position:static!important;border:0!important;height:auto!important;padding:0!important;background:#fff!important;backdrop-filter:none!important}
+  main{padding:0!important;max-width:none!important}
+  #printCaption{display:block!important}
+  section{box-shadow:none!important;break-inside:avoid}
+  @page{size:landscape;margin:14mm}
+}
+#printCaption{display:none}
+</head>
+<body data-active="My Timetable" data-persona="teacher" class="bg-canvas font-sans text-charcoal antialiased">
+<div class="flex min-h-screen">
+  <div id="sidebar-root"></div>
+  <div class="flex-1 min-w-0">
+    <header class="h-[60px] bg-white/80 backdrop-blur-md border-b border-whisper/70 flex items-center justify-between px-4 sm:px-7 sticky top-0 z-20">
+      <div class="flex items-center gap-3">
+        <h1 class="text-[15px] font-semibold tracking-tight">My Timetable</h1>
+        <div class="flex gap-1 bg-white border border-whisper/70 rounded-lg p-0.5 text-[11.5px] font-medium">
+          <button onclick="wk(0)" id="w0" class="px-3 py-1.5 rounded-md bg-blue text-white shadow-soft">Normal week</button>
+          <button onclick="wk(1)" id="w1" class="px-3 py-1.5 rounded-md text-steel">Exam week · 23–27 Jun</button>
+        </div>
+      </div>
+      <div id="headerActions" class="flex items-center gap-2.5">
+        <button onclick="downloadPdf()" class="h-9 px-3.5 rounded-lg bg-white ring-1 ring-whisper text-[12.5px] font-medium text-steel hover:bg-mist/30 flex items-center gap-1.5"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><path d="M7 10l5 5 5-5M12 15V3"/></svg>Download PDF</button>
+        <span class="font-mono text-[11.5px] font-medium text-blue bg-wash rounded-full px-2.5 py-1 hidden sm:inline">Mallam Musa · Maths</span>
+      </div>
+    </header>
+
+    <main class="p-4 sm:p-7 max-w-[1120px] space-y-5">
+
+      <!-- print-only caption -->
+      <div id="printCaption" class="mb-4">
+        <p class="text-[17px] font-semibold tracking-tight">Al-Furqan Academy, Bauchi — Class Timetable 2025/26</p>
+        <p class="text-[12px] text-steel mt-0.5">Mallam Musa Ibrahim · Form teacher JSS 2A · Mathematics &amp; Basic Science</p>
+      </div>
+
+      <!-- duty banner -->
+      <div id="dutyBanner" class="rise flex items-center gap-3 bg-blue/[0.06] border border-blue/20 rounded-2xl px-5 py-3.5">
+        <svg class="text-blue shrink-0" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l2.4 7.4H22l-6 4.4 2.3 7.2L12 16.9 5.7 21l2.3-7.2-6-4.4h7.6z"/></svg>
+        <p class="text-[13px] flex-1"><span class="font-medium">You're the teacher on duty this Wednesday.</span> Morning assembly + long-break supervision + close-of-day. Duty rotates weekly — set by <span class="font-medium">Admin</span>.</p>
+        <button onclick="toast('Swap request sent to Admin')" class="h-9 px-3.5 rounded-lg border border-blue/30 text-blue text-[12px] font-medium hover:bg-blue/10 shrink-0">Request swap</button>
+      </div>
+      <div id="examDutyBanner" class="rise hidden items-center gap-3 bg-caution/[0.07] border border-caution/25 rounded-2xl px-5 py-3.5">
+        <svg class="text-caution shrink-0" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4M12 17h.01"/><circle cx="12" cy="12" r="10"/></svg>
+        <p class="text-[13px] flex-1"><span class="font-medium">Exam week:</span> <span class="font-mono font-semibold">4 supervision duties</span> assigned by the <span class="font-medium">Exam office</span> (10 Jun). They appear on your calendar; you're notified of any change.</p>
+        <button onclick="toast('Swap request sent to Exam office')" class="h-9 px-3.5 rounded-lg border border-caution/40 text-caution text-[12px] font-medium hover:bg-caution/10 shrink-0">Request swap</button>
+      </div>
+
+      <!-- week grid -->
+      <section class="rise bg-white border border-whisper/70 rounded-2xl shadow-soft overflow-hidden p-3 sm:p-4" style="animation-delay:.05s">
+        <div id="grid"></div>
+        <div class="px-2 py-2 flex flex-wrap gap-x-4 gap-y-1.5 text-[10.5px] text-steel border-t border-whisper/60 mt-2">
+          <span class="flex items-center gap-1.5"><span class="h-2.5 w-2.5 rounded bg-blue/15 border border-blue/30"></span>My teaching period</span>
+          <span class="flex items-center gap-1.5"><span class="h-2.5 w-2.5 rounded bg-mist/40 border border-mist"></span>Form-class registration</span>
+          <span class="flex items-center gap-1.5"><span class="h-2.5 w-2.5 rounded bg-caution/15 border border-caution/30"></span>Supervision (exam wk)</span>
+          <span class="flex items-center gap-1.5"><span class="h-2.5 w-2.5 rounded bg-canvas border border-whisper"></span>Free / non-teaching</span>
+        </div>
+      </section>
+
+      <!-- duty roster + who assigns -->
+      <section class="rise grid lg:grid-cols-[1fr_1fr] gap-4" style="animation-delay:.1s">
+        <div class="bg-white border border-whisper/70 rounded-2xl p-5 shadow-soft">
+          <p class="text-[13.5px] font-semibold">Teacher-on-duty roster · this term</p>
+          <p class="text-[11.5px] text-steel mt-0.5">Weekly rotation. The duty teacher runs assembly, supervises breaks and oversees closing.</p>
+          <div class="mt-3 rounded-xl ring-1 ring-whisper/80 divide-y divide-whisper/60 text-[12.5px]">
+            <div class="flex items-center justify-between px-4 py-2.5"><span class="text-steel">Wk 9 · 9–13 Jun</span><span class="font-medium">Mrs. Adeyemi</span></div>
+            <div class="flex items-center justify-between px-4 py-2.5 bg-blue/[0.04]"><span class="text-steel">Wk 10 · 16–20 Jun</span><span class="font-medium text-blue">You (Mallam Musa) · Wed lead</span></div>
+            <div class="flex items-center justify-between px-4 py-2.5"><span class="text-steel">Wk 11 · 23–27 Jun</span><span class="font-medium">Mr. Okafor</span></div>
+            <div class="flex items-center justify-between px-4 py-2.5"><span class="text-steel">Wk 12 · 30 Jun–4 Jul</span><span class="font-medium">Ustadha Halima</span></div>
+          </div>
+        </div>
+        <div class="grid grid-rows-3 gap-3 text-[12.5px]">
+          <div class="bg-white border border-whisper/70 rounded-2xl p-4 shadow-soft"><p class="text-[10.5px] font-semibold uppercase tracking-wider text-steel">Teaching periods</p><p class="mt-1 text-charcoal/85">Assigned by <span class="font-medium">Admin</span> in Subjects &amp; Classes — your subjects × classes.</p></div>
+          <div class="bg-white border border-blue/25 bg-blue/[0.03] rounded-2xl p-4 shadow-soft"><p class="text-[10.5px] font-semibold uppercase tracking-wider text-blue">Duty days</p><p class="mt-1 text-charcoal/85">Weekly duty rota set by <span class="font-medium">Admin</span> — assembly, break &amp; gate supervision.</p></div>
+          <div class="bg-white border border-caution/25 bg-caution/[0.04] rounded-2xl p-4 shadow-soft"><p class="text-[10.5px] font-semibold uppercase tracking-wider text-caution">Exam supervision</p><p class="mt-1 text-charcoal/85">Per exam session by the <span class="font-medium">Exam office</span> — lands on your calendar automatically.</p></div>
+        </div>
+      </section>
+    </main>
+  </div>
+</div>
+<script src="../assets/shell.js"></script>
+<div id="toast" class="hidden fixed bottom-5 left-1/2 -translate-x-1/2 z-[60] bg-ink text-white text-[12.5px] font-medium px-4 py-2.5 rounded-xl shadow-lift"></div>
+<script>function toast(m){var t=document.getElementById('toast');t.textContent=m;t.classList.remove('hidden');clearTimeout(window._tt);window._tt=setTimeout(function(){t.classList.add('hidden')},2200);}</script>
+<script>
+const DAYS=['Mon','Tue','Wed','Thu','Fri'];
+const COLS=[['P1','8:00','p'],['P2','8:40','p'],['P3','9:20','p'],['SB','15m','b'],['P4','10:15','p'],['P5','10:55','p'],['P6','11:35','p'],['LB','40m','l'],['P7','12:55','p'],['P8','13:35','p']];
+// (subject, detail, kind) kind: t=teach m=own-exam s=supervise '' free ; reg handled separately
+const T='blue',S='caution',M='confirm';
+// Normal week — Mallam Musa's teaching schedule
+const NORMAL={
+ 'P1':[['Maths','JSS 2A',T],['English','—','free'],['Maths','JSS 3A',T],['Maths','JSS 2A',T],['Maths','JSS 3A',T]],
+ 'P2':[['Maths','JSS 2B',T],['Maths','JSS 2A',T],['—','free','free'],['Maths','JSS 2B',T],['—','free','free']],
+ 'P3':[['—','free','free'],['Maths','JSS 2B',T],['Maths','JSS 2A',T],['—','free','free'],['Maths','JSS 2A',T]],
+ 'P4':[['Maths','JSS 3A',T],['—','free','free'],['Maths','JSS 2B',T],['Maths','JSS 3A',T],['—','free','free']],
+ 'P5':[['—','free','free'],['Maths','JSS 3A',T],['—','free','free'],['Maths','JSS 2A',T],['Maths','JSS 2B',T]],
+ 'P6':[['Maths','JSS 2A',T],['—','free','free'],['Maths','JSS 3A',T],['—','free','free'],['—','free','free']],
+ 'P7':[['—','free','free'],['Maths','JSS 2B',T],['—','free','free'],['—','free','free'],['Maths','JSS 3A',T]],
+ 'P8':[['—','free','free'],['—','free','free'],['—','free','free'],['Maths','JSS 2A',T],['—','free','free']],
+};
+const EXAM={
+ 'P1':[['Maths exam','JSS 3 · my paper',M],['Supervise','English · SS 1',S],['—','free','free'],['Supervise','Basic Sci · JSS 1B',S],['—','free','free']],
+ 'P2':[['—','free','free'],['—','free','free'],['Supervise','CBT · ICT hall',S],['—','free','free'],['Maths exam','JSS 2 · my paper',M]],
+ 'P3':[['Supervise','Arabic · Idad.',S],['—','free','free'],['—','free','free'],['—','free','free'],['—','free','free']],
+ 'P4':[['Mark scripts','Maths JSS 3',M],['—','free','free'],['Mark scripts','continue',M],['—','free','free'],['—','free','free']],
+ 'P5':[['—','free','free'],['—','free','free'],['—','free','free'],['—','free','free'],['—','free','free']],
+ 'P6':[['—','free','free'],['—','free','free'],['—','free','free'],['—','free','free'],['—','free','free']],
+ 'P7':[['—','free','free'],['—','free','free'],['—','free','free'],['—','free','free'],['—','free','free']],
+ 'P8':[['—','free','free'],['—','free','free'],['—','free','free'],['—','free','free'],['—','free','free']],
+};
+function cell(c){
+  if(!c||c[2]==='free') return '<td class="rounded-lg bg-canvas/40 align-top"></td>';
+  const tone=c[2];
+  return `<td class="rounded-lg bg-${tone}/10 ring-1 ring-${tone}/25 px-2 py-1.5 align-top"><p class="font-semibold text-[10.5px] text-charcoal leading-tight">${c[0]}</p><p class="text-[9px] text-steel mt-0.5">${c[1]}</p></td>`;
+}
+function render(data){
+  let o='<div class="overflow-x-auto"><table class="w-full border-separate" style="border-spacing:4px;min-width:780px"><thead><tr><th class="w-12 text-left text-[9px] font-semibold uppercase tracking-wide text-steel/50 pl-1">Day</th>';
+  COLS.forEach(c=>{const[lab,time,kind]=c;
+    if(kind==='b'||kind==='l'){const t=kind==='b'?'caution':'blue';o+=`<th class="w-9"><div class="text-[8px] font-semibold uppercase text-${t}">${kind==='b'?'Short':'Long'}</div><div class="text-[7.5px] text-${t}/60">${time}</div></th>`;}
+    else o+=`<th class="text-center"><div class="text-[10px] font-semibold text-steel">${lab}</div><div class="font-mono text-[8px] text-steel/50">${time}</div></th>`;});
+  o+='</tr></thead><tbody>';
+  DAYS.forEach((d,di)=>{
+    o+=`<tr><td class="font-semibold text-[11px] text-charcoal pr-2 text-right align-middle">${d}</td>`;
+    COLS.forEach(c=>{const[lab,time,kind]=c;
+      if(kind==='b'||kind==='l'){o+=`<td class="rounded-md bg-${kind==='b'?'caution':'blue'}/10 align-middle"></td>`;return;}
+      const cl=(data[lab]||[])[di];
+      if(!cl||cl[2]==='free'){o+='<td class="rounded-md bg-canvas/40"></td>';return;}
+      const tone=cl[2];
+      o+=`<td class="rounded-md bg-${tone}/10 ring-1 ring-${tone}/25 px-1.5 py-1 align-top"><p class="font-semibold text-[10px] text-charcoal leading-tight">${cl[0]}</p><p class="text-[8px] text-steel mt-0.5">${cl[1]}</p></td>`;});
+    o+='</tr>';
+  });
+  document.getElementById('grid').innerHTML=o+'</tbody></table></div>';
+}
+function wk(i){
+  render(i?EXAM:NORMAL);
+  document.getElementById('dutyBanner').style.display=i?'none':'flex';
+  document.getElementById('examDutyBanner').style.display=i?'flex':'none';
+  document.getElementById('w0').className='px-3 py-1.5 rounded-md '+(i?'text-steel':'bg-blue text-white shadow-soft');
+  document.getElementById('w1').className='px-3 py-1.5 rounded-md '+(i?'bg-caution text-white shadow-soft':'text-steel');
+}
+wk(0);
+function downloadPdf(){toast('Preparing timetable PDF…');setTimeout(function(){window.print();},400);}
+</script>
+</body>
+</html>

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Edsynk — Notifications</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script>tailwind.config={theme:{extend:{colors:{canvas:'#F7F9FC',ink:'#0B2A56',charcoal:'#18181B',steel:'#64748B',whisper:'#E2E8F0',blue:'#2177EF',skyblue:'#5C9DF5',wash:'#EAF2FE',mist:'#D3E4FD',confirm:'#16A34A',caution:'#D97706',alert:'#DC2626',excused:'#7C8DA6'},fontFamily:{sans:['Geist','sans-serif'],mono:['"Geist Mono"','monospace']},boxShadow:{soft:'0 1px 2px rgba(11,42,86,0.04), 0 6px 24px rgba(11,42,86,0.05)',lift:'0 1px 3px rgba(11,42,86,0.10), 0 12px 32px rgba(11,42,86,0.12)'}}}}</script>
+<style>@keyframes rise{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}.rise{animation:rise .45s cubic-bezier(.2,.8,.2,1) both}</style>
+</head>
+<body data-active="Notifications" data-persona="teacher" class="bg-canvas font-sans text-charcoal antialiased">
+<div class="flex min-h-screen">
+  <div id="sidebar-root"></div>
+  <div class="flex-1 min-w-0">
+    <header class="h-[60px] bg-white/80 backdrop-blur-md border-b border-whisper/70 flex items-center justify-between px-4 sm:px-7 sticky top-0 z-20">
+      <div class="flex items-center gap-3"><h1 class="text-[15px] font-semibold tracking-tight">Notifications</h1>
+        <span id="unreadBadge" class="font-mono text-[11.5px] font-medium text-alert bg-alert/10 rounded-full px-2.5 py-1 hidden sm:inline">5 unread</span></div>
+      <div class="flex items-center gap-2.5">
+        <button onclick="markAllRead()" class="h-9 px-4 rounded-lg bg-white ring-1 ring-whisper text-[13px] font-medium text-steel hover:bg-mist/30">Mark all read</button>
+        <button onclick="location.href='announcements.html'" class="relative h-9 w-9 grid place-items-center rounded-lg hover:bg-mist/40 text-steel border border-transparent hover:border-whisper">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8a6 6 0 10-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 01-3.4 0"/></svg></button>
+      </div>
+    </header>
+    <main class="p-4 sm:p-7 max-w-[820px] space-y-5 pb-10">
+      <div class="rise rounded-2xl bg-wash/50 ring-1 ring-mist/60 px-4 py-3 text-[11.5px] text-ink">Alerts for your classes — submissions, parent messages, score deadlines, lesson-note reviews. School-wide notices live under <span class="font-medium">Announcements</span>.</div>
+      <div class="rise flex gap-1.5 text-[12px] font-medium flex-wrap" id="filter">
+        <button data-f="all" class="h-9 px-3.5 rounded-xl bg-blue text-white">All</button>
+        <button data-f="unread" class="h-9 px-3.5 rounded-xl bg-white ring-1 ring-whisper text-steel">Unread</button>
+        <button data-f="submissions" class="h-9 px-3.5 rounded-xl bg-white ring-1 ring-whisper text-steel">Submissions</button>
+        <button data-f="messages" class="h-9 px-3.5 rounded-xl bg-white ring-1 ring-whisper text-steel">Messages</button>
+        <button data-f="admin" class="h-9 px-3.5 rounded-xl bg-white ring-1 ring-whisper text-steel">Admin</button>
+      </div>
+      <div id="feed" class="rise space-y-4" style="animation-delay:.05s"></div>
+    </main>
+  </div>
+</div>
+<script src="../assets/shell.js"></script>
+<script>
+var IC={submissions:['sub','text-caution bg-caution/10','<path d="M9 11l3 3 8-8"/><path d="M21 12a9 9 0 11-6.2-8.5"/>'],
+ messages:['chat','text-blue bg-wash','<path d="M21 11.5a8.38 8.38 0 01-7.6 8.5 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7A8.5 8.5 0 1121 11.5z"/>'],
+ admin:['adm','text-ink bg-mist/60','<path d="M18 8a6 6 0 10-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 01-3.4 0"/>'],
+ score:['sc','text-confirm bg-confirm/10','<path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M9 15l2 2 4-4"/>'],
+ review:['rv','text-blue bg-wash','<path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 013 3L7 19l-4 1 1-4z"/>'],
+ deadline:['dl','text-alert bg-alert/10','<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>']};
+var N=[
+ ['today','submissions','12 new submissions','Algebra homework (JSS 2A) — 12 of 38 students have submitted so far.','25 min ago',1,'assignments.html'],
+ ['today','messages','New message from Alhaji Bello Sani','Ibrahim\'s parent — "Will Ibrahim need the textbook for the exam on Monday?"','1 hr ago',1,'messages.html'],
+ ['today','deadline','Score-entry deadline reminder','JSS 2A Mathematics exam scores are due Friday 26 June. 36/38 entered.','2 hr ago',1,'score-entry.html'],
+ ['today','review','Lesson note approved','Week 9 — "Factorisation" approved by HOD (Mrs. Bisi Adeyemi).','4 hr ago',1,'lesson-notes.html'],
+ ['today','admin','Staff memo from the Principal','Exam invigilation duties posted — you are assigned JSS 1 Hall B, Tuesday 9am.','5 hr ago',1,'announcements.html'],
+ ['earlier','review','Lesson note returned','Week 10 — "Plane shapes" needs clearer evaluation questions before approval.','Yesterday',0,'lesson-notes.html'],
+ ['earlier','submissions','Submissions complete','All 36 students submitted the Factorisation practice set (JSS 2B).','2 days ago',0,'assignments.html'],
+ ['earlier','score','JSS 2B Maths approved','Exam office approved your JSS 2B Mathematics scores — now in results.','3 days ago',0,'score-entry.html'],
+ ['earlier','admin','PTA meeting notice','Term-end PTA meeting Saturday 28 June, 10am. Form teachers expected.','4 days ago',0,'announcements.html'],
+];
+var f='all';
+function icon(type){var i=IC[type];return '<span class="h-9 w-9 rounded-xl '+i[1]+' grid place-items-center shrink-0"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">'+i[2]+'</svg></span>';}
+function matchFilter(n){
+ if(f==='all')return true;
+ if(f==='unread')return n[5];
+ if(f==='submissions')return n[1]==='submissions';
+ if(f==='messages')return n[1]==='messages';
+ if(f==='admin')return n[1]==='admin'||n[1]==='deadline'||n[1]==='review'||n[1]==='score';
+ return true;
+}
+function render(){
+ var groups={today:'Today',earlier:'Earlier'};
+ var html='';
+ for(var g in groups){
+  var items=N.filter(function(n){return n[0]===g&&matchFilter(n);});
+  if(!items.length)continue;
+  html+='<div><p class="text-[11px] font-semibold uppercase tracking-[0.07em] text-steel/70 mb-2">'+groups[g]+'</p><div class="space-y-2">';
+  items.forEach(function(n){
+   html+='<a href="'+n[6]+'" class="flex items-start gap-3 bg-white ring-1 '+(n[5]?'ring-blue/20':'ring-whisper/80')+' rounded-2xl shadow-soft p-4 hover:ring-mist relative">'+
+    icon(n[1])+'<div class="flex-1 min-w-0"><p class="text-[13px] font-semibold">'+n[2]+'</p><p class="text-[12px] text-steel mt-0.5 leading-relaxed">'+n[3]+'</p><p class="text-[10.5px] text-steel/70 mt-1.5 font-mono">'+n[4]+'</p></div>'+
+    (n[5]?'<span class="h-2 w-2 rounded-full bg-blue shrink-0 mt-1.5"></span>':'')+'</a>';
+  });
+  html+='</div></div>';
+ }
+ document.getElementById('feed').innerHTML=html||'<p class="text-center text-[12.5px] text-steel py-10">Nothing here.</p>';
+}
+document.querySelectorAll('#filter button').forEach(function(b){b.onclick=function(){f=b.dataset.f;document.querySelectorAll('#filter button').forEach(function(x){x.className='h-9 px-3.5 rounded-xl bg-white ring-1 ring-whisper text-steel';});b.className='h-9 px-3.5 rounded-xl bg-blue text-white';render();};});
+function markAllRead(){N.forEach(function(n){n[5]=0;});var badge=document.getElementById('unreadBadge');if(badge)badge.remove();render();toast('All notifications marked as read');}
+render();
+</script>
+<div id="toast" class="hidden fixed bottom-5 left-1/2 -translate-x-1/2 z-[60] bg-ink text-white text-[12.5px] font-medium px-4 py-2.5 rounded-xl shadow-lift"></div>
+<script>function toast(m){var t=document.getElementById('toast');t.textContent=m;t.classList.remove('hidden');clearTimeout(window._tt);window._tt=setTimeout(function(){t.classList.add('hidden')},2200);}</script>
+</body>
+</html>

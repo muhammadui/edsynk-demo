@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Edsynk HQ — Feature Flags</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script>
+tailwind.config = { theme: { extend: {
+  colors: { canvas:'#F7F9FC', ink:'#0B2A56', charcoal:'#18181B', steel:'#64748B', whisper:'#E2E8F0',
+    blue:'#2177EF', skyblue:'#5C9DF5', wash:'#EAF2FE', mist:'#D3E4FD',
+    confirm:'#16A34A', caution:'#D97706', alert:'#DC2626', excused:'#7C8DA6' },
+  fontFamily: { sans:['Geist','sans-serif'], mono:['"Geist Mono"','monospace'] },
+  boxShadow: { soft:'0 1px 2px rgba(11,42,86,0.04), 0 6px 24px rgba(11,42,86,0.05)',
+               lift:'0 1px 3px rgba(11,42,86,0.10), 0 12px 32px rgba(11,42,86,0.12)' }
+}}}
+</script>
+<style>
+  @keyframes rise{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+  .rise{animation:rise .5s cubic-bezier(.2,.8,.2,1) both}
+  .sw{height:22px;width:38px;border-radius:99px;position:relative;cursor:pointer;transition:background .18s;flex-shrink:0}
+  .sw .knob{position:absolute;top:2px;height:18px;width:18px;border-radius:99px;background:#fff;transition:left .18s;box-shadow:0 1px 2px rgba(11,42,86,.2)}
+  .sw.off{background:#E2E8F0}.sw.off .knob{left:2px}
+  .sw.on{background:#2177EF}.sw.on .knob{left:18px}
+</style>
+</head>
+<body data-active="Feature Flags" data-persona="platform" class="bg-canvas font-sans text-charcoal antialiased">
+<div class="flex min-h-screen">
+  <div id="sidebar-root"></div>
+  <div class="flex-1 min-w-0">
+    <header class="h-[60px] bg-white/80 backdrop-blur-md border-b border-whisper/70 flex items-center justify-between px-4 sm:px-7 sticky top-0 z-20">
+      <div class="flex items-center gap-3">
+        <h1 class="text-[15px] font-semibold tracking-tight">Feature Flags</h1>
+        <span class="font-mono text-[11.5px] font-medium text-blue bg-wash rounded-full px-2.5 py-1 hidden sm:inline">per plan · per school</span>
+      </div>
+      <div class="flex items-center gap-2.5"><button onclick="toast('Flag changes saved · propagating to tenants…')" class="h-9 px-4 rounded-lg bg-blue text-white text-[13px] font-medium shadow-soft active:translate-y-px">Save flags</button></div>
+    </header>
+    <main class="p-4 sm:p-7 max-w-[1180px] space-y-5 pb-10">
+
+      <div class="rise rounded-2xl ring-1 ring-whisper/80 bg-wash/60 px-4 py-3 text-[11.5px] text-ink" style="animation-delay:.02s">
+        Flags roll out gradually. Plan-tier toggles set the default for every school on that plan; per-school overrides win over the plan default. Some features are <span class="font-semibold">Beta</span> or land in <span class="font-mono text-[10.5px]">SEPT</span>.
+      </div>
+
+      <!-- plan matrix -->
+      <div class="rise bg-white ring-1 ring-whisper/80 rounded-2xl shadow-soft overflow-hidden" style="animation-delay:.06s">
+        <div class="px-5 pt-4 pb-3 border-b border-whisper/70"><p class="text-[13.5px] font-semibold">Feature × plan matrix</p><p class="text-[11.5px] text-steel mt-0.5">default availability per plan tier</p></div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-[12.5px]">
+            <thead><tr class="text-left text-[10.5px] uppercase tracking-wider text-steel border-b border-whisper/70 bg-canvas/60">
+              <th class="px-5 py-3 font-semibold">Feature</th>
+              <th class="px-3 py-3 font-semibold text-center">Starter</th>
+              <th class="px-3 py-3 font-semibold text-center">Standard</th>
+              <th class="px-3 py-3 font-semibold text-center">Pro</th></tr></thead>
+            <tbody class="divide-y divide-whisper/60" id="matrix">
+              <!-- rows injected -->
+            </tbody>
+          </table>
+        </div>
+        <p class="px-5 py-3 border-t border-whisper/70 bg-canvas/50 text-[11px] text-steel">Turning a flag off on a plan hides the module for those schools at next page load — it never deletes their data.</p>
+      </div>
+
+      <!-- per-school override -->
+      <div class="rise bg-white ring-1 ring-whisper/80 rounded-2xl shadow-soft overflow-hidden" style="animation-delay:.1s">
+        <div class="px-5 pt-4 pb-3 border-b border-whisper/70 flex flex-wrap items-center justify-between gap-3">
+          <div><p class="text-[13.5px] font-semibold">Per-school overrides</p><p class="text-[11.5px] text-steel mt-0.5">give a single school early access or hold a feature back</p></div>
+          <div class="flex items-center gap-2 text-[12.5px]">
+            <span class="text-steel">School</span>
+            <select id="schoolSel" onchange="schoolNote()" class="h-9 rounded-lg border border-whisper bg-canvas px-3 text-[12.5px] font-medium">
+              <option>Al-Furqan Academy · Pro</option>
+              <option>Sunrise International · Plus</option>
+              <option>Daru-l-Hikma · Core</option>
+            </select>
+          </div>
+        </div>
+        <div class="p-5 space-y-3" id="overrides">
+          <div class="rounded-xl ring-1 ring-blue/30 bg-wash/40 px-4 py-3 flex items-center justify-between gap-3">
+            <div><p class="text-[12.5px] font-medium">EdMentor AI <span class="font-mono text-[9.5px] text-blue/80 ml-1">SEPT</span></p><p class="text-[11px] text-steel mt-0.5">early access — Al-Furqan asked twice; parent consent still required</p></div>
+            <div class="flex items-center gap-2"><span class="text-[10px] font-semibold text-blue bg-wash rounded-full px-2 py-0.5">override</span><span class="sw on" onclick="tg(this,'EdMentor early access')"><span class="knob"></span></span></div>
+          </div>
+          <div class="rounded-xl ring-1 ring-whisper px-4 py-3 flex items-center justify-between gap-3">
+            <div><p class="text-[12.5px] font-medium">CBT Exams <span class="font-mono text-[9.5px] text-blue/80 ml-1">BETA</span></p><p class="text-[11px] text-steel mt-0.5">pilot one class before the Sept-wide rollout</p></div>
+            <div class="flex items-center gap-2"><span class="text-[10px] font-semibold text-blue bg-wash rounded-full px-2 py-0.5">override</span><span class="sw on" onclick="tg(this,'CBT pilot')"><span class="knob"></span></span></div>
+          </div>
+          <div class="rounded-xl ring-1 ring-whisper px-4 py-3 flex items-center justify-between gap-3">
+            <div><p class="text-[12.5px] font-medium">Custom domains</p><p class="text-[11px] text-steel mt-0.5">portal.alfurqan.sch.ng already live with SSL</p></div>
+            <div class="flex items-center gap-2"><span class="text-[10px] font-semibold text-steel bg-canvas ring-1 ring-whisper rounded-full px-2 py-0.5">plan default</span><span class="sw on" onclick="tg(this,'Custom domains')"><span class="knob"></span></span></div>
+          </div>
+          <div class="rounded-xl ring-1 ring-whisper px-4 py-3 flex items-center justify-between gap-3">
+            <div><p class="text-[12.5px] font-medium">WhatsApp notifications</p><p class="text-[11px] text-steel mt-0.5">result-ready + fee reminders to guardians</p></div>
+            <div class="flex items-center gap-2"><span class="text-[10px] font-semibold text-steel bg-canvas ring-1 ring-whisper rounded-full px-2 py-0.5">plan default</span><span class="sw on" onclick="tg(this,'WhatsApp notifications')"><span class="knob"></span></span></div>
+          </div>
+          <div class="flex justify-end pt-1">
+            <button onclick="toast('Override applied to Al-Furqan Academy')" class="h-9 px-4 rounded-lg bg-blue text-white text-[12.5px] font-semibold shadow-soft">Apply override</button>
+          </div>
+        </div>
+        <p class="px-5 py-3 border-t border-whisper/70 bg-canvas/50 text-[11px] text-steel">Overrides are logged in the audit trail with who flipped them and when. Use for pilots and goodwill, not as a workaround for billing.</p>
+      </div>
+
+    </main>
+  </div>
+</div>
+<script src="../assets/shell.js"></script>
+<div id="toast" class="hidden fixed bottom-5 left-1/2 -translate-x-1/2 z-[60] bg-ink text-white text-[12.5px] font-medium px-4 py-2.5 rounded-xl shadow-lift"></div>
+<script>
+function toast(m){var t=document.getElementById('toast');t.textContent=m;t.classList.remove('hidden');clearTimeout(window._tt);window._tt=setTimeout(function(){t.classList.add('hidden')},2200);}
+function tg(el,name){var on=el.classList.contains('on');el.classList.toggle('on');el.classList.toggle('off');toast(name+(on?' off':' on'));}
+function schoolNote(){toast('Loaded overrides for '+document.getElementById('schoolSel').value.split(' · ')[0]);}
+// build matrix: [feature, sub, starter, standard, pro, tag]
+var rows=[
+ ['Results & report cards','core grading',1,1,1,''],
+ ['Attendance','daily register',1,1,1,''],
+ ['Bulk import','CSV student/staff',1,1,1,''],
+ ['ID Card Studio','printable cards + QR',0,1,1,''],
+ ['EdAssess','AI question banks',0,1,1,''],
+ ['Transcripts','sealed PDF on demand',0,0,1,'SEPT'],
+ ['Hostel','boarding house mgmt',0,0,1,''],
+ ['Transport','route & pickup',0,0,1,''],
+ ['CBT Exams','online testing',0,0,1,'BETA'],
+ ['EdMentor AI','student tutor',0,0,1,'SEPT'],
+ ['WhatsApp notifications','guardian alerts',0,1,1,''],
+ ['Custom domains','bring your own domain',0,0,1,'']
+];
+var tag=function(t){return t?'<span class="font-mono text-[9.5px] '+(t==='BETA'?'text-blue/80':'text-blue/80')+' ml-1">'+t+'</span>':'';};
+var cell=function(on,name,plan){return '<td class="px-3 py-3 text-center"><span class="sw '+(on?'on':'off')+' inline-block align-middle" onclick="tg(this,\''+name+' · '+plan+'\')"><span class="knob"></span></span></td>';};
+document.getElementById('matrix').innerHTML=rows.map(function(r){
+ return '<tr class="hover:bg-canvas/60"><td class="px-5 py-3"><p class="font-medium">'+r[0]+tag(r[5])+'</p><p class="text-[10.5px] text-steel mt-0.5">'+r[1]+'</p></td>'
+ +cell(r[2],r[0],'Starter')+cell(r[3],r[0],'Standard')+cell(r[4],r[0],'Pro')+'</tr>';
+}).join('');
+</script>
+</body>
+</html>

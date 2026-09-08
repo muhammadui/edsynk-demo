@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Edsynk — Lesson Notes</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script>tailwind.config={theme:{extend:{colors:{canvas:'#F7F9FC',ink:'#0B2A56',charcoal:'#18181B',steel:'#64748B',whisper:'#E2E8F0',blue:'#2177EF',skyblue:'#5C9DF5',wash:'#EAF2FE',mist:'#D3E4FD',confirm:'#16A34A',caution:'#D97706',alert:'#DC2626',excused:'#7C8DA6'},fontFamily:{sans:['Geist','sans-serif'],mono:['"Geist Mono"','monospace']},boxShadow:{soft:'0 1px 2px rgba(11,42,86,0.04), 0 6px 24px rgba(11,42,86,0.05)',lift:'0 1px 3px rgba(11,42,86,0.10), 0 12px 32px rgba(11,42,86,0.12)'}}}}</script>
+<style>@keyframes rise{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}.rise{animation:rise .45s cubic-bezier(.2,.8,.2,1) both}</style>
+</head>
+<body data-active="Lesson Notes" data-persona="teacher" class="bg-canvas font-sans text-charcoal antialiased">
+<div class="flex min-h-screen">
+  <div id="sidebar-root"></div>
+  <div class="flex-1 min-w-0">
+    <header class="h-[60px] bg-white/80 backdrop-blur-md border-b border-whisper/70 flex items-center justify-between px-4 sm:px-7 sticky top-0 z-20">
+      <div class="flex items-center gap-3">
+        <h1 class="text-[15px] font-semibold tracking-tight">Lesson Notes</h1>
+        <span class="font-mono text-[11.5px] font-medium text-blue bg-wash rounded-full px-2.5 py-1 hidden sm:inline">Mathematics · JSS 2A</span>
+      </div>
+      <div class="flex items-center gap-2.5">
+        <button onclick="toast('Downloading lesson note as PDF')" class="h-9 px-4 rounded-lg bg-white ring-1 ring-whisper text-[13px] font-medium text-steel hover:bg-mist/30 hidden sm:flex items-center gap-1.5">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><path d="M7 10l5 5 5-5M12 15V3"/></svg>Download</button>
+        <button onclick="openUpload()" class="h-9 px-4 rounded-lg bg-white ring-1 ring-whisper text-[13px] font-medium text-steel hover:bg-mist/30 flex items-center gap-1.5">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><path d="M17 8l-5-5-5 5M12 3v12"/></svg>Upload note</button>
+        <button onclick="toast('New lesson note — opening template')" class="h-9 px-4 rounded-lg bg-blue text-white text-[13px] font-medium shadow-soft active:translate-y-px">New lesson note</button>
+      </div>
+    </header>
+
+    <main class="p-4 sm:p-7 max-w-[1180px] grid lg:grid-cols-[300px_1fr] gap-5">
+
+      <!-- Weeks list -->
+      <div class="rise bg-white ring-1 ring-whisper/80 rounded-2xl shadow-soft overflow-hidden h-fit">
+        <div class="px-4 py-3 border-b border-whisper/70 flex items-center justify-between">
+          <p class="text-[11px] font-semibold uppercase tracking-[0.08em] text-steel">Third Term · 12 weeks</p>
+          <span class="text-[10px] font-semibold text-confirm bg-confirm/10 rounded-full px-2 py-0.5">9 done</span>
+        </div>
+        <div id="weeks" class="divide-y divide-whisper/50 max-h-[70vh] overflow-y-auto"></div>
+        <div class="px-4 py-3 border-t border-whisper/70 bg-canvas/40 space-y-2">
+          <p class="text-[10.5px] text-steel leading-relaxed">Notes are reviewed by the <span class="font-medium text-charcoal">Head of Department</span> before lessons. Approved notes are visible to admin.</p>
+          <p class="text-[10px] text-steel/90 leading-relaxed">Uploaded <span class="font-medium text-charcoal">PDFs render inline</span> in the viewer; <span class="font-medium text-charcoal">Word (.docx)</span> files are converted to a readable in-app view.</p>
+        </div>
+      </div>
+
+      <!-- Detail -->
+      <div class="rise" style="animation-delay:.06s">
+        <div id="detail" class="bg-white ring-1 ring-whisper/80 rounded-2xl shadow-soft"></div>
+      </div>
+    </main>
+  </div>
+</div>
+<!-- upload modal -->
+<div id="up" class="hidden fixed inset-0 z-50 bg-ink/40 backdrop-blur-sm grid place-items-end sm:place-items-center p-0 sm:p-4" onclick="if(event.target===this)closeUpload()">
+  <div class="bg-white w-full sm:max-w-[480px] rounded-t-3xl sm:rounded-3xl shadow-lift">
+    <div class="border-b border-whisper/70 px-5 py-3.5 flex items-center justify-between"><p class="text-[14px] font-semibold">Upload a lesson note</p><button onclick="closeUpload()" class="h-8 w-8 grid place-items-center rounded-lg hover:bg-mist/40 text-steel">✕</button></div>
+    <div class="p-5 space-y-4 text-[12.5px]">
+      <div class="grid grid-cols-2 gap-3">
+        <div><label class="text-[11px] font-semibold uppercase tracking-wider text-steel">Week</label><select id="upWeek" class="mt-1.5 w-full h-11 rounded-xl border border-whisper bg-canvas px-3"></select></div>
+        <div><label class="text-[11px] font-semibold uppercase tracking-wider text-steel">Topic</label><input id="upTopic" placeholder="e.g. Probability basics" class="mt-1.5 w-full h-11 rounded-xl border border-whisper bg-canvas px-4"></div>
+      </div>
+      <div onclick="document.getElementById('upFile').click()" id="dropZone" class="cursor-pointer rounded-2xl border-2 border-dashed border-whisper bg-canvas hover:bg-mist/20 px-5 py-8 text-center">
+        <svg class="mx-auto text-blue" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><path d="M17 8l-5-5-5 5M12 3v12"/></svg>
+        <p class="text-[12.5px] font-medium mt-2.5">Drag &amp; drop, or <span class="text-blue">browse</span></p>
+        <p id="upHint" class="text-[10.5px] text-steel mt-1">Accepts .pdf and .docx · max 10 MB</p>
+        <input id="upFile" type="file" accept=".pdf,.docx" class="hidden" onchange="pickedFile(this)">
+      </div>
+      <p class="text-[10px] text-steel leading-relaxed">PDFs render inline in the in-app viewer. Word documents (.docx) are converted to a clean, readable preview you can view without leaving Edsynk.</p>
+      <div class="flex justify-end gap-2 pt-1"><button onclick="closeUpload()" class="h-11 px-4 rounded-xl ring-1 ring-whisper text-steel font-medium">Cancel</button><button onclick="doUpload()" class="h-11 px-5 rounded-xl bg-blue text-white font-semibold shadow-soft">Upload note</button></div>
+    </div>
+  </div>
+</div>
+<script src="../assets/shell.js"></script>
+<div id="toast" class="hidden fixed bottom-5 left-1/2 -translate-x-1/2 z-[60] bg-ink text-white text-[12.5px] font-medium px-4 py-2.5 rounded-xl shadow-lift"></div>
+<script>function toast(m){var t=document.getElementById('toast');t.textContent=m;t.classList.remove('hidden');clearTimeout(window._tt);window._tt=setTimeout(function(){t.classList.add('hidden')},2200);}</script>
+<script>
+var ST={approved:['Approved','text-confirm bg-confirm/10'],pending:['Pending review','text-caution bg-caution/10'],draft:['Draft','text-steel bg-steel/10'],uploaded:['Uploaded','text-blue bg-wash']};
+var NOTES=[
+ {wk:1,topic:'Whole numbers & place value',status:'approved'},
+ {wk:2,topic:'LCM and HCF of numbers',status:'approved'},
+ {wk:3,topic:'Fractions — addition & subtraction',status:'approved'},
+ {wk:4,topic:'Fractions — multiplication & division',status:'approved'},
+ {wk:5,topic:'Decimals & approximation',status:'approved'},
+ {wk:6,topic:'Simple equations',status:'approved'},
+ {wk:7,topic:'Algebraic expressions',status:'approved'},
+ {wk:8,topic:'Expansion of brackets',status:'approved'},
+ {wk:9,topic:'Factorisation',status:'approved'},
+ {wk:10,topic:'Plane shapes — perimeter & area',status:'pending',
+   objectives:['State the formula for perimeter and area of rectangles, triangles and circles','Calculate the perimeter and area of given plane shapes','Solve word problems involving area of compound shapes'],
+   materials:'Chalkboard, mathematical set, cut-out cardboard shapes (rectangle, triangle, circle), measuring tape, JSS 2 New General Mathematics textbook.',
+   intro:'Teacher revises Week 9 (factorisation) with two quick board examples. Teacher then shows real classroom objects — the door, a window, a circular clock — and asks students how they would measure "the space around" versus "the space inside" each. This draws out the difference between perimeter and area.',
+   dev:'Step 1: Teacher defines perimeter as the total distance round a shape and derives P = 2(l+b) for a rectangle using a measured cardboard cut-out.\nStep 2: Teacher introduces area as the space a shape covers, units in cm² and m², and works A = l × b on the board.\nStep 3: Triangle area A = ½ × base × height demonstrated with a cut-out folded from the rectangle.\nStep 4: Circle — students recall π ≈ 22/7, teacher works C = 2πr and A = πr² with worked example r = 7cm.\nStudents copy the four formulae into their notes and attempt two guided examples in pairs.',
+   evaluation:['Find the perimeter and area of a rectangle 12cm by 5cm.','A triangle has base 8cm and height 6cm — find its area.','Find the area of a circle of radius 7cm (take π = 22/7).','Mention two everyday situations where area is used.'],
+   assignment:'Exercise 14b, questions 1–10, New General Mathematics for JSS 2, page 142. Due next Mathematics period.'},
+ {wk:11,topic:'Angles & properties of triangles',status:'draft'},
+ {wk:12,topic:'Revision & end-of-term assessment',status:'draft'},
+];
+// fill defaults for brevity weeks
+NOTES.forEach(function(n){
+ if(n.fileType)return; // uploaded files render in the viewer, not the structured template
+ if(!n.objectives){n.objectives=['Define and explain '+n.topic.toLowerCase(),'Work through worked examples on '+n.topic.toLowerCase(),'Apply the concept to solve simple problems'];}
+ if(!n.materials)n.materials='Chalkboard, mathematical set, JSS 2 New General Mathematics textbook, worked-example flashcards.';
+ if(!n.intro)n.intro='Teacher revises the previous week and links it to today\'s topic using a familiar everyday example before stating the lesson objectives on the board.';
+ if(!n.dev)n.dev='Teacher explains the concept step by step on the board, works two examples, then guides students through a third example in pairs while moving round the class to assist.';
+ if(!n.evaluation)n.evaluation=['Question 1 on the topic','Question 2 applying the method','A short word problem','State one real-life use of the concept'];
+ if(!n.assignment)n.assignment='Relevant exercise from New General Mathematics for JSS 2, due next Mathematics period.';
+});
+var active=9; // Week 10 (index 9)
+function renderWeeks(){
+ document.getElementById('weeks').innerHTML=NOTES.map(function(n,i){
+  var s=ST[n.status];
+  return '<button onclick="select('+i+')" class="w-full text-left px-4 py-3 flex gap-3 '+(i===active?'bg-wash':'hover:bg-canvas/70')+'">'+
+   '<span class="font-mono text-[11px] font-semibold '+(i===active?'text-blue':'text-steel/70')+' shrink-0 w-12 pt-0.5">Wk '+n.wk+'</span>'+
+   '<div class="min-w-0 flex-1"><p class="text-[12.5px] font-medium leading-snug '+(i===active?'text-ink':'')+'">'+n.topic+'</p>'+
+   '<span class="inline-block mt-1 text-[9.5px] font-medium '+s[1]+' rounded-full px-1.5 py-0.5">'+s[0]+'</span></div></button>';
+ }).join('');
+}
+function detail(i){
+ var n=NOTES[i],s=ST[n.status];
+ if(n.fileType)return viewer(n,s);
+ var canSubmit=n.status==='draft';
+ return '<div class="px-6 py-5 border-b border-whisper/60 flex items-start justify-between gap-3">'+
+   '<div><p class="text-[11px] font-mono font-semibold text-steel">WEEK '+n.wk+' · MATHEMATICS · JSS 2A</p>'+
+   '<h2 class="text-[19px] font-semibold tracking-tight mt-1">'+n.topic+'</h2>'+
+   '<p class="text-[11.5px] text-steel mt-1">2 periods · 80 minutes · Mallam Musa Ibrahim</p></div>'+
+   '<span class="text-[11px] font-medium '+s[1]+' rounded-full px-2.5 py-1 shrink-0">'+s[0]+'</span></div>'+
+   (n.status==='pending'?'<div class="mx-6 mt-4 flex items-center gap-2.5 bg-caution/[0.06] border border-caution/25 rounded-xl px-4 py-2.5 text-[12px]"><span class="h-2 w-2 rounded-full bg-caution shrink-0"></span>Submitted to HOD on 16 June — awaiting review before Monday\'s lesson.</div>':'')+
+   (n.status==='approved'?'<div class="mx-6 mt-4 flex items-center gap-2.5 bg-confirm/[0.06] border border-confirm/25 rounded-xl px-4 py-2.5 text-[12px]"><span class="text-confirm">✓</span>Approved by HOD (Mrs. Bisi Adeyemi). Good lesson structure.</div>':'')+
+   '<div class="p-6 space-y-6 text-[13px] leading-relaxed">'+
+   sect('Objectives','By the end of the lesson, students should be able to:','<ol class="list-decimal pl-5 space-y-1.5 mt-2 text-charcoal">'+n.objectives.map(function(o){return '<li>'+o+'</li>';}).join('')+'</ol>')+
+   sect('Instructional materials','','<p class="text-charcoal mt-1">'+n.materials+'</p>')+
+   sect('Introduction','','<p class="text-charcoal mt-1">'+n.intro+'</p>')+
+   sect('Lesson development','','<div class="text-charcoal mt-1 whitespace-pre-line">'+n.dev+'</div>')+
+   sect('Evaluation','Class questions:','<ol class="list-decimal pl-5 space-y-1.5 mt-2 text-charcoal">'+n.evaluation.map(function(e){return '<li>'+e+'</li>';}).join('')+'</ol>')+
+   sect('Assignment','','<p class="text-charcoal mt-1">'+n.assignment+'</p>')+
+   '</div>'+
+   '<div class="px-6 py-4 border-t border-whisper/60 flex items-center justify-between gap-3 bg-canvas/40">'+
+   '<p class="text-[11px] text-steel">Last edited 16 June · auto-saved</p>'+
+   '<div class="flex items-center gap-2.5">'+
+   '<button onclick="toast(\'Editing lesson note\')" class="h-9 px-4 rounded-lg bg-white ring-1 ring-whisper text-[12.5px] font-medium text-steel hover:bg-mist/30">Edit</button>'+
+   (canSubmit?'<button onclick="toast(\'Submitted to HOD for review\')" class="h-9 px-4 rounded-lg bg-blue text-white text-[12.5px] font-medium shadow-soft active:translate-y-px">Submit for review</button>':
+    '<button onclick="toast(\'Already submitted\')" class="h-9 px-4 rounded-lg bg-white ring-1 ring-whisper text-[12.5px] font-medium text-steel">Submitted</button>')+
+   '</div></div>';
+}
+function sect(t,sub,body){
+ return '<div><h3 class="text-[11px] font-semibold uppercase tracking-[0.07em] text-blue">'+t+'</h3>'+(sub?'<p class="text-[11.5px] text-steel mt-1">'+sub+'</p>':'')+body+'</div>';
+}
+function select(i){active=i;renderWeeks();document.getElementById('detail').innerHTML=detail(i);}
+
+// ---- In-app document viewer (uploaded PDF / converted .docx) ----
+var vpage=1;
+function viewer(n,s){
+ var head='<div class="px-6 py-5 border-b border-whisper/60 flex items-start justify-between gap-3">'+
+  '<div><p class="text-[11px] font-mono font-semibold text-steel">WEEK '+n.wk+' · MATHEMATICS · JSS 2A · '+(n.fileType==='pdf'?'PDF':'WORD DOC')+'</p>'+
+  '<h2 class="text-[19px] font-semibold tracking-tight mt-1">'+n.topic+'</h2>'+
+  '<p class="text-[11.5px] text-steel mt-1">Uploaded '+(n.uploadedAt||'today')+' · '+n.fileName+'</p></div>'+
+  '<span class="text-[11px] font-medium '+s[1]+' rounded-full px-2.5 py-1 shrink-0">'+s[0]+'</span></div>';
+ var foot='<div class="px-6 py-4 border-t border-whisper/60 flex items-center justify-between gap-3 bg-canvas/40">'+
+  '<p class="text-[11px] text-steel">'+n.fileName+'</p>'+
+  '<div class="flex items-center gap-2.5">'+
+  '<button onclick="toast(\'Downloading '+n.fileName+'\')" class="h-9 px-4 rounded-lg bg-white ring-1 ring-whisper text-[12.5px] font-medium text-steel hover:bg-mist/30">Download</button>'+
+  '<button onclick="toast(\'Submitted to HOD for review\')" class="h-9 px-4 rounded-lg bg-blue text-white text-[12.5px] font-medium shadow-soft active:translate-y-px">Submit for review</button>'+
+  '</div></div>';
+ if(n.fileType==='pdf')return head+pdfViewer(n)+foot;
+ return head+docxViewer(n)+foot;
+}
+function pdfViewer(n){
+ var pages=n.pages||3;
+ return '<div class="p-6">'+
+  '<div class="flex items-center justify-between mb-3">'+
+   '<p class="text-[11px] font-medium text-steel inline-flex items-center gap-1.5"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg>PDF rendered inline · Edsynk viewer</p>'+
+   '<div class="flex items-center gap-1.5 text-[12px]">'+
+    '<button onclick="pdfPage(-1,'+pages+')" class="h-8 w-8 grid place-items-center rounded-lg ring-1 ring-whisper bg-white text-steel hover:bg-mist/30">‹</button>'+
+    '<span class="px-2 font-mono text-[11.5px] text-steel">Page <span id="vpNum">'+vpage+'</span> / '+pages+'</span>'+
+    '<button onclick="pdfPage(1,'+pages+')" class="h-8 w-8 grid place-items-center rounded-lg ring-1 ring-whisper bg-white text-steel hover:bg-mist/30">›</button>'+
+   '</div></div>'+
+  // Build note: replace mock page with a real embedded renderer, e.g.
+  // <iframe src="<file-url>#page="+vpage+"" class="w-full" style="height:560px" title="'+n.topic+'"></iframe>
+  // or <embed src="<file-url>" type="application/pdf" class="w-full" style="height:560px">
+  '<div class="rounded-xl ring-1 ring-whisper bg-steel/5 p-4 sm:p-6 grid place-items-center" style="min-height:520px">'+
+   '<div class="relative bg-white shadow-lift ring-1 ring-whisper/80 w-full max-w-[460px] aspect-[1/1.414] p-7 sm:p-9 overflow-hidden">'+
+    '<p class="text-[9px] font-mono text-steel/60 uppercase tracking-wider">Al-Furqan Academy · Mathematics</p>'+
+    '<h4 class="text-[15px] font-semibold mt-3">'+n.topic+'</h4>'+
+    '<p class="text-[10.5px] text-steel mt-1">Week '+n.wk+' · JSS 2A · Mallam Musa Ibrahim</p>'+
+    '<div class="mt-4 space-y-2.5">'+
+     '<div class="h-2 rounded bg-steel/15 w-11/12"></div><div class="h-2 rounded bg-steel/15 w-full"></div><div class="h-2 rounded bg-steel/15 w-10/12"></div>'+
+     '<div class="h-2 rounded bg-steel/10 w-9/12 mt-4"></div><div class="h-2 rounded bg-steel/15 w-full"></div><div class="h-2 rounded bg-steel/15 w-11/12"></div><div class="h-2 rounded bg-steel/15 w-8/12"></div>'+
+     '<div class="h-2 rounded bg-steel/10 w-7/12 mt-4"></div><div class="h-2 rounded bg-steel/15 w-full"></div><div class="h-2 rounded bg-steel/15 w-10/12"></div>'+
+    '</div>'+
+    '<p class="absolute bottom-4 left-1/2 -translate-x-1/2 text-[9px] font-mono text-steel/40">— page '+vpage+' —</p>'+
+   '</div></div></div>';
+}
+function pdfPage(d,max){vpage=Math.min(max,Math.max(1,vpage+d));var el=document.getElementById('vpNum');if(el){el.textContent=vpage;document.getElementById('detail').innerHTML=detail(active);}}
+function docxViewer(n){
+ var body=n.html||'<p>Document content.</p>';
+ return '<div class="p-6">'+
+  '<div class="flex items-center gap-2 mb-3 rounded-xl bg-wash/60 ring-1 ring-mist px-3.5 py-2 text-[11px] text-blue">'+
+   '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v6M12 2L9 5M12 2l3 3"/><path d="M4 13v7h16v-7"/></svg>'+
+   'This Word document was <span class="font-medium">converted to a readable in-app view</span>. Formatting is approximate.</div>'+
+  // Build note: server-side .docx→HTML conversion (e.g. mammoth.js) feeds this panel.
+  '<div class="rounded-xl ring-1 ring-whisper bg-white shadow-soft px-6 sm:px-10 py-8 max-w-[640px] mx-auto text-[13px] leading-relaxed text-charcoal">'+body+'</div></div>';
+}
+
+// ---- Upload flow ----
+var _picked=null;
+function openUpload(){
+ vpage=1;_picked=null;
+ var sel=document.getElementById('upWeek');
+ sel.innerHTML=NOTES.map(function(n){return '<option value="'+n.wk+'">Wk '+n.wk+' · '+n.topic+'</option>';}).join('')+'<option value="new">New week…</option>';
+ document.getElementById('upTopic').value='';
+ document.getElementById('upFile').value='';
+ document.getElementById('upHint').textContent='Accepts .pdf and .docx · max 10 MB';
+ document.getElementById('upHint').className='text-[10.5px] text-steel mt-1';
+ document.getElementById('up').classList.remove('hidden');
+}
+function closeUpload(){document.getElementById('up').classList.add('hidden');}
+function pickedFile(inp){
+ if(!inp.files||!inp.files[0])return;
+ _picked=inp.files[0];
+ var ext=(_picked.name.split('.').pop()||'').toLowerCase();
+ if(ext!=='pdf'&&ext!=='docx'){toast('Only PDF or .docx files are supported');_picked=null;return;}
+ var h=document.getElementById('upHint');
+ h.textContent='Selected: '+_picked.name;
+ h.className='text-[10.5px] text-blue font-medium mt-1';
+ if(!document.getElementById('upTopic').value)document.getElementById('upTopic').value=_picked.name.replace(/\.[^.]+$/,'');
+}
+function doUpload(){
+ var topic=document.getElementById('upTopic').value.trim()||(_picked?_picked.name.replace(/\.[^.]+$/,''):'');
+ if(!_picked){toast('Choose a PDF or .docx file first');return;}
+ if(!topic){toast('Give the note a topic');return;}
+ var ext=(_picked.name.split('.').pop()||'').toLowerCase();
+ var wkSel=document.getElementById('upWeek').value;
+ var wk=wkSel==='new'?(NOTES.length+1):parseInt(wkSel,10);
+ var note={wk:wk,topic:topic,status:'uploaded',fileType:ext,fileName:_picked.name,uploadedAt:'just now',pages:ext==='pdf'?4:undefined};
+ if(ext==='docx'){
+  note.html='<h2 class="text-[17px] font-semibold tracking-tight">'+topic+'</h2>'+
+   '<p class="text-[11px] text-steel mt-1 mb-4">Mathematics · JSS 2A · Mallam Musa Ibrahim</p>'+
+   '<h3 class="text-[12px] font-semibold uppercase tracking-wide text-blue mt-5">Objectives</h3>'+
+   '<ol class="list-decimal pl-5 space-y-1 mt-1.5"><li>Explain the key idea of '+topic.toLowerCase()+'.</li><li>Work through guided examples on the board.</li><li>Apply the concept to solve problems.</li></ol>'+
+   '<h3 class="text-[12px] font-semibold uppercase tracking-wide text-blue mt-5">Lesson development</h3>'+
+   '<p class="mt-1.5">Teacher introduces '+topic.toLowerCase()+', demonstrates two worked examples, then guides students through practice in pairs. (Converted from your Word document — original formatting preserved as closely as possible.)</p>'+
+   '<h3 class="text-[12px] font-semibold uppercase tracking-wide text-blue mt-5">Assignment</h3>'+
+   '<p class="mt-1.5">Relevant exercise from New General Mathematics for JSS 2, due next Mathematics period.</p>';
+ }
+ NOTES.unshift(note);
+ active=0;vpage=1;
+ renderWeeks();
+ document.getElementById('detail').innerHTML=detail(0);
+ closeUpload();
+ toast('Lesson note uploaded');
+}
+
+renderWeeks();
+document.getElementById('detail').innerHTML=detail(active);
+</script>
+</body>
+</html>

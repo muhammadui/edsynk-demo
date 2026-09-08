@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Edsynk — Announcements</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script>tailwind.config={theme:{extend:{colors:{canvas:'#F7F9FC',ink:'#0B2A56',charcoal:'#18181B',steel:'#64748B',whisper:'#E2E8F0',blue:'#2177EF',skyblue:'#5C9DF5',wash:'#EAF2FE',mist:'#D3E4FD',confirm:'#16A34A',caution:'#D97706',alert:'#DC2626',excused:'#7C8DA6'},fontFamily:{sans:['Geist','sans-serif'],mono:['"Geist Mono"','monospace']},boxShadow:{soft:'0 1px 2px rgba(11,42,86,0.04), 0 6px 24px rgba(11,42,86,0.05)',lift:'0 1px 3px rgba(11,42,86,0.10), 0 12px 32px rgba(11,42,86,0.12)'}}}}</script>
+<style>@keyframes rise{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}.rise{animation:rise .45s cubic-bezier(.2,.8,.2,1) both}</style>
+</head>
+<body data-active="Announcements" data-persona="teacher" class="bg-canvas font-sans text-charcoal antialiased">
+<div class="flex min-h-screen">
+  <div id="sidebar-root"></div>
+  <div class="flex-1 min-w-0">
+    <header class="h-[60px] bg-white/80 backdrop-blur-md border-b border-whisper/70 flex items-center justify-between px-4 sm:px-7 sticky top-0 z-20">
+      <div class="flex items-center gap-3"><h1 class="text-[15px] font-semibold tracking-tight">Announcements</h1>
+        <span class="font-mono text-[11.5px] font-medium text-blue bg-wash rounded-full px-2.5 py-1 hidden sm:inline">my classes</span></div>
+    </header>
+    <main class="p-4 sm:p-7 max-w-[1000px] space-y-5 pb-10">
+      <!-- composer (teacher → own classes only) -->
+      <section class="rise bg-white ring-1 ring-whisper/80 rounded-2xl shadow-soft p-5">
+        <p class="text-[13.5px] font-semibold">Post to your class</p>
+        <p class="text-[11.5px] text-steel mt-0.5">You can post to classes you teach or your form class. School-wide notices come from Admin.</p>
+        <div class="mt-3 flex flex-wrap items-center gap-2 text-[12px] font-medium">
+          <span class="text-steel">To:</span>
+          <button onclick="toRecip(this)" class="h-8 px-3 rounded-lg bg-blue text-white">JSS 2A (form)</button>
+          <button onclick="toRecip(this)" class="h-8 px-3 rounded-lg bg-white ring-1 ring-whisper text-steel">JSS 2B</button>
+          <button onclick="toRecip(this)" class="h-8 px-3 rounded-lg bg-white ring-1 ring-whisper text-steel">JSS 3A</button>
+          <button onclick="toRecip(this)" class="h-8 px-3 rounded-lg bg-white ring-1 ring-whisper text-steel">+ parents too</button>
+        </div>
+        <textarea rows="2" class="mt-3 w-full rounded-xl border border-whisper bg-canvas px-4 py-3 text-[13px] focus:outline-none focus:ring-2 focus:ring-blue/50 resize-none" placeholder="e.g. Bring your mathematical set for tomorrow's geometry lesson…"></textarea>
+        <div class="flex items-center justify-between mt-3">
+          <label class="flex items-center gap-2 text-[12px] text-steel"><input type="checkbox" class="h-4 w-4 rounded accent-[#2177EF]">Send WhatsApp ping to parents</label>
+          <button onclick="toast('Announcement posted')" class="h-10 px-5 rounded-xl bg-blue text-white text-[13px] font-semibold shadow-soft active:translate-y-px">Post</button>
+        </div>
+      </section>
+
+      <!-- my posts -->
+      <section class="rise" style="animation-delay:.05s">
+        <p class="text-[13px] font-semibold uppercase tracking-[0.06em] text-steel mb-2.5">Posted by me</p>
+        <div class="space-y-3">
+          <div class="bg-white ring-1 ring-whisper/80 rounded-2xl shadow-soft p-4 flex gap-3"><span class="mt-1 h-2 w-2 rounded-full bg-blue shrink-0"></span><div class="flex-1"><p class="text-[13px] font-medium">Bring your mathematical set tomorrow</p><p class="text-[11.5px] text-steel mt-0.5">JSS 2A · 1 day ago · seen by 34/38</p></div><button onclick="toast('Post options')" class="text-steel/50 hover:text-steel text-[12px]">⋯</button></div>
+          <div class="bg-white ring-1 ring-whisper/80 rounded-2xl shadow-soft p-4 flex gap-3"><span class="mt-1 h-2 w-2 rounded-full bg-blue shrink-0"></span><div class="flex-1"><p class="text-[13px] font-medium">CA2 holds Friday — revise chapters 4 &amp; 5</p><p class="text-[11.5px] text-steel mt-0.5">JSS 2A · JSS 2B · 3 days ago · WhatsApp sent</p></div><button onclick="toast('Post options')" class="text-steel/50 hover:text-steel text-[12px]">⋯</button></div>
+        </div>
+      </section>
+
+      <!-- school-wide feed -->
+      <section class="rise" style="animation-delay:.1s">
+        <p class="text-[13px] font-semibold uppercase tracking-[0.06em] text-steel mb-2.5">From the school</p>
+        <div class="space-y-3">
+          <div class="bg-white ring-1 ring-whisper/80 rounded-2xl shadow-soft p-4 flex gap-3"><span class="mt-1 h-2 w-2 rounded-full bg-caution shrink-0"></span><div><p class="text-[13px] font-medium">Exam supervision roster is out</p><p class="text-[11.5px] text-steel mt-0.5">Admin · all staff · 2 days ago — check My Timetable</p></div></div>
+          <div class="bg-white ring-1 ring-whisper/80 rounded-2xl shadow-soft p-4 flex gap-3"><span class="mt-1 h-2 w-2 rounded-full bg-confirm shrink-0"></span><div><p class="text-[13px] font-medium">Staff meeting Monday 3:30pm</p><p class="text-[11.5px] text-steel mt-0.5">Admin · all staff · 4 days ago</p></div></div>
+        </div>
+      </section>
+    </main>
+  </div>
+</div>
+<script src="../assets/shell.js"></script>
+<div id="toast" class="hidden fixed bottom-5 left-1/2 -translate-x-1/2 z-[60] bg-ink text-white text-[12.5px] font-medium px-4 py-2.5 rounded-xl shadow-lift"></div>
+<script>function toast(m){var t=document.getElementById('toast');t.textContent=m;t.classList.remove('hidden');clearTimeout(window._tt);window._tt=setTimeout(function(){t.classList.add('hidden')},2200);}
+function toRecip(b){var on=b.classList.contains('bg-blue');if(on){b.className='h-8 px-3 rounded-lg bg-white ring-1 ring-whisper text-steel';}else{b.className='h-8 px-3 rounded-lg bg-blue text-white';}}</script>
+</body>
+</html>

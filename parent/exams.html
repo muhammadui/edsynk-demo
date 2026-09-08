@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Edsynk — Exams</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&family=Noto+Naskh+Arabic:wght@500&display=swap" rel="stylesheet">
+<script>tailwind.config={theme:{extend:{colors:{canvas:'#F7F9FC',ink:'#0B2A56',charcoal:'#18181B',steel:'#64748B',whisper:'#E2E8F0',blue:'#2177EF',skyblue:'#5C9DF5',wash:'#EAF2FE',mist:'#D3E4FD',confirm:'#16A34A',caution:'#D97706',alert:'#DC2626',excused:'#7C8DA6'},fontFamily:{sans:['Geist','sans-serif'],mono:['"Geist Mono"','monospace'],arabic:['"Noto Naskh Arabic"','serif']},boxShadow:{soft:'0 1px 2px rgba(11,42,86,0.04), 0 6px 24px rgba(11,42,86,0.05)',lift:'0 1px 3px rgba(11,42,86,0.10), 0 12px 32px rgba(11,42,86,0.12)'}}}}</script>
+<style>@keyframes rise{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}.rise{animation:rise .45s cubic-bezier(.2,.8,.2,1) both}</style>
+</head>
+<body data-active="Exams" data-persona="parent" class="bg-canvas font-sans text-charcoal antialiased">
+<div class="flex min-h-screen">
+  <div id="sidebar-root"></div>
+  <div class="flex-1 min-w-0">
+    <header class="h-[60px] bg-white/80 backdrop-blur-md border-b border-whisper/70 flex items-center justify-between px-4 sm:px-7 sticky top-0 z-20">
+      <div class="flex items-center gap-3"><h1 class="text-[15px] font-semibold tracking-tight">Exams</h1>
+        <span class="font-mono text-[11.5px] font-medium text-caution bg-caution/10 rounded-full px-2.5 py-1 hidden sm:inline">Third Term · 23–27 Jun</span></div>
+      <button onclick="toast('Exam timetable downloaded')" class="h-9 px-4 rounded-lg bg-white ring-1 ring-whisper text-[13px] font-medium text-steel hover:bg-mist/30 hidden sm:block">Download timetable</button>
+    </header>
+    <main class="p-4 sm:p-7 max-w-[1100px] space-y-5 pb-10">
+      <!-- child switcher -->
+      <div class="rise flex items-center justify-between flex-wrap gap-3">
+        <div class="flex gap-2" id="exKids">
+          <button onclick="exKid(0)" class="exk flex items-center gap-2.5 rounded-xl px-3.5 py-2 bg-blue text-white shadow-soft"><span class="h-7 w-7 rounded-full bg-white/20 grid place-items-center text-[10px] font-bold">FA</span><span class="text-left"><span class="block text-[12.5px] font-semibold leading-tight">Fatima</span><span class="exsub block text-[9.5px] text-white/70">JSS 2A · 9 papers</span></span></button>
+          <button onclick="exKid(1)" class="exk flex items-center gap-2.5 rounded-xl px-3.5 py-2 bg-white ring-1 ring-whisper text-steel"><span class="h-7 w-7 rounded-full bg-wash text-blue grid place-items-center text-[10px] font-bold">YA</span><span class="text-left"><span class="block text-[12.5px] font-semibold leading-tight">Yusuf</span><span class="exsub block text-[9.5px] text-steel">JSS 1B · 8 papers</span></span></button>
+        </div>
+        <span class="text-[11.5px] text-steel" id="exCaption">Fatima's exam schedule</span>
+      </div>
+
+      <!-- tips banner -->
+      <section class="rise rounded-2xl bg-wash/60 ring-1 ring-mist/60 p-4 flex items-start gap-3 text-[12.5px] text-ink">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-blue shrink-0 mt-0.5"><path d="M12 3l1.9 5.7L19.5 10l-5.6 1.3L12 17l-1.9-5.7L4.5 10l5.6-1.3z"/></svg>
+        <span id="exTip">Fatima's first paper is <span class="font-semibold">Mathematics, Monday 23 June 9:00am</span>. Help her revise the topics listed below. Results publish here, sealed, once marking is done.</span>
+      </section>
+
+      <!-- schedule by day -->
+      <section class="rise space-y-4" style="animation-delay:.05s" id="schedule"></section>
+    </main>
+  </div>
+</div>
+<script src="../assets/shell.js"></script>
+<script>
+const SCHEDULES=[
+ [ // Fatima
+ ['Monday','23 Jun',[['09:00','Mathematics','2 hrs','written','Algebra, mensuration, statistics'],['12:00','Civic Education','1 hr','cbt','Rights &amp; duties']]],
+ ['Tuesday','24 Jun',[['09:00','English Language','2 hrs','written','Comprehension, summary, essay'],['12:00','Basic Science','1h 30','cbt','Refraction, the cell, energy']]],
+ ['Wednesday','25 Jun',[['09:00','القرآن الكريم','1h 30','written','Suratul Mulk, Tajweed'],['11:30','Social Studies','1 hr','cbt','—']]],
+ ['Thursday','26 Jun',[['09:00','Basic Technology','1h 30','written','Tools, materials, drawing']]],
+ ['Friday','27 Jun',[['09:00','Arabic','1h 30','written','Grammar, comprehension'],['11:30','Agric Science','1 hr','written','Crops, soil, tools']]],
+ ],
+ [ // Yusuf
+ ['Monday','23 Jun',[['09:00','Mathematics','1h 30','written','Whole numbers, fractions, LCM']]],
+ ['Tuesday','24 Jun',[['09:00','English Language','1h 30','written','Comprehension, parts of speech'],['11:30','Basic Science','1 hr','cbt','Living things, sense organs']]],
+ ['Wednesday','25 Jun',[['09:00','القرآن الكريم','1h 30','written','Suratul Falaq & An-Nas, Tajweed'],['11:30','Civic Education','1 hr','cbt','The family, our values']]],
+ ['Thursday','26 Jun',[['09:00','Social Studies','1 hr','cbt','Culture & the community'],['11:30','Basic Technology','1 hr','written','Simple tools, safety']]],
+ ['Friday','27 Jun',[['09:00','Arabic','1h 30','written','Letters, simple words']]],
+ ],
+];
+const EXKIDS=[
+ {name:'Fatima',tip:'Fatima\'s first paper is <span class="font-semibold">Mathematics, Monday 23 June 9:00am</span>. Help her revise the topics listed below. Results publish here, sealed, once marking is done.',caption:'Fatima\'s exam schedule'},
+ {name:'Yusuf',tip:'Yusuf\'s first paper is <span class="font-semibold">Mathematics, Monday 23 June 9:00am</span>. Help him revise the topics listed below. Results publish here, sealed, once marking is done.',caption:'Yusuf\'s exam schedule'},
+];
+const fmt={written:['Written','text-blue bg-wash'],cbt:['CBT','text-confirm bg-confirm/10']};
+function renderSchedule(DAYS){document.getElementById('schedule').innerHTML=DAYS.map((d,di)=>`
+  <div class="bg-white ring-1 ${di===0?'ring-blue/30':'ring-whisper/80'} rounded-2xl shadow-soft overflow-hidden">
+    <div class="px-5 py-3 border-b border-whisper/60 flex items-center justify-between ${di===0?'bg-wash/50':'bg-canvas/40'}"><p class="text-[13px] font-semibold">${d[0]} <span class="text-steel font-normal">· ${d[1]}</span></p><span class="text-[10.5px] text-steel">${d[2].length} paper${d[2].length>1?'s':''}</span></div>
+    <div class="divide-y divide-whisper/50">${d[2].map(e=>{const arc=e[1].indexOf('ال')>-1?'arabic text-[15px] ':'';return `<div class="px-5 py-3.5 flex items-center gap-4 flex-wrap"><div class="font-mono text-[13px] font-semibold w-16 shrink-0">${e[0]}</div><div class="flex-1 min-w-[160px]"><div class="flex items-center gap-2"><p class="${arc}text-[13.5px] font-semibold">${e[1]}</p><span class="text-[9.5px] font-semibold ${fmt[e[3]][1]} rounded-full px-2 py-0.5">${fmt[e[3]][0]}</span></div><p class="text-[11px] text-steel mt-0.5">${e[2]} · revise: ${e[4]}</p></div></div>`;}).join('')}</div>
+  </div>`).join('');}
+function exKid(i){const k=EXKIDS[i];
+  document.getElementById('exTip').innerHTML=k.tip;
+  document.getElementById('exCaption').textContent=k.caption;
+  document.querySelectorAll('.exk').forEach((b,j)=>{const sel=j===i;
+    b.className='exk flex items-center gap-2.5 rounded-xl px-3.5 py-2 '+(sel?'bg-blue text-white shadow-soft':'bg-white ring-1 ring-whisper text-steel');
+    b.querySelector('.exsub').className='exsub block text-[9.5px] '+(sel?'text-white/70':'text-steel');});
+  renderSchedule(SCHEDULES[i]);}
+exKid(0);
+</script>
+<div id="toast" class="hidden fixed bottom-5 left-1/2 -translate-x-1/2 z-[60] bg-ink text-white text-[12.5px] font-medium px-4 py-2.5 rounded-xl shadow-lift"></div>
+<script>function toast(m){var t=document.getElementById('toast');t.textContent=m;t.classList.remove('hidden');clearTimeout(window._tt);window._tt=setTimeout(function(){t.classList.add('hidden')},2200);}</script>
+</body>
+</html>

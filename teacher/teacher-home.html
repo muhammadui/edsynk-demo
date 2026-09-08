@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Edsynk — Teacher Dashboard</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&family=Noto+Naskh+Arabic:wght@500&display=swap" rel="stylesheet">
+<script>tailwind.config={theme:{extend:{colors:{canvas:'#F7F9FC',ink:'#0B2A56',charcoal:'#18181B',steel:'#64748B',whisper:'#E2E8F0',blue:'#2177EF',wash:'#EAF2FE',mist:'#D3E4FD',confirm:'#16A34A',caution:'#D97706',alert:'#DC2626',excused:'#7C8DA6'},fontFamily:{sans:['Geist','sans-serif'],mono:['"Geist Mono"','monospace'],arabic:['"Noto Naskh Arabic"','serif']},boxShadow:{soft:'0 1px 2px rgba(11,42,86,0.04), 0 6px 24px rgba(11,42,86,0.05)',lift:'0 1px 3px rgba(11,42,86,0.10), 0 12px 32px rgba(11,42,86,0.12)'}}}}</script>
+<style>@keyframes rise{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}.rise{animation:rise .45s cubic-bezier(.2,.8,.2,1) both}</style>
+</head>
+<body data-active="My Classes" data-persona="teacher" class="bg-canvas font-sans text-charcoal antialiased">
+<div class="flex min-h-screen">
+  <div id="sidebar-root"></div>
+  <div class="flex-1 min-w-0">
+    <header class="h-[60px] bg-white/80 backdrop-blur-md border-b border-whisper/70 flex items-center justify-between px-4 sm:px-7 sticky top-0 z-20">
+      <div class="flex items-center gap-3">
+        <h1 class="text-[15px] font-semibold tracking-tight">My Classes</h1>
+        <span class="font-mono text-[11.5px] font-medium text-blue bg-wash rounded-full px-2.5 py-1 hidden sm:inline">2025/26 · Term 3</span>
+      </div>
+      <button onclick="location.href='announcements.html'" class="relative h-9 w-9 grid place-items-center rounded-lg hover:bg-mist/40 text-steel border border-transparent hover:border-whisper">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8a6 6 0 10-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 01-3.4 0"/></svg>
+        <span class="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-alert ring-2 ring-white"></span></button>
+    </header>
+
+    <main class="p-4 sm:p-7 max-w-[1100px] space-y-5">
+
+      <div class="rise">
+        <p class="text-[12.5px] text-steel">Friday, 12 June · submissions close in 8 days</p>
+        <h2 class="text-[20px] font-semibold tracking-tight mt-1">Sannu da aiki, Mallam Musa.</h2>
+      </div>
+
+      <!-- Rejected alert -->
+      <div class="rise flex items-center gap-3 bg-alert/[0.06] border border-alert/25 rounded-2xl px-5 py-3.5" style="animation-delay:.04s">
+        <span class="h-2.5 w-2.5 rounded-full bg-alert shrink-0"></span>
+        <p class="text-[13px] flex-1"><span class="font-medium">Maths — JSS 3A was returned:</span> <span class="text-steel">"Two students show 0 in CA2 — confirm they were absent." — Exam office</span></p>
+        <a href="score-entry.html" class="h-9 px-4 rounded-lg bg-alert text-white text-[12.5px] font-medium active:translate-y-px shrink-0">Fix &amp; resubmit</a>
+      </div>
+
+      <!-- My class-subjects -->
+      <section class="rise grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4" style="animation-delay:.08s">
+        <a href="score-entry.html" class="bg-white border border-whisper/70 rounded-2xl p-5 shadow-soft hover:shadow-lift transition-shadow">
+          <div class="flex items-center justify-between">
+            <p class="font-semibold">Mathematics — JSS 2A</p>
+            <span class="text-[10.5px] font-medium text-caution bg-caution/10 rounded-full px-2 py-0.5">Open</span>
+          </div>
+          <p class="text-[11.5px] text-steel mt-1">38 students · CA1 ✓ · CA2 ✓ · Exam in progress</p>
+          <div class="h-1.5 bg-mist/60 rounded-full mt-3"><div class="h-1.5 w-[90%] bg-blue rounded-full"></div></div>
+          <p class="font-mono text-[11px] text-steel mt-1.5">36/38 scored</p>
+        </a>
+        <a href="score-entry.html" class="bg-white border border-whisper/70 rounded-2xl p-5 shadow-soft hover:shadow-lift transition-shadow">
+          <div class="flex items-center justify-between">
+            <p class="font-semibold">Mathematics — JSS 2B</p>
+            <span class="text-[10.5px] font-medium text-blue bg-wash rounded-full px-2 py-0.5">Submitted</span>
+          </div>
+          <p class="text-[11.5px] text-steel mt-1">36 students · awaiting exam office review</p>
+          <div class="h-1.5 bg-mist/60 rounded-full mt-3"><div class="h-1.5 w-full bg-blue rounded-full"></div></div>
+          <p class="font-mono text-[11px] text-steel mt-1.5">36/36 ✓</p>
+        </a>
+        <a href="score-entry.html" class="bg-white border-2 border-alert/40 rounded-2xl p-5 shadow-soft hover:shadow-lift transition-shadow bg-alert/[0.02]">
+          <div class="flex items-center justify-between">
+            <p class="font-semibold">Mathematics — JSS 3A</p>
+            <span class="text-[10.5px] font-medium text-alert bg-alert/10 rounded-full px-2 py-0.5">Rejected</span>
+          </div>
+          <p class="text-[11.5px] text-steel mt-1">35 students · 1 note from exam office</p>
+          <div class="h-1.5 bg-mist/60 rounded-full mt-3"><div class="h-1.5 w-full bg-alert/60 rounded-full"></div></div>
+          <p class="font-mono text-[11px] text-alert mt-1.5">needs your attention</p>
+        </a>
+      </section>
+
+      <!-- Form-teacher zone + notifications -->
+      <section class="rise grid grid-cols-1 xl:grid-cols-5 gap-5" style="animation-delay:.12s">
+        <div class="xl:col-span-3 bg-white border border-whisper/70 rounded-2xl shadow-soft overflow-hidden">
+          <div class="px-6 py-4 border-b border-whisper/60 flex items-center justify-between">
+            <div><h3 class="font-semibold tracking-tight text-[15px]">My class — JSS 2A</h3>
+            <p class="text-[11.5px] text-steel mt-0.5">You are the form teacher</p></div>
+            <span class="text-[10.5px] font-medium text-confirm bg-confirm/10 rounded-full px-2.5 py-1">Register: 14-day streak</span>
+          </div>
+          <div class="p-5 grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <a href="daily-register.html" class="rounded-xl ring-1 ring-whisper/80 p-4 hover:bg-wash/40 hover:ring-mist">
+              <p class="text-[13px] font-medium">Today's register</p>
+              <p class="text-[11px] text-confirm mt-1">✓ Marked — 35 present, 2 absent, 1 late</p></a>
+            <a href="traits.html" class="rounded-xl ring-1 ring-whisper/80 p-4 hover:bg-wash/40 hover:ring-mist">
+              <p class="text-[13px] font-medium">Trait ratings</p>
+              <p class="text-[11px] text-caution mt-1">31/38 rated — 7 to finish before publish</p></a>
+            <a href="announcements.html" class="rounded-xl ring-1 ring-whisper/80 p-4 hover:bg-wash/40 hover:ring-mist">
+              <p class="text-[13px] font-medium">Class announcement</p>
+              <p class="text-[11px] text-steel mt-1">Post to JSS 2A students &amp; parents</p></a>
+          </div>
+        </div>
+        <div class="xl:col-span-2 bg-white border border-whisper/70 rounded-2xl shadow-soft">
+          <div class="px-5 py-4 border-b border-whisper/60"><h3 class="font-semibold tracking-tight text-[15px]">Notifications</h3></div>
+          <ul class="divide-y divide-whisper/60 text-[12.5px]">
+            <li onclick="location.href='score-entry.html'" class="px-5 py-3 flex gap-2.5 cursor-pointer hover:bg-canvas/60"><span class="mt-1 h-2 w-2 rounded-full bg-alert shrink-0"></span>
+              <p>JSS 3A Maths rejected — see note <span class="text-steel">· 1 hr</span></p></li>
+            <li onclick="location.href='submissions.html'" class="px-5 py-3 flex gap-2.5 cursor-pointer hover:bg-canvas/60"><span class="mt-1 h-2 w-2 rounded-full bg-confirm shrink-0"></span>
+              <p>JSS 2B Maths approved ✓ <span class="text-steel">· yesterday</span></p></li>
+            <li class="px-5 py-3 flex gap-2.5"><span class="mt-1 h-2 w-2 rounded-full bg-blue shrink-0"></span>
+              <p>Staff memo: submit by Friday — <button onclick="toast('Memo acknowledged')" class="text-blue hover:underline">acknowledge</button> <span class="text-steel">· 2 days</span></p></li>
+          </ul>
+        </div>
+      </section>
+    </main>
+  </div>
+</div>
+<script src="../assets/shell.js"></script>
+<div id="toast" class="hidden fixed bottom-5 left-1/2 -translate-x-1/2 z-[60] bg-ink text-white text-[12.5px] font-medium px-4 py-2.5 rounded-xl shadow-lift"></div>
+<script>function toast(m){var t=document.getElementById('toast');t.textContent=m;t.classList.remove('hidden');clearTimeout(window._tt);window._tt=setTimeout(function(){t.classList.add('hidden')},2200);}</script>
+</body>
+</html>

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Edsynk — Notifications</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script>tailwind.config={theme:{extend:{colors:{canvas:'#F7F9FC',ink:'#0B2A56',charcoal:'#18181B',steel:'#64748B',whisper:'#E2E8F0',blue:'#2177EF',skyblue:'#5C9DF5',wash:'#EAF2FE',mist:'#D3E4FD',confirm:'#16A34A',caution:'#D97706',alert:'#DC2626',excused:'#7C8DA6'},fontFamily:{sans:['Geist','sans-serif'],mono:['"Geist Mono"','monospace']},boxShadow:{soft:'0 1px 2px rgba(11,42,86,0.04), 0 6px 24px rgba(11,42,86,0.05)',lift:'0 1px 3px rgba(11,42,86,0.10), 0 12px 32px rgba(11,42,86,0.12)'}}}}</script>
+<style>@keyframes rise{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}.rise{animation:rise .45s cubic-bezier(.2,.8,.2,1) both}</style>
+</head>
+<body data-active="Notifications" data-persona="admin" class="bg-canvas font-sans text-charcoal antialiased">
+<div class="flex min-h-screen">
+  <div id="sidebar-root"></div>
+  <div class="flex-1 min-w-0">
+    <header class="h-[60px] bg-white/80 backdrop-blur-md border-b border-whisper/70 flex items-center justify-between px-4 sm:px-7 sticky top-0 z-20">
+      <div class="flex items-center gap-3"><h1 class="text-[15px] font-semibold tracking-tight">Notifications</h1>
+        <span id="unreadBadge" class="font-mono text-[11.5px] font-medium text-alert bg-alert/10 rounded-full px-2.5 py-1 hidden sm:inline">5 unread</span></div>
+      <div class="flex items-center gap-2.5">
+        <button onclick="markAllRead()" class="h-9 px-4 rounded-lg bg-white ring-1 ring-whisper text-[13px] font-medium text-steel hover:bg-mist/30">Mark all read</button>
+        <button onclick="location.href='settings.html'" class="h-9 w-9 grid place-items-center rounded-lg hover:bg-mist/40 text-steel border border-transparent hover:border-whisper"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 11-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 11-4 0v-.09A1.65 1.65 0 008.6 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 11-2.83-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 110-4h.09A1.65 1.65 0 004.6 8.6a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 112.83-2.83l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 114 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 112.83 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9c.66.27 1.18.79 1.51 1.51H21a2 2 0 110 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></button>
+      </div>
+    </header>
+    <main class="p-4 sm:p-7 max-w-[820px] space-y-5 pb-10">
+      <div class="rise rounded-2xl bg-wash/50 ring-1 ring-mist/60 px-4 py-3 text-[11.5px] text-ink">Action items and system alerts for the whole school. Things needing your approval appear first. School-wide notices you send out live under <span class="font-medium">Announcements</span>.</div>
+      <div class="rise flex gap-1.5 text-[12px] font-medium flex-wrap" id="filter">
+        <button data-f="all" class="h-9 px-3.5 rounded-xl bg-blue text-white">All</button>
+        <button data-f="unread" class="h-9 px-3.5 rounded-xl bg-white ring-1 ring-whisper text-steel">Unread</button>
+        <button data-f="approval" class="h-9 px-3.5 rounded-xl bg-white ring-1 ring-whisper text-steel">Approvals</button>
+        <button data-f="finance" class="h-9 px-3.5 rounded-xl bg-white ring-1 ring-whisper text-steel">Finance</button>
+        <button data-f="system" class="h-9 px-3.5 rounded-xl bg-white ring-1 ring-whisper text-steel">System</button>
+      </div>
+      <div id="feed" class="rise space-y-4" style="animation-delay:.05s"></div>
+    </main>
+  </div>
+</div>
+<script src="../assets/shell.js"></script>
+<script>
+const IC={approval:['ap','text-caution bg-caution/10','<path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/>'],
+ finance:['fi','text-blue bg-wash','<rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2.5"/>'],
+ system:['sy','text-steel bg-canvas ring-1 ring-whisper','<path d="M12 2a10 10 0 100 20 10 10 0 000-20z"/><path d="M12 8v4l3 2"/>'],
+ flag:['fl','text-alert bg-alert/10','<path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><path d="M4 22v-7"/>'],
+ admission:['ad','text-confirm bg-confirm/10','<path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M19 8v6M22 11h-6"/>']};
+const N=[
+ ['today','approval','Results awaiting approval','Mallam Musa Ibrahim submitted JSS 2A Term 3 results (38 cards). Review before they publish.','18 min ago',1,'results-center.html'],
+ ['today','admission','New admission application','Khadija Umar applied for JSS 1 entry. Documents attached — needs screening.','51 min ago',1,'admissions.html'],
+ ['today','finance','Fee payment to confirm','Bank transfer ₦29,400 from Hajiya Maryam Abubakar (Fatima) needs matching to an invoice.','2 hr ago',1,'fees.html'],
+ ['today','approval','Submission rejected — needs redo','SS 2 Chemistry scores were sent back to Mr. Chinedu Okafor: 3 students missing CA 2.','4 hr ago',1,'results-center.html'],
+ ['today','system','Storage at 78%','Document storage is filling up. Archive old session files or upgrade before it reaches 90%.','6 hr ago',1,'settings.html'],
+ ['earlier','flag','Flagged result edit','A published JSS 3B Mathematics score was edited after sealing. Logged for your review.','Yesterday','0','audit-log.html'],
+ ['earlier','system','Nightly backup completed','Full backup of all records finished successfully at 02:14. 412 students · 16 staff.','Yesterday','0','settings.html'],
+ ['earlier','finance','Term 3 invoices generated','412 invoices issued to parents. 286 paid in full, 94 part-paid, 32 outstanding.','3 days ago','0','finance.html'],
+];
+let f='all';
+function icon(type){const i=IC[type];return `<span class="h-9 w-9 rounded-xl ${i[1]} grid place-items-center shrink-0"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">${i[2]}</svg></span>`;}
+function render(){
+  const groups={today:'Today',earlier:'Earlier'};
+  let html='';
+  for(const g in groups){
+    const items=N.filter(n=>n[0]===g && (f==='all'||(f==='unread'&&n[5])||n[1]===f));
+    if(!items.length) continue;
+    html+=`<div><p class="text-[11px] font-semibold uppercase tracking-[0.07em] text-steel/70 mb-2">${groups[g]}</p><div class="space-y-2">`;
+    items.forEach(n=>{
+      html+=`<a href="${n[6]}" class="flex items-start gap-3 bg-white ring-1 ${n[5]?'ring-blue/20':'ring-whisper/80'} rounded-2xl shadow-soft p-4 hover:ring-mist relative">
+        ${icon(n[1])}<div class="flex-1 min-w-0"><p class="text-[13px] font-semibold">${n[2]}</p><p class="text-[12px] text-steel mt-0.5 leading-relaxed">${n[3]}</p><p class="text-[10.5px] text-steel/70 mt-1.5 font-mono">${n[4]}</p></div>
+        ${n[5]?'<span class="h-2 w-2 rounded-full bg-blue shrink-0 mt-1.5"></span>':''}</a>`;
+    });
+    html+='</div></div>';
+  }
+  document.getElementById('feed').innerHTML=html||'<p class="text-center text-[12.5px] text-steel py-10">Nothing here.</p>';
+}
+document.querySelectorAll('#filter button').forEach(b=>b.onclick=()=>{f=b.dataset.f;document.querySelectorAll('#filter button').forEach(x=>x.className='h-9 px-3.5 rounded-xl bg-white ring-1 ring-whisper text-steel');b.className='h-9 px-3.5 rounded-xl bg-blue text-white';render();});
+function markAllRead(){N.forEach(n=>n[5]=0);const badge=document.getElementById('unreadBadge');if(badge)badge.remove();render();toast('All notifications marked as read');}
+render();
+</script>
+<div id="toast" class="hidden fixed bottom-5 left-1/2 -translate-x-1/2 z-[60] bg-ink text-white text-[12.5px] font-medium px-4 py-2.5 rounded-xl shadow-lift"></div>
+<script>function toast(m){var t=document.getElementById('toast');t.textContent=m;t.classList.remove('hidden');clearTimeout(window._tt);window._tt=setTimeout(function(){t.classList.add('hidden')},2200);}</script>
+</body>
+</html>

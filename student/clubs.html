@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Edsynk — Clubs &amp; Activities</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&family=Noto+Naskh+Arabic:wght@500&display=swap" rel="stylesheet">
+<script>tailwind.config={theme:{extend:{colors:{canvas:'#F7F9FC',ink:'#0B2A56',charcoal:'#18181B',steel:'#64748B',whisper:'#E2E8F0',blue:'#2177EF',skyblue:'#5C9DF5',wash:'#EAF2FE',mist:'#D3E4FD',confirm:'#16A34A',caution:'#D97706',alert:'#DC2626',excused:'#7C8DA6'},fontFamily:{sans:['Geist','sans-serif'],mono:['"Geist Mono"','monospace'],arabic:['"Noto Naskh Arabic"','serif']},boxShadow:{soft:'0 1px 2px rgba(11,42,86,0.04), 0 6px 24px rgba(11,42,86,0.05)',lift:'0 1px 3px rgba(11,42,86,0.10), 0 12px 32px rgba(11,42,86,0.12)'}}}}</script>
+<style>@keyframes rise{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}.rise{animation:rise .45s cubic-bezier(.2,.8,.2,1) both}</style>
+</head>
+<body data-active="Clubs" data-persona="student" class="bg-canvas font-sans text-charcoal antialiased">
+<div class="flex min-h-screen">
+  <div id="sidebar-root"></div>
+  <div class="flex-1 min-w-0">
+    <header class="h-[60px] bg-white/80 backdrop-blur-md border-b border-whisper/70 flex items-center justify-between px-4 sm:px-7 sticky top-0 z-20">
+      <div class="flex items-center gap-3">
+        <h1 class="text-[15px] font-semibold tracking-tight">Clubs &amp; Activities</h1>
+        <span class="font-mono text-[11.5px] font-medium text-blue bg-wash rounded-full px-2.5 py-1 hidden sm:inline">2 joined</span>
+      </div>
+      <button onclick="toast('Speak to a patron to start a new club')" class="h-9 px-4 rounded-lg bg-white ring-1 ring-whisper text-[13px] font-medium text-steel hover:bg-mist/30 hidden sm:block">Suggest a club</button>
+    </header>
+
+    <main class="p-4 sm:p-7 max-w-[1100px] space-y-6 pb-10">
+
+      <!-- my clubs -->
+      <section class="rise">
+        <div class="flex items-center justify-between">
+          <h2 class="text-[13px] font-semibold uppercase tracking-[0.06em] text-steel">My clubs</h2>
+          <span class="text-[11px] text-steel">2 memberships</span>
+        </div>
+        <div class="mt-2.5 grid sm:grid-cols-2 gap-3">
+          <div class="bg-ink text-white rounded-2xl p-4 shadow-lift relative overflow-hidden">
+            <div class="absolute -right-6 -top-10 h-28 w-28 rounded-full bg-blue/30 blur-2xl"></div>
+            <div class="relative">
+              <div class="flex items-center gap-2.5"><span class="h-10 w-10 rounded-xl bg-blue grid place-items-center shrink-0"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M5 19l2-2M17 7l2-2"/></svg></span>
+              <div><p class="text-[14px] font-semibold">Science &amp; Robotics</p><p class="text-[10.5px] text-white/60">Mr. Okafor · member</p></div></div>
+              <p class="text-[11.5px] text-skyblue font-medium mt-3">Next meeting · Tomorrow 2:00pm · Lab 1</p>
+              <button onclick="toast('Robotics meeting added to your reminders')" class="mt-2.5 h-9 px-3.5 rounded-xl bg-white/10 ring-1 ring-white/20 text-[12px] font-medium">Remind me</button>
+            </div>
+          </div>
+          <div class="bg-white ring-1 ring-whisper/80 rounded-2xl p-4 shadow-soft">
+            <div class="flex items-center gap-2.5"><span class="h-10 w-10 rounded-xl bg-confirm/10 text-confirm grid place-items-center shrink-0 font-arabic text-[16px]">ق</span>
+            <div><p class="text-[14px] font-semibold">Qur'an Recitation circle</p><p class="text-[10.5px] text-steel">Ustadh Sani · member</p></div></div>
+            <p class="text-[11.5px] text-confirm font-medium mt-3">Next meeting · Saturday 10:00am · Hall</p>
+            <button onclick="toast('Recitation circle added to your reminders')" class="mt-2.5 h-9 px-3.5 rounded-xl ring-1 ring-whisper bg-white text-[12px] font-medium text-steel hover:bg-mist/30">Remind me</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- upcoming activities -->
+      <section class="rise" style="animation-delay:.05s">
+        <h2 class="text-[13px] font-semibold uppercase tracking-[0.06em] text-steel">Upcoming activities</h2>
+        <div class="mt-2.5 bg-white ring-1 ring-whisper/80 rounded-2xl shadow-soft divide-y divide-whisper/60">
+          <div class="flex items-center gap-3.5 px-4 py-3.5">
+            <div class="text-center shrink-0 w-11"><p class="font-mono text-[10px] text-steel uppercase">Jun</p><p class="font-mono text-[18px] font-semibold leading-none">21</p></div>
+            <div class="flex-1 min-w-0"><p class="text-[13px] font-semibold">Robotics build session</p><p class="text-[11px] text-steel mt-0.5">Science &amp; Robotics · 2:00pm · Lab 1</p></div>
+            <span class="text-[10px] font-semibold text-blue bg-wash rounded-full px-2.5 py-1 shrink-0">My club</span>
+          </div>
+          <div class="flex items-center gap-3.5 px-4 py-3.5">
+            <div class="text-center shrink-0 w-11"><p class="font-mono text-[10px] text-steel uppercase">Jun</p><p class="font-mono text-[18px] font-semibold leading-none">25</p></div>
+            <div class="flex-1 min-w-0"><p class="text-[13px] font-semibold">Inter-house debate heats</p><p class="text-[11px] text-steel mt-0.5">Debate Society · 11:30am · Main hall</p></div>
+            <button onclick="toast('Added to your calendar — open to all students')" class="text-blue text-[11.5px] font-medium shrink-0">Add</button>
+          </div>
+          <div class="flex items-center gap-3.5 px-4 py-3.5">
+            <div class="text-center shrink-0 w-11"><p class="font-mono text-[10px] text-steel uppercase">Jun</p><p class="font-mono text-[18px] font-semibold leading-none">28</p></div>
+            <div class="flex-1 min-w-0"><p class="text-[13px] font-semibold">Press Club newsletter deadline</p><p class="text-[11px] text-steel mt-0.5">Press Club · submit articles to Mrs. Yusuf</p></div>
+            <button onclick="toast('Added to your calendar')" class="text-blue text-[11.5px] font-medium shrink-0">Add</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- all clubs -->
+      <section class="rise" style="animation-delay:.1s">
+        <h2 class="text-[13px] font-semibold uppercase tracking-[0.06em] text-steel">All clubs</h2>
+        <div id="clubGrid" class="mt-2.5 grid sm:grid-cols-2 lg:grid-cols-3 gap-3"></div>
+      </section>
+
+      <section class="rise rounded-2xl bg-wash/60 ring-1 ring-mist/60 px-4 py-3 text-[12px] text-ink flex items-start gap-2.5" style="animation-delay:.14s">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-blue shrink-0 mt-0.5"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 12h1v4h1"/></svg>
+        <span>Clubs are a great way to make friends and learn new skills. You can join up to 3 clubs at a time — a patron will confirm your place.</span>
+      </section>
+    </main>
+  </div>
+</div>
+<script src="../assets/shell.js"></script>
+<div id="toast" class="hidden fixed bottom-5 left-1/2 -translate-x-1/2 z-[60] bg-ink text-white text-[12.5px] font-medium px-4 py-2.5 rounded-xl shadow-lift"></div>
+<script>
+function toast(m){var t=document.getElementById('toast');t.textContent=m;t.classList.remove('hidden');clearTimeout(window._tt);window._tt=setTimeout(function(){t.classList.add('hidden')},2200);}
+
+const CLUBS=[
+ ['Science &amp; Robotics','Mr. Okafor','Wednesdays · 2:00pm','Lab 1',18,'circle','bg-blue/10 text-blue',1],
+ ["Qur'an Recitation circle",'Ustadh Sani','Saturdays · 10:00am','Hall',26,'arabic','bg-confirm/10 text-confirm',1],
+ ['Press Club','Mrs. Yusuf','Tuesdays · 3:00pm','Room 9',12,'pen','bg-caution/10 text-caution',0],
+ ['Debate Society','Mr. Adamu','Thursdays · 3:30pm','Main hall',15,'chat','bg-skyblue/15 text-skyblue',0],
+ ['Football','Coach Bala','Fridays · 4:00pm','Field',22,'ball','bg-ink/10 text-ink',0],
+];
+const ICN={
+ circle:'<circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M5 19l2-2M17 7l2-2"/>',
+ pen:'<path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 013 3L7 19l-4 1 1-4z"/>',
+ chat:'<path d="M21 11.5a8.5 8.5 0 01-12.5 7.5L3 21l2-5.5A8.5 8.5 0 1121 11.5z"/>',
+ ball:'<circle cx="12" cy="12" r="9"/><path d="M12 7l4 3-1.5 5h-5L8 10z"/>'
+};
+document.getElementById('clubGrid').innerHTML=CLUBS.map((c,i)=>{
+ const icon=c[5]==='arabic'?'<span class="font-arabic text-[16px]">ق</span>':`<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">${ICN[c[5]]}</svg>`;
+ const joined=c[7];
+ return `<div class="bg-white ring-1 ring-whisper/80 rounded-2xl shadow-soft p-4 flex flex-col">
+   <div class="flex items-start justify-between">
+     <span class="h-11 w-11 rounded-xl ${c[6]} grid place-items-center shrink-0">${icon}</span>
+     ${joined?'<span class="text-[10px] font-semibold text-confirm bg-confirm/10 rounded-full px-2.5 py-1">Joined ✓</span>':''}
+   </div>
+   <p class="text-[14px] font-semibold mt-3">${c[0]}</p>
+   <p class="text-[11.5px] text-steel mt-0.5">Patron · ${c[1]}</p>
+   <div class="mt-2.5 space-y-1 text-[11.5px] text-steel">
+     <p class="flex items-center gap-1.5"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>${c[2]}</p>
+     <p class="flex items-center gap-1.5"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 6-9 12-9 12s-9-6-9-12a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>${c[3]} · <span class="font-mono">${c[4]}</span> members</p>
+   </div>
+   <button onclick="joinClub(this,'${c[0].replace(/&amp;/g,'and').replace(/'/g,'')}')" data-joined="${joined}" class="mt-3.5 h-9 rounded-xl ${joined?'ring-1 ring-whisper bg-white text-steel':'bg-blue text-white'} text-[12.5px] font-semibold active:translate-y-px">${joined?'Leave club':'Join'}</button>
+ </div>`;
+}).join('');
+
+function joinClub(btn,name){
+ const j=btn.dataset.joined==='1';
+ if(j){
+   btn.dataset.joined='0';
+   btn.className='mt-3.5 h-9 rounded-xl bg-blue text-white text-[12.5px] font-semibold active:translate-y-px';
+   btn.textContent='Join';
+   toast('You left '+name);
+ }else{
+   btn.dataset.joined='1';
+   btn.className='mt-3.5 h-9 rounded-xl ring-1 ring-whisper bg-white text-steel text-[12.5px] font-semibold active:translate-y-px';
+   btn.textContent='Leave club';
+   toast('Request sent — the patron will confirm your place in '+name);
+ }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Edsynk — Payments Ledger</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script>tailwind.config={theme:{extend:{colors:{canvas:'#F7F9FC',ink:'#0B2A56',charcoal:'#18181B',steel:'#64748B',whisper:'#E2E8F0',blue:'#2177EF',wash:'#EAF2FE',mist:'#D3E4FD',confirm:'#16A34A',caution:'#D97706',alert:'#DC2626',excused:'#7C8DA6'},fontFamily:{sans:['Geist','sans-serif'],mono:['"Geist Mono"','monospace']},boxShadow:{soft:'0 1px 2px rgba(11,42,86,0.04), 0 6px 24px rgba(11,42,86,0.05)',lift:'0 1px 3px rgba(11,42,86,0.10), 0 12px 32px rgba(11,42,86,0.12)'}}}}</script>
+<style>@keyframes rise{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}.rise{animation:rise .45s cubic-bezier(.2,.8,.2,1) both}</style>
+</head>
+<body data-active="Payments" data-persona="cashier" class="bg-canvas font-sans text-charcoal antialiased">
+<div class="flex min-h-screen">
+  <div id="sidebar-root"></div>
+  <div class="flex-1 min-w-0">
+    <header class="h-[60px] bg-white/80 backdrop-blur-md border-b border-whisper/70 flex items-center justify-between px-4 sm:px-7 sticky top-0 z-20">
+      <div class="flex items-center gap-3">
+        <h1 class="text-[15px] font-semibold tracking-tight">Payments Ledger</h1>
+        <span class="text-[10px] font-semibold uppercase tracking-wide text-excused bg-canvas ring-1 ring-whisper rounded-full px-2.5 py-1">Front desk · accounts</span>
+      </div>
+      <div class="flex items-center gap-2.5">
+        <button onclick="toast('Exporting ledger to CSV…')" class="h-9 px-3.5 rounded-lg border border-whisper bg-white text-[12.5px] font-medium hover:bg-mist/30 hidden sm:block">Export</button>
+        <button onclick="location.href='cashier-dashboard.html'" class="h-9 px-4 rounded-lg bg-blue text-white text-[13px] font-medium shadow-soft active:translate-y-px">Record payment</button>
+      </div>
+    </header>
+
+    <main class="p-4 sm:p-7 max-w-[1100px] space-y-5">
+
+      <!-- Summary by method -->
+      <section class="rise grid grid-cols-1 xl:grid-cols-5 gap-5">
+        <div class="xl:col-span-3 bg-white ring-1 ring-whisper/80 rounded-2xl shadow-soft p-6">
+          <div class="flex items-center justify-between flex-wrap gap-2">
+            <h2 class="font-semibold tracking-tight text-[15px]">Daily collection by method</h2>
+            <span class="font-mono text-[13px] font-semibold text-confirm">₦775,500 total</span>
+          </div>
+          <div class="mt-5 space-y-3">
+            <div class="grid grid-cols-[90px_1fr_120px] gap-3 items-center text-[12.5px]">
+              <span class="font-medium">Cash</span>
+              <div class="h-5 relative"><div class="absolute inset-y-0.5 left-0 rounded-full bg-confirm" style="width:63%"></div></div>
+              <span class="font-mono text-right">₦486,500</span></div>
+            <div class="grid grid-cols-[90px_1fr_120px] gap-3 items-center text-[12.5px]">
+              <span class="font-medium">POS</span>
+              <div class="h-5 relative"><div class="absolute inset-y-0.5 left-0 rounded-full bg-caution" style="width:23%"></div></div>
+              <span class="font-mono text-right">₦179,000</span></div>
+            <div class="grid grid-cols-[90px_1fr_120px] gap-3 items-center text-[12.5px]">
+              <span class="font-medium">Transfer</span>
+              <div class="h-5 relative"><div class="absolute inset-y-0.5 left-0 rounded-full bg-blue" style="width:14%"></div></div>
+              <span class="font-mono text-right">₦110,000</span></div>
+          </div>
+        </div>
+        <div class="xl:col-span-2 bg-white ring-1 ring-whisper/80 rounded-2xl shadow-soft p-6 flex flex-col">
+          <h2 class="font-semibold tracking-tight text-[15px]">Reconciliation</h2>
+          <div class="mt-4 space-y-2 text-[12.5px] flex-1">
+            <div class="flex justify-between"><span class="text-steel">Reconciled</span><span class="font-mono text-confirm font-semibold">11 · ₦727,500</span></div>
+            <div class="flex justify-between"><span class="text-steel">Unreconciled</span><span class="font-mono text-caution font-semibold">3 · ₦48,000</span></div>
+          </div>
+          <button onclick="toast('Matching transactions against bank statement…')" class="mt-4 w-full h-10 rounded-lg bg-ink text-white text-[12.5px] font-medium active:translate-y-px">Reconcile with bank</button>
+        </div>
+      </section>
+
+      <!-- Filters + ledger -->
+      <section class="rise bg-white ring-1 ring-whisper/80 rounded-2xl shadow-soft overflow-hidden" style="animation-delay:.05s">
+        <div class="px-6 py-4 border-b border-whisper/60 flex items-center justify-between flex-wrap gap-3">
+          <h2 class="font-semibold tracking-tight text-[15px]">All payments</h2>
+          <div class="flex flex-wrap gap-2 text-[11.5px] font-medium">
+            <div class="flex gap-1.5" id="rangeF">
+              <button onclick="rangeFilt(this)" class="rf px-3 py-1.5 rounded-lg bg-wash text-blue">Today</button>
+              <button onclick="rangeFilt(this)" class="rf px-3 py-1.5 rounded-lg text-steel hover:bg-mist/40">Week</button>
+              <button onclick="rangeFilt(this)" class="rf px-3 py-1.5 rounded-lg text-steel hover:bg-mist/40">Term</button>
+            </div>
+            <select onchange="toast('Filtered by method: '+this.value)" class="h-[31px] rounded-lg border border-whisper bg-canvas px-2.5 text-[11.5px]"><option>All methods</option><option>Cash</option><option>POS</option><option>Transfer</option><option>Paystack</option></select>
+            <select onchange="toast('Filtered by class: '+this.value)" class="h-[31px] rounded-lg border border-whisper bg-canvas px-2.5 text-[11.5px]"><option>All classes</option><option>JSS 1B</option><option>JSS 2A</option><option>SS 1A</option></select>
+          </div>
+        </div>
+        <div class="overflow-x-auto"><table class="w-full text-[13px] min-w-[900px]">
+          <thead><tr class="text-left text-[10px] font-semibold uppercase tracking-wider text-steel border-b border-whisper/60 bg-canvas/60">
+            <th class="px-6 py-3 font-semibold">Date / time</th><th class="px-3 py-3 font-semibold">Student</th>
+            <th class="px-3 py-3 font-semibold">Class</th><th class="px-3 py-3 font-semibold">Fee item</th>
+            <th class="px-3 py-3 font-semibold text-right">Amount</th><th class="px-3 py-3 font-semibold">Method</th>
+            <th class="px-3 py-3 font-semibold">Reference</th><th class="px-3 py-3 font-semibold">Cashier</th>
+            <th class="px-6 py-3 font-semibold text-right">Status</th></tr></thead>
+          <tbody class="divide-y divide-whisper/60">
+            <tr class="hover:bg-mist/15"><td class="px-6 py-3 font-mono text-steel text-[12px]">23 Jun · 09:41</td>
+              <td class="px-3 py-3 font-medium"><a href="../admin/student-detail.html" class="hover:text-blue hover:underline">Fatima Abubakar</a></td>
+              <td class="px-3 py-3 text-steel">JSS 2A</td><td class="px-3 py-3 text-steel">Term 3 tuition</td>
+              <td class="px-3 py-3 text-right font-mono">₦40,500</td><td class="px-3 py-3"><span class="text-[10.5px] font-medium text-blue bg-wash rounded-full px-2.5 py-1">Transfer</span></td>
+              <td class="px-3 py-3 font-mono text-[12px] text-steel">TRF-99812</td><td class="px-3 py-3 text-steel text-[12px]">G. Eze</td>
+              <td class="px-6 py-3 text-right"><span class="text-[10.5px] font-medium text-confirm bg-confirm/10 rounded-full px-2.5 py-1">Reconciled</span></td></tr>
+            <tr class="hover:bg-mist/15"><td class="px-6 py-3 font-mono text-steel text-[12px]">23 Jun · 10:08</td>
+              <td class="px-3 py-3 font-medium"><a href="../admin/student-detail.html" class="hover:text-blue hover:underline">Aisha Bello</a></td>
+              <td class="px-3 py-3 text-steel">JSS 2A</td><td class="px-3 py-3 text-steel">Term 3 tuition</td>
+              <td class="px-3 py-3 text-right font-mono">₦45,000</td><td class="px-3 py-3"><span class="text-[10.5px] font-medium text-confirm bg-confirm/10 rounded-full px-2.5 py-1">Cash</span></td>
+              <td class="px-3 py-3 font-mono text-[12px] text-steel">—</td><td class="px-3 py-3 text-steel text-[12px]">G. Eze</td>
+              <td class="px-6 py-3 text-right"><span class="text-[10.5px] font-medium text-confirm bg-confirm/10 rounded-full px-2.5 py-1">Reconciled</span></td></tr>
+            <tr class="hover:bg-mist/15"><td class="px-6 py-3 font-mono text-steel text-[12px]">23 Jun · 11:15</td>
+              <td class="px-3 py-3 font-medium"><a href="../admin/student-detail.html" class="hover:text-blue hover:underline">Chinedu Okafor</a></td>
+              <td class="px-3 py-3 text-steel">JSS 2A</td><td class="px-3 py-3 text-steel">Part payment</td>
+              <td class="px-3 py-3 text-right font-mono">₦25,000</td><td class="px-3 py-3"><span class="text-[10.5px] font-medium text-caution bg-caution/10 rounded-full px-2.5 py-1">POS</span></td>
+              <td class="px-3 py-3 font-mono text-[12px] text-steel">POS-3341</td><td class="px-3 py-3 text-steel text-[12px]">G. Eze</td>
+              <td class="px-6 py-3 text-right"><span class="text-[10.5px] font-medium text-caution bg-caution/10 rounded-full px-2.5 py-1">Unreconciled</span></td></tr>
+            <tr class="hover:bg-mist/15"><td class="px-6 py-3 font-mono text-steel text-[12px]">23 Jun · 12:03</td>
+              <td class="px-3 py-3 font-medium"><a href="../admin/student-detail.html" class="hover:text-blue hover:underline">Yusuf Abubakar</a></td>
+              <td class="px-3 py-3 text-steel">JSS 1B</td><td class="px-3 py-3 text-steel">Part payment</td>
+              <td class="px-3 py-3 text-right font-mono">₦30,000</td><td class="px-3 py-3"><span class="text-[10.5px] font-medium text-confirm bg-confirm/10 rounded-full px-2.5 py-1">Cash</span></td>
+              <td class="px-3 py-3 font-mono text-[12px] text-steel">—</td><td class="px-3 py-3 text-steel text-[12px]">G. Eze</td>
+              <td class="px-6 py-3 text-right"><span class="text-[10.5px] font-medium text-caution bg-caution/10 rounded-full px-2.5 py-1">Unreconciled</span></td></tr>
+            <tr class="hover:bg-mist/15"><td class="px-6 py-3 font-mono text-steel text-[12px]">23 Jun · 12:47</td>
+              <td class="px-3 py-3 font-medium"><a href="../admin/student-detail.html" class="hover:text-blue hover:underline">Ibrahim Sani</a></td>
+              <td class="px-3 py-3 text-steel">SS 1A</td><td class="px-3 py-3 text-steel">Lab levy</td>
+              <td class="px-3 py-3 text-right font-mono">₦18,000</td><td class="px-3 py-3"><span class="text-[10.5px] font-medium text-caution bg-caution/10 rounded-full px-2.5 py-1">POS</span></td>
+              <td class="px-3 py-3 font-mono text-[12px] text-steel">POS-3342</td><td class="px-3 py-3 text-steel text-[12px]">G. Eze</td>
+              <td class="px-6 py-3 text-right"><span class="text-[10.5px] font-medium text-caution bg-caution/10 rounded-full px-2.5 py-1">Unreconciled</span></td></tr>
+            <tr class="hover:bg-mist/15"><td class="px-6 py-3 font-mono text-steel text-[12px]">23 Jun · 13:30</td>
+              <td class="px-3 py-3 font-medium"><a href="../admin/student-detail.html" class="hover:text-blue hover:underline">Hauwa Lawal</a></td>
+              <td class="px-3 py-3 text-steel">SS 1A</td><td class="px-3 py-3 text-steel">Term 3 tuition</td>
+              <td class="px-3 py-3 text-right font-mono">₦52,000</td><td class="px-3 py-3"><span class="text-[10.5px] font-medium text-blue bg-wash rounded-full px-2.5 py-1">Transfer</span></td>
+              <td class="px-3 py-3 font-mono text-[12px] text-steel">TRF-99840</td><td class="px-3 py-3 text-steel text-[12px]">G. Eze</td>
+              <td class="px-6 py-3 text-right"><span class="text-[10.5px] font-medium text-confirm bg-confirm/10 rounded-full px-2.5 py-1">Reconciled</span></td></tr>
+          </tbody>
+          <tfoot><tr class="bg-canvas border-t border-whisper/60 text-[12.5px] font-semibold">
+            <td class="px-6 py-3" colspan="4">Total · 14 payments today</td>
+            <td class="px-3 py-3 text-right font-mono text-confirm">₦775,500</td>
+            <td class="px-3 py-3" colspan="4"></td></tr></tfoot>
+        </table></div>
+        <div class="px-6 py-3.5 bg-canvas border-t border-whisper/60 text-[11px] text-steel flex justify-between flex-wrap gap-2">
+          <span>Money goes straight to Al-Furqan Academy's account — Edsynk never holds school funds.</span>
+          <a href="receipts.html" class="font-medium text-blue hover:underline">View receipts →</a>
+        </div>
+      </section>
+    </main>
+  </div>
+</div>
+
+<script src="../assets/shell.js"></script>
+<div id="toast" class="hidden fixed bottom-5 left-1/2 -translate-x-1/2 z-[60] bg-ink text-white text-[12.5px] font-medium px-4 py-2.5 rounded-xl shadow-lift"></div>
+<script>
+function toast(m){var t=document.getElementById('toast');t.textContent=m;t.classList.remove('hidden');clearTimeout(window._tt);window._tt=setTimeout(function(){t.classList.add('hidden')},2200);}
+function rangeFilt(b){document.querySelectorAll('#rangeF .rf').forEach(function(x){x.className='rf px-3 py-1.5 rounded-lg text-steel hover:bg-mist/40';});b.className='rf px-3 py-1.5 rounded-lg bg-wash text-blue';toast('Showing: '+b.textContent);}
+</script>
+</body>
+</html>

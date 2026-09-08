@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Edsynk — Academic Years</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script>tailwind.config={theme:{extend:{colors:{canvas:'#F7F9FC',ink:'#0B2A56',charcoal:'#18181B',steel:'#64748B',whisper:'#E2E8F0',blue:'#2177EF',skyblue:'#5C9DF5',wash:'#EAF2FE',mist:'#D3E4FD',confirm:'#16A34A',caution:'#D97706',alert:'#DC2626',excused:'#7C8DA6'},fontFamily:{sans:['Geist','sans-serif'],mono:['"Geist Mono"','monospace']},boxShadow:{soft:'0 1px 2px rgba(11,42,86,0.04), 0 6px 24px rgba(11,42,86,0.05)',lift:'0 1px 3px rgba(11,42,86,0.10), 0 12px 32px rgba(11,42,86,0.12)'}}}}</script>
+<style>@keyframes rise{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}.rise{animation:rise .45s cubic-bezier(.2,.8,.2,1) both}</style>
+</head>
+<body data-active="Academic Years" data-persona="admin" class="bg-canvas font-sans text-charcoal antialiased">
+<div class="flex min-h-screen">
+  <div id="sidebar-root"></div>
+  <div class="flex-1 min-w-0">
+    <header class="h-[60px] bg-white/80 backdrop-blur-md border-b border-whisper/70 flex items-center justify-between px-4 sm:px-7 sticky top-0 z-20">
+      <div class="flex items-center gap-3">
+        <a href="settings.html" class="h-8 w-8 grid place-items-center rounded-lg hover:bg-mist/40 text-steel" title="Back to Settings"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg></a>
+        <h1 class="text-[15px] font-semibold tracking-tight">Academic Years</h1>
+      </div>
+      <button onclick="om('newSession')" class="h-9 px-4 rounded-lg bg-blue text-white text-[13px] font-medium shadow-soft active:translate-y-px">Open new session</button>
+    </header>
+
+    <main class="p-4 sm:p-7 max-w-[1000px] space-y-5 pb-10">
+      <div class="rise rounded-2xl bg-wash/50 ring-1 ring-mist/60 px-4 py-3 text-[11.5px] text-ink">A session has three terms. <span class="font-medium">Closing a term locks all results and attendance for that term</span> — staff can no longer enter or edit scores, and the records become read-only on report cards. You can re-open a term within 14 days if you made a mistake.</div>
+
+      <!-- Current session -->
+      <section class="rise bg-white ring-1 ring-whisper/80 rounded-2xl shadow-soft overflow-hidden">
+        <div class="px-6 py-4 border-b border-whisper/60 flex items-center justify-between flex-wrap gap-2">
+          <div><h2 class="font-semibold tracking-tight text-[15px]">2025/26 <span class="text-[10.5px] font-medium text-confirm bg-confirm/10 rounded-full px-2.5 py-1 ml-1">Active</span></h2>
+            <p class="text-[11.5px] text-steel mt-0.5">Sept 2025 – July 2026 · 412 students</p></div>
+          <a href="promotion.html" class="text-[12px] font-medium text-blue">End-of-year promotion →</a>
+        </div>
+        <div class="divide-y divide-whisper/60">
+          <!-- term 1 -->
+          <div class="px-6 py-4 flex items-center justify-between flex-wrap gap-3">
+            <div><p class="text-[13px] font-medium">First Term <span class="text-[10.5px] font-medium text-steel bg-canvas ring-1 ring-whisper rounded-full px-2.5 py-1 ml-1">Closed</span></p>
+              <p class="text-[11.5px] text-steel mt-0.5 font-mono">15 Sep 2025 – 12 Dec 2025</p></div>
+            <div class="flex gap-2 text-[11.5px] font-medium">
+              <button onclick="toast('Opening First Term dates…');om('termDates')" class="h-8 px-3 rounded-lg border border-whisper text-steel hover:bg-mist/30">Set dates</button>
+              <button onclick="toast('Re-opening First Term — staff can edit again for 14 days')" class="h-8 px-3 rounded-lg border border-whisper text-steel hover:bg-mist/30">Re-open</button></div>
+          </div>
+          <!-- term 2 -->
+          <div class="px-6 py-4 flex items-center justify-between flex-wrap gap-3">
+            <div><p class="text-[13px] font-medium">Second Term <span class="text-[10.5px] font-medium text-steel bg-canvas ring-1 ring-whisper rounded-full px-2.5 py-1 ml-1">Closed</span></p>
+              <p class="text-[11.5px] text-steel mt-0.5 font-mono">5 Jan 2026 – 27 Mar 2026</p></div>
+            <div class="flex gap-2 text-[11.5px] font-medium">
+              <button onclick="om('termDates')" class="h-8 px-3 rounded-lg border border-whisper text-steel hover:bg-mist/30">Set dates</button>
+              <button onclick="toast('Re-opening Second Term — staff can edit again for 14 days')" class="h-8 px-3 rounded-lg border border-whisper text-steel hover:bg-mist/30">Re-open</button></div>
+          </div>
+          <!-- term 3 (active) -->
+          <div class="px-6 py-4 flex items-center justify-between flex-wrap gap-3 bg-wash/30">
+            <div><p class="text-[13px] font-medium">Third Term <span class="text-[10.5px] font-medium text-confirm bg-confirm/10 rounded-full px-2.5 py-1 ml-1">Active</span></p>
+              <p class="text-[11.5px] text-steel mt-0.5 font-mono">22 Apr 2026 – 24 Jul 2026</p></div>
+            <div class="flex gap-2 text-[11.5px] font-medium">
+              <button onclick="om('termDates')" class="h-8 px-3 rounded-lg border border-whisper text-steel hover:bg-mist/30">Set dates</button>
+              <button onclick="om('closeTerm')" class="h-8 px-3 rounded-lg bg-caution text-white">Close current term</button></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Past sessions -->
+      <section class="rise bg-white ring-1 ring-whisper/80 rounded-2xl shadow-soft overflow-hidden">
+        <div class="px-6 py-4 border-b border-whisper/60"><h2 class="font-semibold tracking-tight text-[15px]">Past sessions</h2><p class="text-[11.5px] text-steel mt-0.5">Archived sessions are read-only. Records stay verifiable forever.</p></div>
+        <ul class="divide-y divide-whisper/60 text-[13px]">
+          <li class="px-6 py-4 flex items-center justify-between flex-wrap gap-3">
+            <div><p class="font-medium">2024/25 <span class="text-[10.5px] font-medium text-steel bg-canvas ring-1 ring-whisper rounded-full px-2.5 py-1 ml-1">Archived</span></p>
+              <p class="text-[11.5px] text-steel mt-0.5">Sept 2024 – July 2025 · 386 students · all 3 terms closed</p></div>
+            <div class="flex gap-2 text-[11.5px] font-medium">
+              <a href="transcripts.html" class="h-8 px-3 grid place-items-center rounded-lg border border-whisper text-steel hover:bg-mist/30">View results</a>
+              <button onclick="toast('Preparing 2024/25 archive export…')" class="h-8 px-3 rounded-lg border border-whisper text-steel hover:bg-mist/30">Export</button></div>
+          </li>
+          <li class="px-6 py-4 flex items-center justify-between flex-wrap gap-3">
+            <div><p class="font-medium">2023/24 <span class="text-[10.5px] font-medium text-steel bg-canvas ring-1 ring-whisper rounded-full px-2.5 py-1 ml-1">Archived</span></p>
+              <p class="text-[11.5px] text-steel mt-0.5">Sept 2023 – July 2024 · 351 students · all 3 terms closed</p></div>
+            <div class="flex gap-2 text-[11.5px] font-medium">
+              <a href="transcripts.html" class="h-8 px-3 grid place-items-center rounded-lg border border-whisper text-steel hover:bg-mist/30">View results</a>
+              <button onclick="toast('Preparing 2023/24 archive export…')" class="h-8 px-3 rounded-lg border border-whisper text-steel hover:bg-mist/30">Export</button></div>
+          </li>
+        </ul>
+        <div class="px-6 py-3.5 bg-canvas border-t border-whisper/60 text-[11px] text-steel">Archiving a session moves it here and frees it from the active timetable. Nothing is ever deleted.</div>
+      </section>
+    </main>
+  </div>
+</div>
+
+<!-- MODALS -->
+<div id="newSession" class="modal hidden fixed inset-0 z-50 bg-ink/40 backdrop-blur-sm grid place-items-center p-4" onclick="if(event.target===this)cm('newSession')">
+  <div class="bg-white rounded-2xl shadow-lift max-w-[440px] w-full p-6">
+    <div class="flex items-center justify-between mb-3"><p class="text-[15px] font-semibold">Open new session</p><button onclick="cm('newSession')" class="h-8 w-8 grid place-items-center rounded-lg hover:bg-mist/40 text-steel">✕</button></div>
+    <div class="space-y-3 text-[12.5px]">
+      <div><label class="text-[11.5px] font-semibold text-steel">Session name</label><input value="2026/27" class="mt-1.5 w-full h-10 rounded-lg border border-whisper bg-canvas px-3.5 font-mono"></div>
+      <div class="grid grid-cols-2 gap-2">
+        <div><label class="text-[11.5px] font-semibold text-steel">Starts</label><input type="date" value="2026-09-14" class="mt-1.5 w-full h-10 rounded-lg border border-whisper bg-canvas px-3"></div>
+        <div><label class="text-[11.5px] font-semibold text-steel">Ends</label><input type="date" value="2027-07-23" class="mt-1.5 w-full h-10 rounded-lg border border-whisper bg-canvas px-3"></div>
+      </div>
+      <label class="flex items-center gap-2.5"><input type="checkbox" checked class="h-4 w-4 rounded accent-[#2177EF]">Promote students from 2025/26 into the new session</label>
+      <p class="text-[11px] text-steel">The current session stays active until you archive it. You can run promotion separately.</p>
+    </div>
+    <div class="flex justify-end gap-2 mt-5"><button onclick="cm('newSession')" class="h-10 px-4 rounded-lg ring-1 ring-whisper text-[13px] font-medium text-steel">Cancel</button><button onclick="cm('newSession');toast('New session 2026/27 created')" class="h-10 px-5 rounded-lg bg-blue text-white text-[13px] font-semibold shadow-soft">Create session</button></div>
+  </div>
+</div>
+<div id="closeTerm" class="modal hidden fixed inset-0 z-50 bg-ink/40 backdrop-blur-sm grid place-items-center p-4" onclick="if(event.target===this)cm('closeTerm')">
+  <div class="bg-white rounded-2xl shadow-lift max-w-[440px] w-full p-6">
+    <div class="flex items-center justify-between mb-3"><p class="text-[15px] font-semibold">Close Third Term?</p><button onclick="cm('closeTerm')" class="h-8 w-8 grid place-items-center rounded-lg hover:bg-mist/40 text-steel">✕</button></div>
+    <div class="rounded-xl bg-caution/10 ring-1 ring-caution/30 px-4 py-3 text-[12px] text-charcoal">Closing locks <span class="font-medium">all results and attendance</span> for Third Term. Teachers will no longer be able to enter or edit scores. This is logged in the audit trail.</div>
+    <p class="text-[11.5px] text-steel mt-3">2 classes still have unsubmitted scores (SS 2 Chemistry, SS 1 Further Maths). Close anyway?</p>
+    <div class="flex justify-end gap-2 mt-5"><button onclick="cm('closeTerm')" class="h-10 px-4 rounded-lg ring-1 ring-whisper text-[13px] font-medium text-steel">Cancel</button><button onclick="cm('closeTerm');toast('Third Term closed — results & attendance locked')" class="h-10 px-5 rounded-lg bg-caution text-white text-[13px] font-semibold shadow-soft">Close term</button></div>
+  </div>
+</div>
+<div id="termDates" class="modal hidden fixed inset-0 z-50 bg-ink/40 backdrop-blur-sm grid place-items-center p-4" onclick="if(event.target===this)cm('termDates')">
+  <div class="bg-white rounded-2xl shadow-lift max-w-[420px] w-full p-6">
+    <div class="flex items-center justify-between mb-3"><p class="text-[15px] font-semibold">Set term dates</p><button onclick="cm('termDates')" class="h-8 w-8 grid place-items-center rounded-lg hover:bg-mist/40 text-steel">✕</button></div>
+    <div class="grid grid-cols-2 gap-2 text-[12.5px]">
+      <div><label class="text-[11.5px] font-semibold text-steel">Resumption</label><input type="date" value="2026-04-22" class="mt-1.5 w-full h-10 rounded-lg border border-whisper bg-canvas px-3"></div>
+      <div><label class="text-[11.5px] font-semibold text-steel">Vacation</label><input type="date" value="2026-07-24" class="mt-1.5 w-full h-10 rounded-lg border border-whisper bg-canvas px-3"></div>
+    </div>
+    <p class="text-[11px] text-steel mt-3">Dates set the attendance calendar and appear on report cards.</p>
+    <div class="flex justify-end gap-2 mt-5"><button onclick="cm('termDates')" class="h-10 px-4 rounded-lg ring-1 ring-whisper text-[13px] font-medium text-steel">Cancel</button><button onclick="cm('termDates');toast('Term dates saved')" class="h-10 px-5 rounded-lg bg-blue text-white text-[13px] font-semibold shadow-soft">Save dates</button></div>
+  </div>
+</div>
+
+<script src="../assets/shell.js"></script>
+<script>
+function om(id){document.getElementById(id).classList.remove('hidden');}
+function cm(id){document.getElementById(id).classList.add('hidden');}
+</script>
+<div id="toast" class="hidden fixed bottom-5 left-1/2 -translate-x-1/2 z-[60] bg-ink text-white text-[12.5px] font-medium px-4 py-2.5 rounded-xl shadow-lift"></div>
+<script>function toast(m){var t=document.getElementById('toast');t.textContent=m;t.classList.remove('hidden');clearTimeout(window._tt);window._tt=setTimeout(function(){t.classList.add('hidden')},2200);}</script>
+</body>
+</html>

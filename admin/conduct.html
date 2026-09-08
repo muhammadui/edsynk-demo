@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Edsynk — Conduct</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script>tailwind.config={theme:{extend:{colors:{canvas:'#F7F9FC',ink:'#0B2A56',charcoal:'#18181B',steel:'#64748B',whisper:'#E2E8F0',blue:'#2177EF',skyblue:'#5C9DF5',wash:'#EAF2FE',mist:'#D3E4FD',confirm:'#16A34A',caution:'#D97706',alert:'#DC2626',excused:'#7C8DA6'},fontFamily:{sans:['Geist','sans-serif'],mono:['"Geist Mono"','monospace']},boxShadow:{soft:'0 1px 2px rgba(11,42,86,0.04), 0 6px 24px rgba(11,42,86,0.05)',lift:'0 1px 3px rgba(11,42,86,0.10), 0 12px 32px rgba(11,42,86,0.12)'}}}}</script>
+<style>@keyframes rise{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}.rise{animation:rise .45s cubic-bezier(.2,.8,.2,1) both}.modal.open{opacity:1!important;pointer-events:auto!important}</style>
+</head>
+<body data-active="Conduct" data-persona="admin" class="bg-canvas font-sans text-charcoal antialiased">
+<div class="flex min-h-screen">
+  <div id="sidebar-root"></div>
+  <div class="flex-1 min-w-0">
+    <header class="h-[60px] bg-white/80 backdrop-blur-md border-b border-whisper/70 flex items-center justify-between px-4 sm:px-7 sticky top-0 z-20">
+      <div class="flex items-center gap-3"><h1 class="text-[15px] font-semibold tracking-tight">Conduct &amp; incidents</h1>
+        <span class="font-mono text-[11.5px] text-steel hidden sm:inline">Term 3 · 2025/26</span></div>
+      <div class="flex items-center gap-2.5">
+        <button onclick="toast('Exporting conduct register to PDF…')" class="h-9 px-3.5 rounded-lg border border-whisper bg-white text-[13px] font-medium hover:bg-mist/30 hidden sm:block">Export</button>
+        <button onclick="openM('logM')" class="h-9 px-4 rounded-lg bg-blue text-white text-[13px] font-medium shadow-soft active:translate-y-px">+ Log incident</button>
+      </div>
+    </header>
+    <main class="p-4 sm:p-7 max-w-[1180px] space-y-5 pb-12">
+
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-3">
+        <div class="rise bg-white ring-1 ring-whisper/80 rounded-2xl p-4 shadow-soft" style="animation-delay:.04s"><p class="text-[10.5px] font-semibold uppercase tracking-wider text-steel">Open cases</p><p class="font-mono text-[22px] font-semibold mt-1.5 text-caution">5</p><p class="text-[11.5px] text-steel mt-1">awaiting action</p></div>
+        <div class="rise bg-white ring-1 ring-whisper/80 rounded-2xl p-4 shadow-soft" style="animation-delay:.08s"><p class="text-[10.5px] font-semibold uppercase tracking-wider text-steel">Resolved this term</p><p class="font-mono text-[22px] font-semibold mt-1.5">23</p><p class="text-[11.5px] text-steel mt-1">closed cases</p></div>
+        <div class="rise bg-white ring-1 ring-whisper/80 rounded-2xl p-4 shadow-soft" style="animation-delay:.12s"><p class="text-[10.5px] font-semibold uppercase tracking-wider text-steel">Suspensions</p><p class="font-mono text-[22px] font-semibold mt-1.5 text-alert">2</p><p class="text-[11.5px] text-steel mt-1">this term · 5 days total</p></div>
+        <div class="rise bg-white ring-1 ring-whisper/80 rounded-2xl p-4 shadow-soft" style="animation-delay:.16s"><p class="text-[10.5px] font-semibold uppercase tracking-wider text-steel">Merits / commendations</p><p class="font-mono text-[22px] font-semibold mt-1.5 text-confirm">14</p><p class="text-[11.5px] text-steel mt-1">awarded this term</p></div>
+      </div>
+
+      <div class="rise rounded-2xl bg-wash/60 ring-1 ring-mist px-4 py-3 flex items-center gap-3" style="animation-delay:.18s">
+        <span class="h-8 w-8 rounded-lg bg-blue/15 text-blue grid place-items-center shrink-0"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4m0 4h.01M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg></span>
+        <p class="text-[12px] text-charcoal">Serious cases (major severity, fighting, exam misconduct, bullying) <span class="font-semibold">escalate to the registrar</span> and the guardian is notified automatically. This register records both sanctions and merits — affective traits live on the report card.</p>
+      </div>
+
+      <!-- Filters -->
+      <div class="rise flex flex-wrap items-center gap-2" style="animation-delay:.2s">
+        <div class="flex items-center gap-2 h-10 flex-1 min-w-[200px] bg-white ring-1 ring-whisper rounded-xl px-3.5 text-[13px] text-steel">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+          <input id="q" oninput="apply()" placeholder="Search student or type…" class="bg-transparent flex-1 focus:outline-none">
+        </div>
+        <div class="flex gap-1.5 text-[12px] font-medium" id="tabs">
+          <button data-f="all" class="h-10 px-3.5 rounded-xl bg-blue text-white">All</button>
+          <button data-f="Open" class="h-10 px-3.5 rounded-xl bg-white ring-1 ring-whisper text-steel">Open</button>
+          <button data-f="Resolved" class="h-10 px-3.5 rounded-xl bg-white ring-1 ring-whisper text-steel">Resolved</button>
+          <button data-f="Merit" class="h-10 px-3.5 rounded-xl bg-white ring-1 ring-whisper text-steel">Merits</button>
+        </div>
+      </div>
+
+      <!-- Incident table -->
+      <div class="rise bg-white ring-1 ring-whisper/80 rounded-2xl shadow-soft overflow-hidden" style="animation-delay:.24s">
+        <div class="overflow-x-auto"><table class="w-full text-[13px] min-w-[960px]">
+          <thead><tr class="text-left text-[10.5px] font-semibold uppercase tracking-[0.07em] text-steel border-y border-whisper/60 bg-canvas/60">
+            <th class="pl-5 pr-3 py-3">Date</th><th class="px-3 py-3">Student</th><th class="px-3 py-3">Type</th><th class="px-3 py-3">Severity</th><th class="px-3 py-3">Reported by</th><th class="px-3 py-3">Sanction / award</th><th class="px-3 py-3">Status</th><th class="px-5 py-3 text-right">Action</th></tr></thead>
+          <tbody id="rows" class="divide-y divide-whisper/60"></tbody>
+        </table></div>
+        <p class="px-5 py-3 border-t border-whisper/60 bg-canvas/50 text-[11.5px] text-steel" id="foot">Guardians of students with a suspension or major case receive a WhatsApp note and a printable letter.</p>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<!-- Log incident modal -->
+<div id="logM" class="modal fixed inset-0 z-50 bg-ink/40 backdrop-blur-sm grid place-items-center p-4" style="opacity:0;pointer-events:none;transition:opacity .2s" onclick="if(event.target===this)closeM('logM')">
+  <div class="bg-white rounded-2xl shadow-lift max-w-[500px] w-full p-6 max-h-[90vh] overflow-y-auto">
+    <div class="flex items-center justify-between mb-3"><p class="text-[15px] font-semibold">Log a conduct entry</p><button onclick="closeM('logM')" class="h-8 w-8 grid place-items-center rounded-lg hover:bg-mist/40 text-steel">✕</button></div>
+    <div class="grid grid-cols-2 gap-3 text-[12.5px]">
+      <div class="col-span-2"><label class="text-[11.5px] font-semibold text-steel">Student</label><input placeholder="Name or reg number" class="mt-1.5 w-full h-10 rounded-lg border border-whisper bg-canvas px-3.5"></div>
+      <div><label class="text-[11.5px] font-semibold text-steel">Type</label><select class="mt-1.5 w-full h-10 rounded-lg border border-whisper bg-canvas px-2.5"><option>Lateness</option><option>Uniform</option><option>Fighting</option><option>Exam misconduct</option><option>Bullying</option><option>Phone</option><option>Merit / commendation</option></select></div>
+      <div><label class="text-[11.5px] font-semibold text-steel">Severity</label><select class="mt-1.5 w-full h-10 rounded-lg border border-whisper bg-canvas px-2.5"><option>Minor</option><option>Major</option><option>Positive (merit)</option></select></div>
+      <div class="col-span-2"><label class="text-[11.5px] font-semibold text-steel">Description</label><textarea rows="2" placeholder="What happened, where, witnesses…" class="mt-1.5 w-full rounded-lg border border-whisper bg-canvas px-3.5 py-2"></textarea></div>
+      <div class="col-span-2"><label class="text-[11.5px] font-semibold text-steel">Sanction / award</label><select class="mt-1.5 w-full h-10 rounded-lg border border-whisper bg-canvas px-2.5"><option>Verbal warning</option><option>Written warning</option><option>Detention</option><option>Suspension — 1 day</option><option>Suspension — 3 days</option><option>Parent invited</option><option>Merit award</option></select></div>
+      <label class="col-span-2 flex items-center gap-2 text-[12.5px]"><input type="checkbox" checked class="h-4 w-4 rounded border-whisper accent-[#2177EF]">Notify guardian</label>
+    </div>
+    <div class="flex justify-end gap-2 mt-5"><button onclick="closeM('logM')" class="h-10 px-4 rounded-lg ring-1 ring-whisper text-[13px] font-medium text-steel">Cancel</button><button onclick="closeM('logM');toast('Conduct entry logged · guardian notified')" class="h-10 px-5 rounded-lg bg-blue text-white text-[13px] font-semibold shadow-soft">Save entry</button></div>
+  </div>
+</div>
+
+<script src="../assets/shell.js"></script>
+<div id="toast" class="hidden fixed bottom-5 left-1/2 -translate-x-1/2 z-[60] bg-ink text-white text-[12.5px] font-medium px-4 py-2.5 rounded-xl shadow-lift"></div>
+<script>function toast(m){var t=document.getElementById('toast');t.textContent=m;t.classList.remove('hidden');clearTimeout(window._tt);window._tt=setTimeout(function(){t.classList.add('hidden')},2200);}
+function openM(id){document.getElementById(id).classList.add('open');}
+function closeM(id){document.getElementById(id).classList.remove('open');}
+
+// [date, student, class, type, severity(minor/major/merit), reportedBy, sanction, status(Open/Resolved/Merit)]
+const ROWS=[
+ ['20 Jun','Bashir Nuhu','JSS 3A','Fighting','major','Mallam Musa Ibrahim','Suspension — 3 days · parent invited','Open'],
+ ['20 Jun','Fatima Abubakar','JSS 2A','Merit / commendation','merit','Ustadha Halima Yusuf','Merit award · best Tajweed recitation','Merit'],
+ ['19 Jun','Chiamaka Okafor','SS 2 Arts','Phone','minor','Mr. Chinedu Okafor','Phone seized · written warning','Open'],
+ ['19 Jun','Aisha Garba','JSS 3A','Merit / commendation','merit','Mrs. Ngozi Okonkwo','Merit award · top JSS 3 Biology test','Merit'],
+ ['18 Jun','Tijani Bello','SS 1 Science','Exam misconduct','major','Mallam Musa Ibrahim','Paper voided · parent invited','Open'],
+ ['18 Jun','Yusuf Abubakar','SS 1 Science','Lateness','minor','Mr. Tunde Bakare','Verbal warning (3rd this term)','Open'],
+ ['17 Jun','Ibrahim Sani','SS 1 Science','Uniform','minor','Mrs. Bisi Adeyemi','Verbal warning','Resolved'],
+ ['17 Jun','Halima Sadiq','JSS 1B','Merit / commendation','merit','Mrs. Grace Eze','Merit award · class monitor service','Merit'],
+ ['16 Jun','Musa Garba','JSS 2B','Bullying','major','Mr. Chinedu Okafor','Detention · counselling · parent invited','Resolved'],
+ ['16 Jun','Zainab Lawal','SS 2B','Lateness','minor','Mrs. Ngozi Okonkwo','Verbal warning','Resolved'],
+ ['13 Jun','Sadiq Umar','JSS 3B','Phone','minor','Mr. Sani Bello','Phone returned to guardian','Resolved'],
+ ['12 Jun','Fatima Abubakar','JSS 2A','Merit / commendation','merit','Mallam Musa Ibrahim','Merit award · helped new pupil settle','Merit'],
+];
+const SEV={minor:['Minor','text-caution bg-caution/10'],major:['Major','text-alert bg-alert/10'],merit:['Merit','text-confirm bg-confirm/10']};
+function statusPill(s){
+  if(s==='Open') return '<span class="text-[10.5px] font-medium text-caution bg-caution/10 rounded-full px-2 py-0.5">Open</span>';
+  if(s==='Merit') return '<span class="text-[10.5px] font-medium text-confirm bg-confirm/10 rounded-full px-2 py-0.5">Awarded</span>';
+  return '<span class="text-[10.5px] font-medium text-steel bg-mist/50 rounded-full px-2 py-0.5">Resolved</span>';
+}
+function actionCell(r){
+  if(r[7]==='Open') return '<div class="inline-flex gap-1.5"><button onclick="event.stopPropagation();toast(\'Guardian notified by WhatsApp\')" class="h-8 px-2.5 rounded-lg border border-whisper text-[11px] font-medium hover:bg-mist/30">Notify</button><button onclick="event.stopPropagation();this.closest(\'tr\').remove();toast(\'Case marked resolved\')" class="h-8 px-2.5 rounded-lg bg-confirm/10 text-confirm text-[11px] font-medium hover:bg-confirm/20">Resolve</button></div>';
+  if(r[7]==='Merit') return '<button onclick="event.stopPropagation();toast(\'Commendation printed for guardian\')" class="h-8 px-2.5 rounded-lg border border-whisper text-[11px] font-medium hover:bg-mist/30">Print</button>';
+  return '<button onclick="event.stopPropagation();toast(\'Opening case history…\')" class="h-8 px-2.5 rounded-lg border border-whisper text-[11px] font-medium hover:bg-mist/30">View</button>';
+}
+let cur='all';
+function apply(){
+  const q=document.getElementById('q').value.toLowerCase();
+  const list=ROWS.filter(r=>{
+    const mq=r[1].toLowerCase().includes(q)||r[3].toLowerCase().includes(q);
+    let mf=true;
+    if(cur==='Open') mf=r[7]==='Open';
+    else if(cur==='Resolved') mf=r[7]==='Resolved';
+    else if(cur==='Merit') mf=r[7]==='Merit';
+    return mq&&mf;
+  });
+  document.getElementById('rows').innerHTML=list.map(r=>`<tr class="hover:bg-mist/15">
+    <td class="pl-5 pr-3 py-3 font-mono text-steel">${r[0]}</td>
+    <td class="px-3 py-3"><a href="student-detail.html" class="font-medium hover:text-blue">${r[1]}</a><span class="block text-[11px] text-steel">${r[2]}</span></td>
+    <td class="px-3 py-3">${r[3]}</td>
+    <td class="px-3 py-3"><span class="text-[10.5px] font-medium ${SEV[r[4]][1]} rounded-full px-2 py-0.5">${SEV[r[4]][0]}</span></td>
+    <td class="px-3 py-3 text-steel">${r[5]}</td>
+    <td class="px-3 py-3 text-steel">${r[6]}</td>
+    <td class="px-3 py-3">${statusPill(r[7])}</td>
+    <td class="px-5 py-3 text-right">${actionCell(r)}</td></tr>`).join('');
+  document.getElementById('foot').innerHTML=`Showing <span class="font-mono">${list.length}</span> entries. Guardians of students with a suspension or major case receive a WhatsApp note and a printable letter.`;
+}
+document.querySelectorAll('#tabs button').forEach(b=>b.onclick=()=>{
+  cur=b.dataset.f;
+  document.querySelectorAll('#tabs button').forEach(x=>x.className='h-10 px-3.5 rounded-xl bg-white ring-1 ring-whisper text-steel');
+  b.className='h-10 px-3.5 rounded-xl bg-blue text-white';
+  apply();
+});
+apply();
+</script>
+</body>
+</html>

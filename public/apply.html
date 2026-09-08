@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Apply for admission — Al-Furqan Academy · Edsynk</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800&family=Geist+Mono:wght@400;500;600&family=Noto+Naskh+Arabic:wght@500&display=swap" rel="stylesheet">
+<script>
+tailwind.config = { theme: { extend: {
+  colors: { canvas:'#F7F9FC', ink:'#0B2A56', charcoal:'#18181B', steel:'#64748B', whisper:'#E2E8F0',
+    hair:'#E7ECF3', blue:'#2177EF', skyblue:'#5C9DF5', wash:'#EAF2FE', mist:'#D3E4FD',
+    confirm:'#16A34A', caution:'#D97706', alert:'#DC2626' },
+  fontFamily: { sans:['Geist','sans-serif'], mono:['"Geist Mono"','monospace'], arabic:['"Noto Naskh Arabic"','serif'] },
+  boxShadow: { soft:'0 1px 2px rgba(11,42,86,0.05), 0 10px 40px rgba(11,42,86,0.07)',
+               lift:'0 2px 8px rgba(11,42,86,0.08), 0 28px 80px rgba(11,42,86,0.14)' }
+}}}
+</script>
+<style>
+  html{scroll-behavior:smooth}
+  ::selection{background:#D3E4FD}
+  @keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+  .rise{animation:rise .45s cubic-bezier(.2,.8,.2,1) both}
+  .field{transition:border-color .18s, box-shadow .18s, background .18s}
+  .field:focus{outline:none;border-color:#2177EF;box-shadow:0 0 0 3px rgba(33,119,239,.14);background:#fff}
+  .drop{transition:border-color .18s, background .18s}
+  .drop:hover, .drop.drag{border-color:#2177EF;background:#EAF2FE}
+  .step-pane{display:none}
+  .step-pane.on{display:block;animation:rise .4s cubic-bezier(.2,.8,.2,1) both}
+  body{background:radial-gradient(900px 460px at 50% -10%,#EAF2FE,transparent 65%),linear-gradient(180deg,#F7F9FC,#fff 55%)}
+</style>
+</head>
+<body class="font-sans text-charcoal antialiased min-h-screen flex flex-col">
+
+<!-- ════════ TOP NAV ════════ -->
+<nav class="sticky top-0 z-30 backdrop-blur-md bg-white/82 border-b border-hair">
+  <div class="max-w-[1000px] mx-auto px-5 h-[58px] flex items-center justify-between">
+    <a href="landing.html" class="flex items-center gap-2.5 font-bold text-[15.5px] tracking-tight text-charcoal">
+      <span class="w-[26px] h-[26px] rounded-lg bg-blue grid place-items-center text-white font-extrabold text-[13px]">E</span>Edsynk
+    </a>
+    <div class="flex items-center gap-2.5">
+      <button onclick="toast('Enter your reference (e.g. AFA-APP-2041) and the phone you applied with to track your status.')" class="text-[13.5px] font-medium text-steel hover:text-charcoal px-3 py-2">Check application status</button>
+      <a href="landing.html" class="hidden sm:inline-flex items-center h-9 px-4 rounded-lg bg-white ring-1 ring-hair text-[13.5px] font-medium text-charcoal hover:bg-canvas">Back to Edsynk</a>
+    </div>
+  </div>
+</nav>
+
+<main class="flex-1 w-full max-w-[840px] mx-auto px-5 py-9 sm:py-12">
+
+  <!-- school header -->
+  <div class="rise flex items-center gap-3.5 mb-7">
+    <span class="w-12 h-12 rounded-2xl bg-ink text-white grid place-items-center font-extrabold text-[16px] shadow-soft">AF</span>
+    <div>
+      <p class="text-[11px] font-bold uppercase tracking-[.12em] text-blue">Admission application</p>
+      <h1 class="text-[21px] sm:text-[24px] font-bold tracking-tight text-ink leading-tight">Al-Furqan Academy, Bauchi</h1>
+    </div>
+  </div>
+
+  <!-- STEPPER -->
+  <div id="stepper" class="rise flex items-center mb-8" style="animation-delay:.05s">
+    <!-- steps injected by JS -->
+  </div>
+
+  <form id="applyForm" onsubmit="return false" class="rise bg-white ring-1 ring-hair rounded-3xl shadow-soft overflow-hidden" style="animation-delay:.1s">
+
+    <!-- ── STEP 1 · STUDENT ── -->
+    <section class="step-pane on" data-step="1">
+      <div class="px-6 sm:px-8 pt-7 pb-2">
+        <h2 class="text-[17px] font-semibold text-ink">Student details</h2>
+        <p class="text-[13px] text-steel mt-1">Tell us about the child you are applying for.</p>
+      </div>
+      <div class="px-6 sm:px-8 py-6 grid sm:grid-cols-2 gap-4">
+        <label class="block sm:col-span-2"><span class="text-[12.5px] font-medium text-charcoal">Full name</span>
+          <input type="text" placeholder="e.g. Suleiman Mohammed" class="field mt-1.5 w-full h-11 rounded-xl bg-canvas ring-1 ring-hair px-3.5 text-[14px]"></label>
+        <label class="block"><span class="text-[12.5px] font-medium text-charcoal">Date of birth</span>
+          <input type="date" class="field mt-1.5 w-full h-11 rounded-xl bg-canvas ring-1 ring-hair px-3.5 text-[14px] text-steel"></label>
+        <label class="block"><span class="text-[12.5px] font-medium text-charcoal">Gender</span>
+          <select class="field mt-1.5 w-full h-11 rounded-xl bg-canvas ring-1 ring-hair px-3.5 text-[14px]">
+            <option value="">Select…</option><option>Male</option><option>Female</option>
+          </select></label>
+        <label class="block sm:col-span-2"><span class="text-[12.5px] font-medium text-charcoal">Class applying for</span>
+          <select class="field mt-1.5 w-full h-11 rounded-xl bg-canvas ring-1 ring-hair px-3.5 text-[14px]">
+            <option value="">Select a class…</option>
+            <option>Nursery 1</option><option>Primary 1</option><option>Primary 4</option>
+            <option>JSS 1</option><option>JSS 3 (transfer)</option><option>SS 1</option>
+          </select></label>
+      </div>
+    </section>
+
+    <!-- ── STEP 2 · GUARDIAN ── -->
+    <section class="step-pane" data-step="2">
+      <div class="px-6 sm:px-8 pt-7 pb-2">
+        <h2 class="text-[17px] font-semibold text-ink">Parent / guardian details</h2>
+        <p class="text-[13px] text-steel mt-1">The person the school should contact about this application.</p>
+      </div>
+      <div class="px-6 sm:px-8 py-6 grid sm:grid-cols-2 gap-4">
+        <label class="block"><span class="text-[12.5px] font-medium text-charcoal">Full name</span>
+          <input type="text" placeholder="e.g. Alhaji Bello Mohammed" class="field mt-1.5 w-full h-11 rounded-xl bg-canvas ring-1 ring-hair px-3.5 text-[14px]"></label>
+        <label class="block"><span class="text-[12.5px] font-medium text-charcoal">Relationship</span>
+          <select class="field mt-1.5 w-full h-11 rounded-xl bg-canvas ring-1 ring-hair px-3.5 text-[14px]">
+            <option>Father</option><option>Mother</option><option>Guardian</option>
+          </select></label>
+        <label class="block"><span class="text-[12.5px] font-medium text-charcoal">Phone number</span>
+          <input type="tel" placeholder="e.g. 0803 000 0000" class="field mt-1.5 w-full h-11 rounded-xl bg-canvas ring-1 ring-hair px-3.5 text-[14px]"></label>
+        <label class="block"><span class="text-[12.5px] font-medium text-charcoal">Email address</span>
+          <input type="email" placeholder="name@example.com" class="field mt-1.5 w-full h-11 rounded-xl bg-canvas ring-1 ring-hair px-3.5 text-[14px]"></label>
+        <label class="block sm:col-span-2"><span class="text-[12.5px] font-medium text-charcoal">Home address</span>
+          <textarea rows="2" placeholder="House, street, area, city, state" class="field mt-1.5 w-full rounded-xl bg-canvas ring-1 ring-hair px-3.5 py-2.5 text-[14px]"></textarea></label>
+      </div>
+    </section>
+
+    <!-- ── STEP 3 · PREVIOUS SCHOOL + DOCS ── -->
+    <section class="step-pane" data-step="3">
+      <div class="px-6 sm:px-8 pt-7 pb-2">
+        <h2 class="text-[17px] font-semibold text-ink">Previous school &amp; documents</h2>
+        <p class="text-[13px] text-steel mt-1">Upload clear photos or scans. Accepted: JPG, PNG or PDF.</p>
+      </div>
+      <div class="px-6 sm:px-8 py-6 space-y-4">
+        <label class="block"><span class="text-[12.5px] font-medium text-charcoal">Previous school (if any)</span>
+          <input type="text" placeholder="e.g. Little Stars Nursery" class="field mt-1.5 w-full h-11 rounded-xl bg-canvas ring-1 ring-hair px-3.5 text-[14px]"></label>
+
+        <div class="grid sm:grid-cols-3 gap-3">
+          <!-- doc 1 -->
+          <div>
+            <p class="text-[12.5px] font-medium text-charcoal mb-1.5">Birth certificate</p>
+            <label class="drop block cursor-pointer rounded-xl border border-dashed border-hair bg-canvas px-3 py-5 text-center" data-doc="Birth certificate">
+              <input type="file" class="hidden" accept="image/*,.pdf" onchange="picked(this)">
+              <svg class="mx-auto text-blue" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5-5 5 5"/><path d="M12 5v12"/></svg>
+              <span class="block mt-1.5 text-[11.5px] font-medium text-charcoal name">Drag or browse</span>
+              <span class="block text-[10.5px] text-steel">JPG · PNG · PDF</span>
+            </label>
+          </div>
+          <!-- doc 2 -->
+          <div>
+            <p class="text-[12.5px] font-medium text-charcoal mb-1.5">Passport photo</p>
+            <label class="drop block cursor-pointer rounded-xl border border-dashed border-hair bg-canvas px-3 py-5 text-center" data-doc="Passport photo">
+              <input type="file" class="hidden" accept="image/*" onchange="picked(this)">
+              <svg class="mx-auto text-blue" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="9" r="3.2"/><path d="M5 20a7 7 0 0 1 14 0"/><rect x="3" y="3" width="18" height="18" rx="3"/></svg>
+              <span class="block mt-1.5 text-[11.5px] font-medium text-charcoal name">Drag or browse</span>
+              <span class="block text-[10.5px] text-steel">JPG · PNG</span>
+            </label>
+          </div>
+          <!-- doc 3 -->
+          <div>
+            <p class="text-[12.5px] font-medium text-charcoal mb-1.5">Last report card</p>
+            <label class="drop block cursor-pointer rounded-xl border border-dashed border-hair bg-canvas px-3 py-5 text-center" data-doc="Last report card">
+              <input type="file" class="hidden" accept="image/*,.pdf" onchange="picked(this)">
+              <svg class="mx-auto text-blue" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M8 13h8M8 17h6"/></svg>
+              <span class="block mt-1.5 text-[11.5px] font-medium text-charcoal name">Drag or browse</span>
+              <span class="block text-[10.5px] text-steel">JPG · PNG · PDF</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="flex items-start gap-2.5 rounded-xl bg-wash ring-1 ring-mist px-4 py-3">
+          <svg class="text-blue mt-0.5 flex-none" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 12h1v4h1"/></svg>
+          <p class="text-[12px] text-ink leading-relaxed">After you submit, the school may invite the student for an <b>entrance assessment or interview</b>. If an offer is made, you can <b>pay the acceptance fee online</b> to secure the place.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── STEP 4 · REVIEW ── -->
+    <section class="step-pane" data-step="4">
+      <div class="px-6 sm:px-8 pt-7 pb-2">
+        <h2 class="text-[17px] font-semibold text-ink">Review &amp; submit</h2>
+        <p class="text-[13px] text-steel mt-1">Please confirm everything is correct before you submit.</p>
+      </div>
+      <div class="px-6 sm:px-8 py-6 space-y-3">
+        <div class="rounded-xl ring-1 ring-hair divide-y divide-hair text-[13px]">
+          <div class="flex items-center justify-between px-4 py-3"><span class="text-steel">School</span><span class="font-medium">Al-Furqan Academy, Bauchi</span></div>
+          <div class="flex items-center justify-between px-4 py-3"><span class="text-steel">Class applying for</span><span class="font-medium">JSS 1</span></div>
+          <div class="flex items-center justify-between px-4 py-3"><span class="text-steel">Student</span><span class="font-medium">As entered in Step 1</span></div>
+          <div class="flex items-center justify-between px-4 py-3"><span class="text-steel">Guardian contact</span><span class="font-medium">As entered in Step 2</span></div>
+          <div class="flex items-center justify-between px-4 py-3"><span class="text-steel">Documents</span><span class="font-medium text-confirm">Attached</span></div>
+        </div>
+        <label class="flex items-start gap-2.5 text-[12.5px] text-steel cursor-pointer">
+          <input type="checkbox" class="mt-0.5 w-4 h-4 accent-blue">
+          <span>I confirm the information above is true, and I agree to Edsynk's <a href="terms.html" class="text-blue font-medium hover:underline">Terms</a> and <a href="privacy-policy.html" class="text-blue font-medium hover:underline">Privacy notice (NDPA 2023)</a>.</span>
+        </label>
+      </div>
+    </section>
+
+    <!-- ── SUCCESS ── -->
+    <section class="step-pane" data-step="done">
+      <div class="px-6 sm:px-8 py-12 text-center">
+        <span class="mx-auto w-16 h-16 rounded-2xl bg-confirm/10 text-confirm grid place-items-center">
+          <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 13l4 4L19 7"/></svg>
+        </span>
+        <h2 class="text-[21px] font-bold text-ink mt-5">Application received</h2>
+        <p class="text-[14px] text-steel mt-2 max-w-[44ch] mx-auto leading-relaxed">Reference <span class="font-mono font-semibold text-ink bg-wash rounded-md px-2 py-0.5">AFA-APP-2041</span> — the school will contact you on the phone number you provided. Track your status anytime with your reference and phone.</p>
+        <div class="mt-7 flex flex-wrap items-center justify-center gap-2.5">
+          <button onclick="toast('Enter reference AFA-APP-2041 and your phone number to see the current stage.')" class="h-11 px-5 rounded-xl bg-blue text-white text-[14px] font-semibold shadow-soft hover:shadow-lift active:translate-y-px">Check application status</button>
+          <a href="landing.html" class="h-11 px-5 inline-flex items-center rounded-xl bg-white ring-1 ring-hair text-[14px] font-medium text-charcoal hover:bg-canvas">Back to Edsynk</a>
+        </div>
+        <p class="text-[12px] text-steel mt-6 max-w-[46ch] mx-auto leading-relaxed">Next steps: you may be invited for an entrance assessment or interview. If an offer is made, you can pay the acceptance fee online to enrol.</p>
+      </div>
+    </section>
+
+    <!-- ── NAV BAR ── -->
+    <div id="formNav" class="flex items-center justify-between gap-3 px-6 sm:px-8 py-5 border-t border-hair bg-canvas/60">
+      <button id="backBtn" onclick="go(-1)" class="h-11 px-5 rounded-xl bg-white ring-1 ring-hair text-[14px] font-medium text-charcoal hover:bg-canvas disabled:opacity-40 disabled:cursor-not-allowed" disabled>Back</button>
+      <span class="font-mono text-[11.5px] text-steel">Step <b id="stepNum" class="text-charcoal">1</b> of 4</span>
+      <button id="nextBtn" onclick="go(1)" class="h-11 px-5 rounded-xl bg-blue text-white text-[14px] font-semibold shadow-soft hover:shadow-lift active:translate-y-px">Next</button>
+    </div>
+  </form>
+
+  <p class="text-center text-[12px] text-steel mt-6">Applying to a different school? Open their page or <a href="results-lookup.html" class="text-blue font-medium hover:underline">look up a result</a>.</p>
+</main>
+
+<!-- ════════ FOOTER ════════ -->
+<footer class="border-t border-hair bg-white">
+  <div class="max-w-[840px] mx-auto px-5 py-6 flex items-center justify-between flex-wrap gap-3 text-[12px] text-steel">
+    <a href="landing.html" class="flex items-center gap-2 font-medium text-charcoal">
+      <span class="w-[22px] h-[22px] rounded-md bg-blue grid place-items-center text-white font-extrabold text-[11px]">E</span>Powered by Edsynk
+    </a>
+    <span class="font-mono">© 2026 Edsynk Technologies Ltd</span>
+  </div>
+</footer>
+
+<!-- toast -->
+<div id="toast" style="display:none" class="fixed bottom-5 left-1/2 -translate-x-1/2 z-50 bg-ink text-white text-[12.5px] font-medium px-4 py-2.5 rounded-xl shadow-lift max-w-[90vw] text-center"></div>
+
+<script>
+const STEPS = ['Student','Guardian','Documents','Review'];
+let step = 1; // 1..4, then 'done'
+
+/* build stepper */
+const stepper = document.getElementById('stepper');
+stepper.innerHTML = STEPS.map((label,i)=>{
+  const n=i+1;
+  const conn = i<STEPS.length-1 ? '<div class="flex-1 h-[2px] mx-2 bg-hair rounded-full conn" data-conn="'+n+'"></div>' : '';
+  return '<div class="flex items-center '+(i<STEPS.length-1?'flex-1':'')+'">'
+    +'<div class="flex items-center gap-2.5" data-dot="'+n+'">'
+    +'<span class="knob w-8 h-8 rounded-xl grid place-items-center font-mono text-[13px] font-semibold ring-1 ring-hair bg-white text-steel">'+n+'</span>'
+    +'<span class="hidden sm:inline text-[12.5px] font-medium text-steel lbl">'+label+'</span>'
+    +'</div>'+conn+'</div>';
+}).join('');
+
+function paintStepper(){
+  STEPS.forEach((_,i)=>{
+    const n=i+1;
+    const dot=stepper.querySelector('[data-dot="'+n+'"]');
+    const knob=dot.querySelector('.knob');
+    const lbl=dot.querySelector('.lbl');
+    const conn=stepper.querySelector('[data-conn="'+n+'"]');
+    const cur = (step==='done') ? STEPS.length+1 : step;
+    knob.className='knob w-8 h-8 rounded-xl grid place-items-center font-mono text-[13px] font-semibold ring-1';
+    if(n<cur){ knob.classList.add('bg-blue','text-white','ring-blue'); knob.innerHTML='<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 13l4 4L19 7"/></svg>'; }
+    else if(n===cur){ knob.classList.add('bg-blue','text-white','ring-blue'); knob.textContent=n; }
+    else { knob.classList.add('bg-white','text-steel','ring-hair'); knob.textContent=n; }
+    if(lbl) lbl.className='hidden sm:inline text-[12.5px] font-medium lbl '+(n<=cur?'text-charcoal':'text-steel');
+    if(conn) conn.className='flex-1 h-[2px] mx-2 rounded-full conn '+(n<cur?'bg-blue':'bg-hair');
+  });
+}
+
+function show(){
+  document.querySelectorAll('.step-pane').forEach(p=>p.classList.remove('on'));
+  const sel = step==='done' ? '[data-step="done"]' : '[data-step="'+step+'"]';
+  document.querySelector(sel).classList.add('on');
+  const nav=document.getElementById('formNav');
+  if(step==='done'){ nav.style.display='none'; paintStepper(); window.scrollTo({top:0,behavior:'smooth'}); return; }
+  nav.style.display='flex';
+  document.getElementById('backBtn').disabled = step===1;
+  document.getElementById('stepNum').textContent = step;
+  document.getElementById('nextBtn').textContent = step===4 ? 'Submit application' : 'Next';
+  paintStepper();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function go(dir){
+  if(dir>0 && step===4){ step='done'; show(); return; }
+  if(step==='done') return;
+  step = Math.min(4, Math.max(1, step+dir));
+  show();
+}
+
+/* file pickers */
+function picked(input){
+  const label=input.closest('.drop');
+  const f=input.files[0];
+  if(!f) return;
+  label.querySelector('.name').textContent=f.name.length>22 ? f.name.slice(0,20)+'…' : f.name;
+  label.classList.add('border-blue','bg-wash');
+  label.querySelector('svg').classList.remove('text-blue');
+  label.querySelector('svg').classList.add('text-confirm');
+}
+
+/* drag highlight (visual only) */
+document.querySelectorAll('.drop').forEach(d=>{
+  ['dragover','dragenter'].forEach(e=>d.addEventListener(e,ev=>{ev.preventDefault();d.classList.add('drag');}));
+  ['dragleave','dragend','drop'].forEach(e=>d.addEventListener(e,ev=>{ev.preventDefault();d.classList.remove('drag');}));
+  d.addEventListener('drop',ev=>{
+    const inp=d.querySelector('input[type=file]');
+    if(ev.dataTransfer.files.length){ inp.files=ev.dataTransfer.files; picked(inp); }
+  });
+});
+
+/* toast */
+function toast(m){var t=document.getElementById('toast');t.textContent=m;t.style.display='block';clearTimeout(window._tt);window._tt=setTimeout(function(){t.style.display='none'},3200);}
+
+paintStepper();
+</script>
+</body>
+</html>

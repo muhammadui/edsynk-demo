@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Edsynk — Privacy Policy</title>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800&family=Geist+Mono:wght@400;500;600&family=Noto+Naskh+Arabic:wght@500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#FFFFFF; --canvas:#F7F9FC; --ink:#0B2A56; --text:#18181B; --muted:#64748B;
+  --hair:#E7ECF3; --blue:#2177EF; --sky:#5C9DF5; --wash:#EAF2FE; --mist:#D3E4FD;
+  --green:#16A34A; --amber:#D97706; --red:#DC2626;
+  --shadow:0 1px 2px rgba(11,42,86,.05),0 10px 40px rgba(11,42,86,.07);
+  --lift:0 2px 8px rgba(11,42,86,.08),0 28px 80px rgba(11,42,86,.14);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'Geist',sans-serif;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+.mono{font-family:'Geist Mono',monospace}
+a{text-decoration:none;color:var(--blue);transition:color .18s}
+a:hover{color:var(--ink)}
+button,a{cursor:pointer}
+button:active,.btn:active{transform:scale(.97)}
+::selection{background:var(--mist)}
+::-webkit-scrollbar{width:9px}
+::-webkit-scrollbar-track{background:var(--canvas)}
+::-webkit-scrollbar-thumb{background:var(--blue);border-radius:99px;border:2px solid var(--canvas)}
+.wrap{max-width:1120px;margin:0 auto;padding:0 24px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:40px;padding:0 18px;border-radius:10px;font-size:13.5px;font-weight:600;border:none;transition:transform .15s,box-shadow .2s,background .2s}
+.btn-ghost{background:#fff;color:var(--text);border:1px solid var(--hair)}
+.btn-ghost:hover{background:var(--canvas);color:var(--text)}
+
+/* nav */
+nav{position:sticky;top:0;z-index:100;backdrop-filter:blur(14px);background:rgba(255,255,255,.85);border-bottom:1px solid var(--hair)}
+.nav-in{height:58px;display:flex;align-items:center;justify-content:space-between}
+.logo{display:flex;align-items:center;gap:9px;font-weight:700;font-size:15.5px;letter-spacing:-.01em;color:var(--text)}
+.logo:hover{color:var(--text)}
+.logo-mark{width:26px;height:26px;border-radius:8px;background:var(--blue);display:grid;place-items:center;color:#fff;font-weight:800;font-size:13px}
+.nav-links{display:flex;gap:4px;align-items:center}
+.nav-links a{font-size:13.5px;font-weight:500;color:var(--muted);padding:8px 13px}
+.nav-links a:hover{color:var(--text)}
+@media(max-width:680px){.nav-links a.hide-sm{display:none}}
+
+/* doc header */
+.doc-head{background:radial-gradient(900px 360px at 50% -40%,var(--wash),transparent 70%),linear-gradient(180deg,var(--canvas),#fff);border-bottom:1px solid var(--hair);padding:64px 0 48px}
+.doc-head .eyebrow{font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--blue)}
+.doc-head h1{font-size:clamp(30px,4.4vw,46px);font-weight:800;letter-spacing:-.03em;line-height:1.06;color:var(--ink);margin-top:12px}
+.doc-meta{display:flex;align-items:center;flex-wrap:wrap;gap:14px;margin-top:20px}
+.updated{font-size:13px;color:var(--muted)}
+.updated b{color:var(--text);font-weight:600}
+
+/* layout */
+.doc-body{padding:48px 0 90px}
+.doc-grid{display:grid;grid-template-columns:236px 1fr;gap:48px;align-items:start}
+@media(max-width:880px){.doc-grid{grid-template-columns:1fr}.toc{position:static!important;margin-bottom:8px}}
+
+/* toc */
+.toc{position:sticky;top:78px}
+.toc h5{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:12px}
+.toc ol{list-style:none;counter-reset:t;display:grid;gap:2px}
+.toc li{counter-increment:t}
+.toc a{display:flex;gap:9px;font-size:13px;line-height:1.45;color:var(--muted);padding:6px 10px;border-radius:8px;font-weight:500}
+.toc a::before{content:counter(t);font-family:'Geist Mono',monospace;font-size:11px;color:var(--blue);min-width:16px}
+.toc a:hover{background:var(--canvas);color:var(--text)}
+
+/* article */
+article{max-width:760px}
+article section{scroll-margin-top:78px;padding-top:8px}
+article section+section{margin-top:40px;padding-top:40px;border-top:1px solid var(--hair)}
+article h2{font-size:21px;font-weight:700;letter-spacing:-.02em;color:var(--ink);line-height:1.2;display:flex;gap:12px;align-items:baseline}
+article h2 .num{font-family:'Geist Mono',monospace;font-size:14px;color:var(--blue);font-weight:600}
+article h3{font-size:15px;font-weight:600;color:var(--text);margin-top:22px}
+article p{font-size:15px;line-height:1.72;color:#3A4452;margin-top:14px}
+article p:first-of-type{margin-top:16px}
+article strong{color:var(--ink);font-weight:600}
+article ul{margin:14px 0 0;padding-left:0;list-style:none;display:grid;gap:10px}
+article ul li{position:relative;padding-left:24px;font-size:15px;line-height:1.65;color:#3A4452}
+article ul li::before{content:'';position:absolute;left:6px;top:9px;width:6px;height:6px;border-radius:99px;background:var(--mist);border:1.5px solid var(--blue)}
+article ul li strong{color:var(--ink)}
+.lead{font-size:16.5px!important;line-height:1.7!important;color:var(--text)!important}
+.callout{margin-top:18px;border:1px solid var(--mist);background:var(--wash);border-radius:14px;padding:16px 18px}
+.callout p{margin-top:0;font-size:14px;color:var(--ink)}
+.callout p+p{margin-top:8px}
+.tag{display:inline-flex;align-items:center;gap:6px;font-size:10.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--blue);background:#fff;border:1px solid var(--mist);border-radius:99px;padding:3px 10px;margin-bottom:8px}
+.sub-table{margin-top:18px;width:100%;border-collapse:collapse;border:1px solid var(--hair);border-radius:12px;overflow:hidden;font-size:13.5px}
+.sub-table th{text-align:left;background:var(--canvas);color:var(--muted);font-weight:600;font-size:11px;letter-spacing:.05em;text-transform:uppercase;padding:10px 14px;border-bottom:1px solid var(--hair)}
+.sub-table td{padding:11px 14px;border-bottom:1px solid var(--hair);color:#3A4452;line-height:1.5;vertical-align:top}
+.sub-table tr:last-child td{border-bottom:none}
+.sub-table td b{color:var(--ink)}
+.contact-card{margin-top:18px;display:grid;gap:6px;border:1px solid var(--hair);border-radius:14px;padding:18px 20px;box-shadow:var(--shadow)}
+.contact-card .row{font-size:14px;color:#3A4452}
+.contact-card .row b{color:var(--ink);font-weight:600;display:inline-block;min-width:120px}
+.back-top{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;color:var(--muted);margin-top:48px}
+
+/* footer */
+footer{background:#fff;border-top:1px solid var(--hair);padding:64px 0 36px}
+.foot{display:grid;grid-template-columns:1.4fr repeat(4,1fr);gap:28px;font-size:12.5px;color:var(--muted)}
+.foot h5{font-size:12px;color:var(--text);margin-bottom:12px}
+.foot a{display:block;padding:4px 0;color:var(--muted)}
+.foot a:hover{color:var(--blue)}
+.foot .logo:hover{color:var(--text)}
+.foot p{line-height:1.6}
+.copyright{margin-top:44px;padding-top:20px;border-top:1px solid var(--hair);font-size:11.5px;color:#9AA6B5;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
+@media(max-width:900px){.foot{grid-template-columns:repeat(2,1fr)}}
+
+@media print{
+  nav,.doc-head .doc-meta .btn,.toc,footer,.back-top{display:none!important}
+  .doc-grid{grid-template-columns:1fr}
+  body{background:#fff}
+  article{max-width:none}
+  article section+section{break-inside:avoid}
+}
+</style>
+</head>
+<body>
+
+<nav><div class="wrap nav-in">
+  <a class="logo" href="landing.html"><span class="logo-mark">E</span>Edsynk</a>
+  <div class="nav-links">
+    <a href="landing.html" class="hide-sm">Back to site</a>
+    <a href="pricing.html" class="hide-sm">Pricing</a>
+    <a href="terms.html">Terms</a>
+  </div>
+</div></nav>
+
+<header class="doc-head"><div class="wrap">
+  <p class="eyebrow">Trust at Edsynk</p>
+  <h1>Privacy Policy</h1>
+  <div class="doc-meta">
+    <span class="updated">Last updated: <b>22 June 2026</b></span>
+    <button class="btn btn-ghost" onclick="window.print()">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+      Download / Print PDF
+    </button>
+  </div>
+</div></header>
+
+<div class="doc-body"><div class="wrap"><div class="doc-grid">
+
+  <aside class="toc">
+    <h5>On this page</h5>
+    <ol>
+      <li><a href="#who">Who we are</a></li>
+      <li><a href="#basis">Legal basis</a></li>
+      <li><a href="#children">Children's data</a></li>
+      <li><a href="#collect">What we collect</a></li>
+      <li><a href="#use">How we use it</a></li>
+      <li><a href="#security">Storage &amp; security</a></li>
+      <li><a href="#subprocessors">Sub-processors</a></li>
+      <li><a href="#ownership">Data ownership &amp; export</a></li>
+      <li><a href="#retention">Retention &amp; deletion</a></li>
+      <li><a href="#rights">Your rights under the NDPA</a></li>
+      <li><a href="#breach">Data breach handling</a></li>
+      <li><a href="#transfers">International transfers</a></li>
+      <li><a href="#contact">Contact us</a></li>
+    </ol>
+  </aside>
+
+  <article>
+    <p class="lead">Edsynk is a school-management platform. Most of the personal data we handle belongs to schoolchildren, so we treat it with particular care. This policy explains what we collect, why, who can see it, and the rights you hold under Nigerian law. It is written plainly on purpose — if anything here is unclear, write to us and we will explain it.</p>
+
+    <section id="who">
+      <h2><span class="num">01</span> Who we are</h2>
+      <p>Edsynk is operated by <strong>Edsynk Technologies Ltd</strong>, a company registered in Nigeria with its base in Bauchi. We provide software that schools use to manage students, results, attendance, communication and payments.</p>
+      <p>An important distinction runs through this entire policy:</p>
+      <div class="callout">
+        <p><strong>The school is the data controller.</strong> Your school decides what student records to keep, how they are used, and for how long. The records belong to the school.</p>
+        <p><strong>Edsynk is the data processor.</strong> We store and process those records strictly on the school's instructions, to deliver the service. We do not decide, on our own, what happens to a child's data.</p>
+      </div>
+      <p>For Edsynk's own business contacts — for example a proprietor who signs up, or a visitor to this website — Edsynk acts as the data controller. This policy covers both roles and says which is which where it matters.</p>
+    </section>
+
+    <section id="basis">
+      <h2><span class="num">02</span> Legal basis</h2>
+      <p>We process personal data in line with the <strong>Nigeria Data Protection Act (NDPA) 2023</strong> and the Nigeria Data Protection Regulation (NDPR), under the supervision of the Nigeria Data Protection Commission (NDPC).</p>
+      <p>We rely on the following lawful bases:</p>
+      <ul>
+        <li><strong>Performance of a contract</strong> — to deliver the service your school has subscribed to (storing records, computing results, sending notifications).</li>
+        <li><strong>Consent</strong> — where a parent, guardian or staff member has agreed to a specific, optional use of their data, which they may withdraw at any time.</li>
+        <li><strong>Legitimate interest</strong> — for keeping the platform secure, preventing fraud and forgery, and improving reliability — balanced against the rights of the people whose data we hold.</li>
+        <li><strong>Legal obligation</strong> — where Nigerian law requires a record to be kept or disclosed.</li>
+      </ul>
+      <p>For children's records, the responsibility for establishing the appropriate basis (including any consent) sits with the school as controller; Edsynk acts on the school's documented instructions.</p>
+    </section>
+
+    <section id="children">
+      <h2><span class="num">03</span> Children's data</h2>
+      <p>Most students on Edsynk are minors. Their data is collected and held <strong>on behalf of the school</strong>, which has a direct relationship with the child and their family. Edsynk never markets to children and never builds advertising profiles of them.</p>
+      <p>Parental and guardian rights — to see a child's records, to correct them, or to ask questions — are <strong>exercised through the school</strong>, which knows the family and can verify identity properly. The parent portal in Edsynk exists to give families that visibility directly, but the school remains the gatekeeper of who is connected to which child.</p>
+      <div class="callout">
+        <p>We apply heightened safeguards to minors' records: stricter access controls, no use of their data to train external AI models, and export and deletion handled only on the school's verified instruction.</p>
+      </div>
+    </section>
+
+    <section id="collect">
+      <h2><span class="num">04</span> What we collect</h2>
+      <p>We collect only what a school needs to run. Depending on how your school configures Edsynk, this may include:</p>
+      <ul>
+        <li><strong>Student records</strong> — name, class, admission number, date of birth, gender, photo, and the biodata your school chooses to keep.</li>
+        <li><strong>Results and assessment data</strong> — continuous-assessment and exam scores, grades, positions, traits, and teacher and principal remarks.</li>
+        <li><strong>Attendance</strong> — daily or session attendance marked by staff.</li>
+        <li><strong>Guardian and contact details</strong> — names, phone numbers and email addresses of parents or guardians, so the school can reach them.</li>
+        <li><strong>Staff data</strong> — names, roles, login credentials and the actions staff take in the system.</li>
+        <li><strong>Payment metadata</strong> — what was paid, when, by whom and the reference. <strong>We do not store full card numbers</strong>; card payments are handled by our payment providers (see Sub-processors).</li>
+        <li><strong>Usage and technical logs</strong> — log-in times, device and browser type, IP address and audit records of changes, kept for security and troubleshooting.</li>
+      </ul>
+      <p>We do not collect special-category data (such as health or religious belief) except where a school deliberately records it as part of its own legitimate operation — for example, subjects taught at an Islamiyyah school — and only as the controller directs.</p>
+    </section>
+
+    <section id="use">
+      <h2><span class="num">05</span> How we use it</h2>
+      <p>We use personal data for one purpose: <strong>to deliver the service the school pays for</strong>. Concretely, that means computing and sealing results, building broadsheets and report cards, marking attendance, notifying parents, processing payments and keeping audit logs.</p>
+      <p>Three commitments matter enough to state plainly:</p>
+      <ul>
+        <li><strong>We never sell personal data.</strong> Not student data, not guardian contacts, not staff data — to anyone, for any purpose.</li>
+        <li><strong>AI features run on the school's configuration only.</strong> Edsynk's AI assistants (such as drafting remarks or generating practice questions) process a school's data to produce output for that school. They are an aid; staff approve everything.</li>
+        <li><strong>We never train external AI models on student data.</strong> Children's records are not used to train third-party or foundation models. Where a school brings its own AI key (BYOK), that key is <strong>encrypted at rest</strong> and used solely to serve that school.</li>
+      </ul>
+    </section>
+
+    <section id="security">
+      <h2><span class="num">06</span> Storage &amp; security</h2>
+      <p>Protecting children's records is the most important thing we do. Our safeguards include:</p>
+      <ul>
+        <li><strong>Encryption in transit and at rest</strong> — data moves over TLS and is encrypted on our servers and in backups.</li>
+        <li><strong>Role-based access controls</strong> — staff see only what their role allows; a subject teacher cannot browse another class's records.</li>
+        <li><strong>Audit logs</strong> — sensitive changes (such as editing a published result) are versioned and attributed, so nothing is changed silently.</li>
+        <li><strong>Least-privilege internal access</strong> — Edsynk staff access customer data only when needed for support and only with appropriate authorisation, and such access is logged.</li>
+      </ul>
+      <p>We host on reputable cloud infrastructure and select hosting regions to keep latency low and meet our obligations under Nigerian law. No system is perfectly secure, but we work continuously to reduce risk and respond quickly when issues arise.</p>
+    </section>
+
+    <section id="subprocessors">
+      <h2><span class="num">07</span> Sub-processors</h2>
+      <p>To run the service we rely on a small number of trusted providers who process data on our behalf, under contract and only for the purposes below:</p>
+      <table class="sub-table">
+        <thead><tr><th>Provider</th><th>Purpose</th></tr></thead>
+        <tbody>
+          <tr><td><b>Paystack / Flutterwave</b></td><td>Processing card and bank payments. They receive payment details directly; Edsynk does not store full card data.</td></tr>
+          <tr><td><b>SMS &amp; email providers</b></td><td>Delivering notifications, result alerts and one-time codes to guardians and staff.</td></tr>
+          <tr><td><b>Cloud hosting provider</b></td><td>Hosting the application, databases and encrypted backups.</td></tr>
+        </tbody>
+      </table>
+      <p>We use only sub-processors that offer appropriate protections, and we remain responsible to the school for their handling of data. We will give schools reasonable notice of any material change to this list.</p>
+    </section>
+
+    <section id="ownership">
+      <h2><span class="num">08</span> Data ownership &amp; export</h2>
+      <p><strong>The school's data belongs to the school.</strong> Edsynk claims no ownership over student records, results or any other content a school puts into the platform. We are custodians, not owners.</p>
+      <p>A school can <strong>export its data at any time</strong> — students, results, attendance and report cards — in standard, portable formats.</p>
+      <div class="callout">
+        <p><strong>We will never hold children's data hostage.</strong> If an account is suspended — for example for non-payment — it becomes <strong>read-only</strong> rather than deleted, and export remains available throughout. A billing dispute will never cut a school off from its own records.</p>
+      </div>
+    </section>
+
+    <section id="retention">
+      <h2><span class="num">09</span> Retention &amp; deletion</h2>
+      <p>We keep personal data for as long as the school (as controller) instructs, plus any minimum period Nigerian law requires. Academic records often need to be kept for years so that transcripts and historical results stay verifiable.</p>
+      <p>When a school offboards, or asks us to delete specific records, we delete or return the data on the school's verified instruction, subject to any legal retention obligation. Backups containing deleted data are overwritten on our normal backup cycle.</p>
+    </section>
+
+    <section id="rights">
+      <h2><span class="num">10</span> Your rights under the NDPA</h2>
+      <p>Under the NDPA 2023 and NDPR, data subjects have the right to:</p>
+      <ul>
+        <li><strong>Access</strong> — ask what personal data is held about you or your child.</li>
+        <li><strong>Rectification</strong> — have inaccurate data corrected.</li>
+        <li><strong>Erasure</strong> — ask for data to be deleted, where no legal duty requires us to keep it.</li>
+        <li><strong>Portability</strong> — receive your data in a portable format.</li>
+        <li><strong>Objection</strong> — object to certain processing, and withdraw consent you have given.</li>
+      </ul>
+      <p><strong>How to exercise them:</strong> for a student's records, contact <strong>the school</strong> in the first instance — as controller, it verifies identity and acts on requests. For data Edsynk controls directly, or if the school directs a request to us, write to <a href="#contact">privacy@edsynk.ng</a>. We respond within the timeframe set by the NDPA.</p>
+    </section>
+
+    <section id="breach">
+      <h2><span class="num">11</span> Data breach handling</h2>
+      <p>If a personal data breach occurs, we act quickly to contain it and assess the risk. Where the law requires, we <strong>notify the affected school</strong> without undue delay so it can meet its own obligations as controller, and we <strong>notify the Nigeria Data Protection Commission (NDPC)</strong> within the timeframe set by the NDPA. Where a breach is likely to result in high risk to individuals, affected people are informed through the appropriate route.</p>
+    </section>
+
+    <section id="transfers">
+      <h2><span class="num">12</span> International transfers</h2>
+      <p>We aim to keep data on infrastructure appropriate for Nigerian schools. Where any processing or backup involves a transfer outside Nigeria — for example a sub-processor's regional infrastructure — we ensure an adequate level of protection through appropriate safeguards permitted under the NDPA, such as contractual data-protection terms with the recipient.</p>
+    </section>
+
+    <section id="contact">
+      <h2><span class="num">13</span> Contact us</h2>
+      <p>Questions about this policy, or about how your or your child's data is handled, are welcome.</p>
+      <div class="contact-card">
+        <div class="row"><b>Privacy team</b> <a href="mailto:privacy@edsynk.ng">privacy@edsynk.ng</a></div>
+        <div class="row"><b>For students</b> Contact your school, which holds your records as data controller.</div>
+        <div class="row"><b>Company</b> Edsynk Technologies Ltd, Bauchi, Nigeria</div>
+      </div>
+      <p>If you believe your rights under the NDPA have not been respected, you may also lodge a complaint with the Nigeria Data Protection Commission (NDPC).</p>
+      <a class="back-top" href="#">↑ Back to top</a>
+    </section>
+  </article>
+
+</div></div></div>
+
+<footer><div class="wrap">
+  <div class="foot">
+    <div>
+      <a class="logo" href="landing.html"><span class="logo-mark">E</span>Edsynk</a>
+      <p style="margin-top:14px">The school operating system.<br>Built for how schools actually work — starting with Nigeria's.</p>
+    </div>
+    <div><h5>Product</h5><a href="landing.html#results">Results pipeline</a><a href="landing.html#assist">Edsynk AI</a><a href="landing.html#results">CBT exams</a><a href="pricing.html">Pricing</a></div>
+    <div><h5>Schools</h5><a href="verify-result.html">Verify a result</a><a href="../auth/register-school.html">Become a pilot</a><a href="school-portal.html">School portal</a><a href="results-lookup.html">Results lookup</a></div>
+    <div><h5>Trust</h5><a href="privacy-policy.html">Privacy · NDPA 2023</a><a href="terms.html">Terms of Service</a><a href="privacy-policy.html#ownership">Exportable forever</a><a href="privacy-policy.html#subprocessors">Sub-processors</a></div>
+    <div><h5>Company</h5><a href="landing.html">About</a><a href="landing.html#customers">Customers</a><a href="mailto:hello@edsynk.ng">Contact</a><a href="mailto:privacy@edsynk.ng">Privacy team</a></div>
+  </div>
+  <div class="copyright"><span>© 2026 Edsynk Technologies Ltd · Bauchi, Nigeria</span><span class="mono">privacy@edsynk.ng</span></div>
+</div></footer>
+
+</body>
+</html>

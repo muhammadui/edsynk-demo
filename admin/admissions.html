@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Edsynk — Admissions</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&family=Noto+Naskh+Arabic:wght@500&display=swap" rel="stylesheet">
+<script>
+tailwind.config = { theme: { extend: {
+  colors: { canvas:'#F7F9FC', ink:'#0B2A56', charcoal:'#18181B', steel:'#64748B', whisper:'#E2E8F0',
+    blue:'#2177EF', skyblue:'#5C9DF5', wash:'#EAF2FE', mist:'#D3E4FD',
+    confirm:'#16A34A', caution:'#D97706', alert:'#DC2626', excused:'#7C8DA6' },
+  fontFamily: { sans:['Geist','sans-serif'], mono:['"Geist Mono"','monospace'], arabic:['"Noto Naskh Arabic"','serif'] },
+  boxShadow: { soft:'0 1px 2px rgba(11,42,86,0.04), 0 6px 24px rgba(11,42,86,0.05)',
+               lift:'0 1px 3px rgba(11,42,86,0.10), 0 12px 32px rgba(11,42,86,0.12)' }
+}}}
+</script>
+<style>
+  @keyframes rise{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+  .rise{animation:rise .5s cubic-bezier(.2,.8,.2,1) both}
+  @keyframes fillw{from{width:0}} .hbar{animation:fillw 1s cubic-bezier(.2,.8,.2,1) both}
+  @keyframes grow{from{transform:scaleY(0)}to{transform:scaleY(1)}} .vbar{transform-origin:bottom;animation:grow .8s cubic-bezier(.2,.8,.2,1) both}
+</style>
+</head>
+<body data-active="Admissions" data-persona="admin" class="bg-canvas font-sans text-charcoal antialiased">
+<div class="flex min-h-screen">
+  <div id="sidebar-root"></div>
+  <div class="flex-1 min-w-0">
+    <header class="h-[60px] bg-white/80 backdrop-blur-md border-b border-whisper/70 flex items-center justify-between px-4 sm:px-7 sticky top-0 z-20">
+      <div class="flex items-center gap-3">
+        <h1 class="text-[15px] font-semibold tracking-tight">Admissions</h1>
+        <span class="font-mono text-[11.5px] font-medium text-blue bg-wash rounded-full px-2.5 py-1 hidden sm:inline">12 new</span>
+      </div>
+      <div class="flex items-center gap-2.5"><button onclick="document.getElementById('addAppM').classList.add('open')" class="h-9 px-4 rounded-lg bg-blue text-white text-[13px] font-medium shadow-soft active:translate-y-px">Add applicant</button></div>
+    </header>
+    <main class="p-4 sm:p-7 max-w-[1240px] space-y-5 pb-12">
+<div class="grid grid-cols-2 lg:grid-cols-4 gap-3"><div class="rise bg-white ring-1 ring-whisper/80 rounded-2xl p-4 shadow-soft" style="animation-delay:.04s"><p class="text-[10.5px] font-semibold uppercase tracking-wider text-steel">New applications</p><p class="font-mono text-[22px] font-semibold mt-1.5">12</p><p class="text-[11.5px] text-steel mt-1">this week</p></div><div class="rise bg-white ring-1 ring-whisper/80 rounded-2xl p-4 shadow-soft" style="animation-delay:.08s"><p class="text-[10.5px] font-semibold uppercase tracking-wider text-steel">In review</p><p class="font-mono text-[22px] font-semibold mt-1.5">7</p><p class="text-[11.5px] text-steel mt-1">awaiting decision</p></div><div class="rise bg-white ring-1 ring-whisper/80 rounded-2xl p-4 shadow-soft" style="animation-delay:.12s"><p class="text-[10.5px] font-semibold uppercase tracking-wider text-steel">Offers made</p><p class="font-mono text-[22px] font-semibold mt-1.5">5</p><p class="text-[11.5px] text-steel mt-1">3 accepted</p></div><div class="rise bg-white ring-1 ring-whisper/80 rounded-2xl p-4 shadow-soft" style="animation-delay:.16s"><p class="text-[10.5px] font-semibold uppercase tracking-wider text-steel">Enrolled</p><p class="font-mono text-[22px] font-semibold mt-1.5">3</p><p class="text-[11.5px] text-steel mt-1">became students</p></div></div><div class="rise grid grid-cols-2 sm:grid-cols-5 gap-2.5" style="animation-delay:.18s"><div class="bg-white ring-1 ring-whisper/80 rounded-xl p-3.5 shadow-soft text-center"><p class="font-mono text-[20px] font-semibold text-charcoal">12</p><p class="text-[10.5px] font-semibold uppercase tracking-wider text-steel mt-1">New</p></div><div class="bg-white ring-1 ring-whisper/80 rounded-xl p-3.5 shadow-soft text-center"><p class="font-mono text-[20px] font-semibold text-blue">7</p><p class="text-[10.5px] font-semibold uppercase tracking-wider text-steel mt-1">Reviewing</p></div><div class="bg-white ring-1 ring-whisper/80 rounded-xl p-3.5 shadow-soft text-center"><p class="font-mono text-[20px] font-semibold text-caution">5</p><p class="text-[10.5px] font-semibold uppercase tracking-wider text-steel mt-1">Offered</p></div><div class="bg-white ring-1 ring-whisper/80 rounded-xl p-3.5 shadow-soft text-center"><p class="font-mono text-[20px] font-semibold text-confirm">3</p><p class="text-[10.5px] font-semibold uppercase tracking-wider text-steel mt-1">Accepted</p></div><div class="bg-white ring-1 ring-whisper/80 rounded-xl p-3.5 shadow-soft text-center"><p class="font-mono text-[20px] font-semibold text-confirm">3</p><p class="text-[10.5px] font-semibold uppercase tracking-wider text-steel mt-1">Enrolled</p></div></div><div class="rise bg-white ring-1 ring-whisper/80 rounded-2xl shadow-soft overflow-hidden" style="animation-delay:.22s"><div class="flex items-center justify-between px-5 pt-4 pb-3"><p class="text-[13.5px] font-semibold">Applications</p><button onclick="document.getElementById('addAppM').classList.add('open')" class="h-9 px-4 rounded-lg bg-blue text-white text-[13px] font-medium shadow-soft active:translate-y-px">Add applicant</button></div><div class="overflow-x-auto"><table class="w-full text-[12.5px]"><thead><tr class="text-left text-[10.5px] uppercase tracking-wider text-steel border-y border-whisper/70 bg-canvas/60"><th class="px-4 py-2.5 font-semibold">Applicant</th><th class="px-4 py-2.5 font-semibold">Applying for</th><th class="px-4 py-2.5 font-semibold">Source</th><th class="px-4 py-2.5 font-semibold">Stage</th><th class="px-4 py-2.5 font-semibold">&nbsp;</th></tr></thead><tbody class="divide-y divide-whisper/60"><tr class="hover:bg-canvas/60 cursor-pointer"><td class="px-4 py-3"><div class="flex items-center gap-2.5"><span class="h-8 w-8 rounded-full bg-wash text-blue grid place-items-center text-[9.5px] font-bold">SM</span><div><p class="font-medium">Suleiman Mohammed</p><p class="font-mono text-[10px] text-steel">APP-0112 · age 11</p></div></div></td><td class="px-4 py-3"><span class="text-steel">JSS 1</span></td><td class="px-4 py-3"><span class="text-steel">Sibling of current student</span></td><td class="px-4 py-3"><span class="text-[10.5px] font-semibold text-blue bg-wash rounded-full px-2 py-0.5">Reviewing</span></td><td class="px-4 py-3"><button onclick="openApp('Suleiman Mohammed','SM','JSS 1','reviewing')" class="h-8 px-3 rounded-lg bg-blue text-white text-[11.5px] font-medium">Review</button></td></tr><tr class="hover:bg-canvas/60 cursor-pointer"><td class="px-4 py-3"><div class="flex items-center gap-2.5"><span class="h-8 w-8 rounded-full bg-wash text-blue grid place-items-center text-[9.5px] font-bold">GA</span><div><p class="font-medium">Grace Adeyemi</p><p class="font-mono text-[10px] text-steel">APP-0111 · age 10</p></div></div></td><td class="px-4 py-3"><span class="text-steel">JSS 1</span></td><td class="px-4 py-3"><span class="text-steel">Walk-in</span></td><td class="px-4 py-3"><span class="text-[10.5px] font-semibold text-steel bg-canvas ring-1 ring-whisper rounded-full px-2 py-0.5">New</span></td><td class="px-4 py-3"><button onclick="openApp('Grace Adeyemi','GA','JSS 1','new')" class="h-8 px-3 rounded-lg bg-white ring-1 ring-whisper text-steel text-[11.5px] font-medium">Open</button></td></tr><tr class="hover:bg-canvas/60 cursor-pointer"><td class="px-4 py-3"><div class="flex items-center gap-2.5"><span class="h-8 w-8 rounded-full bg-wash text-blue grid place-items-center text-[9.5px] font-bold">AU</span><div><p class="font-medium">Aliyu Usman</p><p class="font-mono text-[10px] text-steel">APP-0108 · age 13</p></div></div></td><td class="px-4 py-3"><span class="text-steel">JSS 3 (transfer)</span></td><td class="px-4 py-3"><span class="text-steel">From another school</span></td><td class="px-4 py-3"><span class="text-[10.5px] font-semibold text-caution bg-caution/10 rounded-full px-2 py-0.5">Offered</span></td><td class="px-4 py-3"><button onclick="openApp('Aliyu Usman','AU','JSS 3 (transfer)','offered')" class="h-8 px-3 rounded-lg bg-white ring-1 ring-whisper text-steel text-[11.5px] font-medium">View offer</button></td></tr><tr class="hover:bg-canvas/60 cursor-pointer"><td class="px-4 py-3"><div class="flex items-center gap-2.5"><span class="h-8 w-8 rounded-full bg-confirm/10 text-confirm grid place-items-center text-[9.5px] font-bold">FI</span><div><p class="font-medium">Fatima Idris</p><p class="font-mono text-[10px] text-steel">APP-0104 · age 10</p></div></div></td><td class="px-4 py-3"><span class="text-steel">JSS 1</span></td><td class="px-4 py-3"><span class="text-steel">Open day</span></td><td class="px-4 py-3"><span class="text-[10.5px] font-semibold text-confirm bg-confirm/10 rounded-full px-2 py-0.5">Accepted</span></td><td class="px-4 py-3"><button onclick="openApp('Fatima Idris','FI','JSS 1','accepted')" class="h-8 px-3 rounded-lg bg-blue text-white text-[11.5px] font-medium">Enrol →</button></td></tr></tbody></table></div><p class="px-5 py-3 border-t border-whisper/70 bg-canvas/50 text-[11.5px] text-steel">Accepting an applicant creates their student record and registration number — no re-typing. Admission forms can be public on your school site.</p></div><div class="grid lg:grid-cols-2 gap-4"><div class="rise bg-white ring-1 ring-whisper/80 rounded-2xl p-5 shadow-soft" style="animation-delay:.28s"><p class="text-[13.5px] font-semibold">Public admission form</p><p class="text-[12px] text-steel mt-1 leading-relaxed">Share a link so parents apply online. Submissions land in <span class="font-medium text-charcoal">New</span> automatically.</p><div class="mt-3 rounded-xl ring-1 ring-whisper/80 divide-y divide-whisper/60 text-[12.5px]"><div class="flex justify-between gap-4 px-4 py-2.5"><span class="text-steel shrink-0">Form status</span><span class="font-medium text-right"><span class="text-confirm">Live</span></span></div><div class="flex justify-between gap-4 px-4 py-2.5"><span class="text-steel shrink-0">Public link</span><span class="font-medium text-right"><span class="font-mono text-[11px]">alfurqan.edsynk.ng/apply</span></span></div><div class="flex justify-between gap-4 px-4 py-2.5"><span class="text-steel shrink-0">Applications this session</span><span class="font-medium text-right">41</span></div><div class="flex justify-between gap-4 px-4 py-2.5"><span class="text-steel shrink-0">Required documents</span><span class="font-medium text-right">Birth cert · passport photo</span></div></div><button class="mt-3 h-9 px-4 rounded-lg bg-white ring-1 ring-whisper text-steel text-[12.5px] font-medium">Edit form fields</button></div><div class="rise bg-white ring-1 ring-whisper/80 rounded-2xl p-5 shadow-soft" style="animation-delay:.32s"><p class="text-[13.5px] font-semibold">Offer & enrolment</p><div class="mt-3 space-y-0 text-[12px]"><div class="flex gap-3 pb-3"><div class="flex flex-col items-center"><span class="h-2 w-2 rounded-full bg-blue mt-1.5"></span><span class="w-px flex-1 bg-whisper"></span></div><div><p class="font-medium">Review application</p><p class="text-[10.5px] text-steel mt-0.5">Check details, documents, optional entrance test score</p></div></div><div class="flex gap-3 pb-3"><div class="flex flex-col items-center"><span class="h-2 w-2 rounded-full bg-caution mt-1.5"></span><span class="w-px flex-1 bg-whisper"></span></div><div><p class="font-medium">Make an offer</p><p class="text-[10.5px] text-steel mt-0.5">Generates an offer letter (PDF) the parent receives</p></div></div><div class="flex gap-3 pb-3"><div class="flex flex-col items-center"><span class="h-2 w-2 rounded-full bg-confirm mt-1.5"></span><span class="w-px flex-1 bg-whisper"></span></div><div><p class="font-medium">Parent accepts</p><p class="text-[10.5px] text-steel mt-0.5">Pays acceptance fee / confirms place</p></div></div><div class="flex gap-3 pb-3"><div class="flex flex-col items-center"><span class="h-2 w-2 rounded-full bg-confirm mt-1.5"></span></div><div><p class="font-medium">Enrol</p><p class="text-[10.5px] text-steel mt-0.5">Creates the student + reg number, assigns class</p></div></div></div></div></div>
+    </main>
+  </div>
+</div>
+<!-- APPLICANT DRAWER -->
+<div id="appBg" class="fixed inset-0 z-40 bg-ink/30 backdrop-blur-[2px] opacity-0 pointer-events-none transition-opacity duration-200" onclick="closeApp()"></div>
+<aside id="appDrawer" class="fixed inset-y-0 right-0 z-50 w-full max-w-[460px] bg-white shadow-lift overflow-y-auto translate-x-full transition-transform duration-300">
+  <div class="sticky top-0 bg-white/90 backdrop-blur border-b border-whisper/70 px-5 py-4 flex items-center justify-between">
+    <div class="flex items-center gap-3"><span id="adAv" class="h-10 w-10 rounded-xl bg-blue text-white grid place-items-center text-[13px] font-bold">SM</span><div><p id="adName" class="text-[14.5px] font-semibold">Suleiman Mohammed</p><p id="adMeta" class="font-mono text-[10.5px] text-steel">APP-0112 · applying for JSS 1</p></div></div>
+    <button onclick="closeApp()" class="h-8 w-8 grid place-items-center rounded-lg hover:bg-mist/40 text-steel">✕</button>
+  </div>
+  <!-- stage stepper -->
+  <div class="px-5 py-3 border-b border-whisper/60"><div id="adStepper" class="flex items-center gap-1.5 text-[10px]"></div></div>
+  <div class="p-5 space-y-5 text-[12.5px]">
+    <div><p class="text-[11px] font-semibold uppercase tracking-wider text-steel mb-2">Applicant</p>
+      <div class="rounded-xl ring-1 ring-whisper/80 divide-y divide-whisper/60">
+        <div class="flex justify-between px-4 py-2.5"><span class="text-steel">Date of birth</span><span class="font-mono">12 Sept 2014 · age 11</span></div>
+        <div class="flex justify-between px-4 py-2.5"><span class="text-steel">Gender</span><span class="font-medium">Male</span></div>
+        <div class="flex justify-between px-4 py-2.5"><span class="text-steel">Previous school</span><span class="font-medium">Little Stars Nursery</span></div>
+        <div class="flex justify-between px-4 py-2.5"><span class="text-steel">Source</span><span class="font-medium">Sibling of current student</span></div>
+      </div></div>
+    <div><p class="text-[11px] font-semibold uppercase tracking-wider text-steel mb-2">Guardian</p>
+      <div class="rounded-xl ring-1 ring-whisper/80 divide-y divide-whisper/60">
+        <div class="flex justify-between px-4 py-2.5"><span class="text-steel">Name</span><span class="font-medium">Alhaji Bello Mohammed</span></div>
+        <div class="flex justify-between px-4 py-2.5"><span class="text-steel">Phone</span><span class="font-mono">0803 ··· 221</span></div>
+      </div></div>
+    <div><p class="text-[11px] font-semibold uppercase tracking-wider text-steel mb-2">Documents</p>
+      <div class="flex flex-wrap gap-2"><span class="text-[11px] rounded-lg ring-1 ring-confirm/25 bg-confirm/5 text-confirm px-2.5 py-1.5">✓ Birth certificate</span><span class="text-[11px] rounded-lg ring-1 ring-confirm/25 bg-confirm/5 text-confirm px-2.5 py-1.5">✓ Passport photo</span><span class="text-[11px] rounded-lg ring-1 ring-whisper text-steel px-2.5 py-1.5">Entrance test: 72%</span></div></div>
+    <!-- action bar (stage-aware) -->
+    <div id="adActions" class="pt-1"></div>
+  </div>
+</aside>
+
+<!-- ADD APPLICANT MODAL -->
+<div id="addAppM" class="modal fixed inset-0 z-50 bg-ink/40 backdrop-blur-sm grid place-items-center p-4" style="opacity:0;pointer-events:none;transition:opacity .2s" onclick="if(event.target===this)this.classList.remove('open')">
+  <div class="bg-white rounded-2xl shadow-lift max-w-[480px] w-full p-6 max-h-[90vh] overflow-y-auto">
+    <div class="flex items-center justify-between mb-4"><p class="text-[15px] font-semibold">Add applicant</p><button onclick="document.getElementById('addAppM').classList.remove('open')" class="h-8 w-8 grid place-items-center rounded-lg hover:bg-mist/40 text-steel">✕</button></div>
+    <div class="grid grid-cols-2 gap-3 text-[13px]">
+      <div class="col-span-2"><label class="text-[11.5px] font-semibold text-steel">Applicant name</label><input placeholder="Full name" class="mt-1.5 w-full h-10 rounded-lg border border-whisper bg-canvas px-3.5"></div>
+      <div><label class="text-[11.5px] font-semibold text-steel">Date of birth</label><input type="date" class="mt-1.5 w-full h-10 rounded-lg border border-whisper bg-canvas px-2.5 font-mono text-[12px]"></div>
+      <div><label class="text-[11.5px] font-semibold text-steel">Applying for</label><select class="mt-1.5 w-full h-10 rounded-lg border border-whisper bg-canvas px-2.5"><option>JSS 1</option><option>JSS 2</option><option>SS 1</option><option>I'dadiyyah 1</option></select></div>
+      <div class="col-span-2"><label class="text-[11.5px] font-semibold text-steel">Guardian name &amp; phone</label><div class="mt-1.5 flex gap-2"><input placeholder="Guardian" class="h-10 flex-1 rounded-lg border border-whisper bg-canvas px-3.5"><input placeholder="080…" class="h-10 w-32 rounded-lg border border-whisper bg-canvas px-3 font-mono text-[12px]"></div></div>
+      <div class="col-span-2"><label class="text-[11.5px] font-semibold text-steel">Source</label><select class="mt-1.5 w-full h-10 rounded-lg border border-whisper bg-canvas px-2.5"><option>Walk-in</option><option>Sibling of current student</option><option>Open day</option><option>Referral</option><option>Transfer</option></select></div>
+    </div>
+    <div class="flex justify-end gap-2 mt-6"><button onclick="document.getElementById('addAppM').classList.remove('open')" class="h-10 px-4 rounded-lg ring-1 ring-whisper text-[13px] font-medium text-steel">Cancel</button><button onclick="document.getElementById('addAppM').classList.remove('open')" class="h-10 px-5 rounded-lg bg-blue text-white text-[13px] font-semibold shadow-soft">Add to pipeline</button></div>
+  </div>
+</div>
+
+<!-- ENROL CONFIRM -->
+<div id="enrolM" class="modal fixed inset-0 z-50 bg-ink/40 backdrop-blur-sm grid place-items-center p-4" style="opacity:0;pointer-events:none;transition:opacity .2s" onclick="if(event.target===this)this.classList.remove('open')">
+  <div class="bg-white rounded-2xl shadow-lift max-w-[420px] w-full p-6 text-center">
+    <div class="h-16 w-16 rounded-full bg-confirm/10 grid place-items-center mx-auto"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#16A34A" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg></div>
+    <p class="text-[16px] font-bold mt-4">Enrolled!</p>
+    <p class="text-[12.5px] text-steel mt-1"><span id="enrolName">Fatima Idris</span> is now a student. A registration number was generated automatically.</p>
+    <div class="mt-3 rounded-xl bg-canvas ring-1 ring-whisper px-4 py-2.5 font-mono text-[14px] font-semibold">AFA/2026/0413</div>
+    <button onclick="document.getElementById('enrolM').classList.remove('open')" class="mt-4 w-full h-11 rounded-xl bg-blue text-white text-[13px] font-semibold">Done</button>
+  </div>
+</div>
+
+<script src="../assets/shell.js"></script>
+<script>
+const STAGES=['New','Reviewing','Offered','Accepted','Enrolled'];
+function stepIndex(stage){const i=STAGES.findIndex(s=>s.toLowerCase()===stage);if(i>=0)return i;return stage==='offered'?2:stage==='accepted'?3:stage==='rejected'?1:1;}
+function updateStepper(stage){const si=stepIndex(stage);document.getElementById('adStepper').innerHTML=STAGES.map((s,i)=>`<span class="px-2 py-1 rounded-md ${i<si?'bg-confirm/10 text-confirm':i===si?'bg-blue text-white':'bg-canvas text-steel/50 ring-1 ring-whisper'} font-semibold">${s}</span>${i<STAGES.length-1?'<span class="text-steel/30">›</span>':''}`).join('');}
+function actHTML(stage){
+  if(stage==='new') return '<button onclick="setAct(\'reviewing\')" class="w-full h-11 rounded-xl bg-blue text-white text-[13.5px] font-semibold shadow-soft active:translate-y-px">Start review</button>';
+  if(stage==='reviewing') return '<p class="text-[11px] font-semibold uppercase tracking-wider text-steel mb-2">Decision</p><div class="grid grid-cols-2 gap-2"><button onclick="setAct(\'rejected\')" class="h-11 rounded-xl ring-1 ring-alert/30 text-alert text-[13px] font-medium hover:bg-alert/5">Reject</button><button onclick="setAct(\'offered\')" class="h-11 rounded-xl bg-blue text-white text-[13px] font-semibold shadow-soft active:translate-y-px">Make offer →</button></div>';
+  if(stage==='offered') return '<div class="rounded-xl bg-confirm/[0.06] ring-1 ring-confirm/20 px-4 py-3 text-[12px] mb-2">✓ Offer letter generated &amp; sent to the guardian — awaiting acceptance + acceptance fee.</div><div class="grid grid-cols-2 gap-2"><button class="h-11 rounded-xl ring-1 ring-whisper text-steel text-[13px] font-medium hover:bg-mist/30">Resend offer</button><button onclick="enrol()" class="h-11 rounded-xl bg-blue text-white text-[13px] font-semibold shadow-soft active:translate-y-px">Mark accepted &amp; enrol</button></div>';
+  if(stage==='accepted') return '<button onclick="enrol()" class="w-full h-11 rounded-xl bg-confirm text-white text-[13.5px] font-semibold shadow-soft active:translate-y-px">Enrol as student →</button><p class="text-[11px] text-steel text-center mt-2">Creates the student record + registration number.</p>';
+  if(stage==='rejected') return '<div class="rounded-xl bg-alert/[0.06] ring-1 ring-alert/20 px-4 py-3 text-[12px]">Application rejected — the guardian is notified politely. You can reopen it any time.</div><button onclick="setAct(\'reviewing\')" class="mt-2 w-full h-10 rounded-xl ring-1 ring-whisper text-steel text-[12.5px] font-medium hover:bg-mist/30">Reopen review</button>';
+  return '';
+}
+function setAct(stage){updateStepper(stage);document.getElementById('adActions').innerHTML=actHTML(stage);}
+function openApp(name,ini,cls,stage){
+  document.getElementById('adName').textContent=name;
+  document.getElementById('adAv').textContent=ini;
+  document.getElementById('adMeta').textContent='applying for '+cls;
+  setAct(stage);
+  document.getElementById('appDrawer').classList.remove('translate-x-full');
+  document.getElementById('appBg').classList.remove('opacity-0','pointer-events-none');
+}
+function closeApp(){document.getElementById('appDrawer').classList.add('translate-x-full');document.getElementById('appBg').classList.add('opacity-0','pointer-events-none');}
+function enrol(){closeApp();document.getElementById('enrolName').textContent=document.getElementById('adName').textContent;document.getElementById('enrolM').classList.add('open');}
+</script>
+</body>
+</html>

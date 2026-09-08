@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Edsynk — Register your school</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&family=Noto+Naskh+Arabic:wght@500&display=swap" rel="stylesheet">
+<script>tailwind.config={theme:{extend:{colors:{canvas:'#F7F9FC',ink:'#0B2A56',charcoal:'#18181B',steel:'#64748B',whisper:'#E2E8F0',blue:'#2177EF',skyblue:'#5C9DF5',wash:'#EAF2FE',mist:'#D3E4FD',confirm:'#16A34A',caution:'#D97706',alert:'#DC2626',excused:'#7C8DA6'},fontFamily:{sans:['Geist','sans-serif'],mono:['"Geist Mono"','monospace'],arabic:['"Noto Naskh Arabic"','serif']},boxShadow:{soft:'0 1px 2px rgba(11,42,86,0.05), 0 8px 32px rgba(11,42,86,0.07)',lift:'0 2px 8px rgba(11,42,86,0.10), 0 24px 64px rgba(11,42,86,0.16)'}}}}</script>
+<style>@keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}.rise{animation:rise .5s cubic-bezier(.2,.8,.2,1) both}.field{margin-top:6px;width:100%;height:48px;border-radius:12px;border:1px solid #E2E8F0;background:#F7F9FC;padding:0 16px;font-size:14px}.field:focus{outline:none;box-shadow:0 0 0 2px rgba(33,119,239,.5)}.lab{font-size:11.5px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:#64748B}</style>
+</head>
+<body class="font-sans text-charcoal antialiased min-h-screen lg:grid lg:grid-cols-[1fr_1.05fr]">
+<main class="min-h-screen lg:min-h-0 bg-white flex flex-col px-6 sm:px-12 py-8">
+  <div class="flex items-center justify-between">
+    <div class="flex items-center gap-2"><span class="h-7 w-7 rounded-lg bg-blue grid place-items-center text-white font-bold text-[13px]">E</span><span class="font-semibold tracking-tight text-[15px]">edsynk</span></div>
+    <a href="login.html" class="text-[12.5px] font-medium text-steel hover:text-charcoal">Have an account? Sign in →</a>
+  </div>
+  <div class="flex-1 grid place-items-center py-8"><div class="w-full max-w-115">
+
+    <!-- Stepper -->
+    <div class="rise flex items-center gap-2 mb-6" id="stepper"></div>
+
+    <!-- STEP 1 -->
+    <section data-step="1" class="step">
+      <h1 class="text-[23px] font-bold tracking-[-0.02em] text-ink">School details</h1>
+      <p class="text-[13px] text-steel mt-1">Tell us about your school. You can change all of this later.</p>
+      <div class="mt-6 space-y-4">
+        <div><label class="lab">School name</label><input class="field" value="Al-Furqan Academy"></div>
+        <div><label class="lab">School type</label>
+          <div class="grid grid-cols-3 gap-2 mt-1.5" id="typePills">
+            <button type="button" data-v="Conventional" class="type-pill h-10 rounded-xl text-[13px] font-semibold ring-1 ring-whisper">Conventional</button>
+            <button type="button" data-v="Islamiyya" class="type-pill h-10 rounded-xl text-[13px] font-semibold ring-1 ring-whisper">Islamiyya</button>
+            <button type="button" data-v="Hybrid" class="type-pill h-10 rounded-xl text-[13px] font-semibold ring-1 ring-whisper">Hybrid</button>
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div><label class="lab">State</label>
+            <input class="field" list="states" value="Bauchi">
+            <datalist id="states"><option>Bauchi</option><option>Kaduna</option><option>Lagos</option><option>Sokoto</option><option>Abuja FCT</option><option>Katsina</option><option>Borno</option><option>Oyo</option><option>Rivers</option><option>Bauchi</option><option>Niger</option><option>Jigawa</option></datalist>
+          </div>
+          <div><label class="lab">Town / LGA</label><input class="field" value="Nassarawa"></div>
+        </div>
+        <div><label class="lab">Approx. number of students</label>
+          <select class="field"><option>Under 100</option><option selected>100 – 500</option><option>500 – 1,000</option><option>Over 1,000</option></select>
+        </div>
+      </div>
+      <button onclick="go(2)" class="w-full h-12 rounded-xl bg-blue text-white text-[14.5px] font-semibold shadow-soft active:translate-y-px mt-6">Continue →</button>
+    </section>
+
+    <!-- STEP 2 -->
+    <section data-step="2" class="step hidden">
+      <h1 class="text-[23px] font-bold tracking-[-0.02em] text-ink">Owner account</h1>
+      <p class="text-[13px] text-steel mt-1">This is the first administrator. You can invite staff after setup.</p>
+      <div class="mt-6 space-y-4">
+        <div><label class="lab">Full name</label><input class="field" value="Ustadh Abdullahi Sani"></div>
+        <div><label class="lab">Email</label><input class="field" type="email" value="abdullahi@alfurqan.edsynk.ng"></div>
+        <div><label class="lab">Phone (WhatsApp)</label><input class="field" value="0803 481 2207"></div>
+        <div><label class="lab">Create password</label><input class="field" type="password" value="••••••••••"></div>
+      </div>
+      <div class="flex gap-3 mt-6">
+        <button onclick="go(1)" class="h-12 px-5 rounded-xl ring-1 ring-whisper text-[14px] font-semibold text-steel hover:bg-canvas active:translate-y-px">Back</button>
+        <button onclick="go(3)" class="flex-1 h-12 rounded-xl bg-blue text-white text-[14.5px] font-semibold shadow-soft active:translate-y-px">Continue →</button>
+      </div>
+    </section>
+
+    <!-- STEP 3 -->
+    <section data-step="3" class="step hidden">
+      <h1 class="text-[23px] font-bold tracking-[-0.02em] text-ink">Choose a plan</h1>
+      <p class="text-[13px] text-steel mt-1">Per term, billed once. <span class="text-confirm font-medium">14-day pilot — no card required.</span></p>
+      <div class="mt-5 space-y-3" id="planCards">
+        <button type="button" data-v="Starter" class="plan-card w-full text-left rounded-2xl ring-1 ring-whisper p-4 transition">
+          <div class="flex items-center justify-between"><span class="font-semibold text-[14.5px]">Starter</span><span class="font-mono text-[14px] font-semibold text-ink">₦350<span class="text-[11px] text-steel font-sans">/student/term</span></span></div>
+          <p class="text-[12px] text-steel mt-1">Students, attendance, results & fees. For small schools.</p>
+        </button>
+        <button type="button" data-v="Standard" class="plan-card w-full text-left rounded-2xl ring-1 ring-whisper p-4 transition relative">
+          <span class="absolute -top-2 right-4 text-[10px] font-bold uppercase tracking-wide bg-blue text-white rounded-full px-2 py-0.5">Most popular</span>
+          <div class="flex items-center justify-between"><span class="font-semibold text-[14.5px]">Standard</span><span class="font-mono text-[14px] font-semibold text-ink">₦550<span class="text-[11px] text-steel font-sans">/student/term</span></span></div>
+          <p class="text-[12px] text-steel mt-1">Adds CBT, timetable, ID cards & WhatsApp results.</p>
+        </button>
+        <button type="button" data-v="Pro" class="plan-card w-full text-left rounded-2xl ring-1 ring-whisper p-4 transition">
+          <div class="flex items-center justify-between"><span class="font-semibold text-[14.5px]">Pro</span><span class="font-mono text-[14px] font-semibold text-ink">₦850<span class="text-[11px] text-steel font-sans">/student/term</span></span></div>
+          <p class="text-[12px] text-steel mt-1">Adds Edsynk AI, transcripts, custom domain & priority support.</p>
+        </button>
+      </div>
+      <div class="flex gap-3 mt-6">
+        <button onclick="go(2)" class="h-12 px-5 rounded-xl ring-1 ring-whisper text-[14px] font-semibold text-steel hover:bg-canvas active:translate-y-px">Back</button>
+        <button onclick="finish()" class="flex-1 h-12 rounded-xl bg-blue text-white text-[14.5px] font-semibold shadow-soft active:translate-y-px">Start 14-day pilot →</button>
+      </div>
+    </section>
+
+    <!-- STEP 4 -->
+    <section data-step="4" class="step hidden text-center">
+      <div class="mx-auto h-16 w-16 rounded-2xl bg-confirm/10 grid place-items-center"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#16A34A" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg></div>
+      <h1 class="text-[23px] font-bold tracking-[-0.02em] text-ink mt-5">You're all set</h1>
+      <p class="text-[13.5px] text-steel mt-2 max-w-[36ch] mx-auto">We'll set up <b class="text-charcoal">Al-Furqan Academy</b> and email your login to <b class="text-charcoal">abdullahi@alfurqan.edsynk.ng</b>. Your portal will live at <span class="font-mono text-blue">alfurqan.edsynk.ng</span>.</p>
+      <div class="bg-canvas ring-1 ring-whisper rounded-xl px-4 py-3 text-[12px] text-steel mt-5 text-left">
+        Next: import your students, define your grading scheme and invite teachers. The setup wizard walks you through it in about 10 minutes.
+      </div>
+      <button onclick="location.href='../admin/setup-wizard.html'" class="w-full h-12 rounded-xl bg-blue text-white text-[14.5px] font-semibold shadow-soft active:translate-y-px mt-5">Go to dashboard →</button>
+      <p class="text-[11.5px] text-steel mt-3">Pilot ends in 14 days · no card required · cancel anytime</p>
+    </section>
+
+  </div></div>
+  <p class="text-[11px] text-steel/80"><a href="../public/landing.html" class="hover:text-charcoal">edsynk.ng</a> · <a href="#" onclick="toast('Opening WhatsApp support…');return false;" class="hover:text-charcoal">Talk to sales on WhatsApp</a></p>
+</main>
+<aside class="hidden lg:flex relative overflow-hidden bg-ink text-white flex-col justify-between p-12" style="background:radial-gradient(700px 420px at 80% -10%, rgba(33,119,239,0.35), transparent 60%),radial-gradient(500px 500px at -10% 110%, rgba(33,119,239,0.18), transparent 55%),linear-gradient(170deg,#0B2A56 0%,#081D3D 55%,#050F22 100%)">
+  <div class="rise text-[12px] font-medium text-skyblue/90 uppercase tracking-[0.12em]">Onboard in one term</div>
+  <div class="rise" style="animation-delay:.1s">
+    <h2 class="text-[clamp(1.7rem,2.6vw,2.4rem)] font-bold tracking-[-0.02em] leading-[1.1] max-w-[16ch]">Run your whole school from one place.</h2>
+    <ul class="mt-7 space-y-3 text-[13px] text-white/75 max-w-[40ch]">
+      <li class="flex gap-2.5"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#5C9DF5" stroke-width="2.5" class="shrink-0 mt-0.5"><path d="M20 6L9 17l-5-5"/></svg>We import your student records for you</li>
+      <li class="flex gap-2.5"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#5C9DF5" stroke-width="2.5" class="shrink-0 mt-0.5"><path d="M20 6L9 17l-5-5"/></svg>Your own grading scheme, computed exactly</li>
+      <li class="flex gap-2.5"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#5C9DF5" stroke-width="2.5" class="shrink-0 mt-0.5"><path d="M20 6L9 17l-5-5"/></svg>Sealed, verifiable results from day one</li>
+      <li class="flex gap-2.5"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#5C9DF5" stroke-width="2.5" class="shrink-0 mt-0.5"><path d="M20 6L9 17l-5-5"/></svg>Islamic & hybrid schools fully supported</li>
+    </ul>
+  </div>
+  <p class="rise text-[11.5px] text-white/45" style="animation-delay:.2s">© 2026 Edsynk Technologies Ltd · Bauchi, Nigeria</p>
+</aside>
+<div id="toast" class="hidden fixed bottom-5 left-1/2 -translate-x-1/2 z-60 bg-ink text-white text-[12.5px] font-medium px-4 py-2.5 rounded-xl shadow-lift"></div>
+<script>
+function toast(m){var t=document.getElementById('toast');t.textContent=m;t.classList.remove('hidden');clearTimeout(window._tt);window._tt=setTimeout(function(){t.classList.add('hidden')},2200);}
+
+var STEPS=['School','Owner','Plan','Done'];
+var cur=1;
+function renderStepper(){
+  var html='';
+  for(var i=0;i<STEPS.length;i++){
+    var n=i+1,done=n<cur,active=n===cur;
+    var circ=done?'bg-confirm text-white':(active?'bg-blue text-white':'bg-canvas ring-1 ring-whisper text-steel');
+    html+='<span class="h-7 w-7 rounded-full grid place-items-center text-[11px] font-bold '+circ+'">'+(done?'✓':n)+'</span>';
+    html+='<span class="text-[11px] font-medium hidden sm:inline '+(active?'text-ink':'text-steel')+'">'+STEPS[i]+'</span>';
+    if(i<STEPS.length-1)html+='<span class="h-px flex-1 '+(done?'bg-confirm/40':'bg-whisper')+'"></span>';
+  }
+  document.getElementById('stepper').innerHTML=html;
+}
+function go(n){
+  cur=n;
+  document.querySelectorAll('.step').forEach(function(s){s.classList.toggle('hidden',+s.dataset.step!==n);});
+  renderStepper();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function finish(){
+  if(!selectedPlan){toast('Pick a plan to continue');return;}
+  toast('Creating your school…');
+  setTimeout(function(){go(4);},700);
+}
+
+// type pills
+var selectedType='Conventional';
+function paintTypes(){document.querySelectorAll('.type-pill').forEach(function(p){var on=p.dataset.v===selectedType;p.className='type-pill h-10 rounded-xl text-[13px] font-semibold transition '+(on?'bg-blue text-white ring-1 ring-blue':'ring-1 ring-whisper text-charcoal hover:bg-canvas');});}
+document.querySelectorAll('.type-pill').forEach(function(p){p.addEventListener('click',function(){selectedType=p.dataset.v;paintTypes();});});
+paintTypes();
+
+// plan cards
+var selectedPlan='Standard';
+function paintPlans(){document.querySelectorAll('.plan-card').forEach(function(c){var on=c.dataset.v===selectedPlan;c.className='plan-card w-full text-left rounded-2xl p-4 transition relative '+(on?'ring-2 ring-blue bg-wash/50':'ring-1 ring-whisper hover:bg-canvas');});}
+document.querySelectorAll('.plan-card').forEach(function(c){c.addEventListener('click',function(){selectedPlan=c.dataset.v;paintPlans();});});
+paintPlans();
+
+renderStepper();
+</script>
+</body>
+</html>

@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Edsynk HQ — Team & Roles</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script>
+tailwind.config = { theme: { extend: {
+  colors: { canvas:'#F7F9FC', ink:'#0B2A56', charcoal:'#18181B', steel:'#64748B', whisper:'#E2E8F0',
+    blue:'#2177EF', skyblue:'#5C9DF5', wash:'#EAF2FE', mist:'#D3E4FD',
+    confirm:'#16A34A', caution:'#D97706', alert:'#DC2626', excused:'#7C8DA6' },
+  fontFamily: { sans:['Geist','sans-serif'], mono:['"Geist Mono"','monospace'] },
+  boxShadow: { soft:'0 1px 2px rgba(11,42,86,0.04), 0 6px 24px rgba(11,42,86,0.05)',
+               lift:'0 1px 3px rgba(11,42,86,0.10), 0 12px 32px rgba(11,42,86,0.12)' }
+}}}
+</script>
+<style>
+  @keyframes rise{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+  .rise{animation:rise .5s cubic-bezier(.2,.8,.2,1) both}
+</style>
+</head>
+<body data-active="HQ Team" data-persona="platform" class="bg-canvas font-sans text-charcoal antialiased">
+<div class="flex min-h-screen">
+  <div id="sidebar-root"></div>
+  <div class="flex-1 min-w-0">
+    <header class="h-[60px] bg-white/80 backdrop-blur-md border-b border-whisper/70 flex items-center justify-between px-4 sm:px-7 sticky top-0 z-20">
+      <div class="flex items-center gap-3">
+        <h1 class="text-[15px] font-semibold tracking-tight">Team &amp; Roles</h1>
+        <span class="font-mono text-[11.5px] font-medium text-blue bg-wash rounded-full px-2.5 py-1 hidden sm:inline">Edsynk HQ · 1 active</span>
+      </div>
+      <div class="flex items-center gap-2.5"><button onclick="openInvite()" class="h-9 px-4 rounded-lg bg-blue text-white text-[13px] font-medium shadow-soft active:translate-y-px flex items-center gap-1.5">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg><span class="hidden sm:inline">Invite teammate</span></button></div>
+    </header>
+    <main class="p-4 sm:p-7 max-w-[1180px] space-y-5 pb-10">
+
+      <div class="rise rounded-2xl ring-1 ring-whisper/80 bg-wash/60 px-4 py-3 text-[11.5px] text-ink" style="animation-delay:.02s">
+        This is the <span class="font-semibold">Edsynk internal team</span> — not school staff. Roles are least-privilege: only super-admin can suspend a school, refund, or impersonate. Seats are open for the first hires once we pass ~10 schools.
+      </div>
+
+      <!-- team table -->
+      <div class="rise bg-white ring-1 ring-whisper/80 rounded-2xl shadow-soft overflow-hidden" style="animation-delay:.06s">
+        <div class="overflow-x-auto">
+          <table class="w-full text-[12.5px]">
+            <thead><tr class="text-left text-[10.5px] uppercase tracking-wider text-steel border-b border-whisper/70 bg-canvas/60">
+              <th class="px-5 py-3 font-semibold">Member</th><th class="px-3 py-3 font-semibold">Role</th>
+              <th class="px-3 py-3 font-semibold">Scope</th><th class="px-3 py-3 font-semibold">2FA</th>
+              <th class="px-3 py-3 font-semibold hidden md:table-cell">Last active</th><th class="px-5 py-3 text-right font-semibold">Action</th></tr></thead>
+            <tbody class="divide-y divide-whisper/60">
+              <tr class="hover:bg-canvas/60">
+                <td class="px-5 py-3.5"><div class="flex items-center gap-3"><span class="h-9 w-9 rounded-full bg-ink text-white grid place-items-center text-[12px] font-bold shrink-0">M</span>
+                  <div><p class="font-medium">Muhammad</p><p class="font-mono text-[10.5px] text-steel">muhammad@edsynk.ng</p></div></div></td>
+                <td class="px-3 py-3.5"><span class="text-[10.5px] font-semibold text-alert bg-alert/10 rounded-full px-2 py-0.5">Founder · super-admin</span></td>
+                <td class="px-3 py-3.5"><span class="text-[10.5px] font-semibold text-steel bg-canvas ring-1 ring-whisper rounded-full px-2 py-0.5">Full</span></td>
+                <td class="px-3 py-3.5"><span class="text-[10.5px] font-semibold text-confirm bg-confirm/10 rounded-full px-2 py-0.5">2FA ✓</span></td>
+                <td class="px-3 py-3.5 text-steel hidden md:table-cell">now</td>
+                <td class="px-5 py-3.5 text-right"><button onclick="toast('Cannot edit your own super-admin role')" class="h-8 px-3 rounded-lg ring-1 ring-whisper text-[11.5px] font-medium text-steel/60">Edit role</button></td>
+              </tr>
+              <tr class="hover:bg-canvas/60">
+                <td class="px-5 py-3.5"><div class="flex items-center gap-3"><span class="h-9 w-9 rounded-full bg-wash ring-1 ring-mist text-blue grid place-items-center text-[12px] font-bold shrink-0">A</span>
+                  <div><p class="font-medium">Aisha (Support lead)</p><p class="font-mono text-[10.5px] text-caution">invite pending · sent 18 Jun</p></div></div></td>
+                <td class="px-3 py-3.5"><span class="text-[10.5px] font-semibold text-blue bg-wash rounded-full px-2 py-0.5">Support lead</span></td>
+                <td class="px-3 py-3.5"><span class="text-[10.5px] font-semibold text-steel bg-canvas ring-1 ring-whisper rounded-full px-2 py-0.5">Support-only</span></td>
+                <td class="px-3 py-3.5"><span class="text-[10.5px] font-semibold text-caution bg-caution/10 rounded-full px-2 py-0.5">on first login</span></td>
+                <td class="px-3 py-3.5 text-steel hidden md:table-cell">—</td>
+                <td class="px-5 py-3.5 text-right"><div class="flex justify-end gap-1.5"><button onclick="toast('Invite resent to Aisha')" class="h-8 px-3 rounded-lg ring-1 ring-whisper text-[11.5px] font-medium text-steel hover:bg-mist/30">Resend</button><button onclick="toast('Invite cancelled')" class="h-8 px-3 rounded-lg ring-1 ring-alert/30 text-alert text-[11.5px] font-medium hover:bg-alert/5">Cancel</button></div></td>
+              </tr>
+              <tr class="hover:bg-canvas/60 opacity-70">
+                <td class="px-5 py-3.5"><div class="flex items-center gap-3"><span class="h-9 w-9 rounded-full bg-canvas ring-1 ring-whisper text-steel grid place-items-center text-[14px] font-bold shrink-0">+</span>
+                  <div><p class="font-medium text-steel">Onboarding specialist</p><p class="text-[10.5px] text-steel/70">seat open · hire when schools &gt; 10</p></div></div></td>
+                <td class="px-3 py-3.5"><span class="text-[10.5px] font-semibold text-steel bg-canvas ring-1 ring-whisper rounded-full px-2 py-0.5">Onboarding</span></td>
+                <td class="px-3 py-3.5"><span class="text-[10.5px] text-steel">provision + import + training</span></td>
+                <td class="px-3 py-3.5 text-steel">—</td>
+                <td class="px-3 py-3.5 text-steel hidden md:table-cell">—</td>
+                <td class="px-5 py-3.5 text-right"><button onclick="openInvite()" class="h-8 px-3 rounded-lg ring-1 ring-whisper text-[11.5px] font-medium text-steel hover:bg-mist/30">Fill seat</button></td>
+              </tr>
+              <tr class="hover:bg-canvas/60 opacity-70">
+                <td class="px-5 py-3.5"><div class="flex items-center gap-3"><span class="h-9 w-9 rounded-full bg-canvas ring-1 ring-whisper text-steel grid place-items-center text-[14px] font-bold shrink-0">+</span>
+                  <div><p class="font-medium text-steel">Finance</p><p class="text-[10.5px] text-steel/70">seat open · billing &amp; reconciliation only</p></div></div></td>
+                <td class="px-3 py-3.5"><span class="text-[10.5px] font-semibold text-steel bg-canvas ring-1 ring-whisper rounded-full px-2 py-0.5">Finance</span></td>
+                <td class="px-3 py-3.5"><span class="text-[10.5px] text-steel">Finance-only · no impersonation</span></td>
+                <td class="px-3 py-3.5 text-steel">—</td>
+                <td class="px-3 py-3.5 text-steel hidden md:table-cell">—</td>
+                <td class="px-5 py-3.5 text-right"><button onclick="openInvite()" class="h-8 px-3 rounded-lg ring-1 ring-whisper text-[11.5px] font-medium text-steel hover:bg-mist/30">Fill seat</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- roles & permissions -->
+      <div class="grid lg:grid-cols-2 gap-4 sm:gap-5">
+        <div class="rise bg-white ring-1 ring-whisper/80 rounded-2xl p-5 shadow-soft" style="animation-delay:.1s">
+          <p class="text-[13.5px] font-semibold">Roles &amp; permissions</p>
+          <p class="text-[11.5px] text-steel mt-0.5">what each HQ role can do</p>
+          <div class="mt-4 space-y-3 text-[12px]">
+            <div class="rounded-xl ring-1 ring-alert/20 bg-alert/[0.04] p-3.5">
+              <div class="flex items-center justify-between"><p class="font-semibold">Super-admin</p><button onclick="toast('Editing super-admin permission set…')" class="text-[11px] font-medium text-blue">Edit</button></div>
+              <p class="text-steel mt-1.5 leading-relaxed">Everything — billing &amp; refunds, suspend/restore tenants, impersonate (with consent), manage content, rotate keys, flip feature flags. 2FA enforced, no exceptions.</p>
+            </div>
+            <div class="rounded-xl ring-1 ring-whisper p-3.5">
+              <div class="flex items-center justify-between"><p class="font-semibold">Support lead / agent</p><button onclick="toast('Editing support permission set…')" class="text-[11px] font-medium text-blue">Edit</button></div>
+              <p class="text-steel mt-1.5 leading-relaxed">Read-only tenant info, support inbox, resend invoices. <span class="font-medium text-charcoal">No</span> billing changes, <span class="font-medium text-charcoal">no</span> suspension. Impersonation only with a ticket reference + school consent.</p>
+            </div>
+            <div class="rounded-xl ring-1 ring-whisper p-3.5">
+              <div class="flex items-center justify-between"><p class="font-semibold">Onboarding</p><button onclick="toast('Editing onboarding permission set…')" class="text-[11px] font-medium text-blue">Edit</button></div>
+              <p class="text-steel mt-1.5 leading-relaxed">Provision new schools, run data imports, deliver training. No billing, no danger-zone actions on live tenants.</p>
+            </div>
+            <div class="rounded-xl ring-1 ring-whisper p-3.5">
+              <div class="flex items-center justify-between"><p class="font-semibold">Finance</p><button onclick="toast('Editing finance permission set…')" class="text-[11px] font-medium text-blue">Edit</button></div>
+              <p class="text-steel mt-1.5 leading-relaxed">Invoices, payments, reconciliation, plan changes. Read-only everywhere else. Cannot impersonate.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="rise space-y-4" style="animation-delay:.14s">
+          <div class="rounded-2xl ring-1 ring-blue/25 bg-wash/50 p-5">
+            <div class="flex items-start gap-3">
+              <svg class="text-blue shrink-0 mt-0.5" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H7a4 4 0 00-4 4v2"/><circle cx="10" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/></svg>
+              <div class="text-[11.5px] text-ink">
+                <p class="font-semibold">Impersonation always needs consent + a reason.</p>
+                <p class="text-steel mt-1 leading-relaxed">Logging in as a school's user requires an open ticket reference and the school's consent, auto-ends after 30 minutes, and is written to the audit log. This is the same flow exposed on each school's record.</p>
+                <a href="hq-school-detail.html" class="inline-block mt-2 text-[11.5px] font-medium text-blue hover:underline">See impersonation on a school →</a>
+              </div>
+            </div>
+          </div>
+          <div class="rounded-2xl ring-1 ring-whisper/80 bg-white p-5 shadow-soft">
+            <p class="text-[13.5px] font-semibold">Security &amp; access</p>
+            <div class="mt-3 rounded-xl ring-1 ring-whisper/80 divide-y divide-whisper/60 text-[12px]">
+              <div class="flex justify-between gap-4 px-4 py-2.5"><span class="text-steel">2FA</span><span class="font-medium text-right">enforced for all roles · including founder</span></div>
+              <div class="flex justify-between gap-4 px-4 py-2.5"><span class="text-steel">Session</span><span class="font-medium text-right">12h · re-auth for billing &amp; danger actions</span></div>
+              <div class="flex justify-between gap-4 px-4 py-2.5"><span class="text-steel">Access reviews</span><span class="font-medium text-right">quarterly · logged in audit</span></div>
+            </div>
+            <div class="mt-3 flex flex-wrap items-center justify-between gap-2 rounded-xl ring-1 ring-alert/20 bg-alert/[0.04] px-4 py-3">
+              <span class="text-[11.5px] text-steel">Revoke a teammate's access immediately</span>
+              <button onclick="toast('Select a member to revoke — confirm required')" class="h-8 px-3.5 rounded-lg ring-1 ring-alert/30 text-alert text-[12px] font-medium hover:bg-alert/5">Revoke access…</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+</div>
+<script src="../assets/shell.js"></script>
+
+<!-- invite modal -->
+<div id="inviteM" class="fixed inset-0 z-50 bg-ink/40 backdrop-blur-sm grid place-items-center p-4" style="opacity:0;pointer-events:none;transition:opacity .2s" onclick="if(event.target===this){closeInvite();}">
+  <div class="bg-white rounded-2xl shadow-lift max-w-[440px] w-full p-6">
+    <div class="flex items-center justify-between mb-3"><p class="text-[15px] font-semibold">Invite a teammate</p><button onclick="closeInvite()" class="h-8 w-8 grid place-items-center rounded-lg hover:bg-mist/40 text-steel">✕</button></div>
+    <p class="text-[12px] text-steel">Edsynk team only. They get an HQ login scoped to their role.</p>
+    <div class="mt-3 space-y-3 text-[12.5px]">
+      <div><label class="text-[11.5px] font-semibold text-steel">Name</label><input placeholder="Full name" class="mt-1.5 w-full h-10 rounded-lg border border-whisper bg-canvas px-3.5"></div>
+      <div><label class="text-[11.5px] font-semibold text-steel">Email</label><input placeholder="name@edsynk.ng" class="mt-1.5 w-full h-10 rounded-lg border border-whisper bg-canvas px-3.5"></div>
+      <div><label class="text-[11.5px] font-semibold text-steel">Role</label>
+        <div class="mt-2 space-y-2">
+          <label class="flex items-start gap-2.5 rounded-xl ring-2 ring-blue bg-wash/40 px-4 py-2.5 cursor-pointer"><input type="radio" name="hqrole" checked class="accent-[#2177EF] mt-0.5"><div><p class="font-medium">Support lead</p><p class="text-[10.5px] text-steel">tickets + read-only tenant info · no billing, no impersonation</p></div></label>
+          <label class="flex items-start gap-2.5 rounded-xl ring-1 ring-whisper px-4 py-2.5 cursor-pointer"><input type="radio" name="hqrole" class="accent-[#2177EF] mt-0.5"><div><p class="font-medium">Onboarding specialist</p><p class="text-[10.5px] text-steel">provision schools, run imports &amp; training</p></div></label>
+          <label class="flex items-start gap-2.5 rounded-xl ring-1 ring-whisper px-4 py-2.5 cursor-pointer"><input type="radio" name="hqrole" class="accent-[#2177EF] mt-0.5"><div><p class="font-medium">Finance</p><p class="text-[10.5px] text-steel">invoices, payments, reconciliation · no impersonation</p></div></label>
+        </div></div>
+    </div>
+    <div class="flex justify-end gap-2 mt-5"><button onclick="closeInvite()" class="h-10 px-4 rounded-lg ring-1 ring-whisper text-[13px] font-medium text-steel">Cancel</button><button onclick="closeInvite();toast('Invite sent')" class="h-10 px-5 rounded-lg bg-blue text-white text-[13px] font-semibold shadow-soft">Send invite</button></div>
+  </div>
+</div>
+
+<div id="toast" class="hidden fixed bottom-5 left-1/2 -translate-x-1/2 z-[60] bg-ink text-white text-[12.5px] font-medium px-4 py-2.5 rounded-xl shadow-lift"></div>
+<script>
+function toast(m){var t=document.getElementById('toast');t.textContent=m;t.classList.remove('hidden');clearTimeout(window._tt);window._tt=setTimeout(function(){t.classList.add('hidden')},2200);}
+function openInvite(){var m=document.getElementById('inviteM');m.style.opacity='1';m.style.pointerEvents='auto';}
+function closeInvite(){var m=document.getElementById('inviteM');m.style.opacity='0';m.style.pointerEvents='none';}
+</script>
+</body>
+</html>

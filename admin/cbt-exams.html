@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Edsynk — CBT Exams</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&family=Noto+Naskh+Arabic:wght@500&display=swap" rel="stylesheet">
+<script>tailwind.config={theme:{extend:{colors:{canvas:'#F7F9FC',ink:'#0B2A56',charcoal:'#18181B',steel:'#64748B',whisper:'#E2E8F0',blue:'#2177EF',skyblue:'#5C9DF5',wash:'#EAF2FE',mist:'#D3E4FD',confirm:'#16A34A',caution:'#D97706',alert:'#DC2626',excused:'#7C8DA6'},fontFamily:{sans:['Geist','sans-serif'],mono:['"Geist Mono"','monospace'],arabic:['"Noto Naskh Arabic"','serif']},boxShadow:{soft:'0 1px 2px rgba(11,42,86,0.04), 0 6px 24px rgba(11,42,86,0.05)',lift:'0 1px 3px rgba(11,42,86,0.10), 0 12px 32px rgba(11,42,86,0.12)'}}}}</script>
+<style>@keyframes rise{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}.rise{animation:rise .45s cubic-bezier(.2,.8,.2,1) both}.tabp{display:none}.tabp.on{display:block}
+@media print{
+  body{background:#fff}
+  #sidebar-root,header,#tabs,.no-print,#toast,#essayModal{display:none !important}
+  main{padding:0 !important;max-width:none !important}
+  .tabp{display:none !important}
+  .tabp[data-p="4"]{display:block !important}
+  #printArea{box-shadow:none !important;border:none !important;border-radius:0 !important;max-width:none !important;margin:0 !important;padding:0 !important}
+  #printArea *{color:#000 !important}
+}</style>
+</head>
+<body data-active="CBT Exams" data-persona="admin" class="bg-canvas font-sans text-charcoal antialiased">
+<div class="flex min-h-screen">
+  <div id="sidebar-root"></div>
+  <div class="flex-1 min-w-0">
+    <header class="h-[60px] bg-white/80 backdrop-blur-md border-b border-whisper/70 flex items-center justify-between px-4 sm:px-7 sticky top-0 z-20">
+      <div class="flex items-center gap-3"><h1 class="text-[15px] font-semibold tracking-tight">CBT Exams</h1>
+        <span class="text-[10px] font-semibold uppercase tracking-wide text-blue bg-wash rounded-full px-2.5 py-1">Sept feature</span></div>
+      <button onclick="tab(2)" class="h-9 px-4 rounded-lg bg-blue text-white text-[13px] font-medium shadow-soft active:translate-y-px">+ Create exam</button>
+    </header>
+    <main class="p-4 sm:p-7 max-w-[1240px] space-y-5 pb-12">
+
+      <div class="rise flex gap-1 border-b border-whisper/70 overflow-x-auto" id="tabs">
+        <button data-t="0" class="tb shrink-0 px-4 py-2.5 text-[12.5px] font-medium border-b-2 -mb-px text-ink border-blue">Exams</button>
+        <button data-t="1" class="tb shrink-0 px-4 py-2.5 text-[12.5px] font-medium border-b-2 -mb-px text-steel border-transparent hover:text-charcoal">Question bank</button>
+        <button data-t="2" class="tb shrink-0 px-4 py-2.5 text-[12.5px] font-medium border-b-2 -mb-px text-steel border-transparent hover:text-charcoal">Create exam</button>
+        <button data-t="3" class="tb shrink-0 px-4 py-2.5 text-[12.5px] font-medium border-b-2 -mb-px text-steel border-transparent hover:text-charcoal">Proctoring</button>
+        <button data-t="4" class="tb shrink-0 px-4 py-2.5 text-[12.5px] font-medium border-b-2 -mb-px text-steel border-transparent hover:text-charcoal">Print paper</button>
+        <button data-t="5" class="tb shrink-0 px-4 py-2.5 text-[12.5px] font-medium border-b-2 -mb-px text-steel border-transparent hover:text-charcoal">Hybrid marking</button>
+      </div>
+
+      <!-- TAB 0: exams list -->
+      <section class="tabp on" data-p="0">
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+          <div class="bg-white ring-1 ring-whisper/80 rounded-2xl p-4 shadow-soft"><p class="text-[10.5px] font-semibold uppercase tracking-wider text-steel">Scheduled</p><p class="font-mono text-[20px] font-semibold mt-1.5">6</p></div>
+          <div class="bg-white ring-1 ring-whisper/80 rounded-2xl p-4 shadow-soft"><p class="text-[10.5px] font-semibold uppercase tracking-wider text-steel">Live now</p><p class="font-mono text-[20px] font-semibold mt-1.5 text-confirm">1</p></div>
+          <div class="bg-white ring-1 ring-whisper/80 rounded-2xl p-4 shadow-soft"><p class="text-[10.5px] font-semibold uppercase tracking-wider text-steel">Drafts</p><p class="font-mono text-[20px] font-semibold mt-1.5 text-caution">2</p></div>
+          <div class="bg-white ring-1 ring-whisper/80 rounded-2xl p-4 shadow-soft"><p class="text-[10.5px] font-semibold uppercase tracking-wider text-steel">Questions in bank</p><p class="font-mono text-[20px] font-semibold mt-1.5">428</p></div>
+        </div>
+        <div class="bg-white ring-1 ring-whisper/80 rounded-2xl shadow-soft overflow-hidden mt-4">
+          <div class="overflow-x-auto"><table class="w-full text-[12.5px]"><thead><tr class="text-left text-[10.5px] uppercase tracking-wider text-steel border-b border-whisper/70 bg-canvas/60"><th class="px-5 py-3 font-semibold">Exam</th><th class="px-3 py-3 font-semibold">Class</th><th class="px-3 py-3 font-semibold">When</th><th class="px-3 py-3 font-semibold">Qs</th><th class="px-3 py-3 font-semibold">Status</th><th class="px-5 py-3"></th></tr></thead><tbody id="exBody" class="divide-y divide-whisper/60"></tbody></table></div>
+        </div>
+      </section>
+
+      <!-- TAB 1: question bank -->
+      <section class="tabp" data-p="1">
+        <div class="rise flex flex-wrap items-center gap-2 mb-3">
+          <select class="h-10 rounded-xl border border-whisper bg-white px-3 text-[12.5px] font-medium"><option>All subjects</option><option>Mathematics</option><option>Basic Science</option></select>
+          <select class="h-10 rounded-xl border border-whisper bg-white px-3 text-[12.5px] font-medium"><option>All topics</option><option>Algebra</option></select>
+          <div class="flex items-center gap-2 h-10 flex-1 min-w-[180px] bg-white ring-1 ring-whisper rounded-xl px-3.5 text-[13px] text-steel"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>Search questions…</div>
+          <button onclick="tab(2)" class="h-10 px-4 rounded-xl bg-blue text-white text-[12.5px] font-medium shadow-soft">+ Add question</button>
+        </div>
+        <div class="bg-white ring-1 ring-whisper/80 rounded-2xl shadow-soft divide-y divide-whisper/60" id="bank"></div>
+      </section>
+
+      <!-- TAB 2: create exam + manual question builder -->
+      <section class="tabp" data-p="2">
+        <div class="grid lg:grid-cols-[340px_1fr] gap-4">
+          <!-- settings -->
+          <div class="rise bg-white ring-1 ring-whisper/80 rounded-2xl p-5 shadow-soft h-fit">
+            <p class="text-[13.5px] font-semibold">Exam settings</p>
+            <div class="mt-3 space-y-3 text-[12.5px]">
+              <div><label class="text-[11px] font-semibold text-steel">Title</label><input value="Mathematics — Third Term CBT" class="mt-1.5 w-full h-10 rounded-lg border border-whisper bg-canvas px-3"></div>
+              <div class="grid grid-cols-2 gap-2">
+                <div><label class="text-[11px] font-semibold text-steel">Subject</label><select class="mt-1.5 w-full h-10 rounded-lg border border-whisper bg-canvas px-2.5"><option>Mathematics</option></select></div>
+                <div><label class="text-[11px] font-semibold text-steel">Class</label><select class="mt-1.5 w-full h-10 rounded-lg border border-whisper bg-canvas px-2.5"><option>JSS 2A</option><option>JSS 2 (all)</option></select></div>
+              </div>
+              <div class="grid grid-cols-2 gap-2">
+                <div><label class="text-[11px] font-semibold text-steel">Date</label><input type="date" value="2026-06-23" class="mt-1.5 w-full h-10 rounded-lg border border-whisper bg-canvas px-2.5 font-mono text-[12px]"></div>
+                <div><label class="text-[11px] font-semibold text-steel">Start time</label><input type="time" value="09:00" class="mt-1.5 w-full h-10 rounded-lg border border-whisper bg-canvas px-2.5 font-mono text-[12px]"></div>
+              </div>
+              <div class="grid grid-cols-2 gap-2">
+                <div><label class="text-[11px] font-semibold text-steel">Duration (min)</label><input value="45" class="mt-1.5 w-full h-10 rounded-lg border border-whisper bg-canvas px-3 font-mono"></div>
+                <div><label class="text-[11px] font-semibold text-steel">Attempts</label><input value="1" class="mt-1.5 w-full h-10 rounded-lg border border-whisper bg-canvas px-3 font-mono"></div>
+              </div>
+              <label class="flex items-center gap-2.5"><input type="checkbox" checked class="h-4 w-4 rounded accent-[#2177EF]">Shuffle questions per student</label>
+              <label class="flex items-center gap-2.5"><input type="checkbox" checked class="h-4 w-4 rounded accent-[#2177EF]">Shuffle options</label>
+              <label class="flex items-center gap-2.5"><input type="checkbox" class="h-4 w-4 rounded accent-[#2177EF]">Show score immediately</label>
+            </div>
+            <div class="mt-4 pt-3 border-t border-whisper/70 flex items-center justify-between text-[12.5px]"><span class="text-steel">Questions added</span><span class="font-mono font-semibold" id="qCount">0</span></div>
+            <button onclick="toast('Exam saved & scheduled')" class="mt-3 w-full h-11 rounded-xl bg-blue text-white text-[13.5px] font-semibold shadow-soft active:translate-y-px">Save &amp; schedule exam</button>
+          </div>
+
+          <!-- question builder -->
+          <div class="space-y-4">
+            <div class="rise bg-white ring-1 ring-whisper/80 rounded-2xl p-5 shadow-soft">
+              <div class="flex items-center justify-between"><p class="text-[13.5px] font-semibold">Add a question</p>
+                <div class="flex gap-1.5 text-[11.5px] font-medium">
+                  <button onclick="setType('mcq')" id="tmcq" class="h-8 px-3 rounded-lg bg-blue text-white">Multiple choice</button>
+                  <button onclick="setType('tf')" id="ttf" class="h-8 px-3 rounded-lg bg-white ring-1 ring-whisper text-steel">True / False</button>
+                  <button onclick="setType('essay')" id="tessay" class="h-8 px-3 rounded-lg bg-white ring-1 ring-whisper text-steel">Essay</button>
+                </div>
+              </div>
+              <div class="mt-3"><label class="text-[11px] font-semibold text-steel">Question</label><textarea id="qText" rows="2" class="mt-1.5 w-full rounded-lg border border-whisper bg-canvas px-3 py-2.5 text-[13px] focus:outline-none focus:ring-2 focus:ring-blue/50 resize-none" placeholder="Type the question…">Simplify: 3x + 5x − 2x</textarea></div>
+              <div id="optsWrap" class="mt-3 space-y-2"></div>
+              <div class="flex items-center gap-3 mt-3">
+                <div class="flex items-center gap-2 text-[12px]"><span class="text-steel">Marks</span><input id="qMarks" value="1" class="h-9 w-16 rounded-lg border border-whisper bg-canvas px-3 font-mono text-center"></div>
+                <div class="flex items-center gap-2 text-[12px]"><span class="text-steel">Topic</span><input value="Algebra" class="h-9 w-32 rounded-lg border border-whisper bg-canvas px-3"></div>
+                <button onclick="addQ()" class="ml-auto h-10 px-5 rounded-xl bg-confirm text-white text-[13px] font-semibold shadow-soft active:translate-y-px">Add question</button>
+              </div>
+              <p class="text-[10.5px] text-steel mt-2">Tip: tick the radio next to the correct option. Or <button onclick="tab(2)" class="text-blue font-medium">generate a batch with EdAssess</button>.</p>
+            </div>
+
+            <!-- added questions -->
+            <div class="rise bg-white ring-1 ring-whisper/80 rounded-2xl shadow-soft overflow-hidden">
+              <p class="text-[13.5px] font-semibold px-5 pt-4 pb-2">Questions on this exam</p>
+              <div id="added" class="divide-y divide-whisper/60"></div>
+              <div id="emptyQ" class="px-5 py-8 text-center text-[12.5px] text-steel">No questions yet — add your first above, or pull from the bank.</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 3: proctoring settings -->
+      <section class="tabp" data-p="3">
+        <div class="rise flex flex-wrap items-center gap-2 mb-4">
+          <label class="text-[11px] font-semibold text-steel">Settings for</label>
+          <select class="h-10 rounded-xl border border-whisper bg-white px-3 text-[12.5px] font-medium"><option>Mathematics — Third Term · JSS 2A</option><option>Civic Education · JSS 2 (all)</option><option>Basic Science · JSS 2A</option></select>
+        </div>
+        <div class="grid lg:grid-cols-[1fr_320px] gap-4">
+          <div class="rise bg-white ring-1 ring-whisper/80 rounded-2xl p-5 sm:p-6 shadow-soft">
+            <p class="text-[13.5px] font-semibold">AI proctoring</p>
+            <p class="text-[12px] text-steel mt-0.5">Controls what the student's device monitors during this CBT. Strikes accumulate; reaching the limit auto-submits.</p>
+            <div class="mt-5 divide-y divide-whisper/60">
+              <label class="flex items-center justify-between gap-4 py-3.5 cursor-pointer"><span><span class="text-[13px] font-medium block">Require camera</span><span class="text-[11.5px] text-steel">Student must allow webcam before starting.</span></span><input type="checkbox" checked class="h-5 w-5 rounded accent-[#2177EF]"></label>
+              <label class="flex items-center justify-between gap-4 py-3.5 cursor-pointer"><span><span class="text-[13px] font-medium block">Require microphone</span><span class="text-[11.5px] text-steel">Listen for talking / high background noise.</span></span><input type="checkbox" checked class="h-5 w-5 rounded accent-[#2177EF]"></label>
+              <label class="flex items-center justify-between gap-4 py-3.5 cursor-pointer"><span><span class="text-[13px] font-medium block">Flag multiple faces</span><span class="text-[11.5px] text-steel">More than 2 faces in frame → counts as a strike (auto-submit at limit).</span></span><input type="checkbox" checked class="h-5 w-5 rounded accent-[#2177EF]"></label>
+              <label class="flex items-center justify-between gap-4 py-3.5 cursor-pointer"><span><span class="text-[13px] font-medium block">Flag high noise</span><span class="text-[11.5px] text-steel">Sustained loud audio counts as a strike.</span></span><input type="checkbox" checked class="h-5 w-5 rounded accent-[#2177EF]"></label>
+              <label class="flex items-center justify-between gap-4 py-3.5 cursor-pointer"><span><span class="text-[13px] font-medium block">Tab-switch detection</span><span class="text-[11.5px] text-steel">Flag when the student leaves the exam window.</span></span><input type="checkbox" checked class="h-5 w-5 rounded accent-[#2177EF]"></label>
+            </div>
+            <div class="mt-4 pt-4 border-t border-whisper/70 flex items-center justify-between gap-4">
+              <span><span class="text-[13px] font-medium block">Max strikes before auto-submit</span><span class="text-[11.5px] text-steel">After this many flags, the exam submits automatically.</span></span>
+              <select class="h-10 w-20 rounded-lg border border-whisper bg-canvas px-3 font-mono text-[13px]"><option>2</option><option selected>3</option><option>4</option><option>5</option></select>
+            </div>
+            <button onclick="toast('Proctoring settings saved')" class="mt-5 h-11 px-5 rounded-xl bg-blue text-white text-[13.5px] font-semibold shadow-soft active:translate-y-px">Save proctoring settings</button>
+          </div>
+          <div class="rise bg-wash/60 ring-1 ring-mist rounded-2xl p-5 h-fit">
+            <p class="text-[12px] font-semibold text-ink">How students experience this</p>
+            <ul class="mt-3 space-y-2.5 text-[12px] text-charcoal/80">
+              <li class="flex gap-2"><span class="text-blue">•</span>A camera/mic check runs before the exam starts.</li>
+              <li class="flex gap-2"><span class="text-blue">•</span>A live camera tile and "Proctoring on" indicator stay visible.</li>
+              <li class="flex gap-2"><span class="text-blue">•</span>Each flag shows a warning and adds a strike.</li>
+              <li class="flex gap-2"><span class="text-blue">•</span>At the strike limit the paper auto-submits and is logged for the invigilator.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 4: printable exam (OBJ + Essay) -->
+      <section class="tabp" data-p="4">
+        <div class="rise flex flex-wrap items-center justify-between gap-3 mb-4 no-print">
+          <div>
+            <p class="text-[14px] font-semibold">Printable exam paper</p>
+            <p class="text-[12px] text-steel mt-0.5">A print-ready paper with <span class="font-medium">both</span> the objective (CBT) questions and the theory/essay questions with answer spaces — for offline or backup sittings.</p>
+          </div>
+          <button onclick="window.print()" class="h-10 px-4 rounded-xl bg-blue text-white text-[13px] font-medium shadow-soft active:translate-y-px flex items-center gap-2"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="8" rx="1"/></svg>Print exam paper</button>
+        </div>
+        <!-- printable preview -->
+        <div id="printArea" class="rise bg-white ring-1 ring-whisper/80 rounded-2xl shadow-soft p-6 sm:p-10 max-w-[820px] mx-auto">
+          <div class="text-center border-b border-charcoal/15 pb-4">
+            <p class="text-[15px] font-bold tracking-tight">Al-Furqan Academy, Bauchi</p>
+            <p class="text-[12.5px] text-steel mt-0.5">Third Term Examination · 2025/2026</p>
+            <p class="text-[13px] font-semibold mt-2">Mathematics — JSS 2A</p>
+            <div class="flex flex-wrap justify-center gap-x-6 gap-y-1 mt-2 text-[11.5px] text-steel"><span>Time: 45 minutes</span><span>Total: 50 marks</span></div>
+            <div class="flex flex-wrap justify-center gap-6 mt-3 text-[12px]"><span>Name: <span class="inline-block border-b border-charcoal/40 w-48">&nbsp;</span></span><span>Class: <span class="inline-block border-b border-charcoal/40 w-20">&nbsp;</span></span></div>
+          </div>
+          <!-- Section A: objectives -->
+          <div class="mt-5">
+            <p class="text-[13px] font-bold">Section A — Objectives <span class="font-normal text-steel">(answer all · shade the correct option · 1 mark each)</span></p>
+            <ol id="printObj" class="mt-3 space-y-3 text-[13px] list-decimal pl-5"></ol>
+          </div>
+          <!-- Section B: theory / essay -->
+          <div class="mt-7">
+            <p class="text-[13px] font-bold">Section B — Theory / Essay <span class="font-normal text-steel">(answer all · show your working in the space provided)</span></p>
+            <ol id="printEssay" class="mt-3 space-y-5 text-[13px] list-decimal pl-5"></ol>
+          </div>
+          <p class="text-center text-[11px] text-steel mt-8 pt-4 border-t border-charcoal/15">— End of paper —</p>
+        </div>
+      </section>
+
+      <!-- TAB 5: hybrid marking / paper-essay merge -->
+      <section class="tabp" data-p="5">
+        <div class="rise bg-ink text-white rounded-2xl p-5 sm:p-6 shadow-lift relative overflow-hidden mb-4">
+          <div class="absolute -right-8 -top-12 h-36 w-36 rounded-full bg-blue/30 blur-2xl"></div>
+          <div class="relative">
+            <p class="text-[10.5px] font-semibold uppercase tracking-[0.08em] text-skyblue">Hybrid marking · Mathematics — JSS 2A</p>
+            <h2 class="text-[17px] font-bold mt-1">Merge CBT objectives with paper-marked essays</h2>
+            <p class="text-[12.5px] text-white/80 mt-2 max-w-[70ch] leading-relaxed">Students answer the <span class="font-semibold text-white">objectives on CBT</span> (auto-scored instantly) and write the <span class="font-semibold text-white">essays on paper</span>. You mark the paper scripts, enter each essay score below, and the system merges them into the final total.</p>
+            <div class="flex flex-wrap gap-2 mt-3 text-[11px]">
+              <span class="bg-white/10 rounded-full px-3 py-1">1 · Objectives auto-scored (CBT)</span>
+              <span class="bg-white/10 rounded-full px-3 py-1">2 · Mark paper essays</span>
+              <span class="bg-white/10 rounded-full px-3 py-1">3 · Enter essay scores</span>
+              <span class="bg-white/10 rounded-full px-3 py-1">4 · System merges → final total</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="rise grid grid-cols-2 sm:grid-cols-4 gap-3 mb-4">
+          <div class="bg-white ring-1 ring-whisper/80 rounded-2xl p-4 shadow-soft"><p class="text-[10.5px] font-semibold uppercase tracking-wider text-steel">Students</p><p class="font-mono text-[20px] font-semibold mt-1.5">32</p></div>
+          <div class="bg-white ring-1 ring-whisper/80 rounded-2xl p-4 shadow-soft"><p class="text-[10.5px] font-semibold uppercase tracking-wider text-steel">OBJ auto-marked</p><p class="font-mono text-[20px] font-semibold mt-1.5 text-confirm">32</p></div>
+          <div class="bg-white ring-1 ring-whisper/80 rounded-2xl p-4 shadow-soft"><p class="text-[10.5px] font-semibold uppercase tracking-wider text-steel">Essays entered</p><p class="font-mono text-[20px] font-semibold mt-1.5 text-caution" id="essDone">2</p></div>
+          <div class="bg-white ring-1 ring-whisper/80 rounded-2xl p-4 shadow-soft"><p class="text-[10.5px] font-semibold uppercase tracking-wider text-steel">Fully reconciled</p><p class="font-mono text-[20px] font-semibold mt-1.5" id="recDone">2</p></div>
+        </div>
+
+        <div class="rise bg-white ring-1 ring-whisper/80 rounded-2xl shadow-soft overflow-hidden">
+          <div class="flex items-center justify-between px-5 py-3.5 border-b border-whisper/70">
+            <p class="text-[13.5px] font-semibold">Reconciliation — OBJ (CBT, /30) + Essay (paper, /20) = Total (/50)</p>
+            <button onclick="toast('Final totals published to results center')" class="h-9 px-4 rounded-lg bg-confirm text-white text-[12.5px] font-medium shadow-soft active:translate-y-px">Publish merged totals</button>
+          </div>
+          <div class="overflow-x-auto"><table class="w-full text-[12.5px]"><thead><tr class="text-left text-[10.5px] uppercase tracking-wider text-steel border-b border-whisper/70 bg-canvas/60"><th class="px-5 py-3 font-semibold">Student</th><th class="px-3 py-3 font-semibold">OBJ (auto)</th><th class="px-3 py-3 font-semibold">Essay (paper)</th><th class="px-3 py-3 font-semibold">Total</th><th class="px-3 py-3 font-semibold">Status</th><th class="px-5 py-3 text-right"></th></tr></thead><tbody id="recBody" class="divide-y divide-whisper/60"></tbody></table></div>
+        </div>
+        <p class="rise text-[11.5px] text-steel mt-3 max-w-[80ch]">Flow: students do objectives on CBT (auto-scored) and write essays on paper → you mark the paper scripts → enter each essay score here → the system adds OBJ + Essay into the final total and updates the status. Totals stay "Pending essay" until the paper score is entered.</p>
+      </section>
+    </main>
+  </div>
+</div>
+
+<!-- ── Enter paper-essay score modal ── -->
+<div id="essayModal" class="hidden fixed inset-0 z-[65] bg-ink/40 backdrop-blur-sm grid place-items-center p-4 no-print">
+  <div class="bg-white rounded-2xl shadow-lift w-full max-w-[380px] p-5">
+    <div class="flex items-center justify-between"><p class="text-[14px] font-semibold">Enter paper-essay score</p><button onclick="closeEssay()" class="text-steel hover:text-charcoal text-[18px] leading-none">×</button></div>
+    <p class="text-[12px] text-steel mt-1">From the marked paper script for <span id="emName" class="font-medium text-charcoal"></span>.</p>
+    <div class="mt-4 rounded-xl bg-canvas ring-1 ring-whisper p-3 text-[12.5px] flex items-center justify-between"><span class="text-steel">OBJ (auto from CBT)</span><span class="font-mono font-semibold" id="emObj">—</span></div>
+    <label class="block mt-3 text-[11px] font-semibold text-steel">Essay score (out of 20)</label>
+    <input id="emInput" type="number" min="0" max="20" class="mt-1.5 w-full h-11 rounded-lg border border-whisper bg-canvas px-3 font-mono text-[14px]" placeholder="0">
+    <div class="mt-4 rounded-xl bg-wash ring-1 ring-mist p-3 text-[12.5px] flex items-center justify-between"><span class="text-ink font-medium">Merged total (/50)</span><span class="font-mono font-semibold text-ink" id="emTotal">—</span></div>
+    <div class="flex gap-2 mt-5"><button onclick="closeEssay()" class="flex-1 h-10 rounded-lg border border-whisper text-[13px] font-medium hover:bg-mist/30">Cancel</button><button onclick="saveEssay()" class="flex-1 h-10 rounded-lg bg-blue text-white text-[13px] font-semibold shadow-soft active:translate-y-px">Save essay score</button></div>
+  </div>
+</div>
+
+<script src="../assets/shell.js"></script>
+<script>
+// exams list
+const EX=[
+ ['Mathematics — Third Term','JSS 2A','Mon 23 Jun · 9:00','40','scheduled'],
+ ['Civic Education','JSS 2 (all)','Mon 23 Jun · 12:00','40','live'],
+ ['Basic Science','JSS 2A','Tue 24 Jun · 12:00','35','scheduled'],
+ ['English mock','JSS 3A','done · 14 Jun','50','done'],
+ ['Computer Studies','JSS 1','draft','—','draft'],
+];
+const ST={scheduled:['Scheduled','text-blue bg-wash'],live:['● Live','text-confirm bg-confirm/10'],done:['Done','text-steel bg-canvas ring-1 ring-whisper'],draft:['Draft','text-caution bg-caution/10']};
+document.getElementById('exBody').innerHTML=EX.map(e=>`<tr class="hover:bg-canvas/60 cursor-pointer"><td class="px-5 py-3 font-medium">${e[0]}</td><td class="px-3 py-3 text-steel">${e[1]}</td><td class="px-3 py-3 font-mono text-[11px] text-steel">${e[2]}</td><td class="px-3 py-3 font-mono">${e[3]}</td><td class="px-3 py-3"><span class="text-[10.5px] font-semibold ${ST[e[4]][1]} rounded-full px-2 py-0.5">${ST[e[4]][0]}</span></td><td class="px-5 py-3 text-right"><button onclick="event.stopPropagation();${e[4]==='draft'?"tab(2)":"toast('Opening "+e[0]+"…')"}" class="text-blue text-[11.5px] font-medium">${e[4]==='draft'?'Edit':e[4]==='live'?'Monitor':'View'}</button></td></tr>`).join('');
+// bank
+const BANK=[['mcq','Simplify: 3x + 5x − 2x','Maths · Algebra','1'],['mcq','The cell organelle for respiration is…','B.Sci · Cell','1'],['tf','Like terms can be added together.','Maths · Algebra','1'],['mcq','Expand: 2(x + 4)','Maths · Algebra','1'],['essay','Explain photosynthesis in your own words.','B.Sci · Plants','5']];
+const TYC={mcq:['OBJ','text-blue bg-wash'],tf:['T/F','text-confirm bg-confirm/10'],essay:['ESSAY','text-caution bg-caution/10']};
+document.getElementById('bank').innerHTML=BANK.map(q=>`<div class="px-5 py-3.5 flex items-center justify-between gap-3"><div class="flex items-start gap-3"><span class="text-[9.5px] font-semibold ${TYC[q[0]][1]} rounded-full px-2 py-0.5 mt-0.5">${TYC[q[0]][0]}</span><div><p class="text-[13px] font-medium">${q[1]}</p><p class="text-[10.5px] text-steel mt-0.5">${q[2]} · ${q[3]} mark</p></div></div><button onclick="toast('Added to exam')" class="h-8 px-3 rounded-lg ring-1 ring-whisper text-[11.5px] font-medium text-steel hover:bg-mist/30">+ Add to exam</button></div>`).join('');
+// builder
+let qType='mcq', added=[];
+function renderOpts(){
+  const w=document.getElementById('optsWrap');
+  if(qType==='essay'){w.innerHTML='<div class="rounded-lg bg-canvas ring-1 ring-whisper px-3 py-2.5 text-[11.5px] text-steel">Essay — marked manually. Add a marking guide:</div><textarea rows="2" class="mt-2 w-full rounded-lg border border-whisper bg-canvas px-3 py-2 text-[12px] resize-none" placeholder="Marking scheme / model answer…"></textarea>';return;}
+  const opts=qType==='tf'?['True','False']:['6x','10x','8x','4x'];
+  w.innerHTML='<label class="text-[11px] font-semibold text-steel">Options <span class="font-normal text-steel/70">(tick the correct one)</span></label>'+opts.map((o,i)=>`<div class="flex items-center gap-2.5"><input type="radio" name="correct" ${i===0?'checked':''} class="accent-[#16A34A]"><input value="${o}" class="flex-1 h-10 rounded-lg border border-whisper bg-canvas px-3 text-[13px]">${qType==='mcq'?'<button class="text-steel/40 hover:text-alert text-[12px]">✕</button>':''}</div>`).join('')+(qType==='mcq'?'<button class="text-[11.5px] text-blue font-medium">+ Add option</button>':'');
+}
+function setType(t){qType=t;['mcq','tf','essay'].forEach(x=>document.getElementById('t'+x).className='h-8 px-3 rounded-lg '+(x===t?'bg-blue text-white':'bg-white ring-1 ring-whisper text-steel'));renderOpts();}
+function addQ(){
+  const txt=document.getElementById('qText').value||'(untitled question)';
+  added.push({t:qType,txt});
+  document.getElementById('emptyQ').style.display='none';
+  document.getElementById('qCount').textContent=added.length;
+  document.getElementById('added').innerHTML=added.map((q,i)=>`<div class="px-5 py-3.5 flex items-center justify-between gap-3"><div class="flex items-start gap-3"><span class="h-6 w-6 rounded-lg bg-canvas ring-1 ring-whisper grid place-items-center font-mono text-[11px] font-semibold shrink-0">${i+1}</span><div><span class="text-[9.5px] font-semibold ${TYC[q.t][1]} rounded-full px-2 py-0.5">${TYC[q.t][0]}</span><p class="text-[13px] font-medium mt-1">${q.txt}</p></div></div><button onclick="rmQ(${i})" class="text-steel/40 hover:text-alert text-[12px]">remove</button></div>`).join('');
+}
+function rmQ(i){added.splice(i,1);document.getElementById('qCount').textContent=added.length;if(!added.length)document.getElementById('emptyQ').style.display='block';addQ.call();document.getElementById('added').innerHTML=added.map((q,j)=>`<div class="px-5 py-3.5 flex items-center justify-between gap-3"><div class="flex items-start gap-3"><span class="h-6 w-6 rounded-lg bg-canvas ring-1 ring-whisper grid place-items-center font-mono text-[11px] font-semibold shrink-0">${j+1}</span><div><span class="text-[9.5px] font-semibold ${TYC[q.t][1]} rounded-full px-2 py-0.5">${TYC[q.t][0]}</span><p class="text-[13px] font-medium mt-1">${q.txt}</p></div></div><button onclick="rmQ(${j})" class="text-steel/40 hover:text-alert text-[12px]">remove</button></div>`).join('');}
+function tab(n){document.querySelectorAll('.tabp').forEach(p=>p.classList.toggle('on',+p.dataset.p===n));document.querySelectorAll('.tb').forEach(b=>{const on=+b.dataset.t===n;b.className='tb shrink-0 px-4 py-2.5 text-[12.5px] font-medium border-b-2 -mb-px '+(on?'text-ink border-blue':'text-steel border-transparent hover:text-charcoal');});}
+document.querySelectorAll('.tb').forEach(b=>b.onclick=()=>tab(+b.dataset.t));
+renderOpts();
+
+// ── Printable exam paper: objectives + theory/essay with answer spaces ──
+const PRINT_OBJ=[
+  ['Simplify: 3x + 5x − 2x',['6x','10x','8x','4x']],
+  ['The value of 2³ is…',['6','8','9','12']],
+  ['Which is a prime number?',['9','15','17','21']],
+  ['Expand: 2(x + 4)',['2x + 4','2x + 8','x + 8','2x + 6']],
+  ['The perimeter of a square of side 5 cm is…',['10 cm','15 cm','20 cm','25 cm']],
+];
+const PRINT_ESSAY=[
+  ['Solve the equation 3x − 7 = 11, showing each step of your working.',5],
+  ['A rectangle is 8 cm long and 5 cm wide. Find its area and perimeter, stating the formula you used.',6],
+  ['Explain, with an example, what is meant by "like terms" and how they are added together.',9],
+];
+document.getElementById('printObj').innerHTML=PRINT_OBJ.map(q=>`<li><p class="font-medium">${q[0]}</p><div class="grid grid-cols-2 gap-x-6 gap-y-1 mt-1.5 text-steel">${q[1].map((o,i)=>`<span>(${'ABCD'[i]}) ${o}</span>`).join('')}</div></li>`).join('');
+document.getElementById('printEssay').innerHTML=PRINT_ESSAY.map(q=>`<li><p class="font-medium">${q[0]} <span class="text-steel font-normal">[${q[1]} marks]</span></p><div class="mt-2 space-y-4">${Array.from({length:Math.min(4,Math.ceil(q[1]/2))}).map(()=>'<div class="border-b border-charcoal/25 h-5"></div>').join('')}</div></li>`).join('');
+
+// ── Hybrid marking reconciliation: OBJ (auto /30) + Essay (paper /20) = /50 ──
+const REC=[
+  {n:'Fatima Abubakar', id:'AFA/2024/0117', obj:26, essay:17},
+  {n:'Yusuf Bello',     id:'AFA/2024/0093', obj:24, essay:15},
+  {n:'Aisha Sani',      id:'AFA/2024/0101', obj:28, essay:null},
+  {n:'Ibrahim Musa',    id:'AFA/2024/0088', obj:19, essay:null},
+  {n:'Hauwa Lawal',     id:'AFA/2024/0125', obj:30, essay:null},
+  {n:'Sadiq Garba',     id:'AFA/2024/0079', obj:21, essay:null},
+];
+let recEdit=-1;
+function recStatus(r){
+  if(r.essay===null) return ['Pending essay','text-caution bg-caution/10'];
+  const t=r.obj+r.essay; return [t>=25?'Passed':'Below pass','text-confirm bg-confirm/10'];
+}
+function renderRec(){
+  document.getElementById('recBody').innerHTML=REC.map((r,i)=>{
+    const[s,c]=recStatus(r);
+    const total=r.essay===null?'—':(r.obj+r.essay);
+    return `<tr class="hover:bg-canvas/60"><td class="px-5 py-3"><p class="font-medium">${r.n}</p><p class="font-mono text-[10.5px] text-steel">${r.id}</p></td><td class="px-3 py-3"><span class="font-mono">${r.obj}</span><span class="text-steel">/30</span><span class="ml-1.5 text-[9.5px] font-semibold text-confirm bg-confirm/10 rounded px-1.5 py-0.5">auto</span></td><td class="px-3 py-3">${r.essay===null?'<span class="text-caution text-[11.5px]">not entered</span>':'<span class="font-mono">'+r.essay+'</span><span class="text-steel">/20</span>'}</td><td class="px-3 py-3"><span class="font-mono font-semibold">${total}</span>${total==='—'?'':'<span class="text-steel">/50</span>'}</td><td class="px-3 py-3"><span class="text-[10.5px] font-semibold ${c} rounded-full px-2 py-0.5">${s}</span></td><td class="px-5 py-3 text-right"><button onclick="openEssay(${i})" class="h-8 px-3 rounded-lg ${r.essay===null?'bg-blue text-white':'ring-1 ring-whisper text-steel hover:bg-mist/30'} text-[11.5px] font-medium">${r.essay===null?'Enter essay score':'Edit'}</button></td></tr>`;
+  }).join('');
+  document.getElementById('essDone').textContent=REC.filter(r=>r.essay!==null).length;
+  document.getElementById('recDone').textContent=REC.filter(r=>r.essay!==null).length;
+}
+function openEssay(i){
+  recEdit=i;const r=REC[i];
+  document.getElementById('emName').textContent=r.n;
+  document.getElementById('emObj').textContent=r.obj+' / 30';
+  const inp=document.getElementById('emInput');inp.value=r.essay===null?'':r.essay;
+  updateEmTotal();
+  document.getElementById('essayModal').classList.remove('hidden');
+  setTimeout(()=>inp.focus(),50);
+}
+function updateEmTotal(){
+  if(recEdit<0)return;const v=parseInt(document.getElementById('emInput').value);
+  document.getElementById('emTotal').textContent=isNaN(v)?'—':(REC[recEdit].obj+Math.max(0,Math.min(20,v)))+' / 50';
+}
+document.getElementById('emInput').addEventListener('input',updateEmTotal);
+function closeEssay(){document.getElementById('essayModal').classList.add('hidden');recEdit=-1;}
+function saveEssay(){
+  if(recEdit<0)return;let v=parseInt(document.getElementById('emInput').value);
+  if(isNaN(v)){toast('Enter an essay score (0–20)');return;}
+  v=Math.max(0,Math.min(20,v));
+  REC[recEdit].essay=v;
+  renderRec();closeEssay();
+  toast('Essay score saved · total merged');
+}
+renderRec();
+</script>
+<div id="toast" class="hidden fixed bottom-5 left-1/2 -translate-x-1/2 z-[60] bg-ink text-white text-[12.5px] font-medium px-4 py-2.5 rounded-xl shadow-lift"></div>
+<script>function toast(m){var t=document.getElementById('toast');t.textContent=m;t.classList.remove('hidden');clearTimeout(window._tt);window._tt=setTimeout(function(){t.classList.add('hidden')},2200);}</script>
+</body>
+</html>

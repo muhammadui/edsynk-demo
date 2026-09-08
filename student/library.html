@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Edsynk — Library</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script>tailwind.config={theme:{extend:{colors:{canvas:'#F7F9FC',ink:'#0B2A56',charcoal:'#18181B',steel:'#64748B',whisper:'#E2E8F0',blue:'#2177EF',skyblue:'#5C9DF5',wash:'#EAF2FE',mist:'#D3E4FD',confirm:'#16A34A',caution:'#D97706',alert:'#DC2626',excused:'#7C8DA6'},fontFamily:{sans:['Geist','sans-serif'],mono:['"Geist Mono"','monospace']},boxShadow:{soft:'0 1px 2px rgba(11,42,86,0.04), 0 6px 24px rgba(11,42,86,0.05)',lift:'0 1px 3px rgba(11,42,86,0.10), 0 12px 32px rgba(11,42,86,0.12)'}}}}</script>
+<style>@keyframes rise{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}.rise{animation:rise .45s cubic-bezier(.2,.8,.2,1) both}
+.tabpane{display:none}.tabpane.on{display:block}</style>
+</head>
+<body data-active="Library" data-persona="student" class="bg-canvas font-sans text-charcoal antialiased">
+<div class="flex min-h-screen">
+  <div id="sidebar-root"></div>
+  <div class="flex-1 min-w-0">
+    <header class="h-[60px] bg-white/80 backdrop-blur-md border-b border-whisper/70 flex items-center justify-between px-4 sm:px-7 sticky top-0 z-20">
+      <div class="flex items-center gap-3">
+        <h1 class="text-[15px] font-semibold tracking-tight">Library</h1>
+        <span class="font-mono text-[11.5px] font-medium text-blue bg-wash rounded-full px-2.5 py-1 hidden sm:inline">Al-Furqan Library</span>
+      </div>
+      <button onclick="toast('Ask the librarian at the desk for help')" class="h-9 px-4 rounded-lg bg-white ring-1 ring-whisper text-[13px] font-medium text-steel hover:bg-mist/30 hidden sm:flex items-center gap-1.5">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 015 0c0 1.7-2.5 2-2.5 3.5M12 17h.01"/></svg>Ask librarian</button>
+    </header>
+
+    <main class="p-4 sm:p-7 max-w-[1100px] space-y-5 pb-10">
+
+      <!-- reading stat -->
+      <section class="rise grid grid-cols-2 sm:grid-cols-4 gap-3">
+        <div class="bg-white ring-1 ring-whisper/80 rounded-2xl p-4 shadow-soft"><p class="text-[10.5px] font-semibold uppercase tracking-wider text-steel">Books read · term</p><p class="font-mono text-[20px] font-semibold mt-1.5 text-blue">7</p><p class="text-[11px] text-steel mt-1">2 ahead of last term</p></div>
+        <div class="bg-white ring-1 ring-whisper/80 rounded-2xl p-4 shadow-soft"><p class="text-[10.5px] font-semibold uppercase tracking-wider text-steel">Reading streak</p><p class="font-mono text-[20px] font-semibold mt-1.5">12 <span class="text-[12px] text-steel">days</span></p><p class="text-[11px] text-steel mt-1">keep it up</p></div>
+        <div class="bg-white ring-1 ring-whisper/80 rounded-2xl p-4 shadow-soft"><p class="text-[10.5px] font-semibold uppercase tracking-wider text-steel">Borrowed now</p><p class="font-mono text-[20px] font-semibold mt-1.5">2</p><p class="text-[11px] text-caution mt-1">1 due soon</p></div>
+        <div class="bg-white ring-1 ring-whisper/80 rounded-2xl p-4 shadow-soft"><p class="text-[10.5px] font-semibold uppercase tracking-wider text-steel">Requests</p><p class="font-mono text-[20px] font-semibold mt-1.5">1</p><p class="text-[11px] text-steel mt-1">pending pickup</p></div>
+      </section>
+
+      <!-- tabs -->
+      <section class="rise" style="animation-delay:.04s">
+        <div class="flex items-center gap-2 border-b border-whisper/70">
+          <button id="tab-browse" onclick="showTab('browse')" class="tabbtn px-1 pb-2.5 text-[13px] font-semibold text-blue border-b-2 border-blue">Browse</button>
+          <button id="tab-mine" onclick="showTab('mine')" class="tabbtn px-1 pb-2.5 ml-5 text-[13px] font-medium text-steel border-b-2 border-transparent hover:text-charcoal">My books</button>
+          <button id="tab-req" onclick="showTab('req')" class="tabbtn px-1 pb-2.5 ml-5 text-[13px] font-medium text-steel border-b-2 border-transparent hover:text-charcoal">Requests</button>
+        </div>
+      </section>
+
+      <!-- BROWSE -->
+      <div id="pane-browse" class="tabpane on space-y-4">
+        <div class="rise flex items-center gap-2 rounded-xl ring-1 ring-whisper bg-white px-4 h-11 shadow-soft">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-steel shrink-0"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg>
+          <input id="searchBox" oninput="filterBooks()" placeholder="Search by title, author or category…" class="flex-1 bg-transparent text-[12.5px] focus:outline-none placeholder:text-steel">
+        </div>
+        <div class="flex items-center gap-2 flex-wrap rise" style="animation-delay:.03s">
+          <button onclick="setCat(this,'all')" class="catbtn text-[11.5px] font-medium text-white bg-blue rounded-full px-3 py-1.5">All</button>
+          <button onclick="setCat(this,'Fiction')" class="catbtn text-[11.5px] font-medium text-steel bg-white ring-1 ring-whisper rounded-full px-3 py-1.5">Fiction</button>
+          <button onclick="setCat(this,'Science')" class="catbtn text-[11.5px] font-medium text-steel bg-white ring-1 ring-whisper rounded-full px-3 py-1.5">Science</button>
+          <button onclick="setCat(this,'Islamic Studies')" class="catbtn text-[11.5px] font-medium text-steel bg-white ring-1 ring-whisper rounded-full px-3 py-1.5">Islamic Studies</button>
+          <button onclick="setCat(this,'History')" class="catbtn text-[11.5px] font-medium text-steel bg-white ring-1 ring-whisper rounded-full px-3 py-1.5">History</button>
+        </div>
+        <div id="bookGrid" class="rise grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3" style="animation-delay:.06s"></div>
+        <p id="noResults" class="hidden text-center text-[12.5px] text-steel py-8">No books match your search. Try another title or ask the librarian.</p>
+      </div>
+
+      <!-- MY BOOKS -->
+      <div id="pane-mine" class="tabpane space-y-3">
+        <div class="rise bg-white ring-1 ring-whisper/80 rounded-2xl shadow-soft overflow-hidden">
+          <div class="flex items-center gap-4 p-4 border-b border-whisper/60">
+            <div class="h-16 w-12 rounded-md bg-caution/15 ring-1 ring-caution/30 grid place-items-center text-caution shrink-0"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg></div>
+            <div class="flex-1 min-w-0">
+              <p class="text-[13.5px] font-semibold">Things Fall Apart</p>
+              <p class="text-[11.5px] text-steel">Chinua Achebe · Fiction</p>
+              <span class="inline-block mt-1.5 text-[10.5px] font-semibold text-caution bg-caution/10 rounded-full px-2.5 py-0.5">Due in 2 days · 22 Jun</span>
+            </div>
+            <div class="flex flex-col gap-2 shrink-0">
+              <button onclick="toast('Renewal request sent to the librarian')" class="h-9 px-3.5 rounded-xl bg-blue text-white text-[12px] font-semibold shadow-soft active:translate-y-px">Renew</button>
+              <button onclick="toast('Bring the book to the library desk to return')" class="h-9 px-3.5 rounded-xl ring-1 ring-whisper bg-white text-[12px] font-medium text-steel hover:bg-mist/30">Return</button>
+            </div>
+          </div>
+          <div class="flex items-center gap-4 p-4">
+            <div class="h-16 w-12 rounded-md bg-wash ring-1 ring-mist grid place-items-center text-blue shrink-0"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg></div>
+            <div class="flex-1 min-w-0">
+              <p class="text-[13.5px] font-semibold">Introductory Physics for JSS</p>
+              <p class="text-[11.5px] text-steel">M. Bello · Science</p>
+              <span class="inline-block mt-1.5 text-[10.5px] font-semibold text-confirm bg-confirm/10 rounded-full px-2.5 py-0.5">Due 4 Jul · plenty of time</span>
+            </div>
+            <div class="flex flex-col gap-2 shrink-0">
+              <button onclick="toast('Renewal request sent to the librarian')" class="h-9 px-3.5 rounded-xl ring-1 ring-whisper bg-white text-[12px] font-medium text-steel hover:bg-mist/30">Renew</button>
+              <button onclick="toast('Bring the book to the library desk to return')" class="h-9 px-3.5 rounded-xl ring-1 ring-whisper bg-white text-[12px] font-medium text-steel hover:bg-mist/30">Return</button>
+            </div>
+          </div>
+        </div>
+        <p class="text-[11px] text-steel px-1">You can borrow up to 3 books at a time. Returning on time keeps your reading streak going.</p>
+      </div>
+
+      <!-- REQUESTS -->
+      <div id="pane-req" class="tabpane space-y-3">
+        <div class="rise bg-white ring-1 ring-whisper/80 rounded-2xl shadow-soft p-4 flex items-center gap-4">
+          <span class="h-9 w-9 rounded-xl bg-caution/10 text-caution grid place-items-center shrink-0"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span>
+          <div class="flex-1 min-w-0"><p class="text-[13px] font-semibold">A Brief History of Nigeria</p><p class="text-[11.5px] text-steel mt-0.5">Requested 18 Jun · waiting for the librarian to set it aside</p></div>
+          <span class="text-[10.5px] font-semibold text-caution bg-caution/10 rounded-full px-2.5 py-1 shrink-0">Pending</span>
+        </div>
+        <div class="rise bg-white ring-1 ring-whisper/80 rounded-2xl shadow-soft p-4 flex items-center gap-4" style="animation-delay:.04s">
+          <span class="h-9 w-9 rounded-xl bg-confirm/10 text-confirm grid place-items-center shrink-0"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg></span>
+          <div class="flex-1 min-w-0"><p class="text-[13px] font-semibold">Things Fall Apart</p><p class="text-[11.5px] text-steel mt-0.5">Collected 8 Jun · now in My books</p></div>
+          <span class="text-[10.5px] font-semibold text-confirm bg-confirm/10 rounded-full px-2.5 py-1 shrink-0">Collected</span>
+        </div>
+        <p class="text-[11px] text-steel px-1">When a requested book is ready, you'll get a notification to collect it from the library desk.</p>
+      </div>
+    </main>
+  </div>
+</div>
+<script src="../assets/shell.js"></script>
+<div id="toast" class="hidden fixed bottom-5 left-1/2 -translate-x-1/2 z-[60] bg-ink text-white text-[12.5px] font-medium px-4 py-2.5 rounded-xl shadow-lift"></div>
+<script>
+function toast(m){var t=document.getElementById('toast');t.textContent=m;t.classList.remove('hidden');clearTimeout(window._tt);window._tt=setTimeout(function(){t.classList.add('hidden')},2200);}
+
+const BOOKS=[
+ ['The Lion and the Jewel','Wole Soyinka','Fiction',1],
+ ['Half of a Yellow Sun','Chimamanda Adichie','Fiction',1],
+ ['Stories of the Prophets','Ibn Kathir','Islamic Studies',1],
+ ['The Sealed Nectar','S. al-Mubarakpuri','Islamic Studies',0],
+ ['New Concept Biology JSS','A. Okeke','Science',1],
+ ['Wonders of the Solar System','B. Cox','Science',1],
+ ['Chemistry Made Simple','R. Hassan','Science',0],
+ ['An Account of Old Bauchi','Y. Aliyu','History',1],
+ ['West African History','J. Ade Ajayi','History',1],
+ ['The Famished Road','Ben Okri','Fiction',0],
+ ['Coding for Young Minds','S. Adeyemi','Science',1],
+ ['Tales of Northern Nigeria','A. Tremearne','History',1],
+];
+let curCat='all';
+function pill(av){return av
+ ?'<span class="text-[10px] font-semibold text-confirm bg-confirm/10 rounded-full px-2 py-0.5">Available</span>'
+ :'<span class="text-[10px] font-semibold text-steel bg-canvas ring-1 ring-whisper rounded-full px-2 py-0.5">On loan</span>';}
+function render(list){
+ const g=document.getElementById('bookGrid');
+ g.innerHTML=list.map(b=>`
+  <div class="bg-white ring-1 ring-whisper/80 rounded-2xl shadow-soft p-3.5 flex flex-col">
+   <div class="h-24 rounded-xl bg-gradient-to-br from-wash to-mist/50 ring-1 ring-mist grid place-items-center text-blue mb-3"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg></div>
+   <p class="text-[12.5px] font-semibold leading-snug">${b[0]}</p>
+   <p class="text-[11px] text-steel mt-0.5">${b[1]}</p>
+   <div class="mt-1.5 flex items-center gap-1.5"><span class="text-[10px] text-steel">${b[2]}</span>${pill(b[3])}</div>
+   <button onclick="${b[3]?'reqBook(this)':'notifyBook()'}" data-t="${b[0].replace(/'/g,'')}" class="mt-3 h-9 rounded-xl ${b[3]?'bg-blue text-white':'ring-1 ring-whisper bg-white text-steel'} text-[12px] font-semibold active:translate-y-px">${b[3]?'Request':'Notify me'}</button>
+  </div>`).join('');
+}
+function reqBook(b){toast('Request sent for "'+b.dataset.t+'" — collect when ready');}
+function notifyBook(){toast('This book is on loan — we will notify you when it returns');}
+function filterBooks(){
+ const q=(document.getElementById('searchBox').value||'').toLowerCase();
+ const list=BOOKS.filter(b=>(curCat==='all'||b[2]===curCat)&&(b[0].toLowerCase().includes(q)||b[1].toLowerCase().includes(q)||b[2].toLowerCase().includes(q)));
+ document.getElementById('noResults').classList.toggle('hidden',list.length>0);
+ render(list);
+}
+function setCat(btn,c){
+ curCat=c;
+ document.querySelectorAll('.catbtn').forEach(b=>{b.className='catbtn text-[11.5px] font-medium text-steel bg-white ring-1 ring-whisper rounded-full px-3 py-1.5';});
+ btn.className='catbtn text-[11.5px] font-medium text-white bg-blue rounded-full px-3 py-1.5';
+ filterBooks();
+}
+function showTab(t){
+ document.querySelectorAll('.tabpane').forEach(p=>p.classList.remove('on'));
+ document.getElementById('pane-'+t).classList.add('on');
+ document.querySelectorAll('.tabbtn').forEach(b=>{b.classList.remove('text-blue','border-blue','font-semibold');b.classList.add('text-steel','border-transparent','font-medium');});
+ const map={browse:'tab-browse',mine:'tab-mine',req:'tab-req'};
+ const ab=document.getElementById(map[t]);
+ ab.classList.remove('text-steel','border-transparent','font-medium');
+ ab.classList.add('text-blue','border-blue','font-semibold');
+}
+render(BOOKS);
+</script>
+</body>
+</html>

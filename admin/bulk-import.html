@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Edsynk — Bulk Import</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script>tailwind.config={theme:{extend:{colors:{canvas:'#F7F9FC',ink:'#0B2A56',charcoal:'#18181B',steel:'#64748B',whisper:'#E2E8F0',blue:'#2177EF',skyblue:'#5C9DF5',wash:'#EAF2FE',mist:'#D3E4FD',confirm:'#16A34A',caution:'#D97706',alert:'#DC2626',excused:'#7C8DA6'},fontFamily:{sans:['Geist','sans-serif'],mono:['"Geist Mono"','monospace']},boxShadow:{soft:'0 1px 2px rgba(11,42,86,0.04), 0 6px 24px rgba(11,42,86,0.05)',lift:'0 1px 3px rgba(11,42,86,0.10), 0 12px 32px rgba(11,42,86,0.12)'}}}}</script>
+<style>@keyframes rise{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}.rise{animation:rise .45s cubic-bezier(.2,.8,.2,1) both}</style>
+</head>
+<body data-active="Bulk Import" data-persona="admin" class="bg-canvas font-sans text-charcoal antialiased">
+<div class="flex min-h-screen">
+  <div id="sidebar-root"></div>
+  <div class="flex-1 min-w-0">
+    <header class="h-[60px] bg-white/80 backdrop-blur-md border-b border-whisper/70 flex items-center justify-between px-4 sm:px-7 sticky top-0 z-20">
+      <div class="flex items-center gap-3">
+        <a href="students-list.html" class="h-8 w-8 grid place-items-center rounded-lg hover:bg-mist/40 text-steel" title="Back"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg></a>
+        <h1 class="text-[15px] font-semibold tracking-tight">Bulk Import</h1>
+      </div>
+      <a href="students-list.html" class="h-9 px-3.5 rounded-lg bg-white ring-1 ring-whisper text-[12.5px] font-medium text-steel hover:bg-mist/30">Done</a>
+    </header>
+
+    <main class="p-4 sm:p-7 max-w-[1000px] space-y-5 pb-10">
+
+      <!-- Step 1: what to import -->
+      <section class="rise bg-white ring-1 ring-whisper/80 rounded-2xl shadow-soft p-6">
+        <div class="flex items-center gap-2.5"><span class="h-6 w-6 rounded-full bg-blue text-white text-[12px] font-semibold grid place-items-center">1</span><h2 class="font-semibold tracking-tight text-[15px]">What are you importing?</h2></div>
+        <div class="mt-4 grid grid-cols-3 gap-2.5 text-[13px] font-medium">
+          <button onclick="setKind('students')" id="k-students" class="kind rounded-xl ring-2 ring-blue bg-wash/50 px-4 py-4 text-left"><p class="font-semibold">Students</p><p class="text-[11px] text-steel font-normal mt-0.5">New enrolments with bio-data</p></button>
+          <button onclick="setKind('staff')" id="k-staff" class="kind rounded-xl ring-1 ring-whisper px-4 py-4 text-left hover:ring-mist"><p class="font-semibold">Staff</p><p class="text-[11px] text-steel font-normal mt-0.5">Teachers &amp; admin accounts</p></button>
+          <button onclick="setKind('scores')" id="k-scores" class="kind rounded-xl ring-1 ring-whisper px-4 py-4 text-left hover:ring-mist"><p class="font-semibold">Scores</p><p class="text-[11px] text-steel font-normal mt-0.5">CA &amp; exam marks by subject</p></button>
+        </div>
+      </section>
+
+      <!-- Step 2: template -->
+      <section class="rise bg-white ring-1 ring-whisper/80 rounded-2xl shadow-soft p-6" style="animation-delay:.04s">
+        <div class="flex items-center gap-2.5"><span class="h-6 w-6 rounded-full bg-blue text-white text-[12px] font-semibold grid place-items-center">2</span><h2 class="font-semibold tracking-tight text-[15px]">Download the template</h2></div>
+        <div class="mt-4 flex items-center justify-between rounded-xl bg-canvas ring-1 ring-whisper/80 px-4 py-3.5">
+          <div><p class="text-[12.5px] font-medium" id="tplName">students-template.csv</p><p class="text-[11px] text-steel mt-0.5" id="tplCols">Columns: full_name · admission_no · gender · class · date_of_birth · parent_name · parent_phone</p></div>
+          <button onclick="toast('Downloading '+document.getElementById('tplName').textContent+'…')" class="h-9 px-3.5 rounded-lg bg-ink text-white text-[12.5px] font-medium shrink-0">Download template</button>
+        </div>
+        <p class="text-[11px] text-steel mt-3">Fill it in Excel or Google Sheets, keep the column headers exactly as they are, then save as CSV.</p>
+      </section>
+
+      <!-- Step 3: upload -->
+      <section class="rise bg-white ring-1 ring-whisper/80 rounded-2xl shadow-soft p-6" style="animation-delay:.08s">
+        <div class="flex items-center gap-2.5"><span class="h-6 w-6 rounded-full bg-blue text-white text-[12px] font-semibold grid place-items-center">3</span><h2 class="font-semibold tracking-tight text-[15px]">Upload your file</h2></div>
+        <div onclick="picked()" class="mt-4 cursor-pointer rounded-2xl border-2 border-dashed border-mist hover:border-blue hover:bg-wash/30 transition-colors px-6 py-10 text-center">
+          <div class="h-11 w-11 mx-auto rounded-xl bg-wash text-blue grid place-items-center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><path d="M17 8l-5-5-5 5"/><path d="M12 3v12"/></svg></div>
+          <p class="text-[13px] font-medium mt-3">Drag your CSV here, or <span class="text-blue">browse</span></p>
+          <p class="text-[11px] text-steel mt-1">CSV up to 5 MB · max 1,000 rows per upload</p>
+        </div>
+        <div id="fileChip" class="hidden mt-3 flex items-center justify-between rounded-xl bg-canvas ring-1 ring-whisper px-4 py-2.5 text-[12.5px]">
+          <span class="font-mono">jss1-intake-2026.csv · 120 rows</span>
+          <button onclick="document.getElementById('fileChip').classList.add('hidden');document.getElementById('step4').classList.add('hidden')" class="text-steel hover:text-alert">Remove</button>
+        </div>
+        <div class="mt-4"><button onclick="validate()" class="h-10 px-5 rounded-lg bg-blue text-white text-[13px] font-semibold shadow-soft active:translate-y-px">Validate file</button></div>
+      </section>
+
+      <!-- Step 4: validation preview -->
+      <section id="step4" class="rise hidden bg-white ring-1 ring-whisper/80 rounded-2xl shadow-soft overflow-hidden" style="animation-delay:.12s">
+        <div class="px-6 py-4 border-b border-whisper/60 flex items-center justify-between flex-wrap gap-2">
+          <div class="flex items-center gap-2.5"><span class="h-6 w-6 rounded-full bg-blue text-white text-[12px] font-semibold grid place-items-center">4</span><h2 class="font-semibold tracking-tight text-[15px]">Validation preview</h2></div>
+          <div class="flex items-center gap-3 text-[11.5px] font-medium">
+            <span class="text-steel">120 rows</span>
+            <span class="text-confirm">114 ready</span>
+            <span class="text-caution">4 warnings</span>
+            <span class="text-alert">2 errors</span>
+          </div>
+        </div>
+        <div class="overflow-x-auto"><table class="w-full text-[12px] min-w-[720px]">
+          <thead><tr class="text-left text-[10px] font-semibold uppercase tracking-wider text-steel border-b border-whisper/60 bg-canvas/60">
+            <th class="px-6 py-3">Row</th><th class="px-3 py-3">Full name</th><th class="px-3 py-3">Admission no</th><th class="px-3 py-3">Class</th><th class="px-3 py-3">Status</th></tr></thead>
+          <tbody class="divide-y divide-whisper/60">
+            <tr><td class="px-6 py-2.5 font-mono text-steel">1</td><td class="px-3 py-2.5 font-medium">Khadija Umar</td><td class="px-3 py-2.5 font-mono">AFA/2026/0413</td><td class="px-3 py-2.5">JSS 1A</td><td class="px-3 py-2.5"><span class="text-confirm font-medium">✓ Valid</span></td></tr>
+            <tr><td class="px-6 py-2.5 font-mono text-steel">2</td><td class="px-3 py-2.5 font-medium">Abdulrahman Sani</td><td class="px-3 py-2.5 font-mono">AFA/2026/0414</td><td class="px-3 py-2.5">JSS 1A</td><td class="px-3 py-2.5"><span class="text-confirm font-medium">✓ Valid</span></td></tr>
+            <tr class="bg-caution/[0.04]"><td class="px-6 py-2.5 font-mono text-steel">3</td><td class="px-3 py-2.5 font-medium">Hauwa Garba</td><td class="px-3 py-2.5 font-mono text-caution">AFA/2024/0117</td><td class="px-3 py-2.5">JSS 1B</td><td class="px-3 py-2.5"><span class="text-caution font-medium">⚠ Duplicate admission no</span></td></tr>
+            <tr><td class="px-6 py-2.5 font-mono text-steel">4</td><td class="px-3 py-2.5 font-medium">Ismail Bello</td><td class="px-3 py-2.5 font-mono">AFA/2026/0416</td><td class="px-3 py-2.5">JSS 1A</td><td class="px-3 py-2.5"><span class="text-confirm font-medium">✓ Valid</span></td></tr>
+            <tr class="bg-alert/[0.04]"><td class="px-6 py-2.5 font-mono text-steel">5</td><td class="px-3 py-2.5 font-medium">Mary Okeke</td><td class="px-3 py-2.5 font-mono">AFA/2026/0417</td><td class="px-3 py-2.5 text-alert">— missing —</td><td class="px-3 py-2.5"><span class="text-alert font-medium">✗ Missing class</span></td></tr>
+            <tr class="bg-caution/[0.04]"><td class="px-6 py-2.5 font-mono text-steel">6</td><td class="px-3 py-2.5 font-medium">Suleiman Yakubu</td><td class="px-3 py-2.5 font-mono">AFA/2026/0418</td><td class="px-3 py-2.5">JSS 1A</td><td class="px-3 py-2.5"><span class="text-caution font-medium">⚠ Phone not in 080… format</span></td></tr>
+            <tr class="bg-alert/[0.04]"><td class="px-6 py-2.5 font-mono text-steel">7</td><td class="px-3 py-2.5 font-medium text-alert">— blank —</td><td class="px-3 py-2.5 font-mono">AFA/2026/0419</td><td class="px-3 py-2.5">JSS 1B</td><td class="px-3 py-2.5"><span class="text-alert font-medium">✗ Missing full name</span></td></tr>
+            <tr><td class="px-6 py-2.5 font-mono text-steel">8</td><td class="px-3 py-2.5 font-medium">Fatima Adamu</td><td class="px-3 py-2.5 font-mono">AFA/2026/0420</td><td class="px-3 py-2.5">JSS 1B</td><td class="px-3 py-2.5"><span class="text-confirm font-medium">✓ Valid</span></td></tr>
+          </tbody>
+        </table></div>
+        <div class="px-6 py-3.5 bg-canvas border-t border-whisper/60 flex items-center justify-between flex-wrap gap-3">
+          <p class="text-[11px] text-steel">120 rows · 114 ready · 4 warnings · 2 errors. Errors are skipped; warnings still import. Fix and re-upload to include skipped rows.</p>
+          <div class="flex gap-2">
+            <button onclick="toast('Downloading error report…')" class="h-9 px-3.5 rounded-lg bg-white ring-1 ring-whisper text-[12.5px] font-medium text-steel hover:bg-mist/30">Download errors</button>
+            <button onclick="toast('Importing 114 valid rows…')" class="h-9 px-4 rounded-lg bg-confirm text-white text-[12.5px] font-semibold shadow-soft active:translate-y-px">Import 114 valid rows</button>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+</div>
+<script src="../assets/shell.js"></script>
+<script>
+const TPL={students:['students-template.csv','Columns: full_name · admission_no · gender · class · date_of_birth · parent_name · parent_phone'],
+ staff:['staff-template.csv','Columns: full_name · email · phone · role · subjects · employee_id'],
+ scores:['scores-template.csv','Columns: admission_no · subject · term · ca1 · ca2 · exam']};
+function setKind(k){document.querySelectorAll('.kind').forEach(b=>b.className='kind rounded-xl ring-1 ring-whisper px-4 py-4 text-left hover:ring-mist');
+ document.getElementById('k-'+k).className='kind rounded-xl ring-2 ring-blue bg-wash/50 px-4 py-4 text-left';
+ document.getElementById('tplName').textContent=TPL[k][0];document.getElementById('tplCols').textContent=TPL[k][1];}
+function picked(){document.getElementById('fileChip').classList.remove('hidden');toast('File selected — now click Validate');}
+function validate(){if(document.getElementById('fileChip').classList.contains('hidden')){toast('Choose a file first');return;}document.getElementById('step4').classList.remove('hidden');document.getElementById('step4').scrollIntoView({behavior:'smooth',block:'start'});toast('Validation complete — 114 of 120 rows ready');}
+</script>
+<div id="toast" class="hidden fixed bottom-5 left-1/2 -translate-x-1/2 z-[60] bg-ink text-white text-[12.5px] font-medium px-4 py-2.5 rounded-xl shadow-lift"></div>
+<script>function toast(m){var t=document.getElementById('toast');t.textContent=m;t.classList.remove('hidden');clearTimeout(window._tt);window._tt=setTimeout(function(){t.classList.add('hidden')},2200);}</script>
+</body>
+</html>

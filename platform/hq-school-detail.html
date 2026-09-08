@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Edsynk HQ — Al-Furqan Academy</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script>tailwind.config={theme:{extend:{colors:{canvas:'#F7F9FC',ink:'#0B2A56',charcoal:'#18181B',steel:'#64748B',whisper:'#E2E8F0',blue:'#2177EF',skyblue:'#5C9DF5',wash:'#EAF2FE',mist:'#D3E4FD',confirm:'#16A34A',caution:'#D97706',alert:'#DC2626',excused:'#7C8DA6'},fontFamily:{sans:['Geist','sans-serif'],mono:['"Geist Mono"','monospace']},boxShadow:{soft:'0 1px 2px rgba(11,42,86,0.04), 0 6px 24px rgba(11,42,86,0.05)',lift:'0 1px 3px rgba(11,42,86,0.10), 0 12px 32px rgba(11,42,86,0.12)'}}}}</script>
+<style>@keyframes rise{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}.rise{animation:rise .45s cubic-bezier(.2,.8,.2,1) both}.tabp{display:none}.tabp.on{display:block;animation:rise .4s cubic-bezier(.2,.8,.2,1) both}
+.tg{width:38px;height:22px;border-radius:99px;position:relative;transition:background .15s;cursor:pointer;flex:none}.tg.on{background:#2177EF}.tg.off{background:#E7ECF3}.tg b{position:absolute;top:2px;height:18px;width:18px;border-radius:99px;background:#fff;transition:left .15s;box-shadow:0 1px 2px rgba(0,0,0,.12)}.tg.on b{left:18px}.tg.off b{left:2px}
+.modal{opacity:0;pointer-events:none;transition:opacity .2s}.modal.open{opacity:1;pointer-events:auto}</style>
+</head>
+<body data-active="Schools" data-persona="platform" class="bg-canvas font-sans text-charcoal antialiased">
+<div class="flex min-h-screen">
+  <div id="sidebar-root"></div>
+  <div class="flex-1 min-w-0">
+    <header class="h-[60px] bg-white/80 backdrop-blur-md border-b border-whisper/70 flex items-center justify-between px-4 sm:px-7 sticky top-0 z-20">
+      <div class="flex items-center gap-3"><a href="hq-schools.html" class="text-[13px] text-steel hover:text-blue">Schools</a><span class="text-steel/40">/</span><h1 class="text-[15px] font-semibold tracking-tight">Al-Furqan Academy</h1></div>
+      <div class="flex items-center gap-2.5"><button onclick="openImp()" class="h-9 px-4 rounded-lg bg-white ring-1 ring-whisper text-[13px] font-medium text-steel hover:bg-mist/30">Impersonate owner</button><a href="../admin/admin-dashboard.html" class="h-9 px-4 rounded-lg bg-blue text-white text-[13px] font-medium shadow-soft grid place-items-center">Open as school →</a></div>
+    </header>
+    <main class="p-4 sm:p-7 max-w-[1240px] space-y-5 pb-12">
+
+      <!-- header card -->
+      <div class="rise bg-white ring-1 ring-whisper/80 rounded-2xl shadow-soft p-5 sm:p-6">
+        <div class="flex flex-col sm:flex-row sm:items-center gap-4">
+          <span class="h-16 w-16 rounded-2xl bg-blue text-white grid place-items-center text-[20px] font-bold shadow-lift shrink-0">AF</span>
+          <div class="flex-1 min-w-0"><div class="flex items-center gap-2 flex-wrap"><h2 class="text-[18px] font-bold tracking-tight text-ink">Al-Furqan Academy</h2><span class="text-[10.5px] font-semibold text-confirm bg-confirm/10 rounded-full px-2 py-0.5">Live</span><span class="text-[10.5px] font-semibold text-blue bg-wash rounded-full px-2 py-0.5">Pro plan</span><span class="text-[10.5px] font-semibold text-steel bg-canvas ring-1 ring-whisper rounded-full px-2 py-0.5">Hybrid</span></div>
+          <p class="font-mono text-[12px] text-steel mt-0.5">alfurqan.edsynk.ng · tenant af_8k2q · Bauchi · live since Jan 2026</p></div>
+        </div>
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 mt-5 text-center">
+          <div class="rounded-xl bg-canvas ring-1 ring-whisper/70 py-3"><p class="font-mono text-[18px] font-semibold">412</p><p class="text-[10px] text-steel mt-0.5">students</p></div>
+          <div class="rounded-xl bg-canvas ring-1 ring-whisper/70 py-3"><p class="font-mono text-[18px] font-semibold">31</p><p class="text-[10px] text-steel mt-0.5">staff</p></div>
+          <div class="rounded-xl bg-canvas ring-1 ring-whisper/70 py-3"><p class="font-mono text-[18px] font-semibold">₦824k</p><p class="text-[10px] text-steel mt-0.5">term revenue</p></div>
+          <div class="rounded-xl bg-canvas ring-1 ring-whisper/70 py-3"><p class="font-mono text-[18px] font-semibold text-confirm">healthy</p><p class="text-[10px] text-steel mt-0.5">status</p></div>
+        </div>
+      </div>
+
+      <!-- tabs -->
+      <div class="rise flex gap-1 border-b border-whisper/70 overflow-x-auto" id="tabs">
+        <button data-t="0" class="tb shrink-0 px-4 py-2.5 text-[12.5px] font-medium border-b-2 -mb-px text-ink border-blue">Overview</button>
+        <button data-t="1" class="tb shrink-0 px-4 py-2.5 text-[12.5px] font-medium border-b-2 -mb-px text-steel border-transparent hover:text-charcoal">Features</button>
+        <button data-t="2" class="tb shrink-0 px-4 py-2.5 text-[12.5px] font-medium border-b-2 -mb-px text-steel border-transparent hover:text-charcoal">Subscription</button>
+        <button data-t="3" class="tb shrink-0 px-4 py-2.5 text-[12.5px] font-medium border-b-2 -mb-px text-steel border-transparent hover:text-charcoal">People</button>
+        <button data-t="4" class="tb shrink-0 px-4 py-2.5 text-[12.5px] font-medium border-b-2 -mb-px text-steel border-transparent hover:text-charcoal">Billing &amp; usage</button>
+        <button data-t="5" class="tb shrink-0 px-4 py-2.5 text-[12.5px] font-medium border-b-2 -mb-px text-steel border-transparent hover:text-charcoal">Danger</button>
+      </div>
+
+      <!-- OVERVIEW -->
+      <section class="tabp on" data-p="0">
+        <div class="grid lg:grid-cols-2 gap-4">
+          <div class="bg-white ring-1 ring-whisper/80 rounded-2xl p-5 shadow-soft"><p class="text-[11px] font-semibold uppercase tracking-wider text-steel">School profile</p>
+            <div class="mt-3 rounded-xl ring-1 ring-whisper/80 divide-y divide-whisper/60 text-[12.5px]">
+              <div class="flex justify-between px-4 py-2.5"><span class="text-steel">Owner</span><span class="font-medium">Ustadh Abdullahi Sani</span></div>
+              <div class="flex justify-between px-4 py-2.5"><span class="text-steel">Type</span><span class="font-medium">Hybrid (conventional + Islamiyyah)</span></div>
+              <div class="flex justify-between px-4 py-2.5"><span class="text-steel">Subdomain</span><span class="font-mono text-[11px]">alfurqan.edsynk.ng</span></div>
+              <div class="flex justify-between px-4 py-2.5"><span class="text-steel">Custom domain</span><span class="font-mono text-[11px]">portal.alfurqan.sch.ng ✓</span></div>
+              <div class="flex justify-between px-4 py-2.5"><span class="text-steel">Region</span><span class="font-medium">Frankfurt · fra1</span></div>
+            </div>
+            <button onclick="tab(2)" class="mt-3 h-9 px-4 rounded-lg bg-white ring-1 ring-whisper text-[12.5px] font-medium text-steel hover:bg-mist/30">Edit profile &amp; plan</button>
+          </div>
+          <div class="bg-white ring-1 ring-whisper/80 rounded-2xl p-5 shadow-soft"><p class="text-[11px] font-semibold uppercase tracking-wider text-steel">Recent activity</p>
+            <div class="mt-3 space-y-0 text-[12px]">
+              <div class="flex gap-3 pb-3"><div class="flex flex-col items-center"><span class="h-2 w-2 rounded-full bg-confirm mt-1.5"></span><span class="w-px flex-1 bg-whisper"></span></div><div>Published JSS 2A results · 38 cards sealed<p class="font-mono text-[10px] text-steel mt-0.5">today 14:32</p></div></div>
+              <div class="flex gap-3 pb-3"><div class="flex flex-col items-center"><span class="h-2 w-2 rounded-full bg-blue mt-1.5"></span><span class="w-px flex-1 bg-whisper"></span></div><div>EdAssess generated 3 question banks<p class="font-mono text-[10px] text-steel mt-0.5">today 13:08 · ₦212</p></div></div>
+              <div class="flex gap-3"><div class="flex flex-col items-center"><span class="h-2 w-2 rounded-full bg-confirm mt-1.5"></span></div><div>Paid 2026 T3 invoice ₦824,000<p class="font-mono text-[10px] text-steel mt-0.5">4 Jun · bank transfer</p></div></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- FEATURES (on/off per school) -->
+      <section class="tabp" data-p="1">
+        <div class="rise rounded-2xl bg-wash/60 ring-1 ring-mist/60 px-4 py-3 text-[12px] text-ink mb-4">Turn features on or off for <span class="font-semibold">this school only</span>. Plan-gated features show their tier — toggling one outside the plan flags an upsell.</div>
+        <div class="bg-white ring-1 ring-whisper/80 rounded-2xl shadow-soft overflow-hidden">
+          <div id="features" class="divide-y divide-whisper/60"></div>
+          <div class="px-5 py-3 border-t border-whisper/70 bg-canvas/50 text-[11.5px] text-steel">Changes apply instantly &amp; are audit-logged. Disabling a feature hides it from the school's staff — existing data is never deleted.</div>
+        </div>
+      </section>
+
+      <!-- SUBSCRIPTION -->
+      <section class="tabp" data-p="2">
+        <div class="grid lg:grid-cols-2 gap-4">
+          <div class="bg-white ring-1 ring-whisper/80 rounded-2xl p-5 shadow-soft">
+            <p class="text-[13.5px] font-semibold">Plan &amp; pricing</p>
+            <div class="mt-3 space-y-3 text-[12.5px]">
+              <div><label class="text-[11px] font-semibold text-steel">Plan</label><select class="mt-1.5 w-full h-10 rounded-lg border border-whisper bg-canvas px-3"><option>Core · ₦500</option><option>Plus · ₦1,200</option><option selected>Pro · ₦2,000</option><option>AI · ₦3,000</option></select></div>
+              <div class="grid grid-cols-2 gap-2"><div><label class="text-[11px] font-semibold text-steel">Price / student / term</label><div class="mt-1.5 flex items-center"><span class="h-10 grid place-items-center px-2.5 rounded-l-lg border border-r-0 border-whisper bg-mist/30 text-steel">₦</span><input value="2,000" class="h-10 flex-1 rounded-r-lg border border-whisper bg-canvas px-3 font-mono"></div></div><div><label class="text-[11px] font-semibold text-steel">Custom discount</label><div class="mt-1.5 flex items-center"><input value="0" class="h-10 flex-1 rounded-l-lg border border-r-0 border-whisper bg-canvas px-3 font-mono"><span class="h-10 grid place-items-center px-2.5 rounded-r-lg border border-whisper bg-mist/30 text-steel">%</span></div></div></div>
+              <div><label class="text-[11px] font-semibold text-steel">Billing cycle</label><select class="mt-1.5 w-full h-10 rounded-lg border border-whisper bg-canvas px-3"><option>Per term</option><option>Per session (3 terms)</option></select></div>
+              <label class="flex items-center justify-between"><span>Price locked (grandfathered)</span><span class="tg on" onclick="this.classList.toggle('on');this.classList.toggle('off')"><b></b></span></label>
+            </div>
+            <button class="mt-4 h-10 px-5 rounded-xl bg-blue text-white text-[13px] font-semibold shadow-soft">Save subscription</button>
+          </div>
+          <div class="bg-white ring-1 ring-whisper/80 rounded-2xl p-5 shadow-soft">
+            <p class="text-[13.5px] font-semibold">AI credits &amp; BYOK</p>
+            <div class="mt-3 rounded-xl ring-1 ring-whisper/80 divide-y divide-whisper/60 text-[12.5px]">
+              <div class="flex justify-between px-4 py-2.5"><span class="text-steel">Credit balance</span><span class="font-mono">₦18,400</span></div>
+              <div class="flex justify-between px-4 py-2.5"><span class="text-steel">Billing mode</span><span class="font-medium">Platform credits</span></div>
+              <div class="flex justify-between px-4 py-2.5"><span class="text-steel">BYOK keys</span><span class="text-steel">none</span></div>
+            </div>
+            <div class="flex gap-2 mt-3"><button class="h-9 px-4 rounded-lg bg-white ring-1 ring-whisper text-[12.5px] font-medium text-steel hover:bg-mist/30">Add credit</button><button class="h-9 px-4 rounded-lg bg-white ring-1 ring-whisper text-[12.5px] font-medium text-steel hover:bg-mist/30">Switch to BYOK</button></div>
+            <div class="mt-4 rounded-xl bg-wash/50 ring-1 ring-mist/60 px-4 py-3 text-[11.5px] text-ink"><span class="font-semibold">Upsell:</span> owner asked about EdMentor twice → move to AI plan in Sept = +₦412k/term.</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- PEOPLE -->
+      <section class="tabp" data-p="3">
+        <div class="grid sm:grid-cols-3 gap-3 mb-4">
+          <div class="bg-white ring-1 ring-whisper/80 rounded-2xl p-4 shadow-soft text-center"><p class="font-mono text-[20px] font-semibold">412</p><p class="text-[10px] text-steel mt-0.5">students</p></div>
+          <div class="bg-white ring-1 ring-whisper/80 rounded-2xl p-4 shadow-soft text-center"><p class="font-mono text-[20px] font-semibold">31</p><p class="text-[10px] text-steel mt-0.5">staff</p></div>
+          <div class="bg-white ring-1 ring-whisper/80 rounded-2xl p-4 shadow-soft text-center"><p class="font-mono text-[20px] font-semibold">389</p><p class="text-[10px] text-steel mt-0.5">parents linked</p></div>
+        </div>
+        <div class="bg-white ring-1 ring-whisper/80 rounded-2xl shadow-soft overflow-hidden">
+          <div class="flex items-center justify-between px-5 pt-4 pb-3"><p class="text-[13.5px] font-semibold">Staff &amp; admins</p><button onclick="om('addStaffM')" class="h-9 px-4 rounded-lg bg-blue text-white text-[12.5px] font-medium shadow-soft">+ Add staff</button></div>
+          <div class="divide-y divide-whisper/60 text-[12.5px]">
+            <div class="flex items-center justify-between px-5 py-3"><div class="flex items-center gap-2.5"><span class="h-8 w-8 rounded-full bg-ink text-white grid place-items-center text-[10px] font-bold">AS</span><div><p class="font-medium">Ustadh Abdullahi Sani</p><p class="text-[10.5px] text-steel">Owner · super-admin</p></div></div><button class="text-blue text-[11.5px] font-medium">Manage</button></div>
+            <div class="flex items-center justify-between px-5 py-3"><div class="flex items-center gap-2.5"><span class="h-8 w-8 rounded-full bg-wash text-blue grid place-items-center text-[10px] font-bold">MI</span><div><p class="font-medium">Mallam Musa Ibrahim</p><p class="text-[10.5px] text-steel">Teacher · Exam officer</p></div></div><button class="text-blue text-[11.5px] font-medium">Manage</button></div>
+            <div class="flex items-center justify-between px-5 py-3"><div class="flex items-center gap-2.5"><span class="h-8 w-8 rounded-full bg-mist text-ink grid place-items-center text-[10px] font-bold">ZA</span><div><p class="font-medium">Hajiya Zainab Aliyu</p><p class="text-[10.5px] text-steel">Bursar · Admin</p></div></div><button class="text-blue text-[11.5px] font-medium">Manage</button></div>
+          </div>
+          <div class="px-5 py-3 border-t border-whisper/70 bg-canvas/50 text-[11.5px] text-steel">As super-admin you can add staff, reset passwords, or fix role errors on the school's behalf — every action is audit-logged.</div>
+        </div>
+      </section>
+
+      <!-- BILLING & USAGE -->
+      <section class="tabp" data-p="4">
+        <div class="grid lg:grid-cols-2 gap-4">
+          <div class="bg-white ring-1 ring-whisper/80 rounded-2xl shadow-soft overflow-hidden">
+            <p class="text-[13.5px] font-semibold px-5 pt-4 pb-3">Invoices</p>
+            <div class="divide-y divide-whisper/60 text-[12.5px]">
+              <div class="flex items-center justify-between px-5 py-3"><div><p class="font-medium">2026 T3 · ₦824,000</p><p class="text-[10.5px] text-steel">412 students · Pro</p></div><span class="text-[10.5px] font-semibold text-confirm bg-confirm/10 rounded-full px-2 py-0.5">Paid 4 Jun</span></div>
+              <div class="flex items-center justify-between px-5 py-3"><div><p class="font-medium">2026 T2 · ₦810,000</p></div><span class="text-[10.5px] font-semibold text-confirm bg-confirm/10 rounded-full px-2 py-0.5">Paid 9 Feb</span></div>
+            </div>
+            <div class="px-5 py-3 border-t border-whisper/70"><button class="h-9 px-4 rounded-lg bg-white ring-1 ring-whisper text-[12.5px] font-medium text-steel hover:bg-mist/30">Issue new invoice</button></div>
+          </div>
+          <div class="bg-white ring-1 ring-whisper/80 rounded-2xl p-5 shadow-soft"><p class="text-[13.5px] font-semibold">Usage · 30 days</p>
+            <div class="mt-3 rounded-xl ring-1 ring-whisper/80 divide-y divide-whisper/60 text-[12.5px]">
+              <div class="flex justify-between px-4 py-2.5"><span class="text-steel">Active staff logins</span><span class="font-mono">28/31 weekly</span></div>
+              <div class="flex justify-between px-4 py-2.5"><span class="text-steel">Parent result views</span><span class="font-mono">1,893</span></div>
+              <div class="flex justify-between px-4 py-2.5"><span class="text-steel">QR verifications</span><span class="font-mono">214</span></div>
+              <div class="flex justify-between px-4 py-2.5"><span class="text-steel">AI calls</span><span class="font-mono">312 · ₦14.4k</span></div>
+              <div class="flex justify-between px-4 py-2.5"><span class="text-steel">Fees processed (online)</span><span class="font-mono">₦14.5M</span></div>
+            </div>
+            <button class="mt-3 h-9 px-4 rounded-lg bg-white ring-1 ring-whisper text-[12.5px] font-medium text-steel hover:bg-mist/30">Export tenant data</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- DANGER -->
+      <section class="tabp" data-p="5">
+        <div class="space-y-3">
+          <div class="rounded-2xl ring-1 ring-caution/25 bg-caution/[0.04] p-5 flex items-center justify-between flex-wrap gap-3"><div><p class="text-[13px] font-semibold">Read-only suspension</p><p class="text-[11.5px] text-steel mt-0.5">For overdue payment. School can view &amp; export everything; publishing &amp; new entries pause. Never deletes data.</p></div><button class="h-10 px-4 rounded-lg ring-1 ring-caution/40 text-caution text-[12.5px] font-medium hover:bg-caution/10">Suspend (read-only)…</button></div>
+          <div class="rounded-2xl ring-1 ring-whisper bg-white p-5 flex items-center justify-between flex-wrap gap-3 shadow-soft"><div><p class="text-[13px] font-semibold">Impersonate owner</p><p class="text-[11.5px] text-steel mt-0.5">Sign in as the owner for support. Requires a reason; consent-logged; auto-ends in 30 min.</p></div><button onclick="openImp()" class="h-10 px-4 rounded-lg ring-1 ring-whisper text-[12.5px] font-medium text-steel hover:bg-mist/30">Impersonate…</button></div>
+          <div class="rounded-2xl ring-1 ring-alert/20 bg-alert/[0.04] p-5 flex items-center justify-between flex-wrap gap-3"><div><p class="text-[13px] font-semibold text-alert">Offboard school</p><p class="text-[11.5px] text-steel mt-0.5">Full export is generated &amp; sent first. Account is archived, not deleted — children's records are never destroyed.</p></div><button class="h-10 px-4 rounded-lg ring-1 ring-alert/30 text-alert text-[12.5px] font-medium hover:bg-alert/5">Begin offboarding…</button></div>
+        </div>
+      </section>
+    </main>
+  </div>
+</div>
+
+<!-- ADD STAFF MODAL -->
+<div id="addStaffM" class="modal fixed inset-0 z-50 bg-ink/40 backdrop-blur-sm grid place-items-center p-4" onclick="if(event.target===this)cm('addStaffM')">
+  <div class="bg-white rounded-2xl shadow-lift max-w-[440px] w-full p-6">
+    <div class="flex items-center justify-between mb-3"><p class="text-[15px] font-semibold">Add staff to Al-Furqan</p><button onclick="cm('addStaffM')" class="h-8 w-8 grid place-items-center rounded-lg hover:bg-mist/40 text-steel">✕</button></div>
+    <div class="space-y-3 text-[12.5px]">
+      <div><label class="text-[11.5px] font-semibold text-steel">Full name</label><input placeholder="Staff name" class="mt-1.5 w-full h-10 rounded-lg border border-whisper bg-canvas px-3.5"></div>
+      <div class="grid grid-cols-2 gap-2"><div><label class="text-[11.5px] font-semibold text-steel">Phone</label><input placeholder="080…" class="mt-1.5 w-full h-10 rounded-lg border border-whisper bg-canvas px-3 font-mono text-[12px]"></div><div><label class="text-[11.5px] font-semibold text-steel">Role</label><select class="mt-1.5 w-full h-10 rounded-lg border border-whisper bg-canvas px-2.5"><option>Teacher</option><option>Admin</option><option>Exam officer</option><option>Bursar</option></select></div></div>
+      <label class="flex items-center gap-2.5"><input type="checkbox" checked class="h-4 w-4 rounded accent-[#2177EF]">Send login slip (admission-style ID + temp password)</label>
+    </div>
+    <div class="flex justify-end gap-2 mt-5"><button onclick="cm('addStaffM')" class="h-10 px-4 rounded-lg ring-1 ring-whisper text-[13px] font-medium text-steel">Cancel</button><button onclick="cm('addStaffM')" class="h-10 px-5 rounded-lg bg-blue text-white text-[13px] font-semibold shadow-soft">Add staff</button></div>
+  </div>
+</div>
+<!-- IMPERSONATE MODAL -->
+<div id="impM" class="modal fixed inset-0 z-50 bg-ink/40 backdrop-blur-sm grid place-items-center p-4" onclick="if(event.target===this)cm('impM')">
+  <div class="bg-white rounded-2xl shadow-lift max-w-[420px] w-full p-6">
+    <div class="flex items-center justify-between mb-3"><p class="text-[15px] font-semibold">Impersonate owner</p><button onclick="cm('impM')" class="h-8 w-8 grid place-items-center rounded-lg hover:bg-mist/40 text-steel">✕</button></div>
+    <p class="text-[12px] text-steel">You'll sign in as <span class="font-medium text-charcoal">Ustadh Abdullahi</span>. This is consent-logged and auto-ends in 30 minutes.</p>
+    <div class="mt-3"><label class="text-[11.5px] font-semibold text-steel">Reason (required)</label><input placeholder="e.g. Ticket TKT-0047 — reproduce broadsheet bug" class="mt-1.5 w-full h-10 rounded-lg border border-whisper bg-canvas px-3.5 text-[12.5px]"></div>
+    <div class="flex justify-end gap-2 mt-5"><button onclick="cm('impM')" class="h-10 px-4 rounded-lg ring-1 ring-whisper text-[13px] font-medium text-steel">Cancel</button><a href="../admin/admin-dashboard.html" class="h-10 px-5 rounded-lg bg-blue text-white text-[13px] font-semibold shadow-soft grid place-items-center">Start session →</a></div>
+  </div>
+</div>
+
+<script src="../assets/shell.js"></script>
+<script>
+const FEAT=[
+ ['Sealed results &amp; report cards','Core · always on','on','locked'],
+ ['Parent portal','Core','on',''],
+ ['QR result verification','Core','on',''],
+ ['WhatsApp result alerts','Plus','on',''],
+ ['CBT examinations','Plus','on',''],
+ ['EdInsight (AI analytics)','Pro','on',''],
+ ['EdAssess (AI questions)','Pro','on',''],
+ ['Fees &amp; Payments','add-on','on',''],
+ ['Parent ↔ teacher messaging','Plus','on',''],
+ ['Admissions','Pro','on',''],
+ ['Custom domain','Pro','on',''],
+ ['EdMentor (AI tutor)','AI plan','off','upsell'],
+ ['Transcripts','Sept','off','soon'],
+];
+document.getElementById('features').innerHTML=FEAT.map(f=>{
+  const tier=f[3]==='upsell'?'<span class="text-[9.5px] font-semibold text-caution bg-caution/10 rounded-full px-2 py-0.5">'+f[1]+' · upsell</span>':f[3]==='soon'?'<span class="text-[9.5px] font-semibold text-blue bg-wash rounded-full px-2 py-0.5">'+f[1]+'</span>':f[3]==='locked'?'<span class="text-[9.5px] font-semibold text-steel bg-canvas ring-1 ring-whisper rounded-full px-2 py-0.5">'+f[1]+'</span>':'<span class="text-[10px] text-steel">'+f[1]+'</span>';
+  const tg=f[3]==='locked'?'<span class="tg on" style="opacity:.5;cursor-not-allowed"><b></b></span>':'<span class="tg '+f[2]+'" onclick="this.classList.toggle(\'on\');this.classList.toggle(\'off\')"><b></b></span>';
+  return `<div class="flex items-center justify-between px-5 py-3.5"><div class="flex items-center gap-2.5 flex-wrap"><span class="text-[13px] font-medium">${f[0]}</span>${tier}</div>${tg}</div>`;
+}).join('');
+function tab(n){document.querySelectorAll('.tabp').forEach(p=>p.classList.toggle('on',+p.dataset.p===n));document.querySelectorAll('.tb').forEach(b=>{const on=+b.dataset.t===n;b.className='tb shrink-0 px-4 py-2.5 text-[12.5px] font-medium border-b-2 -mb-px '+(on?'text-ink border-blue':'text-steel border-transparent hover:text-charcoal');});window.scrollTo({top:0,behavior:'smooth'});}
+document.querySelectorAll('.tb').forEach(b=>b.onclick=()=>tab(+b.dataset.t));
+function om(id){document.getElementById(id).classList.add('open');}function cm(id){document.getElementById(id).classList.remove('open');}
+function openImp(){om('impM');}
+</script>
+</body>
+</html>

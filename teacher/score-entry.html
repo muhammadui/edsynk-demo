@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Edsynk — Score Entry</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script>
+tailwind.config = { theme: { extend: {
+  colors: { canvas:'#F7F9FC', ink:'#0B2A56', charcoal:'#18181B', steel:'#64748B', whisper:'#E2E8F0',
+    blue:'#2177EF', wash:'#EAF2FE', mist:'#D3E4FD',
+    confirm:'#16A34A', caution:'#D97706', alert:'#DC2626', excused:'#7C8DA6' },
+  fontFamily: { sans:['Geist','sans-serif'], mono:['"Geist Mono"','monospace'] },
+  boxShadow: { soft:'0 1px 2px rgba(11,42,86,0.04), 0 6px 24px rgba(11,42,86,0.05)',
+               lift:'0 1px 3px rgba(11,42,86,0.10), 0 12px 32px rgba(11,42,86,0.12)' }
+}}}
+</script>
+<style>
+@keyframes flash{0%{background:#DCFCE7}100%{background:transparent}}.saved{animation:flash 1s ease-out}
+.scin{transition:border-color .15s, background .15s}
+</style>
+</head>
+<body data-active="Score Entry" data-persona="teacher" class="bg-canvas font-sans text-charcoal antialiased">
+<div class="flex min-h-screen">
+<div id="sidebar-root"></div>
+<div class="flex-1 min-w-0 flex flex-col">
+
+<!-- Teacher context header -->
+<header class="bg-white border-b border-whisper/70 sticky top-0 z-20">
+  <div class="h-14 max-w-[1060px] mx-auto px-4 flex items-center justify-between gap-3">
+    <div class="flex items-center gap-2.5 min-w-0">
+      <a href="teacher-home.html" class="h-9 w-9 grid place-items-center rounded-lg hover:bg-mist/40 text-steel shrink-0">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg></a>
+      <div class="min-w-0 flex items-center gap-2 flex-wrap">
+        <select class="h-9 rounded-lg border border-whisper bg-white px-2.5 text-[12.5px] font-semibold focus:outline-none focus:ring-2 focus:ring-blue/50">
+          <option>Mathematics</option><option>Further Maths</option>
+        </select>
+        <span class="text-steel/50">—</span>
+        <select onchange="" class="h-9 rounded-lg border border-whisper bg-white px-2.5 text-[12.5px] font-semibold focus:outline-none focus:ring-2 focus:ring-blue/50">
+          <option>JSS 2A</option><option>JSS 2B</option><option>JSS 3A</option>
+        </select>
+        <span class="hidden lg:inline text-[11px] text-steel">· Third Term · 2025/26</span>
+      </div>
+    </div>
+    <div class="flex items-center gap-2.5 shrink-0">
+      <div class="relative hidden md:block">
+        <svg class="absolute left-3 top-1/2 -translate-y-1/2 text-steel" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+        <input id="sq" oninput="searchStudent(this.value)" placeholder="Find student…" class="h-9 w-44 rounded-lg border border-whisper bg-canvas pl-9 pr-3 text-[12px] focus:outline-none focus:ring-2 focus:ring-blue/50">
+      </div>
+      <span id="syncPill" class="hidden sm:flex items-center gap-1.5 text-[11px] font-medium text-confirm bg-confirm/10 rounded-full px-2.5 py-1">
+        <span class="h-1.5 w-1.5 rounded-full bg-confirm"></span>All changes saved</span>
+      <span class="font-mono text-[11.5px] font-medium text-blue bg-wash rounded-full px-2.5 py-1">CA1·20 / CA2·20 / Exam·60</span>
+    </div>
+  </div>
+</header>
+
+<main class="max-w-[1060px] mx-auto p-4 sm:p-6 pb-28">
+
+  <!-- Stats strip -->
+  <section class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+    <div class="bg-white border border-whisper/70 rounded-xl px-4 py-3.5 shadow-soft">
+      <p class="text-[10px] font-semibold uppercase tracking-wider text-steel">Progress</p>
+      <div class="flex items-center gap-2.5 mt-1.5">
+        <p class="font-mono text-[18px] font-semibold leading-none"><span id="stDone">0</span><span class="text-[12px] text-steel">/10</span></p>
+        <div class="h-1.5 flex-1 bg-mist/60 rounded-full"><div id="stBar" class="h-1.5 bg-blue rounded-full transition-all duration-300" style="width:0%"></div></div>
+      </div>
+    </div>
+    <div class="bg-white border border-whisper/70 rounded-xl px-4 py-3.5 shadow-soft">
+      <p class="text-[10px] font-semibold uppercase tracking-wider text-steel">Class average</p>
+      <p class="font-mono text-[18px] font-semibold mt-1.5 leading-none" id="stAvg">—</p>
+    </div>
+    <div class="bg-white border border-whisper/70 rounded-xl px-4 py-3.5 shadow-soft">
+      <p class="text-[10px] font-semibold uppercase tracking-wider text-steel">Highest</p>
+      <p class="mt-1.5 leading-none"><span id="stHi" class="font-mono text-[18px] font-semibold">—</span> <span id="stHiName" class="text-[10.5px] text-steel"></span></p>
+    </div>
+    <div class="bg-white border border-whisper/70 rounded-xl px-4 py-3.5 shadow-soft">
+      <p class="text-[10px] font-semibold uppercase tracking-wider text-steel">Errors</p>
+      <p class="mt-1.5 leading-none"><span id="stErr" class="font-mono text-[18px] font-semibold text-confirm">0</span> <span class="text-[10.5px] text-steel">to fix</span></p>
+    </div>
+  </section>
+
+  <!-- Grid -->
+  <section class="mt-4 bg-white border border-whisper/70 rounded-2xl shadow-soft overflow-hidden">
+    <div class="overflow-x-auto">
+      <table class="w-full text-[13px] min-w-[820px]">
+        <thead><tr class="text-left text-[10px] font-semibold uppercase tracking-[0.07em] text-steel border-b border-whisper/70 bg-canvas/70">
+          <th class="pl-5 pr-3 py-3 font-semibold w-8">#</th>
+          <th class="px-3 py-3 font-semibold">Student <span class="ml-1 normal-case text-steel/50 font-mono text-[9px] tracking-normal">A→Z ↓</span></th>
+          <th class="px-3 py-3 font-semibold text-center w-28">CA1 <span class="text-steel/50 normal-case">/20</span></th>
+          <th class="px-3 py-3 font-semibold text-center w-28">CA2 <span class="text-steel/50 normal-case">/20</span></th>
+          <th class="px-3 py-3 font-semibold text-center w-28">Exam <span class="text-steel/50 normal-case">/60</span></th>
+          <th class="px-3 py-3 font-semibold text-right w-20">Total</th>
+          <th class="px-3 py-3 font-semibold text-center w-20">Grade</th>
+          <th class="pr-5 pl-3 py-3 font-semibold text-right w-14"></th>
+        </tr></thead>
+        <tbody id="grid" class="divide-y divide-whisper/50"></tbody>
+      </table>
+    </div>
+  </section>
+  <p class="text-[11px] text-steel mt-3 flex items-center gap-4 flex-wrap">
+    <span class="inline-flex items-center gap-1.5"><kbd class="font-mono text-[10px] bg-white ring-1 ring-whisper rounded px-1.5 py-0.5">Tab</kbd> next cell</span>
+    <span class="inline-flex items-center gap-1.5"><kbd class="font-mono text-[10px] bg-white ring-1 ring-whisper rounded px-1.5 py-0.5">Enter</kbd> next student</span>
+    <span>Every keystroke saves to your device first — bad network never loses scores.</span>
+  </p>
+</main>
+
+<!-- Sticky submit bar -->
+<footer class="sticky bottom-0 bg-white/95 backdrop-blur border-t border-whisper/70 z-20">
+  <div class="max-w-[1060px] mx-auto px-4 sm:px-6 h-[68px] flex items-center justify-between gap-3">
+    <p id="footMsg" class="text-[12.5px] text-steel"></p>
+    <button id="submitBtn" onclick="trySubmit()" class="h-11 px-6 rounded-xl bg-blue text-white text-[13.5px] font-medium shadow-soft active:translate-y-px disabled:opacity-40 disabled:cursor-not-allowed shrink-0">
+      Submit for approval</button>
+  </div>
+</footer>
+</div>
+</div>
+<script src="../assets/shell.js"></script>
+<script>
+const MAX=[20,20,60];
+const BOUNDS=[[75,'A1','text-confirm bg-confirm/10'],[70,'B2','text-confirm bg-confirm/10'],[65,'B3','text-blue bg-wash'],[60,'C4','text-blue bg-wash'],[55,'C5','text-caution bg-caution/10'],[50,'C6','text-caution bg-caution/10'],[45,'D7','text-caution bg-caution/10'],[40,'E8','text-alert bg-alert/10'],[0,'F9','text-alert bg-alert/10']];
+const S=[
+ ['Aisha Bello','AB','bg-wash text-blue',[17,15,48]],
+ ['Chinedu Okafor','CO','bg-confirm/10 text-confirm',[14,12,41]],
+ ['Emeka Eze','EE','bg-mist text-ink',[25,16,52]],          // deliberate error: CA1 > 20
+ ['Fatima Abubakar','FA','bg-caution/10 text-caution',[19,18,55]],
+ ['Halima Yusuf','HY','bg-mist text-ink',[11,9,null]],       // incomplete
+ ['Ibrahim Suleiman','IS','bg-wash text-blue',[16,13,39]],
+ ['Maryam Garba','MG','bg-confirm/10 text-confirm',[18,17,50]],
+ ['Ngozi Adeyemi','NA','bg-wash text-blue',[13,14,44]],
+ ['Sani Abdullahi','SA','bg-mist text-ink',[12,11,null]],    // incomplete
+ ['Zainab Idris','ZI','bg-caution/10 text-caution',[20,19,58]],
+];
+const grid=document.getElementById('grid');
+grid.innerHTML=S.map((s,r)=>`
+ <tr class="hover:bg-mist/10">
+  <td class="pl-5 pr-3 py-2.5 font-mono text-[11px] text-steel/70">${r+1}</td>
+  <td class="px-3 py-2.5"><div class="flex items-center gap-2.5">
+    <span class="h-8 w-8 rounded-full ${s[2]} grid place-items-center text-[10.5px] font-semibold shrink-0">${s[1]}</span>
+    <span class="font-medium whitespace-nowrap">${s[0]}</span></div></td>
+  ${[0,1,2].map(c=>`<td class="px-3 py-2 text-center">
+    <input id="i${r}_${c}" inputmode="numeric" value="${s[3][c]??''}" placeholder="—"
+      oninput="cellChange(${r},${c},this)" onkeydown="keyNav(event,${r},${c})"
+      class="scin w-[72px] h-10 text-center font-mono tabular-nums rounded-lg border border-whisper bg-white focus:outline-none focus:ring-2 focus:ring-blue/60 focus:border-blue"></td>`).join('')}
+  <td id="tot${r}" class="px-3 py-2.5 text-right font-mono font-semibold tabular-nums">—</td>
+  <td id="gr${r}" class="px-3 py-2.5 text-center">—</td>
+  <td id="ok${r}" class="pr-5 pl-3 py-2.5 text-right text-[11px]"></td>
+ </tr>`).join('');
+
+function gradeOf(t){for(const[min,g,c]of BOUNDS) if(t>=min) return [g,c]; return ['F9','text-alert bg-alert/10'];}
+function cellChange(r,c,el){
+  el.classList.add('saved'); setTimeout(()=>el.classList.remove('saved'),900);
+  pulseSync(); recompute();
+}
+function recompute(){
+  let done=0,err=0,sum=0,n=0,hi=-1,hiName='';
+  for(let r=0;r<S.length;r++){
+    let total=0, complete=true, rowErr=false;
+    for(let c=0;c<3;c++){
+      const el=document.getElementById(`i${r}_${c}`), v=el.value.trim();
+      if(v===''){complete=false; el.className=el.className.replace(/border-alert\S*|bg-alert\S*/g,'').replace(/\s+/g,' ');
+        setBase(el); continue;}
+      const num=Number(v);
+      if(isNaN(num)||num<0||num>MAX[c]){rowErr=true;
+        el.className='scin w-[72px] h-10 text-center font-mono tabular-nums rounded-lg border-2 border-alert bg-alert/5 text-alert font-semibold focus:outline-none';
+      } else { setBase(el); total+=num; }
+    }
+    const tot=document.getElementById('tot'+r), gr=document.getElementById('gr'+r), ok=document.getElementById('ok'+r);
+    if(rowErr){err++; tot.textContent='!'; tot.className='px-3 py-2.5 text-right font-mono font-semibold text-alert';
+      gr.innerHTML='<span class="text-[10px] font-medium text-alert">over max</span>'; ok.textContent='';}
+    else if(!complete){tot.textContent='—'; tot.className='px-3 py-2.5 text-right font-mono text-steel';
+      gr.innerHTML='<span class="text-[10px] font-medium text-excused bg-excused/10 rounded-full px-2 py-0.5">pending</span>'; ok.textContent='';}
+    else {done++; sum+=total; n++; if(total>hi){hi=total;hiName=S[r][0].split(' ')[0]}
+      tot.textContent=total; tot.className='px-3 py-2.5 text-right font-mono font-semibold tabular-nums';
+      const[g,cl]=gradeOf(total);
+      gr.innerHTML=`<span class="text-[10.5px] font-medium ${cl} rounded-full px-2 py-0.5">${g}</span>`;
+      ok.innerHTML='<span class="text-confirm">✓</span>';}
+  }
+  document.getElementById('stDone').textContent=done;
+  document.getElementById('stBar').style.width=(done*10)+'%';
+  document.getElementById('stAvg').textContent=n?(sum/n).toFixed(1):'—';
+  document.getElementById('stHi').textContent=hi<0?'—':hi;
+  document.getElementById('stHiName').textContent=hi<0?'':hiName;
+  const se=document.getElementById('stErr'); se.textContent=err;
+  se.className='font-mono text-[18px] font-semibold '+(err?'text-alert':'text-confirm');
+  const btn=document.getElementById('submitBtn'), msg=document.getElementById('footMsg');
+  if(err){btn.disabled=true; msg.innerHTML=`<span class="text-alert font-medium">${err} score${err>1?'s':''} above maximum</span> — fix the red cell${err>1?'s':''} to submit.`;}
+  else if(done<S.length){btn.disabled=true; msg.innerHTML=`<span class="font-mono">${S.length-done}</span> student${S.length-done>1?'s':''} incomplete — finish all scores to submit.`;}
+  else {btn.disabled=false; msg.innerHTML='<span class="text-confirm font-medium">All 10 students scored ✓</span> Ready when you are.';}
+}
+function setBase(el){el.className='scin w-[72px] h-10 text-center font-mono tabular-nums rounded-lg border border-whisper bg-white focus:outline-none focus:ring-2 focus:ring-blue/60 focus:border-blue';}
+function keyNav(e,r,c){
+  if(e.key==='Enter'){e.preventDefault(); const nxt=document.getElementById(`i${Math.min(S.length-1,r+1)}_${c}`); if(nxt) nxt.focus(), nxt.select();}
+}
+function pulseSync(){const p=document.getElementById('syncPill');
+  p.innerHTML='<span class="h-1.5 w-1.5 rounded-full bg-caution animate-pulse"></span>Saving…';
+  p.className='hidden sm:flex items-center gap-1.5 text-[11px] font-medium text-caution bg-caution/10 rounded-full px-2.5 py-1';
+  clearTimeout(window._st); window._st=setTimeout(()=>{
+    p.innerHTML='<span class="h-1.5 w-1.5 rounded-full bg-confirm"></span>All changes saved';
+    p.className='hidden sm:flex items-center gap-1.5 text-[11px] font-medium text-confirm bg-confirm/10 rounded-full px-2.5 py-1';},800);}
+function trySubmit(){
+  if(confirm('Submit Mathematics — JSS 2A for approval?\n\nYou will not be able to edit scores after submission unless the exam officer rejects them back to you.')){
+    document.getElementById('footMsg').innerHTML='<span class="text-blue font-medium">Submitted ✓</span> Awaiting exam officer review — you\'ll be notified.';
+    document.getElementById('submitBtn').disabled=true;
+    document.getElementById('submitBtn').textContent='Submitted';
+    document.querySelectorAll('#grid input').forEach(i=>i.disabled=true);
+  }}
+recompute();
+function searchStudent(q){q=q.toLowerCase();
+  document.querySelectorAll('#grid tr').forEach(tr=>{
+    const name=tr.querySelector('td:nth-child(2)');
+    if(name) tr.style.display=name.textContent.toLowerCase().includes(q)?'':'none';});}
+</script>
+</body>
+</html>

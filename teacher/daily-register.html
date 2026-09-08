@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Edsynk — Daily Register</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script>
+tailwind.config = { theme: { extend: {
+  colors: { canvas:'#F7F9FC', ink:'#0B2A56', charcoal:'#18181B', steel:'#64748B', whisper:'#E2E8F0',
+    blue:'#2177EF', skyblue:'#5C9DF5', wash:'#EAF2FE', mist:'#D3E4FD',
+    confirm:'#16A34A', caution:'#D97706', alert:'#DC2626', excused:'#7C8DA6' },
+  fontFamily: { sans:['Geist','sans-serif'], mono:['"Geist Mono"','monospace'] },
+  boxShadow: { soft:'0 1px 2px rgba(11,42,86,0.04), 0 6px 24px rgba(11,42,86,0.05)',
+               lift:'0 1px 3px rgba(11,42,86,0.10), 0 12px 32px rgba(11,42,86,0.12)' }
+}}}
+</script>
+<style>
+  @keyframes rise{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+  .rise{animation:rise .5s cubic-bezier(.2,.8,.2,1) both}
+  .st{transition:background .12s,color .12s,box-shadow .12s}
+</style>
+</head>
+<body data-active="Daily Register" data-persona="teacher" class="bg-canvas font-sans text-charcoal antialiased">
+<div class="flex min-h-screen">
+
+  <div id="sidebar-root"></div>
+
+  <div class="flex-1 min-w-0">
+    <header class="h-[60px] bg-white/80 backdrop-blur-md border-b border-whisper/70 flex items-center justify-between px-4 sm:px-7 sticky top-0 z-20">
+      <div class="flex items-center gap-3">
+        <h1 class="text-[15px] font-semibold tracking-tight">Daily Register</h1>
+        <span class="font-mono text-[11.5px] font-medium text-blue bg-wash rounded-full px-2.5 py-1 hidden sm:inline">JSS 2A · my class</span>
+      </div>
+      <button class="h-9 px-4 rounded-lg bg-white ring-1 ring-whisper text-[13px] font-medium text-steel hover:bg-mist/30">History</button>
+    </header>
+
+    <main class="p-4 sm:p-7 max-w-[860px] space-y-4 pb-32">
+
+      <!-- date + week strip -->
+      <div class="rise bg-white ring-1 ring-whisper/80 rounded-2xl p-4 sm:p-5 shadow-soft">
+        <div class="flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <p class="text-[17px] font-bold tracking-tight text-ink">Friday, 12 June 2026</p>
+            <p class="text-[12px] text-steel mt-0.5" id="dateSub">Morning register · cut-off 8:00am · 38 students</p>
+          </div>
+          <div class="flex gap-1.5">
+            <div class="grid place-items-center h-11 w-11 rounded-xl bg-canvas ring-1 ring-whisper text-center"><span class="text-[9px] text-steel font-semibold">MON</span><span class="h-1.5 w-1.5 rounded-full bg-confirm -mt-0.5"></span></div>
+            <div class="grid place-items-center h-11 w-11 rounded-xl bg-canvas ring-1 ring-whisper text-center"><span class="text-[9px] text-steel font-semibold">TUE</span><span class="h-1.5 w-1.5 rounded-full bg-confirm -mt-0.5"></span></div>
+            <div class="grid place-items-center h-11 w-11 rounded-xl bg-canvas ring-1 ring-whisper text-center"><span class="text-[9px] text-steel font-semibold">WED</span><span class="h-1.5 w-1.5 rounded-full bg-confirm -mt-0.5"></span></div>
+            <div class="grid place-items-center h-11 w-11 rounded-xl bg-canvas ring-1 ring-whisper text-center"><span class="text-[9px] text-steel font-semibold">THU</span><span class="h-1.5 w-1.5 rounded-full bg-caution -mt-0.5" title="3 absent"></span></div>
+            <div class="grid place-items-center h-11 w-11 rounded-xl bg-blue text-white shadow-lift text-center"><span class="text-[9px] font-semibold">FRI</span><span class="text-[10px] font-mono -mt-0.5">today</span></div>
+          </div>
+        </div>
+        <div class="mt-4 inline-flex rounded-xl bg-canvas ring-1 ring-whisper p-1">
+          <button id="seg-morning" onclick="setSession('morning')" class="st h-9 px-3.5 rounded-lg text-[12.5px] font-semibold bg-blue text-white shadow-soft">Morning <span class="font-normal opacity-80">· by 8:00am</span></button>
+          <button id="seg-afternoon" onclick="setSession('afternoon')" class="st h-9 px-3.5 rounded-lg text-[12.5px] font-semibold text-steel">Afternoon <span class="font-normal opacity-80">· after 2nd break</span></button>
+        </div>
+        <p class="mt-2 text-[11px] text-steel flex items-center gap-1.5"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Morning cut-off (8:00am) and afternoon trigger (after 2nd break) are set by the school in Settings.</p>
+        <div class="mt-4 flex flex-wrap items-center gap-2">
+          <button id="markAll" class="st h-11 px-4 rounded-xl bg-confirm text-white text-[13px] font-semibold shadow-soft active:translate-y-px">✓ Mark all present, then adjust</button>
+          <span class="text-[11.5px] text-steel">fastest way — tap the exceptions after</span>
+        </div>
+      </div>
+
+      <!-- live counts -->
+      <div class="rise grid grid-cols-4 gap-2 sm:gap-3" style="animation-delay:.06s">
+        <div class="bg-white ring-1 ring-whisper/80 rounded-xl py-2.5 text-center shadow-soft"><p class="font-mono text-[18px] font-semibold text-confirm" id="cPresent">31</p><p class="text-[10px] font-semibold uppercase tracking-wider text-steel">Present</p></div>
+        <div class="bg-white ring-1 ring-whisper/80 rounded-xl py-2.5 text-center shadow-soft"><p class="font-mono text-[18px] font-semibold text-alert" id="cAbsent">2</p><p class="text-[10px] font-semibold uppercase tracking-wider text-steel">Absent</p></div>
+        <div class="bg-white ring-1 ring-whisper/80 rounded-xl py-2.5 text-center shadow-soft"><p class="font-mono text-[18px] font-semibold text-caution" id="cLate">1</p><p class="text-[10px] font-semibold uppercase tracking-wider text-steel">Late</p></div>
+        <div class="bg-white ring-1 ring-whisper/80 rounded-xl py-2.5 text-center shadow-soft"><p class="font-mono text-[18px] font-semibold text-excused" id="cExcused">1</p><p class="text-[10px] font-semibold uppercase tracking-wider text-steel">Excused</p></div>
+      </div>
+
+      <!-- roll -->
+      <div class="rise bg-white ring-1 ring-whisper/80 rounded-2xl shadow-soft overflow-hidden" style="animation-delay:.1s">
+        <div class="flex items-center justify-between px-4 sm:px-5 pt-4 pb-3">
+          <p class="text-[13.5px] font-semibold">Class roll</p>
+          <div class="flex items-center gap-2 h-9 bg-canvas ring-1 ring-whisper rounded-lg px-3 text-[12px] text-steel">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>Find student…
+          </div>
+        </div>
+        <div class="divide-y divide-whisper/60" id="roll"></div>
+        <p class="px-5 py-3 text-[11.5px] text-steel border-t border-whisper/70 bg-canvas/50">P = present · A = absent · L = late · E = excused (school knows — sick, travel, hospital). Absences notify the parent portal automatically at 9:00am.</p>
+      </div>
+
+    </main>
+
+    <!-- sticky save bar -->
+    <div class="fixed bottom-0 left-0 right-0 z-30 bg-white/90 backdrop-blur-md border-t border-whisper/80">
+      <div class="max-w-[860px] mx-auto px-4 sm:px-7 py-3 flex items-center justify-between gap-3">
+        <div class="min-w-0">
+          <p class="text-[12.5px] font-semibold">35 of 38 marked <span class="font-normal text-steel">· 3 left</span></p>
+          <div class="h-1.5 w-40 rounded-full bg-canvas ring-1 ring-whisper/60 overflow-hidden mt-1"><div class="h-full w-[92%] bg-blue rounded-full"></div></div>
+        </div>
+        <div class="flex items-center gap-2.5 shrink-0">
+          <span class="hidden sm:flex items-center gap-1.5 text-[11px] text-steel"><span class="h-1.5 w-1.5 rounded-full bg-confirm"></span>saves on your phone even if network drops</span>
+          <button class="h-11 px-6 rounded-xl bg-blue text-white text-[14px] font-semibold shadow-soft active:translate-y-px">Save register</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="toast" class="hidden fixed bottom-24 left-1/2 -translate-x-1/2 z-[60] bg-ink text-white text-[12.5px] font-medium px-4 py-2.5 rounded-xl shadow-lift"></div>
+<script src="../assets/shell.js"></script>
+<script>
+function toast(m){var t=document.getElementById('toast');t.textContent=m;t.classList.remove('hidden');clearTimeout(window._tt);window._tt=setTimeout(function(){t.classList.add('hidden')},2200);}
+// [ini,name,reg,status,arrivalTime] — two sessions, same class (JSS 2A)
+const DATA={
+ morning:[
+  ['AA','Abdulrahman Aliyu','AFA/2024/0102','P',''],
+  ['FA','Fatima Abubakar','AFA/2024/0117','P',''],
+  ['EE','Emeka Eze','AFA/2024/0121','P',''],
+  ['HS','Halima Sani','AFA/2024/0125','A',''],
+  ['IB','Ibrahim Bello','AFA/2024/0129','P',''],
+  ['CO','Chiamaka Okafor','AFA/2024/0133','L','8:17am'],
+  ['MS','Maryam Shehu','AFA/2024/0136','P',''],
+  ['TA','Tunde Adewale','AFA/2024/0140','P',''],
+  ['ZU','Zainab Umar','AFA/2024/0144','E',''],
+  ['YM','Yusuf Musa','AFA/2024/0149','A',''],
+  ['NO','Ngozi Okonkwo','AFA/2024/0153','',''],
+  ['SG','Sadiq Garba','AFA/2024/0157','',''],
+  ['AD','Aisha Danjuma','AFA/2024/0161','',''],
+ ],
+ afternoon:[
+  ['AA','Abdulrahman Aliyu','AFA/2024/0102','P',''],
+  ['FA','Fatima Abubakar','AFA/2024/0117','P',''],
+  ['EE','Emeka Eze','AFA/2024/0121','P',''],
+  ['HS','Halima Sani','AFA/2024/0125','A',''],
+  ['IB','Ibrahim Bello','AFA/2024/0129','L','1:06pm'],
+  ['CO','Chiamaka Okafor','AFA/2024/0133','P',''],
+  ['MS','Maryam Shehu','AFA/2024/0136','P',''],
+  ['TA','Tunde Adewale','AFA/2024/0140','P',''],
+  ['ZU','Zainab Umar','AFA/2024/0144','E',''],
+  ['YM','Yusuf Musa','AFA/2024/0149','A',''],
+  ['NO','Ngozi Okonkwo','AFA/2024/0153','',''],
+  ['SG','Sadiq Garba','AFA/2024/0157','',''],
+  ['AD','Aisha Danjuma','AFA/2024/0161','',''],
+ ]
+};
+let SESSION='morning';
+const states=[
+ ['P','confirm','Present'],['A','alert','Absent'],['L','caution','Late'],['E','excused','Excused']
+];
+const roll=document.getElementById('roll');
+
+function renderRoll(){
+  roll.innerHTML='';
+  DATA[SESSION].forEach(([ini,name,reg,cur,time])=>{
+    const row=document.createElement('div');
+    row.className='flex items-center gap-3 px-4 sm:px-5 py-2.5'+(cur===''?' bg-wash/40':'');
+    let btns='';
+    states.forEach(([k,tone,label])=>{
+      const on=cur===k;
+      btns+=`<button onclick="setState(this,'${tone}','${k}')" title="${label}" class="st h-11 w-11 rounded-xl text-[13px] font-bold grid place-items-center ${on
+        ?`bg-${tone} text-white shadow-soft`
+        :`bg-canvas ring-1 ring-whisper text-steel hover:ring-mist`}">${on?k+' ✓':k}</button>`;
+    });
+    const lateTag=(cur==='L'&&time)?` <span class="text-[9.5px] font-semibold text-caution bg-caution/10 rounded-full px-1.5 py-0.5 ml-1">arrived ${time}</span>`:'';
+    row.innerHTML=`
+      <span class="h-9 w-9 rounded-full bg-wash ring-1 ring-mist grid place-items-center text-[10.5px] font-semibold text-blue shrink-0">${ini}</span>
+      <div class="min-w-0 flex-1">
+        <p class="text-[13px] font-medium truncate">${name}${cur===''?' <span class="text-[9.5px] font-semibold uppercase tracking-wide text-blue ml-1">unmarked</span>':''}${lateTag}</p>
+        <p class="font-mono text-[10px] text-steel">${reg}</p>
+      </div>
+      <div class="flex gap-1.5 shrink-0">${btns}</div>`;
+    roll.appendChild(row);
+  });
+  const more=document.createElement('div');
+  more.className='px-5 py-3 text-center';
+  more.innerHTML='<button class="text-[12.5px] font-medium text-blue" onclick="toast(\'Loading the rest of the JSS 2A roll…\')">Show 25 more students ↓</button>';
+  roll.appendChild(more);
+  recount();
+}
+function recount(){
+  let p=0,a=0,l=0,e=0;
+  DATA[SESSION].forEach(([,,,st])=>{if(st==='P')p++;else if(st==='A')a++;else if(st==='L')l++;else if(st==='E')e++;});
+  document.getElementById('cPresent').textContent=p;
+  document.getElementById('cAbsent').textContent=a;
+  document.getElementById('cLate').textContent=l;
+  document.getElementById('cExcused').textContent=e;
+}
+function setSession(s){
+  SESSION=s;
+  document.getElementById('seg-morning').className='st h-9 px-3.5 rounded-lg text-[12.5px] font-semibold '+(s==='morning'?'bg-blue text-white shadow-soft':'text-steel');
+  document.getElementById('seg-afternoon').className='st h-9 px-3.5 rounded-lg text-[12.5px] font-semibold '+(s==='afternoon'?'bg-blue text-white shadow-soft':'text-steel');
+  document.getElementById('dateSub').textContent=(s==='morning'?'Morning register · cut-off 8:00am':'Afternoon register · after 2nd break (~12:55pm)')+' · 38 students';
+  renderRoll();
+}
+function setState(btn,tone,key){
+  const group=btn.parentElement;
+  const row=group.closest('div.flex.items-center');
+  // update model
+  const reg=row.querySelector('.font-mono.text-\\[10px\\]').textContent;
+  const rec=DATA[SESSION].find(r=>r[2]===reg);
+  if(rec){rec[3]=key;if(key!=='L')rec[4]='';else if(!rec[4])rec[4]=(SESSION==='morning'?'8:24am':'1:09pm');}
+  group.querySelectorAll('button').forEach(b=>{
+    b.className='st h-11 w-11 rounded-xl text-[13px] font-bold grid place-items-center bg-canvas ring-1 ring-whisper text-steel hover:ring-mist';
+    b.textContent=b.textContent.replace(' ✓','');
+  });
+  btn.className=`st h-11 w-11 rounded-xl text-[13px] font-bold grid place-items-center bg-${tone} text-white shadow-soft`;
+  btn.textContent=btn.textContent+' ✓';
+  // refresh name line (unmarked tag + late arrival tag)
+  const nameP=row.querySelector('p.font-medium');
+  if(rec){
+    const lateTag=(key==='L'&&rec[4])?` <span class="text-[9.5px] font-semibold text-caution bg-caution/10 rounded-full px-1.5 py-0.5 ml-1">arrived ${rec[4]}</span>`:'';
+    nameP.innerHTML=rec[1]+lateTag;
+  }
+  row.classList.remove('bg-wash/40');
+  recount();
+}
+document.getElementById('markAll').addEventListener('click',function(){
+  DATA[SESSION].forEach(r=>{if(r[3]===''){r[3]='P';r[4]='';}});
+  renderRoll();
+  toast('All unmarked students set to Present — adjust the exceptions.');
+});
+document.querySelectorAll('button').forEach(b=>{
+  if(b.textContent.trim()==='Save register'){b.addEventListener('click',function(){var l=DATA[SESSION].filter(r=>r[3]==='L').length;toast(SESSION.charAt(0).toUpperCase()+SESSION.slice(1)+' register submitted · '+l+' late. Parents of absentees notified.');});}
+  if(b.textContent.trim()==='History'){b.addEventListener('click',function(){toast('Opening attendance history for JSS 2A…');});}
+});
+setSession('morning');
+</script>
+</body>
+</html>

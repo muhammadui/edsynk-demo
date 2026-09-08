@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Edsynk — Payroll</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script>tailwind.config={theme:{extend:{colors:{canvas:'#F7F9FC',ink:'#0B2A56',charcoal:'#18181B',steel:'#64748B',whisper:'#E2E8F0',blue:'#2177EF',skyblue:'#5C9DF5',wash:'#EAF2FE',mist:'#D3E4FD',confirm:'#16A34A',caution:'#D97706',alert:'#DC2626',excused:'#7C8DA6'},fontFamily:{sans:['Geist','sans-serif'],mono:['"Geist Mono"','monospace']},boxShadow:{soft:'0 1px 2px rgba(11,42,86,0.04), 0 6px 24px rgba(11,42,86,0.05)',lift:'0 1px 3px rgba(11,42,86,0.10), 0 12px 32px rgba(11,42,86,0.12)'}}}}</script>
+<style>@keyframes rise{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}.rise{animation:rise .45s cubic-bezier(.2,.8,.2,1) both}.modal.open{opacity:1!important;pointer-events:auto!important}</style>
+</head>
+<body data-active="Payroll" data-persona="admin" class="bg-canvas font-sans text-charcoal antialiased">
+<div class="flex min-h-screen">
+  <div id="sidebar-root"></div>
+  <div class="flex-1 min-w-0">
+    <header class="h-[60px] bg-white/80 backdrop-blur-md border-b border-whisper/70 flex items-center justify-between px-4 sm:px-7 sticky top-0 z-20">
+      <div class="flex items-center gap-3"><h1 class="text-[15px] font-semibold tracking-tight">Payroll</h1>
+        <span class="text-[10px] font-semibold uppercase tracking-wide text-excused bg-canvas ring-1 ring-whisper rounded-full px-2.5 py-1 hidden sm:inline">Part of Finance module</span></div>
+      <div class="flex items-center gap-2.5">
+        <select onchange="toast('Loaded payroll for '+this.value)" class="h-9 rounded-lg border border-whisper bg-white px-3 text-[13px] font-medium hidden sm:block"><option>June 2025/26</option><option>May 2025/26</option><option>April 2025/26</option></select>
+        <button onclick="toast('Exporting payroll to Excel…')" class="h-9 px-3.5 rounded-lg border border-whisper bg-white text-[13px] font-medium hover:bg-mist/30 hidden sm:block">Export</button>
+        <button onclick="openM('runM')" class="h-9 px-4 rounded-lg bg-blue text-white text-[13px] font-medium shadow-soft active:translate-y-px">Run payroll</button>
+      </div>
+    </header>
+    <main class="p-4 sm:p-7 max-w-[1180px] space-y-5 pb-12">
+
+      <div class="rise rounded-2xl bg-canvas ring-1 ring-whisper px-4 py-3 flex items-center gap-3">
+        <span class="h-8 w-8 rounded-lg bg-excused/15 text-excused grid place-items-center shrink-0"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></span>
+        <p class="text-[12px] text-charcoal">Payroll is part of the wider <span class="font-semibold">Finance module</span> (rolling out alongside fees). Figures here are net of PAYE tax and 8% employee pension; the school adds 10% employer pension separately.</p>
+      </div>
+
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-3">
+        <div class="rise bg-white ring-1 ring-whisper/80 rounded-2xl p-4 shadow-soft" style="animation-delay:.04s"><p class="text-[10.5px] font-semibold uppercase tracking-wider text-steel">Total payroll · June</p><p class="font-mono text-[22px] font-semibold mt-1.5">₦3.42M</p><p class="text-[11.5px] text-steel mt-1">gross · 31 staff</p></div>
+        <div class="rise bg-white ring-1 ring-whisper/80 rounded-2xl p-4 shadow-soft" style="animation-delay:.08s"><p class="text-[10.5px] font-semibold uppercase tracking-wider text-steel">Net paid</p><p class="font-mono text-[22px] font-semibold mt-1.5 text-confirm">₦2.71M</p><p class="text-[11.5px] text-steel mt-1">26 staff paid</p></div>
+        <div class="rise bg-white ring-1 ring-caution/30 bg-caution/[0.04] rounded-2xl p-4 shadow-soft" style="animation-delay:.12s"><p class="text-[10.5px] font-semibold uppercase tracking-wider text-caution">Pending</p><p class="font-mono text-[22px] font-semibold mt-1.5">₦498k</p><p class="text-[11.5px] text-steel mt-1">5 staff · not yet run</p></div>
+        <div class="rise bg-white ring-1 ring-whisper/80 rounded-2xl p-4 shadow-soft" style="animation-delay:.16s"><p class="text-[10.5px] font-semibold uppercase tracking-wider text-steel">Deductions</p><p class="font-mono text-[22px] font-semibold mt-1.5">₦712k</p><p class="text-[11.5px] text-steel mt-1">PAYE ₦438k · pension ₦274k</p></div>
+      </div>
+
+      <div class="rise flex flex-wrap items-center gap-2" style="animation-delay:.2s">
+        <p class="text-[12.5px] text-steel flex-1">Payroll run — <span class="font-medium text-charcoal">June 2025/26</span></p>
+        <button onclick="toast('Generating 31 payslips…')" class="h-9 px-3.5 rounded-lg border border-whisper bg-white text-[12.5px] font-medium hover:bg-mist/30">Generate payslips</button>
+        <button onclick="openM('runM')" class="h-9 px-4 rounded-lg bg-blue text-white text-[12.5px] font-medium shadow-soft active:translate-y-px">Run payroll</button>
+      </div>
+
+      <!-- Payroll table -->
+      <div class="rise bg-white ring-1 ring-whisper/80 rounded-2xl shadow-soft overflow-hidden" style="animation-delay:.24s">
+        <div class="overflow-x-auto"><table class="w-full text-[13px] min-w-[940px]">
+          <thead><tr class="text-left text-[10.5px] font-semibold uppercase tracking-[0.07em] text-steel border-y border-whisper/60 bg-canvas/60">
+            <th class="pl-5 pr-3 py-3">Staff</th><th class="px-3 py-3 text-right">Gross</th><th class="px-3 py-3 text-right">Allowances</th><th class="px-3 py-3 text-right">PAYE</th><th class="px-3 py-3 text-right">Pension</th><th class="px-3 py-3 text-right">Net</th><th class="px-3 py-3">Status</th><th class="px-5 py-3 text-right">Payslip</th></tr></thead>
+          <tbody id="payRows" class="divide-y divide-whisper/60"></tbody>
+          <tfoot><tr class="border-t-2 border-whisper bg-canvas/60 font-semibold"><td class="pl-5 pr-3 py-3">Totals · 31 staff</td><td class="px-3 py-3 text-right font-mono">₦3.42M</td><td class="px-3 py-3 text-right font-mono">₦486k</td><td class="px-3 py-3 text-right font-mono text-alert">₦438k</td><td class="px-3 py-3 text-right font-mono text-alert">₦274k</td><td class="px-3 py-3 text-right font-mono text-confirm">₦3.20M</td><td class="px-3 py-3" colspan="2"></td></tr></tfoot>
+        </table></div>
+        <p class="px-5 py-3 border-t border-whisper/60 bg-canvas/50 text-[11.5px] text-steel">Net pay is disbursed by bank transfer. Payslips are emailed and visible in each staff portal.</p>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<!-- Run payroll confirm modal -->
+<div id="runM" class="modal fixed inset-0 z-50 bg-ink/40 backdrop-blur-sm grid place-items-center p-4" style="opacity:0;pointer-events:none;transition:opacity .2s" onclick="if(event.target===this)closeM('runM')">
+  <div class="bg-white rounded-2xl shadow-lift max-w-[440px] w-full p-6">
+    <div class="flex items-center justify-between mb-3"><p class="text-[15px] font-semibold">Run payroll — June 2025/26</p><button onclick="closeM('runM')" class="h-8 w-8 grid place-items-center rounded-lg hover:bg-mist/40 text-steel">✕</button></div>
+    <div class="rounded-xl ring-1 ring-whisper bg-canvas/50 p-4 space-y-2 text-[12.5px]">
+      <div class="flex justify-between"><span class="text-steel">Staff included</span><span class="font-mono font-medium">31</span></div>
+      <div class="flex justify-between"><span class="text-steel">Gross total</span><span class="font-mono font-medium">₦3,420,000</span></div>
+      <div class="flex justify-between"><span class="text-steel">PAYE tax</span><span class="font-mono text-alert">−₦438,000</span></div>
+      <div class="flex justify-between"><span class="text-steel">Pension (8%)</span><span class="font-mono text-alert">−₦274,000</span></div>
+      <div class="flex justify-between border-t border-whisper pt-2"><span class="font-semibold">Net to disburse</span><span class="font-mono font-semibold text-confirm">₦3,194,000</span></div>
+    </div>
+    <p class="text-[11px] text-steel mt-3">This queues transfers to 31 staff bank accounts and locks the June run. Reversals need registrar approval.</p>
+    <div class="flex justify-end gap-2 mt-5"><button onclick="closeM('runM')" class="h-10 px-4 rounded-lg ring-1 ring-whisper text-[13px] font-medium text-steel">Cancel</button><button onclick="closeM('runM');toast('Payroll run queued')" class="h-10 px-5 rounded-lg bg-blue text-white text-[13px] font-semibold shadow-soft">Confirm &amp; run</button></div>
+  </div>
+</div>
+
+<!-- Payslip preview modal -->
+<div id="slipM" class="modal fixed inset-0 z-50 bg-ink/40 backdrop-blur-sm grid place-items-center p-4" style="opacity:0;pointer-events:none;transition:opacity .2s" onclick="if(event.target===this)closeM('slipM')">
+  <div class="bg-white rounded-2xl shadow-lift max-w-[460px] w-full p-6 max-h-[90vh] overflow-y-auto">
+    <div class="flex items-center justify-between mb-1"><p class="text-[15px] font-semibold">Payslip</p><button onclick="closeM('slipM')" class="h-8 w-8 grid place-items-center rounded-lg hover:bg-mist/40 text-steel">✕</button></div>
+    <p class="text-[11.5px] text-steel mb-3">Al-Furqan Academy, Bauchi · June 2025/26</p>
+    <div class="rounded-xl ring-1 ring-whisper p-4">
+      <div class="flex items-center justify-between"><div><p class="text-[14px] font-semibold" id="slipName">—</p><p class="text-[11.5px] text-steel" id="slipRole">—</p></div><span class="font-mono text-[11px] text-steel" id="slipBank">—</span></div>
+      <div class="mt-4">
+        <p class="text-[10.5px] font-semibold uppercase tracking-wider text-steel mb-1.5">Earnings</p>
+        <div class="space-y-1 text-[12.5px]" id="slipEarn"></div>
+      </div>
+      <div class="mt-3">
+        <p class="text-[10.5px] font-semibold uppercase tracking-wider text-steel mb-1.5">Deductions</p>
+        <div class="space-y-1 text-[12.5px]" id="slipDed"></div>
+      </div>
+      <div class="flex justify-between border-t border-whisper mt-3 pt-3"><span class="font-semibold text-[13px]">Net pay</span><span class="font-mono font-semibold text-[14px] text-confirm" id="slipNet">—</span></div>
+    </div>
+    <div class="flex justify-end gap-2 mt-5"><button onclick="toast('Payslip sent to staff email')" class="h-10 px-4 rounded-lg ring-1 ring-whisper text-[13px] font-medium text-steel">Email</button><button onclick="closeM('slipM');toast('Payslip downloaded as PDF')" class="h-10 px-5 rounded-lg bg-blue text-white text-[13px] font-semibold shadow-soft">Download PDF</button></div>
+  </div>
+</div>
+
+<script src="../assets/shell.js"></script>
+<div id="toast" class="hidden fixed bottom-5 left-1/2 -translate-x-1/2 z-[60] bg-ink text-white text-[12.5px] font-medium px-4 py-2.5 rounded-xl shadow-lift"></div>
+<script>function toast(m){var t=document.getElementById('toast');t.textContent=m;t.classList.remove('hidden');clearTimeout(window._tt);window._tt=setTimeout(function(){t.classList.add('hidden')},2200);}
+function openM(id){document.getElementById(id).classList.add('open');}
+function closeM(id){document.getElementById(id).classList.remove('open');}
+
+function naira(n){return '₦'+n.toLocaleString('en-NG');}
+// [name, role, basic, allowances, paye, pension, status, bank]
+const PAY=[
+ ['Ustadh Abdullahi Sani','Proprietor / Registrar',180000,40000,28000,14400,'Paid','GTB ··· 4471'],
+ ['Mrs. Bisi Adeyemi','VP Academic · English',160000,30000,22800,12800,'Paid','Zenith ··· 8820'],
+ ['Mallam Musa Ibrahim','Mathematics · Exam officer',135000,22000,17600,10800,'Paid','Access ··· 1190'],
+ ['Mr. Emeka Nwosu','Economics teacher',120000,18000,14400,9600,'Paid','UBA ··· 6612'],
+ ['Mrs. Ngozi Okonkwo','Biology teacher',118000,16000,13900,9440,'Paid','GTB ··· 3320'],
+ ['Mr. Ibrahim Lawal','Chemistry teacher',115000,15000,13400,9200,'Paid','First Bank ··· 7740'],
+ ['Ustadha Halima Yusuf','Qur\\'an & Tajweed',98000,12000,9800,7840,'Paid','Jaiz ··· 2281'],
+ ['Mr. Chinedu Okafor','Basic Tech · Form JSS 2B',92000,12000,8900,7360,'Pending','Access ··· 9034'],
+ ['Mr. Tunde Bakare','Further Maths · Physics',110000,14000,12600,8800,'Pending','Zenith ··· 6612'],
+ ['Mrs. Grace Eze','Social Studies teacher',88000,10000,8200,7040,'Paid','UBA ··· 1102'],
+ ['Hajiya Zainab Aliyu','Bursar · Admin',105000,16000,11800,8400,'Pending','Jaiz ··· 3398'],
+ ['Mr. Audu Bappa','PHE teacher',82000,9000,7100,6560,'Pending','GTB ··· 4521'],
+ ['Mallam Yusuf Idris','Security / non-teaching',55000,6000,3200,4400,'Pending','Opay ··· 7781'],
+];
+function spill(s){return s==='Paid'?'<span class="text-[10.5px] font-medium text-confirm bg-confirm/10 rounded-full px-2 py-0.5">Paid</span>':'<span class="text-[10.5px] font-medium text-caution bg-caution/10 rounded-full px-2 py-0.5">Pending</span>';}
+document.getElementById('payRows').innerHTML=PAY.map((p,i)=>{
+  const gross=p[2]+p[3];const net=gross-p[4]-p[5];
+  return `<tr class="hover:bg-mist/15">
+    <td class="pl-5 pr-3 py-3"><a href="staff-detail.html" class="font-medium hover:text-blue">${p[0]}</a><span class="block text-[11px] text-steel">${p[1]}</span></td>
+    <td class="px-3 py-3 text-right font-mono">${naira(p[2])}</td>
+    <td class="px-3 py-3 text-right font-mono text-steel">${naira(p[3])}</td>
+    <td class="px-3 py-3 text-right font-mono text-alert">${naira(p[4])}</td>
+    <td class="px-3 py-3 text-right font-mono text-alert">${naira(p[5])}</td>
+    <td class="px-3 py-3 text-right font-mono font-medium">${naira(net)}</td>
+    <td class="px-3 py-3">${spill(p[6])}</td>
+    <td class="px-5 py-3 text-right"><button onclick="event.stopPropagation();viewSlip(${i})" class="h-8 px-2.5 rounded-lg border border-whisper text-[11px] font-medium hover:bg-mist/30">View</button></td></tr>`;
+}).join('');
+
+function viewSlip(i){
+  const p=PAY[i];const gross=p[2]+p[3];const net=gross-p[4]-p[5];
+  document.getElementById('slipName').textContent=p[0];
+  document.getElementById('slipRole').textContent=p[1];
+  document.getElementById('slipBank').textContent=p[7];
+  document.getElementById('slipEarn').innerHTML=`<div class="flex justify-between"><span class="text-steel">Basic salary</span><span class="font-mono">${naira(p[2])}</span></div><div class="flex justify-between"><span class="text-steel">Allowances (housing/transport)</span><span class="font-mono">${naira(p[3])}</span></div><div class="flex justify-between font-medium"><span>Gross</span><span class="font-mono">${naira(gross)}</span></div>`;
+  document.getElementById('slipDed').innerHTML=`<div class="flex justify-between"><span class="text-steel">PAYE tax</span><span class="font-mono text-alert">−${naira(p[4])}</span></div><div class="flex justify-between"><span class="text-steel">Pension (8% employee)</span><span class="font-mono text-alert">−${naira(p[5])}</span></div>`;
+  document.getElementById('slipNet').textContent=naira(net);
+  openM('slipM');
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Edsynk — Sign in</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&family=Noto+Naskh+Arabic:wght@500&display=swap" rel="stylesheet">
+<script>tailwind.config={theme:{extend:{colors:{canvas:'#F7F9FC',ink:'#0B2A56',charcoal:'#18181B',steel:'#64748B',whisper:'#E2E8F0',blue:'#2177EF',skyblue:'#5C9DF5',wash:'#EAF2FE',mist:'#D3E4FD',confirm:'#16A34A',caution:'#D97706',alert:'#DC2626',excused:'#7C8DA6'},fontFamily:{sans:['Geist','sans-serif'],mono:['"Geist Mono"','monospace'],arabic:['"Noto Naskh Arabic"','serif']},boxShadow:{soft:'0 1px 2px rgba(11,42,86,0.05), 0 8px 32px rgba(11,42,86,0.07)',lift:'0 2px 8px rgba(11,42,86,0.10), 0 24px 64px rgba(11,42,86,0.16)'}}}}</script>
+<style>@keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}.rise{animation:rise .5s cubic-bezier(.2,.8,.2,1) both}</style>
+</head>
+<body class="font-sans text-charcoal antialiased min-h-screen lg:grid lg:grid-cols-[1fr_1.05fr]">
+<main class="min-h-screen lg:min-h-0 bg-white flex flex-col px-6 sm:px-12 py-8">
+  <div class="flex items-center gap-2"><span class="h-7 w-7 rounded-lg bg-blue grid place-items-center text-white font-bold text-[13px]">E</span><span class="font-semibold tracking-tight text-[15px]">edsynk</span></div>
+  <div class="flex-1 grid place-items-center py-10"><div class="w-full max-w-[420px]">
+    <h1 class="rise text-[24px] font-bold tracking-[-0.02em] text-ink">Sign in to Edsynk</h1>
+    <p class="rise text-[13.5px] text-steel mt-1.5" style="animation-delay:.05s">The school operating system for Nigeria. Pick your role to continue.</p>
+
+    <!-- Role selector -->
+    <div class="rise mt-7 grid grid-cols-4 gap-1.5 bg-canvas ring-1 ring-whisper rounded-xl p-1" style="animation-delay:.08s" id="roleTabs">
+      <button data-role="admin" class="role-tab h-9 rounded-lg text-[12.5px] font-semibold transition">Admin</button>
+      <button data-role="teacher" class="role-tab h-9 rounded-lg text-[12.5px] font-semibold transition">Teacher</button>
+      <button data-role="student" class="role-tab h-9 rounded-lg text-[12.5px] font-semibold transition">Student</button>
+      <button data-role="parent" class="role-tab h-9 rounded-lg text-[12.5px] font-semibold transition">Parent</button>
+    </div>
+    <p class="rise text-[11.5px] text-steel mt-2" id="roleHelp" style="animation-delay:.1s"></p>
+
+    <div class="rise mt-5 space-y-4" style="animation-delay:.12s">
+      <div><label class="text-[11.5px] font-semibold uppercase tracking-wider text-steel" id="idLabel">Email</label>
+        <input type="text" id="idField" value="abdullahi@alfurqan.edsynk.ng" class="mt-1.5 w-full h-12 rounded-xl border border-whisper bg-canvas px-4 text-[14px] focus:outline-none focus:ring-2 focus:ring-blue/50"></div>
+      <div><label class="text-[11.5px] font-semibold uppercase tracking-wider text-steel">Password</label>
+        <input type="password" value="••••••••" class="mt-1.5 w-full h-12 rounded-xl border border-whisper bg-canvas px-4 text-[15px] focus:outline-none focus:ring-2 focus:ring-blue/50"></div>
+      <div class="flex items-center justify-between text-[12.5px]">
+        <label class="flex items-center gap-2 text-steel cursor-pointer select-none"><input type="checkbox" checked class="h-4 w-4 rounded border-whisper text-blue focus:ring-blue/50"> Remember me</label>
+        <a href="forgot-password.html" class="text-blue font-medium">Forgot password?</a>
+      </div>
+      <button id="signIn" class="w-full h-12 rounded-xl bg-blue text-white text-[14.5px] font-semibold shadow-soft active:translate-y-px">Sign in as Admin</button>
+
+      <div id="accessCodeRow" class="rounded-xl bg-canvas ring-1 ring-whisper px-4 py-3 text-[12px] text-steel hidden">
+        Students and parents can also <a href="access-code-login.html" class="text-blue font-medium">use an access code instead</a> — no email needed.
+      </div>
+
+      <div class="flex items-center gap-3 text-[11px] text-steel"><span class="h-px flex-1 bg-whisper"></span>New to Edsynk?<span class="h-px flex-1 bg-whisper"></span></div>
+      <button onclick="location.href='register-school.html'" class="w-full h-11 rounded-xl ring-1 ring-whisper bg-white text-[13.5px] font-semibold text-charcoal hover:bg-canvas active:translate-y-px">Register your school</button>
+
+      <p class="text-[11.5px] text-steel/90 text-center pt-1 flex items-center justify-center gap-1.5">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-confirm"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        Your school's data stays yours.
+      </p>
+    </div>
+  </div></div>
+  <p class="text-[11px] text-steel/80"><a href="../public/landing.html" class="hover:text-charcoal">edsynk.ng</a> · <a href="#" onclick="toast('Opening WhatsApp support…');return false;" class="hover:text-charcoal">Need help? WhatsApp us</a></p>
+</main>
+<aside class="hidden lg:flex relative overflow-hidden bg-ink text-white flex-col justify-between p-12" style="background:radial-gradient(700px 420px at 80% -10%, rgba(33,119,239,0.35), transparent 60%),radial-gradient(500px 500px at -10% 110%, rgba(33,119,239,0.18), transparent 55%),linear-gradient(170deg,#0B2A56 0%,#081D3D 55%,#050F22 100%)">
+  <div class="rise text-[12px] font-medium text-skyblue/90 uppercase tracking-[0.12em]">The school operating system</div>
+  <div class="rise" style="animation-delay:.1s">
+    <h2 class="text-[clamp(1.7rem,2.6vw,2.4rem)] font-bold tracking-[-0.02em] leading-[1.1] max-w-[16ch]">Records, results and AI — for every Nigerian school.</h2>
+    <p class="text-[12.5px] text-white/60 mt-4 max-w-[42ch]">Conventional, Islamiyya or hybrid — Edsynk computes on your own grading system, seals every result against forgery, and puts it in every parent's hand.</p>
+    <div class="mt-8 max-w-[340px] bg-white text-charcoal rounded-2xl shadow-lift rotate-[1.5deg] overflow-hidden">
+      <div class="px-4 py-3 flex items-center justify-between border-b border-whisper/60"><div><p class="text-[12px] font-semibold">Fatima Abubakar</p><p class="font-mono text-[9.5px] text-steel">JSS 2A · Third Term</p></div><p class="font-mono text-[16px] font-semibold">87.2%</p></div>
+      <div class="px-4 py-2.5 flex items-center justify-between bg-canvas"><p class="font-mono text-[9px] text-steel">sha256: 4f2a…c91d · sealed</p><span class="flex items-center gap-1 text-[10px] font-semibold text-confirm bg-confirm/10 rounded-full px-2 py-0.5"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>Genuine</span></div>
+    </div>
+  </div>
+  <p class="rise text-[11.5px] text-white/45" style="animation-delay:.2s">© 2026 Edsynk Technologies Ltd · Bauchi, Nigeria</p>
+</aside>
+<div id="toast" class="hidden fixed bottom-5 left-1/2 -translate-x-1/2 z-[60] bg-ink text-white text-[12.5px] font-medium px-4 py-2.5 rounded-xl shadow-lift"></div>
+<script>
+function toast(m){var t=document.getElementById('toast');t.textContent=m;t.classList.remove('hidden');clearTimeout(window._tt);window._tt=setTimeout(function(){t.classList.add('hidden')},2200);}
+
+var ROLES={
+  admin:{label:'Admin',dest:'../admin/admin-dashboard.html',help:'School owner / administrator — full console, staff, billing and approvals.',idLabel:'Email',idValue:'abdullahi@alfurqan.edsynk.ng',code:false},
+  teacher:{label:'Teacher',dest:'../teacher/teacher-home.html',help:'Enter scores, mark attendance and run your classes from any phone.',idLabel:'Email or staff ID',idValue:'musa.ibrahim@alfurqan.edsynk.ng',code:false},
+  student:{label:'Student',dest:'../student/student-home.html',help:'Sign in with your admission number to see results and CBT.',idLabel:'Admission number',idValue:'AFA/2024/0117',code:true},
+  parent:{label:'Parent',dest:'../parent/parent-home.html',help:'One login for every child — results, attendance and fees.',idLabel:'Email or phone',idValue:'0803 481 2207',code:true}
+};
+var current='admin';
+var tabs=document.querySelectorAll('.role-tab');
+function selectRole(r){
+  current=r;var cfg=ROLES[r];
+  tabs.forEach(function(t){
+    var on=t.dataset.role===r;
+    t.className='role-tab h-9 rounded-lg text-[12.5px] font-semibold transition '+(on?'bg-white text-ink shadow-soft':'text-steel hover:text-charcoal');
+  });
+  document.getElementById('roleHelp').textContent=cfg.help;
+  document.getElementById('idLabel').textContent=cfg.idLabel;
+  document.getElementById('idField').value=cfg.idValue;
+  document.getElementById('idField').type=(r==='student'||r==='admin')?'text':'text';
+  document.getElementById('accessCodeRow').classList.toggle('hidden',!cfg.code);
+  document.getElementById('signIn').textContent='Sign in as '+cfg.label;
+}
+tabs.forEach(function(t){t.addEventListener('click',function(){selectRole(t.dataset.role);});});
+document.getElementById('signIn').addEventListener('click',function(){
+  toast('Signing in as '+ROLES[current].label+'…');
+  setTimeout(function(){location.href=ROLES[current].dest;},650);
+});
+selectRole('admin');
+</script>
+</body>
+</html>

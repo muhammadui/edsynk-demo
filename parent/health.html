@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Edsynk — Health & Clinic</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script>tailwind.config={theme:{extend:{colors:{canvas:'#F7F9FC',ink:'#0B2A56',charcoal:'#18181B',steel:'#64748B',whisper:'#E2E8F0',blue:'#2177EF',skyblue:'#5C9DF5',wash:'#EAF2FE',mist:'#D3E4FD',confirm:'#16A34A',caution:'#D97706',alert:'#DC2626',excused:'#7C8DA6'},fontFamily:{sans:['Geist','sans-serif'],mono:['"Geist Mono"','monospace']},boxShadow:{soft:'0 1px 2px rgba(11,42,86,0.04), 0 6px 24px rgba(11,42,86,0.05)',lift:'0 1px 3px rgba(11,42,86,0.10), 0 12px 32px rgba(11,42,86,0.12)'}}}}</script>
+<style>@keyframes rise{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}.rise{animation:rise .45s cubic-bezier(.2,.8,.2,1) both}</style>
+</head>
+<body data-active="Health" data-persona="parent" class="bg-canvas font-sans text-charcoal antialiased">
+<div class="flex min-h-screen">
+  <div id="sidebar-root"></div>
+  <div class="flex-1 min-w-0">
+    <header class="h-[60px] bg-white/80 backdrop-blur-md border-b border-whisper/70 flex items-center justify-between px-4 sm:px-7 sticky top-0 z-20">
+      <div class="flex items-center gap-3"><h1 class="text-[15px] font-semibold tracking-tight">Health &amp; Clinic</h1></div>
+      <button onclick="location.href='messages.html'" class="h-9 px-4 rounded-lg bg-white ring-1 ring-whisper text-[13px] font-medium text-steel hover:bg-mist/30">Message nurse</button>
+    </header>
+
+    <main class="p-4 sm:p-7 max-w-[1000px] space-y-5 pb-10">
+
+      <div class="rise rounded-2xl bg-wash/50 ring-1 ring-mist/60 px-4 py-3 flex items-start gap-3 text-[12px] text-ink leading-relaxed">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-blue shrink-0 mt-0.5"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+        <span>Your child's health records, kept by the school nurse. This page is for your peace of mind — it is read-only. If anything has changed, please tell the nurse so she can update the file.</span>
+      </div>
+
+      <!-- child switcher -->
+      <section class="rise flex gap-2.5 overflow-x-auto pb-1" id="kids">
+        <button onclick="kid(0)" class="kbtn shrink-0 flex items-center gap-3 rounded-2xl px-4 py-3 min-w-[190px] bg-ink text-white shadow-lift">
+          <span class="h-10 w-10 rounded-full bg-skyblue/30 ring-1 ring-skyblue/40 grid place-items-center text-[12px] font-semibold text-skyblue">FA</span>
+          <span class="text-left"><span class="block text-[14px] font-semibold leading-tight">Fatima</span><span class="kSub block text-[10.5px] text-white/60 mt-0.5">JSS 2A</span></span>
+        </button>
+        <button onclick="kid(1)" class="kbtn shrink-0 flex items-center gap-3 rounded-2xl px-4 py-3 min-w-[190px] bg-white ring-1 ring-whisper/80 shadow-soft">
+          <span class="h-10 w-10 rounded-full bg-wash grid place-items-center text-[12px] font-semibold text-blue">YA</span>
+          <span class="text-left"><span class="block text-[14px] font-semibold leading-tight">Yusuf</span><span class="kSub block text-[10.5px] text-steel mt-0.5">SS1 Science</span></span>
+        </button>
+      </section>
+
+      <!-- vitals strip -->
+      <section class="rise grid grid-cols-2 sm:grid-cols-4 gap-3" style="animation-delay:.04s">
+        <div class="bg-white ring-1 ring-whisper/80 rounded-2xl p-4 shadow-soft"><p class="text-[10.5px] font-semibold uppercase tracking-wider text-steel">Blood group</p><p class="font-mono text-[20px] font-semibold mt-1.5" id="vBlood">O+</p></div>
+        <div class="bg-white ring-1 ring-whisper/80 rounded-2xl p-4 shadow-soft"><p class="text-[10.5px] font-semibold uppercase tracking-wider text-steel">Genotype</p><p class="font-mono text-[20px] font-semibold mt-1.5" id="vGeno">AA</p></div>
+        <div class="bg-white ring-1 ring-whisper/80 rounded-2xl p-4 shadow-soft"><p class="text-[10.5px] font-semibold uppercase tracking-wider text-steel">Height</p><p class="font-mono text-[20px] font-semibold mt-1.5" id="vHeight">152 cm</p><p class="text-[10px] text-steel mt-0.5">measured Apr 2026</p></div>
+        <div class="bg-white ring-1 ring-whisper/80 rounded-2xl p-4 shadow-soft"><p class="text-[10.5px] font-semibold uppercase tracking-wider text-steel">Weight</p><p class="font-mono text-[20px] font-semibold mt-1.5" id="vWeight">42 kg</p><p class="text-[10px] text-steel mt-0.5">measured Apr 2026</p></div>
+      </section>
+
+      <!-- conditions + allergies -->
+      <section class="rise grid md:grid-cols-2 gap-5" style="animation-delay:.08s">
+        <div class="bg-white ring-1 ring-whisper/80 rounded-2xl shadow-soft p-5">
+          <div class="flex items-center gap-2.5 mb-3"><span class="h-8 w-8 rounded-lg bg-caution/10 text-caution grid place-items-center"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4M12 17h.01"/><path d="M10.3 3.9l-8 14A2 2 0 004 21h16a2 2 0 001.7-3.1l-8-14a2 2 0 00-3.4 0z"/></svg></span><p class="text-[13.5px] font-semibold">Known conditions</p></div>
+          <ul class="space-y-2 text-[12.5px]" id="conditions"></ul>
+        </div>
+        <div class="bg-white ring-1 ring-whisper/80 rounded-2xl shadow-soft p-5">
+          <div class="flex items-center gap-2.5 mb-3"><span class="h-8 w-8 rounded-lg bg-alert/10 text-alert grid place-items-center"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M4.9 4.9l14.2 14.2"/></svg></span><p class="text-[13.5px] font-semibold">Allergies</p></div>
+          <ul class="space-y-2 text-[12.5px]" id="allergies"></ul>
+        </div>
+      </section>
+
+      <!-- immunization -->
+      <section class="rise bg-white ring-1 ring-whisper/80 rounded-2xl shadow-soft overflow-hidden" style="animation-delay:.1s">
+        <div class="px-5 py-3.5 border-b border-whisper/60 flex items-center justify-between"><h2 class="font-semibold tracking-tight text-[14px]">Immunization status</h2><span id="immBadge" class="text-[10.5px] font-semibold text-confirm bg-confirm/10 rounded-full px-2.5 py-1">Up to date</span></div>
+        <div class="p-5 grid grid-cols-2 sm:grid-cols-4 gap-3 text-[12px]" id="imm"></div>
+      </section>
+
+      <!-- clinic visits -->
+      <section class="rise bg-white ring-1 ring-whisper/80 rounded-2xl shadow-soft overflow-hidden" style="animation-delay:.14s">
+        <div class="px-5 py-3.5 border-b border-whisper/60"><h2 class="font-semibold tracking-tight text-[14px]">Clinic visit history</h2></div>
+        <div class="overflow-x-auto"><table class="w-full text-[12.5px] min-w-[560px]">
+          <thead><tr class="text-left text-[10px] uppercase tracking-wider text-steel border-b border-whisper/70 bg-canvas/60">
+            <th class="px-5 py-2.5 font-semibold">Date</th><th class="px-3 py-2.5 font-semibold">Complaint</th><th class="px-3 py-2.5 font-semibold">Treatment given</th><th class="px-5 py-2.5 font-semibold text-right">Sent home?</th></tr></thead>
+          <tbody id="visits" class="divide-y divide-whisper/60"></tbody>
+        </table></div>
+        <p id="noVisits" class="hidden px-5 py-8 text-center text-[12.5px] text-steel">No clinic visits recorded this session — alhamdulillah.</p>
+      </section>
+
+      <!-- emergency contact + confidentiality -->
+      <section class="rise grid md:grid-cols-2 gap-5" style="animation-delay:.18s">
+        <div class="bg-white ring-1 ring-whisper/80 rounded-2xl shadow-soft p-5">
+          <p class="text-[13.5px] font-semibold mb-3">Emergency contact on file</p>
+          <div class="rounded-xl bg-canvas ring-1 ring-whisper/70 divide-y divide-whisper/60 text-[12.5px]">
+            <div class="flex justify-between px-4 py-2.5"><span class="text-steel">Name</span><span class="font-medium">Hajiya Maryam Abubakar</span></div>
+            <div class="flex justify-between px-4 py-2.5"><span class="text-steel">Relationship</span><span class="font-medium">Mother / guardian</span></div>
+            <div class="flex justify-between px-4 py-2.5"><span class="text-steel">Phone</span><span class="font-mono">0803 ••• 4471</span></div>
+            <div class="flex justify-between px-4 py-2.5"><span class="text-steel">Preferred hospital</span><span class="font-medium">Aminu Bauchi Teaching Hospital</span></div>
+          </div>
+          <button onclick="toast('A request to update the contact has been sent to the nurse')" class="mt-3 w-full h-10 rounded-xl ring-1 ring-whisper bg-white text-[12.5px] font-medium text-steel hover:bg-mist/30">Update contact</button>
+        </div>
+        <div class="bg-gradient-to-br from-wash to-white ring-1 ring-mist rounded-2xl shadow-soft p-5 flex flex-col justify-center">
+          <span class="h-10 w-10 rounded-xl bg-blue text-white grid place-items-center mb-3"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></span>
+          <p class="text-[13.5px] font-semibold text-ink">Kept private &amp; safe</p>
+          <p class="text-[12px] text-charcoal/80 mt-1.5 leading-relaxed">These records are held in confidence by the school nurse, Nurse Hauwa Garba, and are only shared with you and, in an emergency, the doctor treating your child. No teacher or other parent can see them.</p>
+        </div>
+      </section>
+    </main>
+  </div>
+</div>
+<div id="toast" class="hidden fixed bottom-5 left-1/2 -translate-x-1/2 z-[60] bg-ink text-white text-[12.5px] font-medium px-4 py-2.5 rounded-xl shadow-lift"></div>
+<script>function toast(m){var t=document.getElementById('toast');t.textContent=m;t.classList.remove('hidden');clearTimeout(window._tt);window._tt=setTimeout(function(){t.classList.add('hidden')},2200);}</script>
+<script src="../assets/shell.js"></script>
+<script>
+const KIDS=[
+ {blood:'O+',geno:'AA',height:'152 cm',weight:'42 kg',immUp:true,
+  conditions:[['Mild asthma','Emergency reliever inhaler kept at the clinic. Usually triggered by harmattan dust and strenuous exercise. No attack since Oct 2025.','caution']],
+  allergies:[['Penicillin','Mild rash reported as a toddler — avoid; alternatives noted in file.','alert'],['Dust (harmattan)','Linked to her asthma; nurse keeps a mask on hand.','caution']],
+  imm:[['BCG','Done'],['Polio (OPV)','Done'],['Measles','Done'],['Hepatitis B','Done'],['Yellow fever','Done'],['Meningitis','Done'],['Tetanus','Done'],['COVID-19','Done']],
+  visits:[
+   ['14 May 2026','Wheezing after PE','Used reliever inhaler; rested 30 min','No'],
+   ['03 Mar 2026','Headache','Paracetamol; water; rested','No'],
+   ['21 Oct 2025','Mild asthma flare (dust)','Inhaler; mother informed by call','Yes — collected 1:10pm'],
+  ]},
+ {blood:'A+',geno:'AS',height:'168 cm',weight:'58 kg',immUp:true,
+  conditions:[['Sickle cell trait (AS carrier)','A carrier, not a patient — generally no symptoms. Nurse ensures he stays well-hydrated during sports and hot days.','blue']],
+  allergies:[['No known allergies','Nothing recorded. Please inform the nurse if this changes.','confirm']],
+  imm:[['BCG','Done'],['Polio (OPV)','Done'],['Measles','Done'],['Hepatitis B','Done'],['Yellow fever','Done'],['Meningitis','Done'],['Tetanus','Done'],['COVID-19','Done']],
+  visits:[
+   ['09 Jun 2026','Sprained ankle (football)','Cold compress; bandage; rested','No'],
+   ['18 Feb 2026','Stomach ache','Rested; observed; resolved','No'],
+  ]},
+];
+let ci=0;
+const TONE={caution:'text-caution bg-caution/10',alert:'text-alert bg-alert/10',blue:'text-blue bg-wash',confirm:'text-confirm bg-confirm/10'};
+function dot(t){return {caution:'bg-caution',alert:'bg-alert',blue:'bg-blue',confirm:'bg-confirm'}[t];}
+function kid(i){ci=i;
+  document.querySelectorAll('.kbtn').forEach((b,j)=>{const sel=j===i;
+    b.className='kbtn shrink-0 flex items-center gap-3 rounded-2xl px-4 py-3 min-w-[190px] '+(sel?'bg-ink text-white shadow-lift':'bg-white ring-1 ring-whisper/80 shadow-soft');
+    b.querySelector('.kSub').className='kSub block text-[10.5px] mt-0.5 '+(sel?'text-white/60':'text-steel');});
+  render();
+}
+function render(){
+  const k=KIDS[ci];
+  vBlood.textContent=k.blood;vGeno.textContent=k.geno;vHeight.textContent=k.height;vWeight.textContent=k.weight;
+  document.getElementById('conditions').innerHTML=k.conditions.map(c=>`<li class="rounded-xl ring-1 ring-whisper/80 p-3"><div class="flex items-center gap-2"><span class="h-2 w-2 rounded-full ${dot(c[2])}"></span><span class="font-semibold">${c[0]}</span></div><p class="text-steel text-[11.5px] mt-1 leading-relaxed">${c[1]}</p></li>`).join('');
+  document.getElementById('allergies').innerHTML=k.allergies.map(c=>`<li class="rounded-xl ring-1 ring-whisper/80 p-3"><div class="flex items-center gap-2"><span class="h-2 w-2 rounded-full ${dot(c[2])}"></span><span class="font-semibold">${c[0]}</span></div><p class="text-steel text-[11.5px] mt-1 leading-relaxed">${c[1]}</p></li>`).join('');
+  document.getElementById('imm').innerHTML=k.imm.map(m=>`<div class="rounded-xl ring-1 ring-whisper/80 px-3 py-2.5 flex items-center justify-between"><span>${m[0]}</span><span class="text-[10px] font-semibold text-confirm bg-confirm/10 rounded-full px-2 py-0.5 flex items-center gap-1"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>${m[1]}</span></div>`).join('');
+  immBadge.textContent=k.immUp?'Up to date':'Review needed';
+  immBadge.className='text-[10.5px] font-semibold rounded-full px-2.5 py-1 '+(k.immUp?'text-confirm bg-confirm/10':'text-caution bg-caution/10');
+  const vb=document.getElementById('visits');
+  document.getElementById('noVisits').classList.toggle('hidden',k.visits.length>0);
+  vb.innerHTML=k.visits.map(v=>`<tr class="hover:bg-canvas/60"><td class="px-5 py-3 font-mono text-[11px]">${v[0]}</td><td class="px-3 py-3 font-medium">${v[1]}</td><td class="px-3 py-3 text-steel">${v[2]}</td><td class="px-5 py-3 text-right">${v[3]==='No'?'<span class="text-[10.5px] text-steel">No</span>':`<span class="text-[10.5px] font-medium text-caution bg-caution/10 rounded-full px-2 py-0.5">${v[3]}</span>`}</td></tr>`).join('');
+}
+kid(0);
+</script>
+</body>
+</html>

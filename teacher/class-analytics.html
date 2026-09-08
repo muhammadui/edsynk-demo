@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Edsynk — Class Analytics</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script>tailwind.config={theme:{extend:{colors:{canvas:'#F7F9FC',ink:'#0B2A56',charcoal:'#18181B',steel:'#64748B',whisper:'#E2E8F0',blue:'#2177EF',skyblue:'#5C9DF5',wash:'#EAF2FE',mist:'#D3E4FD',confirm:'#16A34A',caution:'#D97706',alert:'#DC2626',excused:'#7C8DA6'},fontFamily:{sans:['Geist','sans-serif'],mono:['"Geist Mono"','monospace']},boxShadow:{soft:'0 1px 2px rgba(11,42,86,0.04), 0 6px 24px rgba(11,42,86,0.05)',lift:'0 1px 3px rgba(11,42,86,0.10), 0 12px 32px rgba(11,42,86,0.12)'}}}}</script>
+<style>@keyframes rise{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}.rise{animation:rise .45s cubic-bezier(.2,.8,.2,1) both}</style>
+</head>
+<body data-active="Class Analytics" data-persona="teacher" class="bg-canvas font-sans text-charcoal antialiased">
+<div class="flex min-h-screen">
+  <div id="sidebar-root"></div>
+  <div class="flex-1 min-w-0">
+    <header class="h-[60px] bg-white/80 backdrop-blur-md border-b border-whisper/70 flex items-center justify-between px-4 sm:px-7 sticky top-0 z-20">
+      <div class="flex items-center gap-3">
+        <h1 class="text-[15px] font-semibold tracking-tight">Class Analytics</h1>
+        <span class="font-mono text-[11.5px] font-medium text-blue bg-wash rounded-full px-2.5 py-1 hidden sm:inline">2025/26 · Term 3</span>
+      </div>
+      <div class="flex items-center gap-2.5">
+        <button onclick="toast('Exported analytics as PDF')" class="h-9 px-4 rounded-lg bg-white ring-1 ring-whisper text-[13px] font-medium text-steel hover:bg-mist/30 hidden sm:flex items-center gap-1.5">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><path d="M7 10l5 5 5-5M12 15V3"/></svg>Export</button>
+        <button onclick="toast('Shared with admin dashboard')" class="h-9 px-4 rounded-lg bg-blue text-white text-[13px] font-medium shadow-soft active:translate-y-px">Share with admin</button>
+      </div>
+    </header>
+
+    <main class="p-4 sm:p-7 max-w-[1180px] space-y-5">
+
+      <!-- Selector -->
+      <section class="rise flex flex-wrap items-center gap-2.5">
+        <select onchange="toast('Loaded analytics')" class="h-9 rounded-lg border border-whisper bg-white px-2.5 text-[12.5px] font-semibold focus:outline-none focus:ring-2 focus:ring-blue/50">
+          <option>JSS 2A · Mathematics</option><option>JSS 2B · Mathematics</option><option>JSS 2A · Basic Science</option>
+        </select>
+        <span class="text-[11.5px] text-steel">38 students · Third Term · all components scored</span>
+      </section>
+
+      <!-- AI insight -->
+      <section class="rise rounded-2xl bg-ink text-white shadow-lift overflow-hidden" style="animation-delay:.04s">
+        <div class="p-5 sm:p-6 flex gap-4">
+          <span class="h-10 w-10 rounded-xl bg-blue/20 text-skyblue grid place-items-center shrink-0">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z"/></svg></span>
+          <div class="flex-1">
+            <p class="text-[10.5px] font-semibold uppercase tracking-[0.1em] text-skyblue">Edsynk AI · insight</p>
+            <p class="text-[13.5px] leading-relaxed mt-1.5">CA2 dipped for <span class="font-semibold text-white">6 students</span> right after the <span class="font-semibold text-white">"expansion of brackets"</span> topic (Week 8). Their CA1 was on track, so this looks like a topic gap rather than a trend. Consider a short revision before the exam — the same six are weakest on factorisation too.</p>
+            <div class="flex items-center gap-2.5 mt-3.5 flex-wrap">
+              <button onclick="toast('Opening the 6 flagged students')" class="h-8 px-3.5 rounded-lg bg-white/10 hover:bg-white/15 text-white text-[12px] font-medium">See the 6 students</button>
+              <button onclick="location.href='lesson-notes.html'" class="h-8 px-3.5 rounded-lg bg-white/10 hover:bg-white/15 text-white text-[12px] font-medium">Plan a revision note</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Top cards -->
+      <section class="rise grid grid-cols-2 lg:grid-cols-4 gap-3" style="animation-delay:.08s">
+        <div class="bg-white ring-1 ring-whisper/80 rounded-2xl px-4 py-4 shadow-soft">
+          <p class="text-[10px] font-semibold uppercase tracking-wider text-steel">Class average</p>
+          <p class="font-mono text-[22px] font-semibold mt-1.5 leading-none">62.4%</p>
+          <p class="text-[10.5px] text-confirm mt-1">+2.1 vs Second Term</p></div>
+        <div class="bg-white ring-1 ring-whisper/80 rounded-2xl px-4 py-4 shadow-soft">
+          <p class="text-[10px] font-semibold uppercase tracking-wider text-steel">Pass rate (≥40)</p>
+          <p class="font-mono text-[22px] font-semibold mt-1.5 leading-none text-confirm">84%</p>
+          <p class="text-[10.5px] text-steel mt-1">32 of 38 passed</p></div>
+        <div class="bg-white ring-1 ring-whisper/80 rounded-2xl px-4 py-4 shadow-soft">
+          <p class="text-[10px] font-semibold uppercase tracking-wider text-steel">Most improved</p>
+          <p class="text-[15px] font-semibold mt-2 leading-none">Aisha Garba</p>
+          <p class="text-[10.5px] text-confirm mt-1.5">+14 points since Term 1</p></div>
+        <div class="bg-white ring-1 ring-whisper/80 rounded-2xl px-4 py-4 shadow-soft">
+          <p class="text-[10px] font-semibold uppercase tracking-wider text-steel">Needs attention</p>
+          <p class="text-[15px] font-semibold mt-2 leading-none text-caution">Expansion of brackets</p>
+          <p class="text-[10.5px] text-steel mt-1.5">lowest topic average</p></div>
+      </section>
+
+      <section class="grid lg:grid-cols-2 gap-5">
+        <!-- Distribution -->
+        <div class="rise bg-white ring-1 ring-whisper/80 rounded-2xl shadow-soft p-5 sm:p-6" style="animation-delay:.12s">
+          <h3 class="text-[15px] font-semibold tracking-tight">Grade distribution</h3>
+          <p class="text-[11.5px] text-steel mt-0.5">Students per grade band · 38 total</p>
+          <div class="mt-5 flex items-end gap-3 h-48">
+            <div class="flex-1 flex flex-col items-center justify-end gap-1.5 h-full"><span class="font-mono text-[12px] font-semibold">3</span><div class="w-full rounded-t-md bg-confirm" style="height:25%"></div><span class="text-[11px] text-steel">A</span></div>
+            <div class="flex-1 flex flex-col items-center justify-end gap-1.5 h-full"><span class="font-mono text-[12px] font-semibold">8</span><div class="w-full rounded-t-md bg-confirm/70" style="height:66%"></div><span class="text-[11px] text-steel">B</span></div>
+            <div class="flex-1 flex flex-col items-center justify-end gap-1.5 h-full"><span class="font-mono text-[12px] font-semibold">12</span><div class="w-full rounded-t-md bg-blue" style="height:100%"></div><span class="text-[11px] text-steel">C</span></div>
+            <div class="flex-1 flex flex-col items-center justify-end gap-1.5 h-full"><span class="font-mono text-[12px] font-semibold">9</span><div class="w-full rounded-t-md bg-caution" style="height:75%"></div><span class="text-[11px] text-steel">D/E</span></div>
+            <div class="flex-1 flex flex-col items-center justify-end gap-1.5 h-full"><span class="font-mono text-[12px] font-semibold">6</span><div class="w-full rounded-t-md bg-alert" style="height:50%"></div><span class="text-[11px] text-steel">F</span></div>
+          </div>
+          <p class="text-[11.5px] text-steel mt-4">Bell-shaped — most students in the C band. Six failing students cluster around the brackets/factorisation topics.</p>
+        </div>
+
+        <!-- Term trend -->
+        <div class="rise bg-white ring-1 ring-whisper/80 rounded-2xl shadow-soft p-5 sm:p-6" style="animation-delay:.16s">
+          <h3 class="text-[15px] font-semibold tracking-tight">Class average over terms</h3>
+          <p class="text-[11.5px] text-steel mt-0.5">Mathematics · JSS 2A · 2025/26</p>
+          <div class="mt-5 flex items-end gap-6 h-48">
+            <div class="flex-1 flex flex-col items-center justify-end gap-2 h-full"><span class="font-mono text-[12px] font-semibold text-steel">58.7%</span><div class="w-full max-w-[70px] rounded-t-lg bg-mist" style="height:58.7%"></div><span class="text-[11px] text-steel">First</span></div>
+            <div class="flex-1 flex flex-col items-center justify-end gap-2 h-full"><span class="font-mono text-[12px] font-semibold text-steel">60.3%</span><div class="w-full max-w-[70px] rounded-t-lg bg-skyblue" style="height:60.3%"></div><span class="text-[11px] text-steel">Second</span></div>
+            <div class="flex-1 flex flex-col items-center justify-end gap-2 h-full"><span class="font-mono text-[12px] font-semibold text-blue">62.4%</span><div class="w-full max-w-[70px] rounded-t-lg bg-blue" style="height:62.4%"></div><span class="text-[11px] font-medium text-charcoal">Third</span></div>
+          </div>
+          <p class="text-[11.5px] text-confirm mt-4 flex items-center gap-1.5">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 6l-9.5 9.5-5-5L1 18"/><path d="M17 6h6v6"/></svg>
+            Gradual upward trend across the year.</p>
+        </div>
+      </section>
+
+      <!-- Top & bottom 5 -->
+      <section class="grid lg:grid-cols-2 gap-5">
+        <div class="rise bg-white ring-1 ring-whisper/80 rounded-2xl shadow-soft" style="animation-delay:.2s">
+          <div class="px-5 sm:px-6 py-4 border-b border-whisper/60"><h3 class="text-[15px] font-semibold tracking-tight">Top 5 students</h3></div>
+          <ul id="top5" class="divide-y divide-whisper/50 text-[12.5px]"></ul>
+        </div>
+        <div class="rise bg-white ring-1 ring-whisper/80 rounded-2xl shadow-soft" style="animation-delay:.24s">
+          <div class="px-5 sm:px-6 py-4 border-b border-whisper/60 flex items-center justify-between">
+            <h3 class="text-[15px] font-semibold tracking-tight">Bottom 5 — need support</h3>
+            <span class="text-[10.5px] font-medium text-caution bg-caution/10 rounded-full px-2 py-0.5">Follow up</span></div>
+          <ul id="bot5" class="divide-y divide-whisper/50 text-[12.5px]"></ul>
+        </div>
+      </section>
+    </main>
+  </div>
+</div>
+<script src="../assets/shell.js"></script>
+<div id="toast" class="hidden fixed bottom-5 left-1/2 -translate-x-1/2 z-[60] bg-ink text-white text-[12.5px] font-medium px-4 py-2.5 rounded-xl shadow-lift"></div>
+<script>function toast(m){var t=document.getElementById('toast');t.textContent=m;t.classList.remove('hidden');clearTimeout(window._tt);window._tt=setTimeout(function(){t.classList.add('hidden')},2200);}</script>
+<script>
+var TOP=[['Chiamaka Okafor','CO','bg-confirm/10 text-confirm',91,'A1','text-confirm'],
+ ['Ngozi Eze','NE','bg-mist text-ink',88,'A1','text-confirm'],
+ ['Fatima Abubakar','FA','bg-caution/10 text-caution',88,'A1','text-confirm'],
+ ['Amina Lawal','AL','bg-wash text-blue',80,'A1','text-confirm'],
+ ['Ibrahim Sani','IS','bg-mist text-ink',81,'A1','text-confirm']];
+var BOT=[['Sadiq Bala','SB','bg-mist text-ink',44,'E8','text-alert'],
+ ['Bello Sani','BS','bg-wash text-blue',51,'C6','text-caution'],
+ ['Musa Danjuma','MD','bg-mist text-ink',54,'C5','text-caution'],
+ ['Aisha Garba','AG','bg-wash text-blue',64,'C4','text-blue'],
+ ['Khadija Usman','KU','bg-caution/10 text-caution',71,'B2','text-confirm']];
+function row(s,rank){
+ return '<li onclick="location.href=\'student-profile.html\'" class="px-5 sm:px-6 py-3 flex items-center gap-3 cursor-pointer hover:bg-canvas/60">'+
+  '<span class="font-mono text-[11px] text-steel/60 w-4 shrink-0">'+rank+'</span>'+
+  '<span class="h-8 w-8 rounded-full '+s[2]+' grid place-items-center text-[10px] font-semibold shrink-0">'+s[1]+'</span>'+
+  '<span class="font-medium flex-1 truncate">'+s[0]+'</span>'+
+  '<span class="font-mono text-[12px] font-semibold '+s[5]+' shrink-0">'+s[3]+'%</span>'+
+  '<span class="text-[10px] font-medium '+s[5]+' bg-canvas ring-1 ring-whisper rounded-full px-1.5 py-0.5 shrink-0 w-9 text-center">'+s[4]+'</span></li>';
+}
+document.getElementById('top5').innerHTML=TOP.map(function(s,i){return row(s,i+1);}).join('');
+document.getElementById('bot5').innerHTML=BOT.map(function(s,i){return row(s,38-4+i);}).join('');
+</script>
+</body>
+</html>

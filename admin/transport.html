@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Edsynk — Transport</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script>tailwind.config={theme:{extend:{colors:{canvas:'#F7F9FC',ink:'#0B2A56',charcoal:'#18181B',steel:'#64748B',whisper:'#E2E8F0',blue:'#2177EF',skyblue:'#5C9DF5',wash:'#EAF2FE',mist:'#D3E4FD',confirm:'#16A34A',caution:'#D97706',alert:'#DC2626',excused:'#7C8DA6'},fontFamily:{sans:['Geist','sans-serif'],mono:['"Geist Mono"','monospace']},boxShadow:{soft:'0 1px 2px rgba(11,42,86,0.04), 0 6px 24px rgba(11,42,86,0.05)',lift:'0 1px 3px rgba(11,42,86,0.10), 0 12px 32px rgba(11,42,86,0.12)'}}}}</script>
+<style>@keyframes rise{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}.rise{animation:rise .45s cubic-bezier(.2,.8,.2,1) both}@keyframes fillw{from{width:0}}.hbar{animation:fillw 1s cubic-bezier(.2,.8,.2,1) both}.modal.open{opacity:1!important;pointer-events:auto!important}</style>
+</head>
+<body data-active="Transport" data-persona="admin" class="bg-canvas font-sans text-charcoal antialiased">
+<div class="flex min-h-screen">
+  <div id="sidebar-root"></div>
+  <div class="flex-1 min-w-0">
+    <header class="h-[60px] bg-white/80 backdrop-blur-md border-b border-whisper/70 flex items-center justify-between px-4 sm:px-7 sticky top-0 z-20">
+      <div class="flex items-center gap-3"><h1 class="text-[15px] font-semibold tracking-tight">Transport</h1>
+        <span class="font-mono text-[11.5px] text-steel hidden sm:inline">3 routes · 96 riders</span></div>
+      <div class="flex items-center gap-2.5">
+        <button onclick="openM('routeM')" class="h-9 px-3.5 rounded-lg border border-whisper bg-white text-[13px] font-medium hover:bg-mist/30 hidden sm:block">Add route</button>
+        <button onclick="openM('assignM')" class="h-9 px-4 rounded-lg bg-blue text-white text-[13px] font-medium shadow-soft active:translate-y-px">+ Assign student</button>
+      </div>
+    </header>
+    <main class="p-4 sm:p-7 max-w-[1180px] space-y-5 pb-12">
+
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-3">
+        <div class="rise bg-white ring-1 ring-whisper/80 rounded-2xl p-4 shadow-soft" style="animation-delay:.04s"><p class="text-[10.5px] font-semibold uppercase tracking-wider text-steel">Active routes</p><p class="font-mono text-[22px] font-semibold mt-1.5">3</p><p class="text-[11.5px] text-steel mt-1">A · B · C</p></div>
+        <div class="rise bg-white ring-1 ring-whisper/80 rounded-2xl p-4 shadow-soft" style="animation-delay:.08s"><p class="text-[10.5px] font-semibold uppercase tracking-wider text-steel">Students riding</p><p class="font-mono text-[22px] font-semibold mt-1.5">96</p><p class="text-[11.5px] text-steel mt-1">of 412</p></div>
+        <div class="rise bg-white ring-1 ring-whisper/80 rounded-2xl p-4 shadow-soft" style="animation-delay:.12s"><p class="text-[10.5px] font-semibold uppercase tracking-wider text-steel">Seats free</p><p class="font-mono text-[22px] font-semibold mt-1.5">30</p><p class="text-[11.5px] text-steel mt-1">126 capacity</p></div>
+        <div class="rise bg-white ring-1 ring-whisper/80 rounded-2xl p-4 shadow-soft" style="animation-delay:.16s"><p class="text-[10.5px] font-semibold uppercase tracking-wider text-steel">Fee per term</p><p class="font-mono text-[22px] font-semibold mt-1.5">₦18,000</p><p class="text-[11.5px] text-steel mt-1">round trip</p></div>
+      </div>
+
+      <!-- Route cards -->
+      <div class="grid lg:grid-cols-3 gap-4">
+        <!-- A -->
+        <div class="rise bg-white ring-1 ring-whisper/80 rounded-2xl p-5 shadow-soft cursor-pointer hover:ring-mist" style="animation-delay:.2s" onclick="selectRoute('A')">
+          <div class="flex items-center justify-between">
+            <span class="h-9 w-9 rounded-xl bg-wash text-blue grid place-items-center font-mono font-bold text-[14px]">A</span>
+            <span class="text-[10.5px] font-medium text-confirm bg-confirm/10 rounded-full px-2 py-0.5">On schedule</span>
+          </div>
+          <p class="text-[14px] font-semibold mt-3">Route A — Nasarawa GRA</p>
+          <p class="text-[11.5px] text-steel mt-0.5">Driver: Alhaji Garba Mohammed · <span class="font-mono">0803 ··· 1190</span></p>
+          <dl class="mt-3 grid grid-cols-2 gap-2 text-[12px]">
+            <div><dt class="text-steel text-[10.5px]">Vehicle</dt><dd class="font-medium">Toyota Coaster · <span class="font-mono">KAN-442-XA</span></dd></div>
+            <div><dt class="text-steel text-[10.5px]">Pickup window</dt><dd class="font-medium font-mono">6:20 – 7:10am</dd></div>
+          </dl>
+          <div class="mt-3"><div class="flex justify-between text-[11px] text-steel mb-1"><span>Seats</span><span class="font-mono">34/40</span></div><div class="h-1.5 rounded-full bg-canvas ring-1 ring-whisper/60 overflow-hidden"><div class="hbar h-full bg-blue rounded-full" style="width:85%"></div></div></div>
+        </div>
+        <!-- B -->
+        <div class="rise bg-white ring-1 ring-whisper/80 rounded-2xl p-5 shadow-soft cursor-pointer hover:ring-mist" style="animation-delay:.24s" onclick="selectRoute('B')">
+          <div class="flex items-center justify-between">
+            <span class="h-9 w-9 rounded-xl bg-wash text-blue grid place-items-center font-mono font-bold text-[14px]">B</span>
+            <span class="text-[10.5px] font-medium text-caution bg-caution/10 rounded-full px-2 py-0.5">Running late</span>
+          </div>
+          <p class="text-[14px] font-semibold mt-3">Route B — Sabon Gari</p>
+          <p class="text-[11.5px] text-steel mt-0.5">Driver: Mr. Emeka Obi · <span class="font-mono">0812 ··· 7745</span></p>
+          <dl class="mt-3 grid grid-cols-2 gap-2 text-[12px]">
+            <div><dt class="text-steel text-[10.5px]">Vehicle</dt><dd class="font-medium">Mini-bus · <span class="font-mono">KAN-118-BZ</span></dd></div>
+            <div><dt class="text-steel text-[10.5px]">Pickup window</dt><dd class="font-medium font-mono">6:30 – 7:15am</dd></div>
+          </dl>
+          <div class="mt-3"><div class="flex justify-between text-[11px] text-steel mb-1"><span>Seats</span><span class="font-mono">30/32</span></div><div class="h-1.5 rounded-full bg-canvas ring-1 ring-whisper/60 overflow-hidden"><div class="hbar h-full bg-caution rounded-full" style="width:94%"></div></div></div>
+        </div>
+        <!-- C -->
+        <div class="rise bg-white ring-1 ring-whisper/80 rounded-2xl p-5 shadow-soft cursor-pointer hover:ring-mist" style="animation-delay:.28s" onclick="selectRoute('C')">
+          <div class="flex items-center justify-between">
+            <span class="h-9 w-9 rounded-xl bg-wash text-blue grid place-items-center font-mono font-bold text-[14px]">C</span>
+            <span class="text-[10.5px] font-medium text-confirm bg-confirm/10 rounded-full px-2 py-0.5">On schedule</span>
+          </div>
+          <p class="text-[14px] font-semibold mt-3">Route C — Bompai</p>
+          <p class="text-[11.5px] text-steel mt-0.5">Driver: Mallam Idris Bello · <span class="font-mono">0705 ··· 6621</span></p>
+          <dl class="mt-3 grid grid-cols-2 gap-2 text-[12px]">
+            <div><dt class="text-steel text-[10.5px]">Vehicle</dt><dd class="font-medium">Toyota Hiace · <span class="font-mono">KAN-307-CC</span></dd></div>
+            <div><dt class="text-steel text-[10.5px]">Pickup window</dt><dd class="font-medium font-mono">6:15 – 7:00am</dd></div>
+          </dl>
+          <div class="mt-3"><div class="flex justify-between text-[11px] text-steel mb-1"><span>Seats</span><span class="font-mono">32/54</span></div><div class="h-1.5 rounded-full bg-canvas ring-1 ring-whisper/60 overflow-hidden"><div class="hbar h-full bg-blue rounded-full" style="width:59%"></div></div></div>
+        </div>
+      </div>
+
+      <!-- Riders table -->
+      <div class="rise bg-white ring-1 ring-whisper/80 rounded-2xl shadow-soft overflow-hidden" style="animation-delay:.32s">
+        <div class="flex items-center justify-between px-5 pt-4 pb-3 flex-wrap gap-2">
+          <p class="text-[13.5px] font-semibold">Students on <span id="selRoute" class="text-blue">Route A — Nasarawa GRA</span></p>
+          <button onclick="toast('Opening WhatsApp broadcast to guardians on this route…')" class="h-9 px-4 rounded-lg bg-blue text-white text-[12.5px] font-medium">Message parents on route</button>
+        </div>
+        <div class="overflow-x-auto"><table class="w-full text-[13px] min-w-[760px]">
+          <thead><tr class="text-left text-[10.5px] font-semibold uppercase tracking-[0.07em] text-steel border-y border-whisper/60 bg-canvas/60">
+            <th class="pl-5 pr-3 py-3">Student</th><th class="px-3 py-3">Class</th><th class="px-3 py-3">Stop</th><th class="px-3 py-3">Pickup</th><th class="px-3 py-3">Guardian phone</th><th class="px-5 py-3 text-right">Action</th></tr></thead>
+          <tbody id="riderRows" class="divide-y divide-whisper/60"></tbody>
+        </table></div>
+        <p class="px-5 py-3 border-t border-whisper/60 bg-canvas/50 text-[11.5px] text-steel">Guardians get a WhatsApp ping when the bus is 5 minutes from their stop (GPS pilot — Route A only).</p>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<!-- Assign student modal -->
+<div id="assignM" class="modal fixed inset-0 z-50 bg-ink/40 backdrop-blur-sm grid place-items-center p-4" style="opacity:0;pointer-events:none;transition:opacity .2s" onclick="if(event.target===this)closeM('assignM')">
+  <div class="bg-white rounded-2xl shadow-lift max-w-[460px] w-full p-6">
+    <div class="flex items-center justify-between mb-3"><p class="text-[15px] font-semibold">Assign student to a route</p><button onclick="closeM('assignM')" class="h-8 w-8 grid place-items-center rounded-lg hover:bg-mist/40 text-steel">✕</button></div>
+    <div class="space-y-3 text-[12.5px]">
+      <div><label class="text-[11.5px] font-semibold text-steel">Student</label><input placeholder="Name or reg number" class="mt-1.5 w-full h-10 rounded-lg border border-whisper bg-canvas px-3.5"></div>
+      <div class="grid grid-cols-2 gap-3">
+        <div><label class="text-[11.5px] font-semibold text-steel">Route</label><select class="mt-1.5 w-full h-10 rounded-lg border border-whisper bg-canvas px-2.5"><option>A — Nasarawa GRA</option><option>B — Sabon Gari</option><option>C — Bompai</option></select></div>
+        <div><label class="text-[11.5px] font-semibold text-steel">Pickup stop</label><input placeholder="e.g. GRA Junction" class="mt-1.5 w-full h-10 rounded-lg border border-whisper bg-canvas px-3"></div>
+      </div>
+      <p class="text-[11px] text-steel">The ₦18,000 termly transport fee is added to the student's next invoice.</p>
+    </div>
+    <div class="flex justify-end gap-2 mt-5"><button onclick="closeM('assignM')" class="h-10 px-4 rounded-lg ring-1 ring-whisper text-[13px] font-medium text-steel">Cancel</button><button onclick="closeM('assignM');toast('Student assigned to route — guardian notified')" class="h-10 px-5 rounded-lg bg-blue text-white text-[13px] font-semibold shadow-soft">Assign student</button></div>
+  </div>
+</div>
+
+<!-- Add route modal -->
+<div id="routeM" class="modal fixed inset-0 z-50 bg-ink/40 backdrop-blur-sm grid place-items-center p-4" style="opacity:0;pointer-events:none;transition:opacity .2s" onclick="if(event.target===this)closeM('routeM')">
+  <div class="bg-white rounded-2xl shadow-lift max-w-[460px] w-full p-6">
+    <div class="flex items-center justify-between mb-3"><p class="text-[15px] font-semibold">Add a route</p><button onclick="closeM('routeM')" class="h-8 w-8 grid place-items-center rounded-lg hover:bg-mist/40 text-steel">✕</button></div>
+    <div class="grid grid-cols-2 gap-3 text-[12.5px]">
+      <div class="col-span-2"><label class="text-[11.5px] font-semibold text-steel">Route name</label><input placeholder="e.g. Route D — Hotoro" class="mt-1.5 w-full h-10 rounded-lg border border-whisper bg-canvas px-3.5"></div>
+      <div><label class="text-[11.5px] font-semibold text-steel">Driver</label><input placeholder="Driver name" class="mt-1.5 w-full h-10 rounded-lg border border-whisper bg-canvas px-3"></div>
+      <div><label class="text-[11.5px] font-semibold text-steel">Driver phone</label><input placeholder="080…" class="mt-1.5 w-full h-10 rounded-lg border border-whisper bg-canvas px-3 font-mono text-[12px]"></div>
+      <div><label class="text-[11.5px] font-semibold text-steel">Plate number</label><input placeholder="KAN-000-XX" class="mt-1.5 w-full h-10 rounded-lg border border-whisper bg-canvas px-3 font-mono text-[12px]"></div>
+      <div><label class="text-[11.5px] font-semibold text-steel">Capacity</label><input type="number" value="32" class="mt-1.5 w-full h-10 rounded-lg border border-whisper bg-canvas px-3 font-mono"></div>
+    </div>
+    <div class="flex justify-end gap-2 mt-5"><button onclick="closeM('routeM')" class="h-10 px-4 rounded-lg ring-1 ring-whisper text-[13px] font-medium text-steel">Cancel</button><button onclick="closeM('routeM');toast('Route created')" class="h-10 px-5 rounded-lg bg-blue text-white text-[13px] font-semibold shadow-soft">Add route</button></div>
+  </div>
+</div>
+
+<script src="../assets/shell.js"></script>
+<div id="toast" class="hidden fixed bottom-5 left-1/2 -translate-x-1/2 z-[60] bg-ink text-white text-[12.5px] font-medium px-4 py-2.5 rounded-xl shadow-lift"></div>
+<script>function toast(m){var t=document.getElementById('toast');t.textContent=m;t.classList.remove('hidden');clearTimeout(window._tt);window._tt=setTimeout(function(){t.classList.add('hidden')},2200);}
+function openM(id){document.getElementById(id).classList.add('open');}
+function closeM(id){document.getElementById(id).classList.remove('open');}
+
+const ROUTES={
+ 'A':['Route A — Nasarawa GRA',[
+   ['Fatima Abubakar','JSS 2A','GRA Junction','6:35am','0705 ··· 2281'],
+   ['Aisha Garba','JSS 3A','Ibrahim Taiwo Rd','6:42am','0813 ··· 6620'],
+   ['Halima Yusuf','JSS 2A','Zoo Road','6:55am','0809 ··· 5512'],
+   ['Musa Adamu','SS 2 Science','GRA Junction','6:35am','0701 ··· 2230'],
+ ]],
+ 'B':['Route B — Sabon Gari',[
+   ['Chiamaka Okafor','SS 2 Arts','France Road','6:48am','0802 ··· 4471'],
+   ['Emeka Nwosu','JSS 1B','Enugu Road','6:55am','0816 ··· 3390'],
+   ['Blessing Eze','SS 1 Arts','Ibo Road','7:02am','0703 ··· 8810'],
+ ]],
+ 'C':['Route C — Bompai',[
+   ['Ibrahim Sani','SS 1 Science','Bompai Roundabout','6:25am','0816 ··· 9032'],
+   ['Bashir Nuhu','JSS 3A','Tarauni','6:38am','0701 ··· 8845'],
+ ]],
+};
+function selectRoute(k){
+  const r=ROUTES[k];
+  document.getElementById('selRoute').textContent=r[0];
+  document.getElementById('riderRows').innerHTML=r[1].map(s=>`<tr class="hover:bg-mist/15"><td class="pl-5 pr-3 py-3"><a href="student-detail.html" class="font-medium hover:text-blue">${s[0]}</a></td><td class="px-3 py-3 text-steel">${s[1]}</td><td class="px-3 py-3">${s[2]}</td><td class="px-3 py-3 font-mono text-steel">${s[3]}</td><td class="px-3 py-3 font-mono text-steel">${s[4]}</td><td class="px-5 py-3 text-right"><button onclick="toast('Remove ${s[0].replace(/'/g,"\\'")} from ${r[0].replace(/'/g,"\\'")}?')" class="h-8 px-3 rounded-lg border border-whisper text-[12px] font-medium hover:bg-mist/30">Remove</button></td></tr>`).join('');
+}
+selectRoute('A');
+</script>
+</body>
+</html>

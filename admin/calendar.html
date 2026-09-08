@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Edsynk — Academic Calendar</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script>tailwind.config={theme:{extend:{colors:{canvas:'#F7F9FC',ink:'#0B2A56',charcoal:'#18181B',steel:'#64748B',whisper:'#E2E8F0',blue:'#2177EF',wash:'#EAF2FE',mist:'#D3E4FD',confirm:'#16A34A',caution:'#D97706',alert:'#DC2626',excused:'#7C8DA6'},fontFamily:{sans:['Geist','sans-serif'],mono:['"Geist Mono"','monospace']},boxShadow:{soft:'0 1px 2px rgba(11,42,86,0.04), 0 6px 24px rgba(11,42,86,0.05)',lift:'0 1px 3px rgba(11,42,86,0.10), 0 12px 32px rgba(11,42,86,0.12)'}}}}</script>
+<style>@keyframes rise{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}.rise{animation:rise .45s cubic-bezier(.2,.8,.2,1) both}</style>
+</head>
+<body data-active="Calendar" class="bg-canvas font-sans text-charcoal antialiased">
+<div class="flex min-h-screen">
+  <div id="sidebar-root"></div>
+  <div class="flex-1 min-w-0">
+    <header class="h-[60px] bg-white/80 backdrop-blur-md border-b border-whisper/70 flex items-center justify-between px-4 sm:px-7 sticky top-0 z-20">
+      <div class="flex items-center gap-3">
+        <h1 class="text-[15px] font-semibold tracking-tight">Academic calendar</h1>
+        <div class="hidden sm:flex items-center gap-1.5 text-[13px] font-medium">
+          <button onclick="toast('Showing May 2026')" class="h-8 w-8 grid place-items-center rounded-lg border border-whisper hover:bg-mist/30">‹</button>
+          <span class="font-mono px-1">June 2026</span>
+          <button onclick="toast('Showing July 2026')" class="h-8 w-8 grid place-items-center rounded-lg border border-whisper hover:bg-mist/30">›</button>
+        </div>
+      </div>
+      <button onclick="document.getElementById('evModal').classList.remove('hidden')" class="h-9 px-4 rounded-lg bg-blue text-white text-[13px] font-medium shadow-soft active:translate-y-px">+ Add event</button>
+    </header>
+
+    <main class="p-4 sm:p-7 max-w-[1100px] grid grid-cols-1 lg:grid-cols-[1fr_300px] gap-6 items-start">
+
+      <!-- Month grid -->
+      <section class="rise bg-white border border-whisper/70 rounded-2xl shadow-soft overflow-hidden">
+        <div class="grid grid-cols-7 text-center text-[10.5px] font-semibold uppercase tracking-wider text-steel border-b border-whisper/60">
+          <span class="py-2.5">Mon</span><span class="py-2.5">Tue</span><span class="py-2.5">Wed</span><span class="py-2.5">Thu</span><span class="py-2.5">Fri</span><span class="py-2.5 text-steel/50">Sat</span><span class="py-2.5 text-steel/50">Sun</span>
+        </div>
+        <div class="grid grid-cols-7 text-[12px]" id="cal"></div>
+        <div class="px-5 py-3 border-t border-whisper/60 flex flex-wrap gap-x-4 gap-y-1.5 text-[10.5px] text-steel">
+          <span class="flex items-center gap-1.5"><span class="h-2 w-2 rounded-sm bg-blue"></span>Exam</span>
+          <span class="flex items-center gap-1.5"><span class="h-2 w-2 rounded-sm bg-confirm"></span>Holiday</span>
+          <span class="flex items-center gap-1.5"><span class="h-2 w-2 rounded-sm bg-ink"></span>Term boundary <span class="text-steel/60">(auto from term dates)</span></span>
+          <span class="flex items-center gap-1.5"><span class="h-2 w-2 rounded-sm bg-caution"></span>Meeting / event</span>
+        </div>
+      </section>
+
+      <!-- Upcoming -->
+      <section class="rise space-y-3 lg:sticky lg:top-[84px]" style="animation-delay:.05s">
+        <div class="bg-white border border-whisper/70 rounded-2xl shadow-soft p-5">
+          <h2 class="font-semibold tracking-tight text-[15px]">Coming up</h2>
+          <ul class="mt-3 space-y-3 text-[12.5px]">
+            <li class="flex gap-3"><div class="text-center shrink-0 w-9"><p class="font-mono text-[15px] font-semibold leading-none">16</p><p class="text-[9.5px] text-steel uppercase">Jun</p></div>
+              <div><p class="font-medium">Third-term exams begin</p><p class="text-[11px] text-steel">CBT + written · all classes · 📣 announced</p></div>
+              <span class="h-2 w-2 rounded-sm bg-blue ml-auto mt-1.5 shrink-0"></span></li>
+            <li class="flex gap-3"><div class="text-center shrink-0 w-9"><p class="font-mono text-[15px] font-semibold leading-none">21</p><p class="text-[9.5px] text-steel uppercase">Jun</p></div>
+              <div><p class="font-medium">PTA meeting</p><p class="text-[11px] text-steel">10:00 · parents + staff</p></div>
+              <span class="h-2 w-2 rounded-sm bg-caution ml-auto mt-1.5 shrink-0"></span></li>
+            <li class="flex gap-3"><div class="text-center shrink-0 w-9"><p class="font-mono text-[15px] font-semibold leading-none">27</p><p class="text-[9.5px] text-steel uppercase">Jun</p></div>
+              <div><p class="font-medium">Eid al-Adha break</p><p class="text-[11px] text-steel">school closed · counts out of attendance</p></div>
+              <span class="h-2 w-2 rounded-sm bg-confirm ml-auto mt-1.5 shrink-0"></span></li>
+            <li class="flex gap-3"><div class="text-center shrink-0 w-9"><p class="font-mono text-[15px] font-semibold leading-none">25</p><p class="text-[9.5px] text-steel uppercase">Jul</p></div>
+              <div><p class="font-medium">Term ends · vacation day</p><p class="text-[11px] text-steel">auto from term dates · cards go home</p></div>
+              <span class="h-2 w-2 rounded-sm bg-ink ml-auto mt-1.5 shrink-0"></span></li>
+            <li class="flex gap-3 opacity-80"><div class="text-center shrink-0 w-9"><p class="font-mono text-[15px] font-semibold leading-none">8</p><p class="text-[9.5px] text-steel uppercase">Sep</p></div>
+              <div><p class="font-medium">2026/27 session begins</p><p class="text-[11px] text-steel">printed on every report card</p></div>
+              <span class="h-2 w-2 rounded-sm bg-ink ml-auto mt-1.5 shrink-0"></span></li>
+          </ul>
+        </div>
+        <div class="bg-wash/70 border border-mist rounded-2xl p-4 text-[11.5px] text-ink leading-relaxed">
+          <p class="font-semibold">This calendar is load-bearing.</p>
+          <p class="mt-1 text-charcoal/75">School days for attendance = term dates − weekends − holidays marked here. A wrong holiday entry changes every attendance count.</p>
+        </div>
+      </section>
+    </main>
+  </div>
+</div>
+
+<!-- Add event modal -->
+<div id="evModal" class="hidden fixed inset-0 z-50 grid place-items-center bg-ink/40 backdrop-blur-sm p-4">
+  <div class="bg-white rounded-2xl shadow-lift max-w-[420px] w-full p-6">
+    <h3 class="font-semibold tracking-tight text-[16px]">Add calendar event</h3>
+    <input placeholder="Event title" class="mt-4 w-full h-10 rounded-lg border border-whisper bg-canvas px-3.5 text-[13px] focus:outline-none focus:ring-2 focus:ring-blue/50">
+    <div class="grid grid-cols-2 gap-3 mt-3">
+      <div><p class="text-[11px] font-semibold uppercase tracking-wider text-steel">Type</p>
+        <select class="mt-1.5 w-full h-10 rounded-lg border border-whisper bg-canvas px-3 text-[13px]"><option>Holiday — school closed</option><option>Exam</option><option>Meeting</option><option>Activity</option><option>Deadline</option></select></div>
+      <div><p class="text-[11px] font-semibold uppercase tracking-wider text-steel">Date</p>
+        <input type="text" value="27 Jun 2026" class="mt-1.5 w-full h-10 rounded-lg border border-whisper bg-canvas px-3 text-[13px] font-mono"></div>
+    </div>
+    <p class="text-[11px] font-semibold uppercase tracking-wider text-steel mt-3.5">Audience</p>
+    <div class="flex flex-wrap gap-1.5 mt-1.5">
+      <span class="text-[11px] font-medium rounded-full px-2.5 py-1 bg-blue text-white">Everyone</span>
+      <span class="text-[11px] font-medium rounded-full px-2.5 py-1 ring-1 ring-whisper text-steel">Staff</span>
+      <span class="text-[11px] font-medium rounded-full px-2.5 py-1 ring-1 ring-whisper text-steel">JSS 3</span>
+    </div>
+    <label class="mt-4 flex items-center gap-2.5 text-[12.5px] cursor-pointer">
+      <input type="checkbox" checked class="h-4 w-4 rounded accent-[#2177EF]"> Also post as an announcement <span class="text-steel">(never enter it twice)</span></label>
+    <div class="flex justify-end gap-2.5 mt-6">
+      <button onclick="document.getElementById('evModal').classList.add('hidden')" class="h-10 px-4 rounded-lg border border-whisper text-[13px] font-medium hover:bg-mist/30">Cancel</button>
+      <button onclick="document.getElementById('evModal').classList.add('hidden')" class="h-10 px-5 rounded-lg bg-blue text-white text-[13px] font-medium active:translate-y-px">Save event</button>
+    </div>
+  </div>
+</div>
+
+<script src="../assets/shell.js"></script>
+<script>
+// June 2026: Mon Jun 1. Events map
+const DETAILS={
+ 1:[{k:'ink',t:'Term 3 resumes',d:'Auto from term dates · school day count starts'}],
+ 12:[{k:'today',t:'Today',d:''}],
+ 16:[{k:'blue',t:'Third-term exams begin',d:'CBT + written · all classes · ICT hall for CBT papers'},{k:'caution',t:'Staff briefing 7:15am',d:'Exam invigilation roster · staff room'}],
+ 17:[{k:'blue',t:'Exams — day 2',d:'Mathematics (JSS) · Physics (SS) · see timetable'}],
+ 18:[{k:'blue',t:'Exams — day 3',d:'English · Qur\'an orals (I\'dadiyyah)'}],
+ 19:[{k:'blue',t:'Exams — day 4',d:'Basic Science · Arabic'}],
+ 21:[{k:'caution',t:'PTA meeting 10:00',d:'Results timeline · parent portal demo · 2026/27 calendar · also announced'}],
+ 22:[{k:'blue',t:'Exams — day 5',d:'Basic Technology · Fiqh'}],
+ 23:[{k:'blue',t:'Exams end',d:'Last papers · scripts to exam office by 2pm'}],
+ 27:[{k:'confirm',t:'Eid al-Adha — school closed',d:'Holiday · excluded from attendance day count'}],
+ 28:[{k:'confirm',t:'Eid holiday',d:'School closed'}],
+};
+const EV=Object.fromEntries(Object.entries(DETAILS).map(([d,evs])=>[d,[evs[0].k,evs[0].t==='Today'?undefined:evs[0].t]]));
+let html='';
+for(let d=1;d<=30;d++){
+  const ev=EV[d], isToday=ev&&ev[0]==='today';
+  const wd=(d-1+0)%7; // Jun 1 2026 = Monday
+  const weekend=wd>=5;
+  html+=`<div onclick="dayDetail(${d})" class="cursor-pointer hover:bg-wash/40 min-h-[76px] border-b border-r border-whisper/40 p-1.5 ${weekend?'bg-canvas/60':''} ${isToday?'bg-wash/60':''}">
+    <p class="font-mono text-[11px] ${isToday?'h-6 w-6 grid place-items-center rounded-full bg-blue text-white font-semibold':'text-steel'}">${d}</p>
+    ${ev&&ev[0]!=='today'&&ev[1]?`<p class="mt-1 text-[9.5px] font-medium leading-tight rounded px-1 py-0.5 ${ev[0]==='blue'?'bg-wash text-blue':ev[0]==='confirm'?'bg-confirm/10 text-confirm':ev[0]==='caution'?'bg-caution/10 text-caution':'bg-mist/70 text-ink'}">${ev[1]}</p>`
+    :ev&&ev[0]!=='today'?`<span class="mt-1 inline-block h-1.5 w-1.5 rounded-full ${ev[0]==='blue'?'bg-blue':'bg-confirm'}"></span>`:''}
+  </div>`;
+}
+document.getElementById('cal').innerHTML=html;
+
+function dayDetail(d){
+  const evs=DETAILS[d]&&DETAILS[d].filter(e=>e.t!=='Today');
+  const wd=['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'][(d-1)%7];
+  document.getElementById('ddTitle').textContent=`${wd}, ${d} June 2026`;
+  document.getElementById('ddBody').innerHTML=(evs&&evs.length)?evs.map(e=>`
+    <div class="flex gap-3 rounded-xl ring-1 ring-whisper/80 p-3.5">
+      <span class="mt-1 h-2.5 w-2.5 rounded-sm shrink-0 ${e.k==='blue'?'bg-blue':e.k==='confirm'?'bg-confirm':e.k==='caution'?'bg-caution':'bg-ink'}"></span>
+      <div><p class="text-[13.5px] font-medium">${e.t}</p>
+      <p class="text-[12px] text-steel mt-0.5">${e.d}</p></div>
+    </div>`).join('')
+   :'<p class="text-[13px] text-steel text-center py-6">No events — a normal school day.<br><span class="text-[11px]">It counts toward attendance (term day, not weekend/holiday).</span></p>';
+  document.getElementById('ddModal').classList.remove('hidden');
+}
+</script>
+<!-- Day detail modal -->
+<div id="ddModal" class="hidden fixed inset-0 z-50 grid place-items-center bg-ink/40 backdrop-blur-sm p-4" onclick="if(event.target===this)this.classList.add('hidden')">
+  <div class="bg-white rounded-2xl shadow-lift max-w-[420px] w-full p-6">
+    <div class="flex items-center justify-between">
+      <h3 id="ddTitle" class="font-semibold tracking-tight text-[16px]"></h3>
+      <button onclick="document.getElementById('ddModal').classList.add('hidden')" class="h-8 w-8 grid place-items-center rounded-lg hover:bg-mist/40 text-steel">✕</button>
+    </div>
+    <div id="ddBody" class="mt-4 space-y-2.5"></div>
+    <button onclick="document.getElementById('ddModal').classList.add('hidden');document.getElementById('evModal').classList.remove('hidden')" class="mt-4 w-full h-10 rounded-lg border border-whisper text-[12.5px] font-medium hover:bg-mist/30">+ Add event on this day</button>
+  </div>
+</div>
+<div id="toast" class="hidden fixed bottom-5 left-1/2 -translate-x-1/2 z-[60] bg-ink text-white text-[12.5px] font-medium px-4 py-2.5 rounded-xl shadow-lift"></div>
+<script>function toast(m){var t=document.getElementById('toast');t.textContent=m;t.classList.remove('hidden');clearTimeout(window._tt);window._tt=setTimeout(function(){t.classList.add('hidden')},2200);}</script>
+</body>
+</html>

@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EdAssess — Question Generator</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script>tailwind.config={theme:{extend:{colors:{canvas:'#F7F9FC',ink:'#0B2A56',charcoal:'#18181B',steel:'#64748B',whisper:'#E2E8F0',blue:'#2177EF',wash:'#EAF2FE',mist:'#D3E4FD',confirm:'#16A34A',caution:'#D97706',alert:'#DC2626',excused:'#7C8DA6'},fontFamily:{sans:['Geist','sans-serif'],mono:['"Geist Mono"','monospace']},boxShadow:{soft:'0 1px 2px rgba(11,42,86,0.04), 0 6px 24px rgba(11,42,86,0.05)',lift:'0 1px 3px rgba(11,42,86,0.10), 0 12px 32px rgba(11,42,86,0.12)'}}}}</script>
+<style>
+@keyframes rise{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}.rise{animation:rise .45s cubic-bezier(.2,.8,.2,1) both}
+@keyframes shimmer{0%{background-position:-400px 0}100%{background-position:400px 0}}
+.skel{background:linear-gradient(90deg,#EEF2F7 25%,#E2E8F0 37%,#EEF2F7 63%);background-size:400px 100%;animation:shimmer 1.2s infinite linear;border-radius:12px}
+</style>
+</head>
+<body data-active="EdAssess" data-persona="admin" class="bg-canvas font-sans text-charcoal antialiased">
+<div class="flex min-h-screen">
+  <div id="sidebar-root"></div>
+  <div class="flex-1 min-w-0">
+    <header class="h-[60px] bg-white/80 backdrop-blur-md border-b border-whisper/70 flex items-center justify-between px-4 sm:px-7 sticky top-0 z-20">
+      <div class="flex items-center gap-3">
+        <h1 class="text-[15px] font-semibold tracking-tight flex items-center gap-2">
+          <span class="h-6 w-6 rounded-lg bg-blue grid place-items-center text-white"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l1.9 5.7L19.5 10l-5.6 1.3L12 17l-1.9-5.7L4.5 10l5.6-1.3z"/></svg></span>
+          EdAssess</h1>
+        <span class="text-[11.5px] text-steel hidden sm:inline">paste your notes, get your exam</span>
+      </div>
+      <div id="bankActions" class="hidden sm:flex items-center gap-2.5 opacity-30 pointer-events-none transition-opacity">
+        <button class="h-9 px-3.5 rounded-lg border border-whisper bg-white text-[12.5px] font-medium hover:bg-mist/30">Save to question bank</button>
+        <button class="h-9 px-3.5 rounded-lg border border-whisper bg-white text-[12.5px] font-medium hover:bg-mist/30">Print exam paper</button>
+        <button class="h-9 px-3.5 rounded-lg border border-whisper bg-white text-[12.5px] font-medium hover:bg-mist/30">Print marking scheme</button>
+        <button onclick="alert('16 questions sent to the CBT question bank — build the exam in CBT Exams.')" class="h-9 px-3.5 rounded-lg bg-ink text-white text-[12.5px] font-medium active:translate-y-px flex items-center gap-1.5">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="14" rx="2"/><path d="M8 21h8M12 18v3"/></svg>Send to CBT exam</button>
+      </div>
+    </header>
+
+    <main class="p-4 sm:p-7 max-w-[1200px] grid grid-cols-1 lg:grid-cols-[400px_1fr] gap-6 items-start">
+
+      <!-- INPUT pane -->
+      <section class="rise bg-white border border-whisper/70 rounded-2xl shadow-soft p-5 lg:sticky lg:top-[84px]">
+        <div class="grid grid-cols-2 gap-3">
+          <div><label class="text-[11px] font-semibold uppercase tracking-wider text-steel">Subject</label>
+            <select class="mt-1.5 w-full h-10 rounded-lg border border-whisper bg-canvas px-3 text-[13px]"><option>Physics</option><option>Mathematics</option><option>Basic Science</option></select></div>
+          <div><label class="text-[11px] font-semibold uppercase tracking-wider text-steel">Level</label>
+            <select class="mt-1.5 w-full h-10 rounded-lg border border-whisper bg-canvas px-3 text-[13px]"><option>SS 1</option><option>JSS 3</option></select></div>
+        </div>
+        <div class="mt-4">
+          <label class="text-[11px] font-semibold uppercase tracking-wider text-steel">Your lesson notes <span class="normal-case font-normal text-steel/70">— paste anything: notes, lesson plan, scheme of work</span></label>
+          <textarea id="notes" rows="9" class="mt-1.5 w-full rounded-xl border border-whisper bg-canvas p-3.5 text-[13px] leading-relaxed focus:outline-none focus:ring-2 focus:ring-blue/50">REFRACTION OF LIGHT — SS1 WEEK 7
+Refraction is the bending of light as it passes from one medium to another of different density. When light travels from a less dense medium (air) into a denser medium (water/glass), it slows down and bends TOWARDS the normal...
+
+Snell's Law: n = sin i / sin r. The refractive index of glass ≈ 1.5, water ≈ 1.33.
+
+Real-life effects: a straw appears bent in water; pools appear shallower; mirages on hot roads. Total internal reflection occurs beyond the critical angle (glass→air ≈ 42°), used in optical fibres and periscopes...</textarea>
+        </div>
+        <div class="mt-4">
+          <p class="text-[11px] font-semibold uppercase tracking-wider text-steel">Generate</p>
+          <div class="mt-2 grid grid-cols-2 gap-2 text-[12.5px]">
+            <label class="flex items-center gap-2 rounded-lg ring-1 ring-whisper px-3 py-2.5 cursor-pointer"><input type="checkbox" checked class="accent-[#2177EF] h-4 w-4">Objectives <span class="font-mono ml-auto text-steel">×10</span></label>
+            <label class="flex items-center gap-2 rounded-lg ring-1 ring-whisper px-3 py-2.5 cursor-pointer"><input type="checkbox" checked class="accent-[#2177EF] h-4 w-4">True / False <span class="font-mono ml-auto text-steel">×4</span></label>
+            <label class="flex items-center gap-2 rounded-lg ring-1 ring-whisper px-3 py-2.5 cursor-pointer"><input type="checkbox" checked class="accent-[#2177EF] h-4 w-4">Essay + scheme <span class="font-mono ml-auto text-steel">×2</span></label>
+            <label class="flex items-center gap-2 rounded-lg ring-1 ring-whisper px-3 py-2.5 cursor-pointer"><input type="checkbox" class="accent-[#2177EF] h-4 w-4">Short answer <span class="font-mono ml-auto text-steel">×0</span></label>
+          </div>
+        </div>
+        <button id="genBtn" onclick="generate()" class="mt-5 w-full h-11 rounded-xl bg-blue text-white text-[13.5px] font-semibold shadow-soft active:translate-y-px flex items-center justify-center gap-2">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l1.9 5.7L19.5 10l-5.6 1.3L12 17l-1.9-5.7L4.5 10l5.6-1.3z"/></svg>
+          Generate question bank</button>
+        <p class="text-center text-[10.5px] text-steel mt-2.5">You review and edit every question · nothing reaches students unapproved</p>
+        <div class="mt-4 pt-4 border-t border-whisper/60 flex items-center justify-between">
+          <p class="text-[12px] text-steel">Prefer to write your own?</p>
+          <button onclick="openManual()" class="h-9 px-3.5 rounded-lg border border-whisper text-[12px] font-medium hover:bg-mist/30">+ Create question manually</button>
+        </div>
+      </section>
+
+      <!-- OUTPUT pane -->
+      <section id="out" class="space-y-3">
+        <div class="rise bg-wash/60 border border-mist rounded-2xl p-8 text-center">
+          <div class="h-12 w-12 mx-auto rounded-2xl bg-white shadow-soft grid place-items-center text-blue">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l1.9 5.7L19.5 10l-5.6 1.3L12 17l-1.9-5.7L4.5 10l5.6-1.3z"/></svg>
+          </div>
+          <p class="text-[14px] font-medium mt-3">Your generated questions will appear here</p>
+          <p class="text-[12px] text-steel mt-1 max-w-[40ch] mx-auto">Objectives with answers, True/False, and essay questions with full marking schemes — drafted from your own notes.</p>
+        </div>
+      </section>
+    </main>
+  </div>
+</div>
+
+<script src="../assets/shell.js"></script>
+<script>
+const qcard=(n,type,badge,inner)=>`
+<article class="rise bg-white border border-whisper/70 rounded-2xl shadow-soft p-5">
+  <div class="flex items-center justify-between">
+    <p class="text-[11px] font-semibold uppercase tracking-wider text-steel"><span class="font-mono text-charcoal">Q${n}</span> · ${type}</p>
+    <div class="flex items-center gap-1.5">
+      ${badge}
+      <button title="Regenerate this question" class="h-8 w-8 grid place-items-center rounded-lg hover:bg-mist/40 text-steel"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 4v6h-6M1 20v-6h6"/><path d="M3.5 9a9 9 0 0114.9-3.4L23 10M1 14l4.6 4.4A9 9 0 0020.5 15"/></svg></button>
+      <button title="Edit" onclick="editQ(this)" class="h-8 w-8 grid place-items-center rounded-lg hover:bg-mist/40 text-steel"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 3a2.8 2.8 0 114 4L7.5 20.5 2 22l1.5-5.5z"/></svg></button>
+      <button title="Delete" class="h-8 w-8 grid place-items-center rounded-lg hover:bg-alert/10 text-steel hover:text-alert"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6"/></svg></button>
+    </div>
+  </div>
+  ${inner}
+</article>`;
+
+function generate(){
+  const out=document.getElementById('out'), btn=document.getElementById('genBtn');
+  btn.disabled=true; btn.innerHTML='<span class="h-4 w-4 border-2 border-white/40 border-t-white rounded-full animate-spin"></span> Drafting from your notes…';
+  out.innerHTML='<div class="skel h-40"></div><div class="skel h-32"></div><div class="skel h-56"></div>';
+  setTimeout(()=>{
+    btn.disabled=false; btn.innerHTML='Regenerate all';
+    document.getElementById('bankActions').classList.remove('opacity-30','pointer-events-none');
+    out.innerHTML=`
+    <div class="rise flex items-center justify-between bg-white border border-whisper/70 rounded-xl px-4 py-3 shadow-soft">
+      <p class="text-[13px]"><span class="font-semibold">16 questions drafted</span> <span class="text-steel">from "Refraction of Light — SS1 Week 7"</span></p>
+      <span class="text-[10.5px] font-medium text-confirm bg-confirm/10 rounded-full px-2.5 py-1">All grounded in your notes ✓</span>
+    </div>`
+    + qcard(1,'Objective · 2 marks','<span class="text-[10px] font-medium text-steel bg-canvas ring-1 ring-whisper rounded-full px-2 py-0.5 mr-1">easy</span>',`
+      <p class="text-[14px] font-medium mt-3 leading-relaxed">Refraction of light occurs because light…</p>
+      <div class="mt-3 space-y-1.5 text-[13px]">
+        <p class="flex gap-2.5"><span class="font-mono text-steel">A.</span> travels in straight lines only</p>
+        <p class="flex gap-2.5"><span class="font-mono text-steel">B.</span> is absorbed by the second medium</p>
+        <p class="flex gap-2.5 items-center"><span class="font-mono text-confirm font-semibold">C.</span> <span class="font-medium">changes speed when entering a medium of different density</span>
+          <span class="text-[10px] font-medium text-confirm bg-confirm/10 rounded-full px-2 py-0.5">answer</span></p>
+        <p class="flex gap-2.5"><span class="font-mono text-steel">D.</span> loses energy at the boundary</p>
+      </div>`)
+    + qcard(2,'True / False · 1 mark','<span class="text-[10px] font-medium text-steel bg-canvas ring-1 ring-whisper rounded-full px-2 py-0.5 mr-1">easy</span>',`
+      <p class="text-[14px] font-medium mt-3 leading-relaxed">Light bends towards the normal when moving from air into glass.</p>
+      <p class="mt-2.5 text-[12.5px]"><span class="font-medium text-confirm">Answer: True</span> <span class="text-steel">— glass is denser, light slows and bends towards the normal.</span></p>`)
+    + qcard(3,'Objective · 2 marks','<span class="text-[10px] font-medium text-caution bg-caution/10 rounded-full px-2 py-0.5 mr-1">hard</span>',`
+      <p class="text-[14px] font-medium mt-3 leading-relaxed">The critical angle for a glass–air boundary is approximately…</p>
+      <div class="mt-3 space-y-1.5 text-[13px]">
+        <p class="flex gap-2.5"><span class="font-mono text-steel">A.</span> 24°</p>
+        <p class="flex gap-2.5 items-center"><span class="font-mono text-confirm font-semibold">B.</span> <span class="font-medium">42°</span> <span class="text-[10px] font-medium text-confirm bg-confirm/10 rounded-full px-2 py-0.5">answer</span></p>
+        <p class="flex gap-2.5"><span class="font-mono text-steel">C.</span> 49°</p>
+        <p class="flex gap-2.5"><span class="font-mono text-steel">D.</span> 90°</p>
+      </div>`)
+    + qcard(4,'Essay · 6 marks','<span class="text-[10px] font-medium text-caution bg-caution/10 rounded-full px-2 py-0.5 mr-1">hard</span>',`
+      <p class="text-[14px] font-medium mt-3 leading-relaxed">(a) State Snell's Law. (b) A ray of light strikes a glass surface at 60° to the normal and refracts at 35°. Calculate the refractive index of the glass. (c) Give TWO everyday effects of refraction.</p>
+      <div class="mt-3.5 rounded-xl bg-wash/70 ring-1 ring-mist p-4">
+        <p class="text-[10.5px] font-semibold uppercase tracking-wider text-ink flex items-center gap-1.5">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+          Marking scheme — staff only</p>
+        <ul class="mt-2 space-y-1.5 text-[12.5px] text-charcoal/85">
+          <li class="flex gap-2"><span class="font-mono text-blue shrink-0">2 mks</span> (a) Correct statement: sin i / sin r is constant for two given media (n = sin i / sin r).</li>
+          <li class="flex gap-2"><span class="font-mono text-blue shrink-0">2 mks</span> (b) n = sin 60° / sin 35° = 0.866 / 0.574 ≈ <span class="font-mono font-semibold">1.51</span> (1 mk method, 1 mk answer).</li>
+          <li class="flex gap-2"><span class="font-mono text-blue shrink-0">2 mks</span> (c) Any two: bent straw in water · pools look shallower · mirages (1 mk each).</li>
+        </ul>
+      </div>`)
+    + `<p class="rise text-center text-[11.5px] text-steel py-2">+ 12 more questions drafted · scroll in the real product</p>`;
+  },1600);
+}
+// ---- manual create + inline edit ----
+let qN=100;
+function openManual(){document.getElementById('manM').style.opacity='1';document.getElementById('manM').style.pointerEvents='auto';setMType('mcq');}
+function closeMan(){document.getElementById('manM').style.opacity='0';document.getElementById('manM').style.pointerEvents='none';}
+let mType='mcq';
+function setMType(t){mType=t;['mcq','tf','essay'].forEach(x=>{const b=document.getElementById('mt_'+x);b.className='h-8 px-3 rounded-lg text-[12px] font-medium '+(x===t?'bg-blue text-white':'bg-white ring-1 ring-whisper text-steel');});
+  const w=document.getElementById('mOpts');
+  if(t==='essay'){w.innerHTML='<label class="text-[11px] font-semibold text-steel">Marking scheme</label><textarea rows="3" class="mt-1.5 w-full rounded-lg border border-whisper bg-canvas p-2.5 text-[12.5px] resize-none" placeholder="Points &amp; marks…"></textarea>';return;}
+  const opts=t==='tf'?['True','False']:['Option A','Option B','Option C','Option D'];
+  w.innerHTML='<label class="text-[11px] font-semibold text-steel">Options — tick the correct one</label>'+opts.map((o,i)=>`<div class="flex items-center gap-2 mt-1.5"><input type="radio" name="mc" ${i===0?'checked':''} class="accent-[#16A34A]"><input value="${o}" class="flex-1 h-9 rounded-lg border border-whisper bg-canvas px-3 text-[12.5px]"></div>`).join('');
+}
+function addManual(){
+  const out=document.getElementById('out');
+  if(out.querySelector('.skel')||out.children.length===1&&out.querySelector('.bg-wash\\/60')) out.innerHTML='';
+  if(out.firstElementChild && out.firstElementChild.classList.contains('bg-wash/60')) out.innerHTML='';
+  const txt=document.getElementById('mQ').value||'(untitled question)';
+  const TYPE={mcq:'Objective · 2 marks',tf:'True / False · 1 mark',essay:'Essay · manual'}[mType];
+  let inner='';
+  if(mType==='mcq'){inner=`<p class="text-[14px] font-medium mt-3 leading-relaxed">${txt}</p><div class="mt-3 space-y-1.5 text-[13px]"><p class="flex gap-2.5 items-center"><span class="font-mono text-confirm font-semibold">A.</span> <span class="font-medium">your correct option</span> <span class="text-[10px] font-medium text-confirm bg-confirm/10 rounded-full px-2 py-0.5">answer</span></p><p class="flex gap-2.5"><span class="font-mono text-steel">B.</span> option</p></div>`;}
+  else if(mType==='tf'){inner=`<p class="text-[14px] font-medium mt-3 leading-relaxed">${txt}</p><p class="mt-2.5 text-[12.5px]"><span class="font-medium text-confirm">Answer: True</span></p>`;}
+  else {inner=`<p class="text-[14px] font-medium mt-3 leading-relaxed">${txt}</p><div class="mt-3 rounded-xl bg-wash/70 ring-1 ring-mist p-3 text-[12px]"><span class="font-semibold">Marking scheme</span> · added manually</div>`;}
+  const card=document.createElement('div'); card.innerHTML=qcard(++qN,TYPE+' · <span class="text-blue">manual</span>','<span class="text-[10px] font-medium text-blue bg-wash rounded-full px-2 py-0.5 mr-1">manual</span>',inner);
+  out.insertBefore(card.firstElementChild,out.firstChild);
+  document.getElementById('bankActions').classList.remove('opacity-30','pointer-events-none');
+  closeMan();
+}
+function editQ(btn){const art=btn.closest('article');const p=art.querySelector('p.text-\\[14px\\]')||art.querySelector('p');if(!p)return;p.contentEditable=true;p.classList.add('ring-1','ring-blue','rounded','px-1');p.focus();p.onblur=()=>{p.contentEditable=false;p.classList.remove('ring-1','ring-blue','px-1');};}
+</script>
+<div id="manM" class="fixed inset-0 z-50 bg-ink/40 backdrop-blur-sm grid place-items-center p-4" style="opacity:0;pointer-events:none;transition:opacity .2s" onclick="if(event.target===this)closeMan()">
+  <div class="bg-white rounded-2xl shadow-lift max-w-[460px] w-full p-6 max-h-[90vh] overflow-y-auto">
+    <div class="flex items-center justify-between mb-3"><p class="text-[15px] font-semibold">Create question manually</p><button onclick="closeMan()" class="h-8 w-8 grid place-items-center rounded-lg hover:bg-mist/40 text-steel">✕</button></div>
+    <div class="flex gap-1.5 mb-3"><button id="mt_mcq" onclick="setMType('mcq')" class="h-8 px-3 rounded-lg bg-blue text-white text-[12px] font-medium">Objective</button><button id="mt_tf" onclick="setMType('tf')" class="h-8 px-3 rounded-lg bg-white ring-1 ring-whisper text-steel text-[12px] font-medium">True/False</button><button id="mt_essay" onclick="setMType('essay')" class="h-8 px-3 rounded-lg bg-white ring-1 ring-whisper text-steel text-[12px] font-medium">Essay</button></div>
+    <label class="text-[11px] font-semibold text-steel">Question</label>
+    <textarea id="mQ" rows="2" class="mt-1.5 w-full rounded-lg border border-whisper bg-canvas p-2.5 text-[13px] resize-none" placeholder="Type the question…"></textarea>
+    <div id="mOpts" class="mt-3"></div>
+    <div class="flex justify-end gap-2 mt-5"><button onclick="closeMan()" class="h-10 px-4 rounded-lg ring-1 ring-whisper text-[13px] font-medium text-steel">Cancel</button><button onclick="addManual()" class="h-10 px-5 rounded-lg bg-blue text-white text-[13px] font-semibold shadow-soft">Add question</button></div>
+  </div>
+</div>
+</body>
+</html>

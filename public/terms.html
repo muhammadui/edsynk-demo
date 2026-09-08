@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Edsynk — Terms of Service</title>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800&family=Geist+Mono:wght@400;500;600&family=Noto+Naskh+Arabic:wght@500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#FFFFFF; --canvas:#F7F9FC; --ink:#0B2A56; --text:#18181B; --muted:#64748B;
+  --hair:#E7ECF3; --blue:#2177EF; --sky:#5C9DF5; --wash:#EAF2FE; --mist:#D3E4FD;
+  --green:#16A34A; --amber:#D97706; --red:#DC2626;
+  --shadow:0 1px 2px rgba(11,42,86,.05),0 10px 40px rgba(11,42,86,.07);
+  --lift:0 2px 8px rgba(11,42,86,.08),0 28px 80px rgba(11,42,86,.14);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'Geist',sans-serif;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+.mono{font-family:'Geist Mono',monospace}
+a{text-decoration:none;color:var(--blue);transition:color .18s}
+a:hover{color:var(--ink)}
+button,a{cursor:pointer}
+button:active,.btn:active{transform:scale(.97)}
+::selection{background:var(--mist)}
+::-webkit-scrollbar{width:9px}
+::-webkit-scrollbar-track{background:var(--canvas)}
+::-webkit-scrollbar-thumb{background:var(--blue);border-radius:99px;border:2px solid var(--canvas)}
+.wrap{max-width:1120px;margin:0 auto;padding:0 24px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:40px;padding:0 18px;border-radius:10px;font-size:13.5px;font-weight:600;border:none;transition:transform .15s,box-shadow .2s,background .2s}
+.btn-ghost{background:#fff;color:var(--text);border:1px solid var(--hair)}
+.btn-ghost:hover{background:var(--canvas);color:var(--text)}
+
+/* nav */
+nav{position:sticky;top:0;z-index:100;backdrop-filter:blur(14px);background:rgba(255,255,255,.85);border-bottom:1px solid var(--hair)}
+.nav-in{height:58px;display:flex;align-items:center;justify-content:space-between}
+.logo{display:flex;align-items:center;gap:9px;font-weight:700;font-size:15.5px;letter-spacing:-.01em;color:var(--text)}
+.logo:hover{color:var(--text)}
+.logo-mark{width:26px;height:26px;border-radius:8px;background:var(--blue);display:grid;place-items:center;color:#fff;font-weight:800;font-size:13px}
+.nav-links{display:flex;gap:4px;align-items:center}
+.nav-links a{font-size:13.5px;font-weight:500;color:var(--muted);padding:8px 13px}
+.nav-links a:hover{color:var(--text)}
+@media(max-width:680px){.nav-links a.hide-sm{display:none}}
+
+/* doc header */
+.doc-head{background:radial-gradient(900px 360px at 50% -40%,var(--wash),transparent 70%),linear-gradient(180deg,var(--canvas),#fff);border-bottom:1px solid var(--hair);padding:64px 0 48px}
+.doc-head .eyebrow{font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--blue)}
+.doc-head h1{font-size:clamp(30px,4.4vw,46px);font-weight:800;letter-spacing:-.03em;line-height:1.06;color:var(--ink);margin-top:12px}
+.doc-meta{display:flex;align-items:center;flex-wrap:wrap;gap:14px;margin-top:20px}
+.updated{font-size:13px;color:var(--muted)}
+.updated b{color:var(--text);font-weight:600}
+
+/* layout */
+.doc-body{padding:48px 0 90px}
+.doc-grid{display:grid;grid-template-columns:236px 1fr;gap:48px;align-items:start}
+@media(max-width:880px){.doc-grid{grid-template-columns:1fr}.toc{position:static!important;margin-bottom:8px}}
+
+/* toc */
+.toc{position:sticky;top:78px}
+.toc h5{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:12px}
+.toc ol{list-style:none;counter-reset:t;display:grid;gap:2px}
+.toc li{counter-increment:t}
+.toc a{display:flex;gap:9px;font-size:13px;line-height:1.45;color:var(--muted);padding:6px 10px;border-radius:8px;font-weight:500}
+.toc a::before{content:counter(t);font-family:'Geist Mono',monospace;font-size:11px;color:var(--blue);min-width:16px}
+.toc a:hover{background:var(--canvas);color:var(--text)}
+
+/* article */
+article{max-width:760px}
+article section{scroll-margin-top:78px;padding-top:8px}
+article section+section{margin-top:40px;padding-top:40px;border-top:1px solid var(--hair)}
+article h2{font-size:21px;font-weight:700;letter-spacing:-.02em;color:var(--ink);line-height:1.2;display:flex;gap:12px;align-items:baseline}
+article h2 .num{font-family:'Geist Mono',monospace;font-size:14px;color:var(--blue);font-weight:600}
+article h3{font-size:15px;font-weight:600;color:var(--text);margin-top:22px}
+article p{font-size:15px;line-height:1.72;color:#3A4452;margin-top:14px}
+article p:first-of-type{margin-top:16px}
+article strong{color:var(--ink);font-weight:600}
+article ul{margin:14px 0 0;padding-left:0;list-style:none;display:grid;gap:10px}
+article ul li{position:relative;padding-left:24px;font-size:15px;line-height:1.65;color:#3A4452}
+article ul li::before{content:'';position:absolute;left:6px;top:9px;width:6px;height:6px;border-radius:99px;background:var(--mist);border:1.5px solid var(--blue)}
+article ul li strong{color:var(--ink)}
+.lead{font-size:16.5px!important;line-height:1.7!important;color:var(--text)!important}
+.callout{margin-top:18px;border:1px solid var(--mist);background:var(--wash);border-radius:14px;padding:16px 18px}
+.callout p{margin-top:0;font-size:14px;color:var(--ink)}
+.callout p+p{margin-top:8px}
+.sub-table{margin-top:18px;width:100%;border-collapse:collapse;border:1px solid var(--hair);border-radius:12px;overflow:hidden;font-size:13.5px}
+.sub-table th{text-align:left;background:var(--canvas);color:var(--muted);font-weight:600;font-size:11px;letter-spacing:.05em;text-transform:uppercase;padding:10px 14px;border-bottom:1px solid var(--hair)}
+.sub-table td{padding:11px 14px;border-bottom:1px solid var(--hair);color:#3A4452;line-height:1.5;vertical-align:top}
+.sub-table tr:last-child td{border-bottom:none}
+.sub-table td b{color:var(--ink)}
+.contact-card{margin-top:18px;display:grid;gap:6px;border:1px solid var(--hair);border-radius:14px;padding:18px 20px;box-shadow:var(--shadow)}
+.contact-card .row{font-size:14px;color:#3A4452}
+.contact-card .row b{color:var(--ink);font-weight:600;display:inline-block;min-width:120px}
+.back-top{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;color:var(--muted);margin-top:48px}
+
+/* footer */
+footer{background:#fff;border-top:1px solid var(--hair);padding:64px 0 36px}
+.foot{display:grid;grid-template-columns:1.4fr repeat(4,1fr);gap:28px;font-size:12.5px;color:var(--muted)}
+.foot h5{font-size:12px;color:var(--text);margin-bottom:12px}
+.foot a{display:block;padding:4px 0;color:var(--muted)}
+.foot a:hover{color:var(--blue)}
+.foot .logo:hover{color:var(--text)}
+.foot p{line-height:1.6}
+.copyright{margin-top:44px;padding-top:20px;border-top:1px solid var(--hair);font-size:11.5px;color:#9AA6B5;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
+@media(max-width:900px){.foot{grid-template-columns:repeat(2,1fr)}}
+
+@media print{
+  nav,.doc-head .doc-meta .btn,.toc,footer,.back-top{display:none!important}
+  .doc-grid{grid-template-columns:1fr}
+  body{background:#fff}
+  article{max-width:none}
+  article section+section{break-inside:avoid}
+}
+</style>
+</head>
+<body>
+
+<nav><div class="wrap nav-in">
+  <a class="logo" href="landing.html"><span class="logo-mark">E</span>Edsynk</a>
+  <div class="nav-links">
+    <a href="landing.html" class="hide-sm">Back to site</a>
+    <a href="pricing.html" class="hide-sm">Pricing</a>
+    <a href="privacy-policy.html">Privacy</a>
+  </div>
+</div></nav>
+
+<header class="doc-head"><div class="wrap">
+  <p class="eyebrow">Trust at Edsynk</p>
+  <h1>Terms of Service</h1>
+  <div class="doc-meta">
+    <span class="updated">Last updated: <b>22 June 2026</b></span>
+    <button class="btn btn-ghost" onclick="window.print()">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+      Download / Print PDF
+    </button>
+  </div>
+</div></header>
+
+<div class="doc-body"><div class="wrap"><div class="doc-grid">
+
+  <aside class="toc">
+    <h5>On this page</h5>
+    <ol>
+      <li><a href="#agreement">Agreement &amp; who can accept</a></li>
+      <li><a href="#service">The service</a></li>
+      <li><a href="#accounts">Accounts &amp; security</a></li>
+      <li><a href="#use">Acceptable use</a></li>
+      <li><a href="#ownership">Data ownership</a></li>
+      <li><a href="#fees">Fees &amp; billing</a></li>
+      <li><a href="#suspension">Suspension &amp; termination</a></li>
+      <li><a href="#ai">AI features</a></li>
+      <li><a href="#availability">Availability &amp; "as-is"</a></li>
+      <li><a href="#liability">Limitation of liability</a></li>
+      <li><a href="#changes">Changes to these terms</a></li>
+      <li><a href="#law">Governing law</a></li>
+      <li><a href="#contact">Contact us</a></li>
+    </ol>
+  </aside>
+
+  <article>
+    <p class="lead">These terms govern your school's use of Edsynk. They are written to be fair and readable. The headline commitments: your school owns its data, you can export it any time, and we will never delete or withhold children's records over a billing dispute. The rest is the detail.</p>
+
+    <section id="agreement">
+      <h2><span class="num">01</span> Agreement &amp; who can accept</h2>
+      <p>These Terms of Service form an agreement between <strong>Edsynk Technologies Ltd</strong> ("Edsynk", "we") and the school, institution or proprietor that registers for the service ("the school", "you").</p>
+      <p>The person who accepts these terms confirms that they are authorised to bind the institution — for example a proprietor, principal or duly appointed administrator. By creating an account or using Edsynk, the school accepts these terms on behalf of all of its staff and users.</p>
+    </section>
+
+    <section id="service">
+      <h2><span class="num">02</span> The service</h2>
+      <p>Edsynk is a school-management platform covering student records, results computation, attendance, computer-based testing, parent communication and payments, among other features.</p>
+      <p>The service is offered in plans — <strong>Starter, Standard and Pro</strong>. Some features are plan-gated, meaning they are available only on certain plans. We may add, change or improve features over time; where a change materially reduces a feature you rely on, we will give reasonable notice.</p>
+    </section>
+
+    <section id="accounts">
+      <h2><span class="num">03</span> Accounts &amp; security</h2>
+      <p>The school's administrator creates and manages user accounts for staff, and is responsible for who they grant access to and what permissions they assign.</p>
+      <ul>
+        <li>Keep login credentials confidential; do not share accounts between people.</li>
+        <li>The school is responsible for activity carried out under its users' accounts.</li>
+        <li>Notify us promptly at <a href="mailto:legal@edsynk.ng">legal@edsynk.ng</a> if you suspect unauthorised access.</li>
+        <li>We provide role-based access controls and audit logs to help you manage this safely.</li>
+      </ul>
+    </section>
+
+    <section id="use">
+      <h2><span class="num">04</span> Acceptable use</h2>
+      <p>You agree to use Edsynk lawfully and in good faith. In particular, you must not:</p>
+      <ul>
+        <li>Use the service for any <strong>unlawful purpose</strong> or in breach of Nigerian law.</li>
+        <li><strong>Upload other people's data without the right to do so</strong> — only enter records you are entitled to hold and process.</li>
+        <li>Attempt to breach security, access another school's data, or disrupt the platform.</li>
+        <li>Misuse assessment and result features in a way that undermines <strong>exam integrity</strong> — Edsynk is built to make results trustworthy, and you agree to use it consistently with honest assessment.</li>
+      </ul>
+      <p>We may investigate suspected misuse and take proportionate action to protect the platform and other schools.</p>
+    </section>
+
+    <section id="ownership">
+      <h2><span class="num">05</span> Data ownership</h2>
+      <p><strong>The school owns its data.</strong> All student records, results, attendance and other content the school puts into Edsynk remain the property of the school. <strong>Edsynk claims no ownership</strong> over it.</p>
+      <p>We act as a processor of that data on your behalf, as described in our <a href="privacy-policy.html">Privacy Policy</a>. You can <strong>export your data at any time</strong> in standard, portable formats — during your subscription and on the way out.</p>
+    </section>
+
+    <section id="fees">
+      <h2><span class="num">06</span> Fees &amp; billing</h2>
+      <p>Edsynk is billed on a <strong>per-student basis, per term or per session</strong>, according to the plan you choose. Fees and what each plan includes are set out on our <a href="pricing.html">pricing page</a>.</p>
+      <ul>
+        <li><strong>Payment methods</strong> — payments are made through Paystack, Flutterwave or Remita.</li>
+        <li><strong>Late payment</strong> — if an invoice is overdue, we will remind you and may move the account to read-only access (see Suspension), but we will not delete your data.</li>
+        <li><strong>Refunds</strong> — fees for a term or session already in use are generally non-refundable; where we have clearly failed to deliver the service, we will resolve it fairly, including a pro-rated refund where appropriate.</li>
+        <li><strong>Price changes</strong> — we may adjust pricing with reasonable advance notice, and never mid-term in a way that surprises you.</li>
+      </ul>
+    </section>
+
+    <section id="suspension">
+      <h2><span class="num">07</span> Suspension &amp; termination</h2>
+      <p>If fees remain unpaid after reminders, we may suspend the account. Suspension means the account becomes <strong>read-only</strong> — never deleted.</p>
+      <div class="callout">
+        <p><strong>We will not hold children's data hostage.</strong> Throughout any suspension, your <strong>data export remains available</strong>. Records are not erased because of a billing dispute.</p>
+        <p>On offboarding, we return or delete the school's data at your request, subject to any minimum retention required by law.</p>
+      </div>
+      <p>Either party may end the agreement with reasonable notice. We may terminate immediately only in cases of serious or repeated breach of these terms, such as unlawful use of the platform.</p>
+    </section>
+
+    <section id="ai">
+      <h2><span class="num">08</span> AI features</h2>
+      <p>Edsynk includes AI assistants that draft remarks, generate practice questions and help staff work faster. These are <strong>aids, not authorities</strong>.</p>
+      <ul>
+        <li>The AI <strong>never sets official scores or grades</strong>. Arithmetic on results is exact and computed by the system, not invented by AI.</li>
+        <li>AI output is always reviewed and approved by a human before it becomes part of a record.</li>
+        <li><strong>The school remains responsible</strong> for the accuracy and integrity of its academic records.</li>
+      </ul>
+    </section>
+
+    <section id="availability">
+      <h2><span class="num">09</span> Availability &amp; "as-is"</h2>
+      <p>We work hard to keep Edsynk available and reliable, and we use <strong>reasonable efforts</strong> to maximise uptime. From time to time we carry out maintenance, which we schedule outside peak periods where we can and announce in advance where practical.</p>
+      <p>The service is provided on an <strong>"as-is" and "as-available"</strong> basis. We do not guarantee that it will be uninterrupted or completely error-free, but we will respond promptly to issues you report.</p>
+    </section>
+
+    <section id="liability">
+      <h2><span class="num">10</span> Limitation of liability</h2>
+      <p>To the extent permitted by Nigerian law, Edsynk is not liable for indirect or consequential losses. Our total liability to a school in connection with the service is limited to the <strong>fees that school paid to Edsynk in the twelve months</strong> before the event giving rise to the claim.</p>
+      <p>Nothing in these terms excludes liability that cannot lawfully be excluded.</p>
+    </section>
+
+    <section id="changes">
+      <h2><span class="num">11</span> Changes to these terms</h2>
+      <p>We may update these terms as the service evolves or the law changes. When we make a material change, we will give <strong>reasonable notice</strong> — for example by email to the school's administrator or a notice in the app — and update the "Last updated" date above. Continued use after a change takes effect means you accept the updated terms.</p>
+    </section>
+
+    <section id="law">
+      <h2><span class="num">12</span> Governing law</h2>
+      <p>These terms are governed by the laws of the <strong>Federal Republic of Nigeria</strong>. We will try to resolve any dispute amicably and in good faith first. Where that fails, the dispute is subject to the jurisdiction of the competent courts of Nigeria.</p>
+    </section>
+
+    <section id="contact">
+      <h2><span class="num">13</span> Contact us</h2>
+      <p>Questions about these terms, billing or your agreement are welcome.</p>
+      <div class="contact-card">
+        <div class="row"><b>Legal &amp; billing</b> <a href="mailto:legal@edsynk.ng">legal@edsynk.ng</a></div>
+        <div class="row"><b>Privacy</b> See our <a href="privacy-policy.html">Privacy Policy</a>.</div>
+        <div class="row"><b>Company</b> Edsynk Technologies Ltd, Bauchi, Nigeria</div>
+      </div>
+      <a class="back-top" href="#">↑ Back to top</a>
+    </section>
+  </article>
+
+</div></div></div>
+
+<footer><div class="wrap">
+  <div class="foot">
+    <div>
+      <a class="logo" href="landing.html"><span class="logo-mark">E</span>Edsynk</a>
+      <p style="margin-top:14px">The school operating system.<br>Built for how schools actually work — starting with Nigeria's.</p>
+    </div>
+    <div><h5>Product</h5><a href="landing.html#results">Results pipeline</a><a href="landing.html#assist">Edsynk AI</a><a href="landing.html#results">CBT exams</a><a href="pricing.html">Pricing</a></div>
+    <div><h5>Schools</h5><a href="verify-result.html">Verify a result</a><a href="../auth/register-school.html">Become a pilot</a><a href="school-portal.html">School portal</a><a href="results-lookup.html">Results lookup</a></div>
+    <div><h5>Trust</h5><a href="privacy-policy.html">Privacy · NDPA 2023</a><a href="terms.html">Terms of Service</a><a href="terms.html#ownership">Exportable forever</a><a href="terms.html#law">Governing law</a></div>
+    <div><h5>Company</h5><a href="landing.html">About</a><a href="landing.html#customers">Customers</a><a href="mailto:hello@edsynk.ng">Contact</a><a href="mailto:legal@edsynk.ng">Legal team</a></div>
+  </div>
+  <div class="copyright"><span>© 2026 Edsynk Technologies Ltd · Bauchi, Nigeria</span><span class="mono">legal@edsynk.ng</span></div>
+</div></footer>
+
+</body>
+</html>

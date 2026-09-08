@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Edsynk — Assignments</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script>tailwind.config={theme:{extend:{colors:{canvas:'#F7F9FC',ink:'#0B2A56',charcoal:'#18181B',steel:'#64748B',whisper:'#E2E8F0',blue:'#2177EF',skyblue:'#5C9DF5',wash:'#EAF2FE',mist:'#D3E4FD',confirm:'#16A34A',caution:'#D97706',alert:'#DC2626',excused:'#7C8DA6'},fontFamily:{sans:['Geist','sans-serif'],mono:['"Geist Mono"','monospace']},boxShadow:{soft:'0 1px 2px rgba(11,42,86,0.04), 0 6px 24px rgba(11,42,86,0.05)',lift:'0 1px 3px rgba(11,42,86,0.10), 0 12px 32px rgba(11,42,86,0.12)'}}}}</script>
+<style>@keyframes rise{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}.rise{animation:rise .45s cubic-bezier(.2,.8,.2,1) both}#m{opacity:0;pointer-events:none;transition:opacity .2s}body.mopen #m{opacity:1;pointer-events:auto}.ms{display:none}.ms.on{display:block}</style>
+</head>
+<body data-active="Assignments" data-persona="student" class="bg-canvas font-sans text-charcoal antialiased">
+<div class="flex min-h-screen">
+  <div id="sidebar-root"></div>
+  <div class="flex-1 min-w-0">
+    <header class="h-[60px] bg-white/80 backdrop-blur-md border-b border-whisper/70 flex items-center justify-between px-4 sm:px-7 sticky top-0 z-20">
+      <div class="flex items-center gap-3"><h1 class="text-[15px] font-semibold tracking-tight">Assignments</h1>
+        <span class="font-mono text-[11.5px] font-medium text-caution bg-caution/10 rounded-full px-2.5 py-1 hidden sm:inline">2 to do</span></div>
+    </header>
+    <main class="p-4 sm:p-7 max-w-[1000px] space-y-5 pb-10">
+
+      <!-- holiday take-home banner -->
+      <section class="rise bg-ink text-white rounded-2xl p-5 shadow-lift relative overflow-hidden">
+        <div class="absolute -right-8 -top-12 h-36 w-36 rounded-full bg-blue/30 blur-2xl"></div>
+        <div class="relative flex items-center justify-between gap-4 flex-wrap">
+          <div><p class="text-[10.5px] font-semibold uppercase tracking-[0.08em] text-skyblue">Holiday take-home</p>
+          <p class="text-[16px] font-semibold mt-1">2 holiday assessments to do before resumption</p>
+          <p class="text-[11.5px] text-white/60 mt-1">Submit on Edsynk over the break · due 5 September</p></div>
+          <button onclick="openSub('Algebra &amp; geometry revision')" class="h-10 px-4 rounded-xl bg-blue text-white text-[12.5px] font-semibold grid place-items-center shadow-soft active:translate-y-px shrink-0">Start</button>
+        </div>
+      </section>
+
+      <!-- to do -->
+      <section class="rise" style="animation-delay:.05s">
+        <p class="text-[13px] font-semibold uppercase tracking-[0.06em] text-steel mb-2.5">To do</p>
+        <div class="space-y-3" id="todo"></div>
+      </section>
+      <!-- done -->
+      <section class="rise" style="animation-delay:.1s">
+        <p class="text-[13px] font-semibold uppercase tracking-[0.06em] text-steel mb-2.5">Submitted &amp; graded</p>
+        <div class="space-y-3" id="done"></div>
+      </section>
+    </main>
+  </div>
+</div>
+
+<!-- submit modal -->
+<div id="m" class="fixed inset-0 z-50 bg-ink/40 backdrop-blur-sm grid place-items-end sm:place-items-center p-0 sm:p-4" onclick="if(event.target===this)document.body.classList.remove('mopen')">
+  <div class="bg-white w-full sm:max-w-[460px] rounded-t-3xl sm:rounded-3xl shadow-lift max-h-[92vh] overflow-y-auto">
+    <div class="sticky top-0 bg-white border-b border-whisper/70 px-5 py-3.5 flex items-center justify-between"><p class="text-[14px] font-semibold" id="subTitle">Assignment</p><button onclick="document.body.classList.remove('mopen')" class="h-8 w-8 grid place-items-center rounded-lg hover:bg-mist/40 text-steel">✕</button></div>
+    <!-- step 1 -->
+    <div class="ms on p-5" data-s="0">
+      <div class="rounded-xl bg-canvas ring-1 ring-whisper px-4 py-3 text-[12px] mb-4"><p class="text-steel">Mathematics · Mallam Musa · due 5 Sept</p></div>
+      <p class="text-[11.5px] font-semibold uppercase tracking-wider text-steel">Instructions</p>
+      <p class="text-[13px] mt-1.5 leading-relaxed">Complete the attached worksheet: simplify the expressions (Q1–10), solve the word problems (Q11–15), and show all working. Submit a photo of your work or type your answers.</p>
+      <button onclick="toast('Downloading worksheet.pdf…')" class="mt-3 w-full h-11 rounded-xl ring-1 ring-whisper bg-canvas text-[12.5px] font-medium text-steel hover:bg-mist/30 flex items-center justify-center gap-2"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg>worksheet.pdf · download</button>
+      <p class="text-[11.5px] font-semibold uppercase tracking-wider text-steel mt-5">Your submission</p>
+      <textarea rows="3" class="mt-2 w-full rounded-xl border border-whisper bg-canvas px-4 py-2.5 text-[13px] focus:outline-none focus:ring-2 focus:ring-blue/50 resize-none" placeholder="Type your answers, or upload below…"></textarea>
+      <button onclick="toast('Photo attached ✓')" class="mt-2 w-full h-11 rounded-xl border border-dashed border-whisper bg-canvas text-[12.5px] text-steel hover:bg-mist/30">📷 Upload photo of your work</button>
+      <button onclick="subStep(1)" class="mt-5 w-full h-12 rounded-xl bg-blue text-white text-[14px] font-semibold shadow-soft active:translate-y-px">Submit assignment</button>
+      <p class="text-[11px] text-steel text-center mt-2">Saved on your device first — submits when you're online.</p>
+    </div>
+    <!-- step 2 success -->
+    <div class="ms p-5" data-s="1">
+      <div class="text-center py-6"><div class="h-16 w-16 rounded-full bg-confirm/10 grid place-items-center mx-auto"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#16A34A" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg></div>
+      <p class="text-[16px] font-bold mt-4">Submitted!</p><p class="text-[12.5px] text-steel mt-1">Mallam Musa will grade it when school resumes. You can still edit until the due date.</p></div>
+      <button onclick="document.body.classList.remove('mopen')" class="w-full h-12 rounded-xl bg-blue text-white text-[13px] font-semibold">Done</button>
+    </div>
+  </div>
+</div>
+<div id="toast" class="hidden fixed bottom-5 left-1/2 -translate-x-1/2 z-[60] bg-ink text-white text-[12.5px] font-medium px-4 py-2.5 rounded-xl shadow-lift"></div>
+<script>function toast(m){var t=document.getElementById('toast');t.textContent=m;t.classList.remove('hidden');clearTimeout(window._tt);window._tt=setTimeout(function(){t.classList.add('hidden')},2200);}</script>
+<script src="../assets/shell.js"></script>
+<script>
+const TODO=[
+ ['holiday','Holiday: Algebra &amp; geometry revision','Mathematics','due 5 Sept','Mallam Musa'],
+ ['holiday','Holiday: Reading log + book report','English','due 5 Sept','Mrs. Adeyemi'],
+ ['hw','Mensuration worksheet','Mathematics','due 2 Jul','Mallam Musa'],
+];
+const DONE=[
+ ['Statistics mini-project','Mathematics','submitted 14 Jun','graded','18/20 · Excellent work, clear charts.'],
+ ['Photosynthesis diagram','Basic Science','submitted 10 Jun','graded','15/20 · Label the stomata next time.'],
+ ['Comprehension Q','English','submitted 8 Jun','submitted','awaiting grading'],
+];
+const TY={holiday:['Holiday','text-confirm bg-confirm/10'],hw:['Homework','text-blue bg-wash']};
+document.getElementById('todo').innerHTML=TODO.map(a=>`
+ <div class="bg-white ring-1 ring-whisper/80 rounded-2xl shadow-soft p-4 flex items-center justify-between gap-3 flex-wrap">
+   <div class="flex items-start gap-3"><span class="text-[9.5px] font-semibold ${TY[a[0]][1]} rounded-full px-2 py-0.5 mt-0.5">${TY[a[0]][0]}</span>
+   <div><p class="text-[13.5px] font-semibold">${a[1]}</p><p class="text-[11.5px] text-steel mt-0.5">${a[2]} · ${a[3]} · ${a[4]}</p></div></div>
+   <button onclick="openSub('${a[1].replace(/'/g,'')}')" class="h-9 px-4 rounded-lg bg-blue text-white text-[12px] font-semibold shadow-soft active:translate-y-px">Open</button>
+ </div>`).join('');
+document.getElementById('done').innerHTML=DONE.map(a=>{
+  const graded=a[3]==='graded';
+  return `<div class="bg-white ring-1 ring-whisper/80 rounded-2xl shadow-soft p-4">
+   <div class="flex items-center justify-between gap-3"><div><p class="text-[13.5px] font-semibold">${a[0]}</p><p class="text-[11.5px] text-steel mt-0.5">${a[1]} · ${a[2]}</p></div>
+   ${graded?`<span class="text-[12px] font-mono font-semibold text-confirm bg-confirm/10 rounded-full px-2.5 py-1">${a[4].split(' · ')[0]}</span>`:`<span class="text-[10.5px] font-semibold text-caution bg-caution/10 rounded-full px-2.5 py-1">Submitted</span>`}</div>
+   ${graded?`<p class="text-[12px] text-steel mt-2 rounded-lg bg-canvas ring-1 ring-whisper px-3 py-2"><span class="font-medium text-charcoal">Feedback:</span> ${a[4].split(' · ').slice(1).join(' · ')}</p>`:''}
+  </div>`;
+}).join('');
+function openSub(t){document.body.classList.add('mopen');document.getElementById('subTitle').innerHTML=t;subStep(0);}
+function subStep(n){document.querySelectorAll('.ms').forEach(s=>s.classList.toggle('on',+s.dataset.s===n));}
+</script>
+</body>
+</html>

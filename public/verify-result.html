@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Verified Result — Edsynk</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&family=Noto+Naskh+Arabic:wght@500&family=Caveat:wght@600&display=swap" rel="stylesheet">
+<script>
+tailwind.config = { theme: { extend: {
+  colors: { canvas:'#F7F9FC', ink:'#0B2A56', charcoal:'#18181B', steel:'#64748B', whisper:'#E2E8F0',
+    blue:'#2177EF', wash:'#EAF2FE', mist:'#D3E4FD',
+    confirm:'#16A34A', caution:'#D97706', alert:'#DC2626', excused:'#7C8DA6' },
+  fontFamily: { sans:['Geist','sans-serif'], mono:['"Geist Mono"','monospace'], arabic:['"Noto Naskh Arabic"','serif'], sig:['Caveat','cursive'] },
+  boxShadow: { soft:'0 1px 2px rgba(11,42,86,0.04), 0 6px 24px rgba(11,42,86,0.05)',
+               lift:'0 2px 6px rgba(11,42,86,0.08), 0 16px 48px rgba(11,42,86,0.12)' }
+}}}
+</script>
+</head>
+<body class="bg-mist/30 font-sans text-charcoal antialiased">
+
+<header class="h-14 flex items-center justify-center border-b border-whisper/60 bg-white">
+  <div class="flex items-center gap-2">
+    <div class="h-6 w-6 rounded-md bg-blue grid place-items-center text-white font-bold text-xs">E</div>
+    <span class="text-sm font-semibold tracking-tight">edsynk</span>
+    <span class="text-xs text-steel ml-1">result verification</span>
+  </div>
+</header>
+
+<main class="max-w-[820px] mx-auto px-3 sm:px-6 py-8">
+
+  <!-- Verified banner -->
+  <div class="flex items-center gap-3 bg-confirm/10 border border-confirm/25 rounded-2xl px-5 py-4">
+    <div class="h-11 w-11 rounded-full bg-confirm grid place-items-center text-white shrink-0">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+    </div>
+    <div class="flex-1">
+      <p class="font-semibold text-confirm text-[15px]">This result is genuine</p>
+      <p class="text-[12px] text-steel mt-0.5">Sealed by the school at publication · re-verified against the sealed record just now · version 1</p>
+    </div>
+    <p class="hidden sm:block font-mono text-[10.5px] text-steel text-right">sha-256<br>4f2a…c91d</p>
+  </div>
+
+  <!-- ════ THE REPORT CARD ════ -->
+  <div class="bg-white border border-whisper/70 rounded-2xl shadow-lift mt-6 overflow-hidden">
+
+    <!-- School header -->
+    <div class="bg-ink text-white px-6 sm:px-8 py-6">
+      <div class="flex items-center gap-4">
+        <div class="h-14 w-14 rounded-xl bg-white/10 ring-1 ring-white/20 grid place-items-center text-[18px] font-bold shrink-0">AF</div>
+        <div class="flex-1 min-w-0">
+          <p class="text-[18px] sm:text-[20px] font-semibold tracking-tight leading-tight">Al-Furqan Academy, Bauchi</p>
+          <p class="text-[11.5px] text-white/60 mt-1">No. 14 Zaria Road, Gyadi-Gyadi, Bauchi State · info@alfurqan.edu.ng · 0803 555 0021</p>
+          <p class="text-[11px] text-mist/90 italic mt-0.5">"Knowledge · Faith · Excellence"</p>
+        </div>
+        <div class="hidden sm:block text-right shrink-0">
+          <p class="text-[10px] uppercase tracking-[0.1em] text-white/50">Report sheet</p>
+          <p class="text-[13px] font-semibold mt-0.5">Third Term</p>
+          <p class="font-mono text-[11px] text-white/70">2025/26 Session</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Student strip -->
+    <div class="px-6 sm:px-8 py-5 border-b border-whisper/60 grid grid-cols-2 sm:grid-cols-4 gap-x-4 gap-y-3">
+      <div class="col-span-2 flex items-center gap-3">
+        <div class="h-12 w-12 rounded-xl bg-wash text-blue grid place-items-center text-[15px] font-semibold shrink-0">FA</div>
+        <div>
+          <p class="font-semibold text-[15px] leading-tight">Fatima Abubakar</p>
+          <p class="text-[11.5px] text-steel font-mono mt-0.5">AFA/2024/0117 · JSS 2A · Female</p>
+        </div>
+      </div>
+      <div><p class="text-[10px] uppercase tracking-wider text-steel">Position</p>
+        <p class="font-mono text-[15px] font-semibold mt-0.5">3rd <span class="text-[11px] text-steel font-sans">of 38</span></p></div>
+      <div><p class="text-[10px] uppercase tracking-wider text-steel">Term average</p>
+        <p class="font-mono text-[15px] font-semibold mt-0.5 text-blue">87.2%</p></div>
+      <div><p class="text-[10px] uppercase tracking-wider text-steel">Attendance</p>
+        <p class="font-mono text-[13px] font-semibold mt-0.5">109<span class="text-steel">/112</span> <span class="text-[10.5px] text-steel font-sans">days</span></p></div>
+      <div><p class="text-[10px] uppercase tracking-wider text-steel">Class average</p>
+        <p class="font-mono text-[13px] font-semibold mt-0.5">64.8%</p></div>
+      <div><p class="text-[10px] uppercase tracking-wider text-steel">Promoted to</p>
+        <p class="text-[13px] font-semibold mt-0.5">JSS 3A</p></div>
+      <div><p class="text-[10px] uppercase tracking-wider text-steel">Next term begins</p>
+        <p class="font-mono text-[13px] font-semibold mt-0.5">8 Sep 2026</p></div>
+    </div>
+
+    <!-- Academic subjects -->
+    <div class="px-2 sm:px-4 pt-4">
+      <p class="px-4 text-[10.5px] font-semibold uppercase tracking-[0.08em] text-steel">Academic subjects</p>
+      <div class="overflow-x-auto"><table class="w-full text-[12.5px] mt-1.5 min-w-[640px]">
+        <thead><tr class="text-left text-[9.5px] font-semibold uppercase tracking-[0.07em] text-steel border-b border-whisper/70">
+          <th class="px-4 py-2 font-semibold">Subject</th>
+          <th class="px-2 py-2 font-semibold text-right">CA1 <span class="text-whisper">/20</span></th>
+          <th class="px-2 py-2 font-semibold text-right">CA2 <span class="text-whisper">/20</span></th>
+          <th class="px-2 py-2 font-semibold text-right">Exam <span class="text-whisper">/60</span></th>
+          <th class="px-2 py-2 font-semibold text-right">Total</th>
+          <th class="px-2 py-2 font-semibold text-right">Class avg</th>
+          <th class="px-2 py-2 font-semibold text-center">Grade</th>
+          <th class="px-4 py-2 font-semibold">Remark</th></tr></thead>
+        <tbody class="divide-y divide-whisper/50 font-mono tabular-nums">
+          <tr><td class="px-4 py-2 font-sans font-medium">Mathematics</td><td class="px-2 py-2 text-right">19</td><td class="px-2 py-2 text-right">18</td><td class="px-2 py-2 text-right">55</td><td class="px-2 py-2 text-right font-semibold">92</td><td class="px-2 py-2 text-right text-steel">61.4</td><td class="px-2 py-2 text-center"><span class="font-sans text-[10.5px] font-medium text-confirm bg-confirm/10 rounded-full px-2 py-0.5">A1</span></td><td class="px-4 py-2 font-sans text-steel text-[11.5px]">Excellent</td></tr>
+          <tr><td class="px-4 py-2 font-sans font-medium">English Language</td><td class="px-2 py-2 text-right">16</td><td class="px-2 py-2 text-right">17</td><td class="px-2 py-2 text-right">48</td><td class="px-2 py-2 text-right font-semibold">81</td><td class="px-2 py-2 text-right text-steel">58.9</td><td class="px-2 py-2 text-center"><span class="font-sans text-[10.5px] font-medium text-confirm bg-confirm/10 rounded-full px-2 py-0.5">A1</span></td><td class="px-4 py-2 font-sans text-steel text-[11.5px]">Excellent</td></tr>
+          <tr><td class="px-4 py-2 font-sans font-medium">Basic Science</td><td class="px-2 py-2 text-right">18</td><td class="px-2 py-2 text-right">16</td><td class="px-2 py-2 text-right">54</td><td class="px-2 py-2 text-right font-semibold">88</td><td class="px-2 py-2 text-right text-steel">63.2</td><td class="px-2 py-2 text-center"><span class="font-sans text-[10.5px] font-medium text-confirm bg-confirm/10 rounded-full px-2 py-0.5">A1</span></td><td class="px-4 py-2 font-sans text-steel text-[11.5px]">Excellent</td></tr>
+          <tr><td class="px-4 py-2 font-sans font-medium">Basic Technology</td><td class="px-2 py-2 text-right">15</td><td class="px-2 py-2 text-right">14</td><td class="px-2 py-2 text-right">45</td><td class="px-2 py-2 text-right font-semibold">74</td><td class="px-2 py-2 text-right text-steel">57.1</td><td class="px-2 py-2 text-center"><span class="font-sans text-[10.5px] font-medium text-caution bg-caution/10 rounded-full px-2 py-0.5">B2</span></td><td class="px-4 py-2 font-sans text-steel text-[11.5px]">Very good</td></tr>
+          <tr><td class="px-4 py-2 font-sans font-medium">Social Studies</td><td class="px-2 py-2 text-right">14</td><td class="px-2 py-2 text-right">15</td><td class="px-2 py-2 text-right">45</td><td class="px-2 py-2 text-right font-semibold">74</td><td class="px-2 py-2 text-right text-steel">59.7</td><td class="px-2 py-2 text-center"><span class="font-sans text-[10.5px] font-medium text-caution bg-caution/10 rounded-full px-2 py-0.5">B2</span></td><td class="px-4 py-2 font-sans text-steel text-[11.5px]">Very good</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+
+    <!-- Islamic studies section -->
+    <div class="px-2 sm:px-4 pt-5">
+      <p class="px-4 text-[10.5px] font-semibold uppercase tracking-[0.08em] text-steel">Islamic studies</p>
+      <div class="overflow-x-auto"><table class="w-full text-[12.5px] mt-1.5 min-w-[640px]">
+        <tbody class="divide-y divide-whisper/50 font-mono tabular-nums">
+          <tr><td class="px-4 py-2 font-sans font-medium w-[28%]"><span class="font-arabic text-[14px]" dir="rtl">القرآن الكريم</span> <span class="text-[10.5px] text-steel ml-1.5">Qur'an</span></td><td class="px-2 py-2 text-right w-[9%]">20</td><td class="px-2 py-2 text-right w-[9%]">18</td><td class="px-2 py-2 text-right w-[9%]">57</td><td class="px-2 py-2 text-right font-semibold w-[9%]">95</td><td class="px-2 py-2 text-right text-steel w-[10%]">72.8</td><td class="px-2 py-2 text-center w-[9%]"><span class="font-sans text-[10.5px] font-medium text-confirm bg-confirm/10 rounded-full px-2 py-0.5">A1</span></td><td class="px-4 py-2 font-sans text-steel text-[11.5px]">Outstanding</td></tr>
+          <tr><td class="px-4 py-2 font-sans font-medium"><span class="font-arabic text-[14px]" dir="rtl">اللغة العربية</span> <span class="text-[10.5px] text-steel ml-1.5">Arabic</span></td><td class="px-2 py-2 text-right">17</td><td class="px-2 py-2 text-right">16</td><td class="px-2 py-2 text-right">51</td><td class="px-2 py-2 text-right font-semibold">84</td><td class="px-2 py-2 text-right text-steel">66.1</td><td class="px-2 py-2 text-center"><span class="font-sans text-[10.5px] font-medium text-confirm bg-confirm/10 rounded-full px-2 py-0.5">A1</span></td><td class="px-4 py-2 font-sans text-steel text-[11.5px]">Excellent</td></tr>
+          <tr><td class="px-4 py-2 font-sans font-medium"><span class="font-arabic text-[14px]" dir="rtl">الفقه</span> <span class="text-[10.5px] text-steel ml-1.5">Fiqh</span></td><td class="px-2 py-2 text-right">16</td><td class="px-2 py-2 text-right">17</td><td class="px-2 py-2 text-right">53</td><td class="px-2 py-2 text-right font-semibold">86</td><td class="px-2 py-2 text-right text-steel">68.4</td><td class="px-2 py-2 text-center"><span class="font-sans text-[10.5px] font-medium text-confirm bg-confirm/10 rounded-full px-2 py-0.5">A1</span></td><td class="px-4 py-2 font-sans text-steel text-[11.5px]">Excellent</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+
+    <!-- Behaviour + grading key -->
+    <div class="px-6 sm:px-8 pt-6 grid grid-cols-1 sm:grid-cols-3 gap-5">
+      <div>
+        <p class="text-[10.5px] font-semibold uppercase tracking-[0.08em] text-steel">Affective traits</p>
+        <dl class="mt-2 space-y-1.5 text-[12px]">
+          <div class="flex justify-between"><dt>Punctuality</dt><dd class="font-mono text-blue">●●●●●</dd></div>
+          <div class="flex justify-between"><dt>Neatness</dt><dd class="font-mono text-blue">●●●●○</dd></div>
+          <div class="flex justify-between"><dt>Honesty</dt><dd class="font-mono text-blue">●●●●●</dd></div>
+          <div class="flex justify-between"><dt>Politeness</dt><dd class="font-mono text-blue">●●●●●</dd></div>
+          <div class="flex justify-between"><dt>Leadership</dt><dd class="font-mono text-blue">●●●●○</dd></div>
+        </dl>
+      </div>
+      <div>
+        <p class="text-[10.5px] font-semibold uppercase tracking-[0.08em] text-steel">Psychomotor skills</p>
+        <dl class="mt-2 space-y-1.5 text-[12px]">
+          <div class="flex justify-between"><dt>Handwriting</dt><dd class="font-mono text-blue">●●●●○</dd></div>
+          <div class="flex justify-between"><dt>Verbal fluency</dt><dd class="font-mono text-blue">●●●●●</dd></div>
+          <div class="flex justify-between"><dt>Sports</dt><dd class="font-mono text-blue">●●●○○</dd></div>
+          <div class="flex justify-between"><dt>Handling tools</dt><dd class="font-mono text-blue">●●●●○</dd></div>
+          <div class="flex justify-between"><dt>Qur'an recitation</dt><dd class="font-mono text-blue">●●●●●</dd></div>
+        </dl>
+      </div>
+      <div class="rounded-xl bg-canvas ring-1 ring-whisper/80 p-3.5 self-start">
+        <p class="text-[10.5px] font-semibold uppercase tracking-[0.08em] text-steel">Grading key</p>
+        <p class="text-[11px] text-steel mt-2 leading-relaxed font-mono">A1 75–100 · B2 70–74 · B3 65–69 · C4 60–64 · C5 55–59 · C6 50–54 · D7 45–49 · E8 40–44 · F9 0–39</p>
+        <p class="text-[10.5px] text-steel mt-2">Traits rated 1–5 by the form teacher.</p>
+      </div>
+    </div>
+
+    <!-- Remarks & signatures -->
+    <div class="px-6 sm:px-8 py-6 space-y-4">
+      <div class="rounded-xl ring-1 ring-whisper/80 p-4">
+        <p class="text-[10.5px] font-semibold uppercase tracking-[0.08em] text-steel">Form teacher's remark</p>
+        <p class="text-[13px] mt-1.5 leading-relaxed">Fatima is a disciplined and consistent student. Her Qur'an memorisation is exemplary, and she has improved noticeably in Mathematics this term. She should give Basic Technology the same attention. — <span class="text-steel">Ustadha Halima Yusuf</span></p>
+      </div>
+      <div class="rounded-xl ring-1 ring-whisper/80 p-4">
+        <p class="text-[10.5px] font-semibold uppercase tracking-[0.08em] text-steel">Principal's remark &amp; recommendation to parents</p>
+        <p class="text-[13px] mt-1.5 leading-relaxed">An outstanding third term — 3rd of 38 with distinction in seven subjects. Promoted to JSS 3A on merit. <span class="font-medium">To her parents:</span> please encourage 20 minutes of practical work weekly for Basic Technology; everything else needs only your continued support, bārakallāhu fīkum.</p>
+        <div class="flex items-end justify-between mt-4">
+          <div>
+            <p class="font-sig text-[26px] leading-none text-ink -rotate-2">A. Abdullahi</p>
+            <p class="text-[10.5px] text-steel mt-1 border-t border-whisper pt-1">Ustadh Ahmad Abdullahi · Principal</p>
+          </div>
+          <div class="h-16 w-16 rounded-full border-2 border-ink/30 grid place-items-center -rotate-12 shrink-0">
+            <p class="text-[6.5px] text-center font-semibold uppercase tracking-wider text-ink/50 leading-tight">Al-Furqan<br>Academy<br>★ Bauchi ★</p>
+          </div>
+          <div class="text-right">
+            <p class="text-[10.5px] text-steel">Issued</p>
+            <p class="font-mono text-[12px] font-medium">25 Jul 2026</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Verification footer -->
+    <div class="px-6 sm:px-8 py-4 bg-canvas border-t border-whisper/60 flex items-center justify-between gap-4">
+      <div class="text-[10.5px] text-steel leading-relaxed">
+        <p>Record seal <span class="font-mono text-charcoal">sha256: 4f2a91d8…6bc91d</span> · version 1 · published 25 Jul 2026, 14:32</p>
+        <p class="mt-0.5">Verify anytime: <span class="font-mono text-blue">alfurqan.edsynk.ng/v/8KQ2-MX4R</span> — if any figure on a printed copy differs from this page, the printed copy has been altered.</p>
+      </div>
+      <div class="h-16 w-16 rounded-lg ring-1 ring-whisper grid place-items-center bg-white shrink-0">
+        <svg width="44" height="44" viewBox="0 0 36 36" fill="#18181B"><rect x="2" y="2" width="8" height="8"/><rect x="4" y="4" width="4" height="4" fill="#fff"/><rect x="26" y="2" width="8" height="8"/><rect x="28" y="4" width="4" height="4" fill="#fff"/><rect x="2" y="26" width="8" height="8"/><rect x="4" y="28" width="4" height="4" fill="#fff"/><rect x="14" y="2" width="2" height="2"/><rect x="18" y="4" width="2" height="2"/><rect x="14" y="8" width="4" height="2"/><rect x="22" y="8" width="2" height="4"/><rect x="2" y="14" width="2" height="4"/><rect x="8" y="14" width="4" height="2"/><rect x="14" y="14" width="8" height="8"/><rect x="16" y="16" width="4" height="4" fill="#fff"/><rect x="26" y="14" width="2" height="2"/><rect x="30" y="16" width="4" height="2"/><rect x="26" y="22" width="4" height="2"/><rect x="14" y="26" width="2" height="4"/><rect x="20" y="26" width="2" height="2"/><rect x="26" y="26" width="8" height="2"/><rect x="26" y="30" width="2" height="4"/><rect x="32" y="30" width="2" height="4"/></svg>
+      </div>
+    </div>
+  </div>
+
+  <p class="text-center text-xs text-steel mt-8">
+    Results published with <span class="font-medium text-charcoal">Edsynk</span> are sealed at approval and verifiable by anyone, forever.<br>
+    <a href="landing.html" class="text-blue font-medium">Run your school on Edsynk →</a>
+  </p>
+</main>
+</body>
+</html>

@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Edsynk — Staff · Mallam Musa</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&family=Noto+Naskh+Arabic:wght@500&display=swap" rel="stylesheet">
+<script>tailwind.config={theme:{extend:{colors:{canvas:'#F7F9FC',ink:'#0B2A56',charcoal:'#18181B',steel:'#64748B',whisper:'#E2E8F0',blue:'#2177EF',skyblue:'#5C9DF5',wash:'#EAF2FE',mist:'#D3E4FD',confirm:'#16A34A',caution:'#D97706',alert:'#DC2626',excused:'#7C8DA6'},fontFamily:{sans:['Geist','sans-serif'],mono:['"Geist Mono"','monospace'],arabic:['"Noto Naskh Arabic"','serif']},boxShadow:{soft:'0 1px 2px rgba(11,42,86,0.04), 0 6px 24px rgba(11,42,86,0.05)',lift:'0 1px 3px rgba(11,42,86,0.10), 0 12px 32px rgba(11,42,86,0.12)'}}}}</script>
+<style>@keyframes rise{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}.rise{animation:rise .45s cubic-bezier(.2,.8,.2,1) both}.tabp{display:none}.tabp.on{display:block;animation:rise .4s cubic-bezier(.2,.8,.2,1) both}.modal{opacity:0;pointer-events:none;transition:opacity .2s}.modal.open{opacity:1;pointer-events:auto}</style>
+</head>
+<body data-active="Staff" data-persona="admin" class="bg-canvas font-sans text-charcoal antialiased">
+<div class="flex min-h-screen">
+  <div id="sidebar-root"></div>
+  <div class="flex-1 min-w-0">
+    <header class="h-[60px] bg-white/80 backdrop-blur-md border-b border-whisper/70 flex items-center justify-between px-4 sm:px-7 sticky top-0 z-20">
+      <div class="flex items-center gap-3"><a href="staff.html" class="text-[13px] text-steel hover:text-blue">Staff</a><span class="text-steel/40">/</span><h1 class="text-[15px] font-semibold tracking-tight">Mallam Musa Ibrahim</h1></div>
+      <button class="h-9 px-4 rounded-lg bg-blue text-white text-[13px] font-medium shadow-soft active:translate-y-px">Message</button>
+    </header>
+    <main class="p-4 sm:p-7 max-w-[1240px] space-y-5 pb-12">
+
+      <div class="rise bg-white ring-1 ring-whisper/80 rounded-2xl shadow-soft p-5 sm:p-6">
+        <div class="flex flex-col sm:flex-row sm:items-center gap-4">
+          <span class="h-16 w-16 rounded-2xl bg-blue text-white grid place-items-center text-[20px] font-bold shadow-lift shrink-0">MI</span>
+          <div class="flex-1 min-w-0"><div class="flex items-center gap-2 flex-wrap"><h2 class="text-[18px] font-bold tracking-tight text-ink">Mallam Musa Ibrahim</h2>
+            <span class="text-[10.5px] font-semibold text-confirm bg-confirm/10 rounded-full px-2 py-0.5">Active</span>
+            <span class="text-[10.5px] font-semibold text-blue bg-wash rounded-full px-2 py-0.5">Teacher</span>
+            <span class="text-[10.5px] font-semibold text-ink bg-mist/60 rounded-full px-2 py-0.5">Exam officer</span>
+            <span class="text-[10.5px] font-semibold text-caution bg-caution/10 rounded-full px-2 py-0.5">Form · JSS 2A</span></div>
+            <p class="font-mono text-[12px] text-steel mt-0.5">STF/2023/014 · Mathematics · joined Jan 2023</p></div>
+          <div class="flex gap-2">
+            <button onclick="openM('editM')" class="h-9 px-4 rounded-lg bg-white ring-1 ring-whisper text-[13px] font-medium text-steel hover:bg-mist/30">Edit</button>
+            <button onclick="openM('pwM')" class="h-9 px-4 rounded-lg bg-white ring-1 ring-whisper text-[13px] font-medium text-steel hover:bg-mist/30">Reset password</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="rise flex gap-1 border-b border-whisper/70 overflow-x-auto" id="tabs">
+        <button data-t="0" class="tb shrink-0 px-4 py-2.5 text-[12.5px] font-medium border-b-2 -mb-px text-ink border-blue">Overview</button>
+        <button data-t="1" class="tb shrink-0 px-4 py-2.5 text-[12.5px] font-medium border-b-2 -mb-px text-steel border-transparent hover:text-charcoal">Assignments</button>
+        <button data-t="2" class="tb shrink-0 px-4 py-2.5 text-[12.5px] font-medium border-b-2 -mb-px text-steel border-transparent hover:text-charcoal">Activity</button>
+        <button data-t="3" class="tb shrink-0 px-4 py-2.5 text-[12.5px] font-medium border-b-2 -mb-px text-steel border-transparent hover:text-charcoal">Permissions</button>
+      </div>
+
+      <section class="tabp on" data-p="0">
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-3">
+          <div class="bg-white ring-1 ring-whisper/80 rounded-2xl p-4 shadow-soft"><p class="text-[10.5px] font-semibold uppercase tracking-wider text-steel">Classes taught</p><p class="font-mono text-[22px] font-semibold mt-1.5">4</p><p class="text-[11.5px] text-steel mt-1">JSS 1A–3A Maths</p></div>
+          <div class="bg-white ring-1 ring-whisper/80 rounded-2xl p-4 shadow-soft"><p class="text-[10.5px] font-semibold uppercase tracking-wider text-steel">Form teacher of</p><p class="font-mono text-[22px] font-semibold mt-1.5">JSS 2A</p><p class="text-[11.5px] text-steel mt-1">38 students</p></div>
+          <div class="bg-white ring-1 ring-whisper/80 rounded-2xl p-4 shadow-soft"><p class="text-[10.5px] font-semibold uppercase tracking-wider text-steel">Submissions</p><p class="font-mono text-[22px] font-semibold mt-1.5">5/6</p><p class="text-[11.5px] text-alert mt-1">1 rejected, pending</p></div>
+          <div class="bg-white ring-1 ring-whisper/80 rounded-2xl p-4 shadow-soft"><p class="text-[10.5px] font-semibold uppercase tracking-wider text-steel">Last login</p><p class="font-mono text-[22px] font-semibold mt-1.5">Today</p><p class="text-[11.5px] text-steel mt-1">8:02am · regular</p></div>
+        </div>
+        <div class="bg-white ring-1 ring-whisper/80 rounded-2xl p-5 shadow-soft mt-4">
+          <p class="text-[11px] font-semibold uppercase tracking-wider text-steel">Contact &amp; account</p>
+          <div class="mt-3 rounded-xl ring-1 ring-whisper/80 divide-y divide-whisper/60 text-[12.5px]">
+            <div class="flex justify-between px-4 py-2.5"><span class="text-steel">Phone</span><span class="font-mono">0803 ··· 1190</span></div>
+            <div class="flex justify-between px-4 py-2.5"><span class="text-steel">Email</span><span class="font-mono text-[11px]">m.ibrahim@alfurqan.sch.ng</span></div>
+            <div class="flex justify-between px-4 py-2.5"><span class="text-steel">Staff ID</span><span class="font-mono">STF/2023/014</span></div>
+            <div class="flex justify-between px-4 py-2.5"><span class="text-steel">2FA</span><span class="text-confirm font-medium">enabled ✓</span></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="tabp" data-p="1">
+        <div class="bg-white ring-1 ring-whisper/80 rounded-2xl shadow-soft overflow-hidden">
+          <div class="flex items-center justify-between px-5 pt-4 pb-3"><p class="text-[13.5px] font-semibold">Teaching assignments</p><button class="h-9 px-3.5 rounded-lg bg-blue text-white text-[12px] font-medium shadow-soft">+ Assign class / subject</button></div>
+          <div class="divide-y divide-whisper/60 text-[12.5px]">
+            <div class="flex items-center justify-between px-5 py-3"><div><p class="font-medium">Mathematics — JSS 2A</p><p class="text-[10.5px] text-steel">form teacher · primary class</p></div><span class="text-[10.5px] font-semibold text-blue bg-wash rounded-full px-2 py-0.5">primary</span></div>
+            <div class="flex items-center justify-between px-5 py-3"><div><p class="font-medium">Mathematics — JSS 2B</p></div><button class="text-steel/50 hover:text-alert text-[12px]">remove</button></div>
+            <div class="flex items-center justify-between px-5 py-3"><div><p class="font-medium">Mathematics — JSS 3A</p></div><button class="text-steel/50 hover:text-alert text-[12px]">remove</button></div>
+            <div class="flex items-center justify-between px-5 py-3"><div><p class="font-medium">Further Maths — SS 1A</p></div><button class="text-steel/50 hover:text-alert text-[12px]">remove</button></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="tabp" data-p="2">
+        <div class="bg-white ring-1 ring-whisper/80 rounded-2xl p-5 shadow-soft">
+          <p class="text-[13.5px] font-semibold">Activity log</p>
+          <div class="mt-3 space-y-0 text-[12px]">
+            <div class="flex gap-3 pb-3"><div class="flex flex-col items-center"><span class="h-2 w-2 rounded-full bg-confirm mt-1.5"></span><span class="w-px flex-1 bg-whisper"></span></div><div>Submitted JSS 1A Maths scores<p class="font-mono text-[10px] text-steel mt-0.5">today 9:14am · IP 102.89.x.x</p></div></div>
+            <div class="flex gap-3 pb-3"><div class="flex flex-col items-center"><span class="h-2 w-2 rounded-full bg-alert mt-1.5"></span><span class="w-px flex-1 bg-whisper"></span></div><div>JSS 2A Maths sent back by exam office<p class="font-mono text-[10px] text-steel mt-0.5">today 11:20am</p></div></div>
+            <div class="flex gap-3 pb-3"><div class="flex flex-col items-center"><span class="h-2 w-2 rounded-full bg-blue mt-1.5"></span><span class="w-px flex-1 bg-whisper"></span></div><div>Took JSS 2A morning register<p class="font-mono text-[10px] text-steel mt-0.5">today 8:05am</p></div></div>
+            <div class="flex gap-3 pb-3"><div class="flex flex-col items-center"><span class="h-2 w-2 rounded-full bg-blue mt-1.5"></span><span class="w-px flex-1 bg-whisper"></span></div><div>Posted assignment "Algebra worksheet 3"<p class="font-mono text-[10px] text-steel mt-0.5">yesterday 4:02pm</p></div></div>
+            <div class="flex gap-3"><div class="flex flex-col items-center"><span class="h-2 w-2 rounded-full bg-steel mt-1.5"></span></div><div>Replied to Hajiya Maryam (parent)<p class="font-mono text-[10px] text-steel mt-0.5">yesterday 2:14pm</p></div></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="tabp" data-p="3">
+        <div class="grid lg:grid-cols-2 gap-4">
+          <div class="bg-white ring-1 ring-whisper/80 rounded-2xl p-5 shadow-soft">
+            <p class="text-[13.5px] font-semibold">Roles held</p>
+            <p class="text-[11.5px] text-steel mt-0.5">Permissions combine across all roles.</p>
+            <div class="mt-3 space-y-2 text-[12.5px]">
+              <div class="flex items-center justify-between rounded-xl ring-1 ring-whisper bg-canvas px-3.5 py-2.5"><span class="font-medium">Teacher</span><button class="text-steel/50 hover:text-alert text-[11px]">remove</button></div>
+              <div class="flex items-center justify-between rounded-xl ring-1 ring-whisper bg-canvas px-3.5 py-2.5"><span class="font-medium">Exam officer</span><button class="text-steel/50 hover:text-alert text-[11px]">remove</button></div>
+              <div class="flex items-center justify-between rounded-xl ring-1 ring-whisper bg-canvas px-3.5 py-2.5"><span class="font-medium">Form teacher · JSS 2A</span><span class="text-[10px] text-steel">auto</span></div>
+            </div>
+            <button class="mt-3 h-9 px-4 rounded-lg bg-white ring-1 ring-whisper text-[12.5px] font-medium text-steel hover:bg-mist/30">+ Add a role</button>
+          </div>
+          <div class="bg-white ring-1 ring-whisper/80 rounded-2xl p-5 shadow-soft">
+            <p class="text-[13.5px] font-semibold">Effective permissions</p>
+            <div class="mt-3 space-y-1.5 text-[12.5px]" id="eff"></div>
+            <a href="roles.html" class="mt-3 inline-block text-[12px] font-medium text-blue">Manage all roles &amp; the permission matrix →</a>
+          </div>
+        </div>
+      </section>
+
+      <div class="rise rounded-2xl ring-1 ring-alert/20 bg-alert/[0.04] p-5">
+        <p class="text-[11px] font-semibold uppercase tracking-wider text-alert">Deactivate staff</p>
+        <p class="text-[12px] text-charcoal mt-2 leading-relaxed">Mallam Musa is form teacher of <span class="font-semibold">JSS 2A</span> and teaches 4 classes. Reassign these before deactivating.</p>
+        <div class="mt-3 flex flex-wrap items-end gap-2"><div class="flex-1 min-w-[200px]"><label class="text-[11.5px] font-medium">Reassign to</label><select class="mt-1.5 w-full h-10 rounded-lg border border-whisper bg-white px-3 text-[12.5px]"><option>Choose a teacher…</option><option>Mr. Okafor</option><option>Mrs. Bello</option></select></div><button class="h-10 px-4 rounded-lg ring-1 ring-alert/30 text-alert text-[12.5px] font-medium hover:bg-alert/5">Reassign &amp; deactivate</button></div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<div id="editM" class="modal fixed inset-0 z-50 bg-ink/40 backdrop-blur-sm grid place-items-center p-4" onclick="if(event.target===this)closeM('editM')">
+  <div class="bg-white rounded-2xl shadow-lift max-w-[480px] w-full p-6 max-h-[90vh] overflow-y-auto">
+    <div class="flex items-center justify-between mb-4"><p class="text-[15px] font-semibold">Edit staff member</p><button onclick="closeM('editM')" class="h-8 w-8 grid place-items-center rounded-lg hover:bg-mist/40 text-steel">✕</button></div>
+    <div class="grid grid-cols-2 gap-3 text-[13px]">
+      <div class="col-span-2"><label class="text-[11.5px] font-semibold text-steel">Full name</label><input value="Mallam Musa Ibrahim" class="mt-1.5 w-full h-10 rounded-lg border border-whisper bg-canvas px-3.5"></div>
+      <div><label class="text-[11.5px] font-semibold text-steel">Phone</label><input value="0803 481 1190" class="mt-1.5 w-full h-10 rounded-lg border border-whisper bg-canvas px-3.5 font-mono text-[12px]"></div>
+      <div><label class="text-[11.5px] font-semibold text-steel">Email</label><input value="m.ibrahim@alfurqan.sch.ng" class="mt-1.5 w-full h-10 rounded-lg border border-whisper bg-canvas px-3.5 text-[12px]"></div>
+      <div class="col-span-2"><label class="text-[11.5px] font-semibold text-steel">Main subject</label><select class="mt-1.5 w-full h-10 rounded-lg border border-whisper bg-canvas px-3"><option>Mathematics</option><option>Further Maths</option></select></div>
+    </div>
+    <div class="flex justify-end gap-2 mt-6"><button onclick="closeM('editM')" class="h-10 px-4 rounded-lg ring-1 ring-whisper text-[13px] font-medium text-steel">Cancel</button><button onclick="closeM('editM')" class="h-10 px-5 rounded-lg bg-blue text-white text-[13px] font-semibold shadow-soft">Save changes</button></div>
+  </div>
+</div>
+
+<div id="pwM" class="modal fixed inset-0 z-50 bg-ink/40 backdrop-blur-sm grid place-items-center p-4" onclick="if(event.target===this)closeM('pwM')">
+  <div class="bg-white rounded-2xl shadow-lift max-w-[420px] w-full p-6">
+    <div class="flex items-center justify-between mb-3"><p class="text-[15px] font-semibold">Reset password</p><button onclick="closeM('pwM')" class="h-8 w-8 grid place-items-center rounded-lg hover:bg-mist/40 text-steel">✕</button></div>
+    <p class="text-[12.5px] text-steel">Choose how Mallam Musa gets a new password. The old one stops working immediately.</p>
+    <div class="mt-4 space-y-2 text-[12.5px]">
+      <label class="flex items-start gap-2.5 rounded-xl ring-2 ring-blue bg-wash/40 px-4 py-3 cursor-pointer"><input type="radio" name="rpw" checked class="accent-[#2177EF] mt-0.5"><div><p class="font-medium">Email a reset link</p><p class="text-[10.5px] text-steel">they set their own password</p></div></label>
+      <label class="flex items-start gap-2.5 rounded-xl ring-1 ring-whisper px-4 py-3 cursor-pointer"><input type="radio" name="rpw" class="accent-[#2177EF] mt-0.5"><div><p class="font-medium">Generate a temporary password</p><p class="text-[10.5px] text-steel">printable slip · forced change on next login</p></div></label>
+    </div>
+    <div class="flex justify-end gap-2 mt-5"><button onclick="closeM('pwM')" class="h-10 px-4 rounded-lg ring-1 ring-whisper text-[13px] font-medium text-steel">Cancel</button><button onclick="document.getElementById('pwDone').classList.remove('hidden')" class="h-10 px-5 rounded-lg bg-blue text-white text-[13px] font-semibold shadow-soft">Reset</button></div>
+    <div id="pwDone" class="hidden mt-3 rounded-xl bg-confirm/[0.07] ring-1 ring-confirm/25 px-4 py-2.5 text-[12px] text-charcoal">✓ Reset link sent to m.ibrahim@alfurqan.sch.ng · audit-logged.</div>
+  </div>
+</div>
+
+<script src="../assets/shell.js"></script>
+<script>
+const EFF=['View &amp; edit students','Enter scores (own classes)','Approve / reject results','Publish &amp; seal results','Take JSS 2A register','Behaviour &amp; traits (JSS 2A)','Assign exam supervision'];
+document.getElementById('eff').innerHTML=EFF.map(e=>`<div class="flex items-center gap-2"><span class="h-4 w-4 rounded-full bg-confirm/15 text-confirm grid place-items-center text-[9px]">✓</span>${e}</div>`).join('');
+function tab(n){document.querySelectorAll('.tabp').forEach(p=>p.classList.toggle('on',+p.dataset.p===n));document.querySelectorAll('.tb').forEach(b=>{const on=+b.dataset.t===n;b.className='tb shrink-0 px-4 py-2.5 text-[12.5px] font-medium border-b-2 -mb-px '+(on?'text-ink border-blue':'text-steel border-transparent hover:text-charcoal');});}
+document.querySelectorAll('.tb').forEach(b=>b.onclick=()=>tab(+b.dataset.t));
+function openM(id){document.getElementById(id).classList.add('open');}
+function closeM(id){document.getElementById(id).classList.remove('open');}
+</script>
+</body>
+</html>

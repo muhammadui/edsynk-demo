@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Edsynk — School Setup</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&family=Noto+Naskh+Arabic:wght@500&display=swap" rel="stylesheet">
+<script>tailwind.config={theme:{extend:{colors:{canvas:'#F7F9FC',ink:'#0B2A56',charcoal:'#18181B',steel:'#64748B',whisper:'#E2E8F0',blue:'#2177EF',skyblue:'#5C9DF5',wash:'#EAF2FE',mist:'#D3E4FD',confirm:'#16A34A',caution:'#D97706',alert:'#DC2626',excused:'#7C8DA6'},fontFamily:{sans:['Geist','sans-serif'],mono:['"Geist Mono"','monospace'],arabic:['"Noto Naskh Arabic"','serif']},boxShadow:{soft:'0 1px 2px rgba(11,42,86,0.04), 0 6px 24px rgba(11,42,86,0.05)',lift:'0 1px 3px rgba(11,42,86,0.10), 0 12px 32px rgba(11,42,86,0.12)'}}}}</script>
+<style>
+@keyframes rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}.rise{animation:rise .4s cubic-bezier(.2,.8,.2,1) both}
+.panel{display:none}.panel.on{display:block;animation:rise .4s cubic-bezier(.2,.8,.2,1) both}
+.lab{font-size:12px;font-weight:600}.fld{margin-top:6px;width:100%;height:44px;border-radius:12px;border:1px solid #E7ECF3;background:#F7F9FC;padding:0 16px;font-size:14px}.fld:focus{outline:none;box-shadow:0 0 0 2px rgba(33,119,239,.4)}
+</style>
+</head>
+<body data-active="School Setup" data-persona="admin" class="bg-canvas font-sans text-charcoal antialiased">
+<div class="flex min-h-screen">
+  <div id="sidebar-root"></div>
+  <div class="flex-1 min-w-0">
+    <header class="h-[60px] bg-white/80 backdrop-blur-md border-b border-whisper/70 flex items-center justify-between px-4 sm:px-7 sticky top-0 z-20">
+      <div class="flex items-center gap-3">
+        <h1 class="text-[15px] font-semibold tracking-tight">School Setup</h1>
+        <span id="stepBadge" class="font-mono text-[11.5px] font-medium text-blue bg-wash rounded-full px-2.5 py-1 hidden sm:inline">step 1 of 6</span>
+      </div>
+      <button class="h-9 px-4 rounded-lg bg-white ring-1 ring-whisper text-[13px] font-medium text-steel hover:bg-mist/30 hidden sm:block">Save &amp; exit</button>
+    </header>
+
+    <main class="p-4 sm:p-7 max-w-[1240px] space-y-5 pb-12">
+
+      <!-- STEPPER -->
+      <div class="rise bg-white ring-1 ring-whisper/80 rounded-2xl px-4 py-4 shadow-soft flex items-center gap-2 sm:gap-3 overflow-x-auto" id="stepper"></div>
+
+      <div class="grid lg:grid-cols-[1fr_330px] gap-4">
+        <!-- PANELS -->
+        <div class="bg-white ring-1 ring-whisper/80 rounded-2xl shadow-soft p-5 sm:p-6 min-h-[440px] flex flex-col">
+          <div class="flex-1">
+
+          <!-- STEP 1 — SCHOOL PROFILE -->
+          <section class="panel on" data-p="0">
+            <p class="text-[11px] font-semibold uppercase tracking-[0.1em] text-blue">Step 1 of 6</p>
+            <h2 class="text-[19px] font-bold tracking-tight text-ink mt-1">Tell us about your school</h2>
+            <p class="text-[12.5px] text-steel mt-1.5 max-w-[56ch]">This appears on every report card, transcript and your portal. You can change it later in Settings.</p>
+            <div class="mt-5 grid sm:grid-cols-2 gap-4">
+              <div class="sm:col-span-2"><label class="lab">School name</label><input class="fld" value="Al-Furqan Academy"></div>
+              <div class="sm:col-span-2"><label class="lab">Motto <span class="text-steel font-normal">(optional, prints on card)</span></label><input class="fld" value="Knowledge · Character · Faith"></div>
+              <div><label class="lab">Town / City</label><input class="fld" value="Bauchi"></div>
+              <div class="relative"><label class="lab">State</label>
+                <input id="stateInput" autocomplete="off" value="Bauchi" placeholder="Search state…" oninput="filterStates()" onfocus="filterStates()" onblur="setTimeout(()=>document.getElementById('stateList').classList.add('hidden'),150)" class="fld">
+                <div id="stateList" class="hidden absolute z-30 mt-1 left-0 right-0 max-h-52 overflow-y-auto bg-white ring-1 ring-whisper rounded-xl shadow-lift py-1 text-[13px]"></div>
+              </div>
+              <div class="sm:col-span-2"><label class="lab">Address</label><input class="fld" value="12 Zaria Road, Bauchi"></div>
+              <div><label class="lab">Head's name</label><input class="fld" value="Ustadh Abdullahi Sani"></div>
+              <div><label class="lab">Head's title</label><input class="fld" value="Proprietor / Principal"></div>
+              <div class="sm:col-span-2"><label class="lab">Logo &amp; head's signature</label>
+                <div class="mt-1.5 flex gap-2.5"><button class="flex-1 h-20 rounded-xl border border-dashed border-whisper bg-canvas text-[12px] text-steel hover:bg-mist/30">＋ Upload logo</button><button class="flex-1 h-20 rounded-xl border border-dashed border-whisper bg-canvas text-[12px] text-steel hover:bg-mist/30">＋ Upload signature</button></div></div>
+            </div>
+          </section>
+
+          <!-- STEP 2 — SCHOOL TYPE -->
+          <section class="panel" data-p="1">
+            <p class="text-[11px] font-semibold uppercase tracking-[0.1em] text-blue">Step 2 of 6</p>
+            <h2 class="text-[19px] font-bold tracking-tight text-ink mt-1">What kind of school is this?</h2>
+            <p class="text-[12.5px] text-steel mt-1.5 max-w-[56ch]">This decides which subjects and report-card sections you get. Hybrid is the most common for Bauchi schools.</p>
+            <div class="mt-5 space-y-2.5">
+              <label class="flex items-start gap-3 rounded-xl ring-1 ring-whisper bg-canvas px-4 py-3.5 cursor-pointer hover:ring-mist"><input type="radio" name="stype" class="accent-[#2177EF] mt-0.5"><div><p class="text-[13.5px] font-semibold">Conventional</p><p class="text-[11.5px] text-steel mt-0.5">Standard Nigerian curriculum — JSS/SS subjects, WAEC-style grading.</p></div></label>
+              <label class="flex items-start gap-3 rounded-xl ring-1 ring-whisper bg-canvas px-4 py-3.5 cursor-pointer hover:ring-mist"><input type="radio" name="stype" class="accent-[#2177EF] mt-0.5"><div><p class="text-[13.5px] font-semibold">Islamiyyah</p><p class="text-[11.5px] text-steel mt-0.5">Islamic curriculum — <span class="arabic">القرآن</span>, Tajweed, Fiqh, Arabic; levels like I'dadiyyah. Card prints in Arabic.</p></div></label>
+              <label class="flex items-start gap-3 rounded-xl ring-2 ring-blue bg-wash/40 px-4 py-3.5 cursor-pointer"><input type="radio" name="stype" checked class="accent-[#2177EF] mt-0.5"><div><div class="flex items-center gap-2"><p class="text-[13.5px] font-semibold">Hybrid</p><span class="text-[9.5px] font-semibold text-blue bg-white ring-1 ring-blue/30 rounded-full px-2 py-0.5">Most common</span></div><p class="text-[11.5px] text-steel mt-0.5">Both: conventional subjects <span class="font-medium text-charcoal">and</span> Islamiyyah — on one report card, each with its own grading.</p></div></label>
+            </div>
+            <div class="mt-4 rounded-xl bg-canvas ring-1 ring-whisper px-4 py-3 text-[12px] text-steel">Arms &amp; class structure (A/B/C, I'dadiyyah levels) come next in step 4.</div>
+          </section>
+
+          <!-- STEP 3 — GRADING SCHEME -->
+          <section class="panel" data-p="2">
+            <p class="text-[11px] font-semibold uppercase tracking-[0.1em] text-blue">Step 3 of 6</p>
+            <h2 class="text-[19px] font-bold tracking-tight text-ink mt-1">Set up your grading scheme</h2>
+            <p class="text-[12.5px] text-steel mt-1.5 max-w-[56ch]">How Edsynk computes results. Junior and senior arms can differ.</p>
+            <div class="mt-5"><label class="lab">How many continuous assessments (CAs)?</label>
+              <div class="mt-2 grid grid-cols-3 gap-2 max-w-[360px] text-[13px] font-medium"><button class="h-11 rounded-xl bg-white ring-1 ring-whisper text-steel">2 CAs</button><button class="h-11 rounded-xl bg-blue text-white shadow-soft">3 CAs</button><button class="h-11 rounded-xl bg-white ring-1 ring-whisper text-steel">Notebook</button></div></div>
+            <div class="mt-5"><label class="lab">Weighting</label>
+              <div class="mt-2 space-y-2 max-w-[460px]">
+                <div class="flex items-center gap-3"><span class="text-[12.5px] w-28 text-steel">CA1</span><div class="flex-1 h-2 rounded-full bg-canvas ring-1 ring-whisper/60 overflow-hidden"><div class="h-full bg-blue rounded-full" style="width:15%"></div></div><span class="font-mono text-[12px] w-12 text-right">15</span></div>
+                <div class="flex items-center gap-3"><span class="text-[12.5px] w-28 text-steel">CA2</span><div class="flex-1 h-2 rounded-full bg-canvas ring-1 ring-whisper/60 overflow-hidden"><div class="h-full bg-blue rounded-full" style="width:15%"></div></div><span class="font-mono text-[12px] w-12 text-right">15</span></div>
+                <div class="flex items-center gap-3"><span class="text-[12.5px] w-28 text-steel">CA3</span><div class="flex-1 h-2 rounded-full bg-canvas ring-1 ring-whisper/60 overflow-hidden"><div class="h-full bg-blue rounded-full" style="width:10%"></div></div><span class="font-mono text-[12px] w-12 text-right">10</span></div>
+                <div class="flex items-center gap-3"><span class="text-[12.5px] w-28 text-steel">Exam</span><div class="flex-1 h-2 rounded-full bg-canvas ring-1 ring-whisper/60 overflow-hidden"><div class="h-full bg-blue rounded-full" style="width:60%"></div></div><span class="font-mono text-[12px] w-12 text-right">60</span></div>
+              </div><p class="text-[11px] text-steel mt-2">Total must equal 100. Current: <span class="font-mono font-medium text-confirm">100 ✓</span></p></div>
+            <div class="mt-5"><label class="lab">Grading scale</label>
+              <p class="text-[11px] text-steel mt-0.5 mb-2">The standard used to turn scores into grades on every report card.</p>
+              <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 text-[12.5px]">
+                <label onclick="setScale('waec')" class="gsc rounded-xl ring-2 ring-blue bg-wash/40 p-3 cursor-pointer" data-scale="waec"><input type="radio" name="gscale" checked class="accent-[#2177EF] mr-2"><span class="font-semibold">WAEC standard</span><br><span class="text-steel font-mono text-[11px]">A1, B2 … F9</span></label>
+                <label onclick="setScale('simple')" class="gsc rounded-xl ring-1 ring-whisper bg-canvas p-3 cursor-pointer hover:ring-mist" data-scale="simple"><input type="radio" name="gscale" class="accent-[#2177EF] mr-2"><span class="font-semibold">Simple letters</span><br><span class="text-steel font-mono text-[11px]">A, B, C, D, E, F</span></label>
+                <label onclick="setScale('custom')" class="gsc rounded-xl ring-1 ring-whisper bg-canvas p-3 cursor-pointer hover:ring-mist" data-scale="custom"><input type="radio" name="gscale" class="accent-[#2177EF] mr-2"><span class="font-semibold">Custom bands</span><br><span class="text-steel font-mono text-[11px]">your own labels</span></label>
+              </div>
+              <div class="mt-3 rounded-xl ring-1 ring-whisper overflow-hidden max-w-[560px]">
+                <div class="grid grid-cols-[64px_1fr_1fr_1.3fr_36px] gap-2 px-3 py-2 bg-canvas text-[10px] font-semibold uppercase tracking-wider text-steel"><span>Grade</span><span>Min %</span><span>Max %</span><span>Remark</span><span></span></div>
+                <div id="bandRows" class="divide-y divide-whisper/50"></div>
+              </div>
+              <div class="flex items-center justify-between mt-2 max-w-[560px]"><button type="button" onclick="addBand()" class="text-[11.5px] font-medium text-blue">+ Add band</button><span id="scaleName" class="text-[11px] text-steel"></span></div>
+            </div>
+            <div class="mt-5 grid sm:grid-cols-2 gap-4 max-w-[460px]">
+              <div><label class="lab">Pass mark</label><input value="40" class="fld font-mono"></div>
+              <div><label class="lab">Repeat after</label><select class="fld"><option>Fail 4+ core subjects</option><option>Average below pass mark</option></select></div>
+            </div>
+          </section>
+
+          <!-- STEP 4 — CLASSES & ARMS -->
+          <section class="panel" data-p="3">
+            <p class="text-[11px] font-semibold uppercase tracking-[0.1em] text-blue">Step 4 of 6</p>
+            <h2 class="text-[19px] font-bold tracking-tight text-ink mt-1">Classes &amp; arms</h2>
+            <p class="text-[12.5px] text-steel mt-1.5 max-w-[56ch]">Add the classes you run. Turn on arms (A/B/C) only where you split a class — some schools don't.</p>
+            <label class="mt-4 flex items-center gap-2.5 text-[12.5px] cursor-pointer"><input type="checkbox" checked class="h-4 w-4 rounded accent-[#2177EF]">This school uses arms (A / B / C)</label>
+            <div class="mt-4 space-y-2" id="classRows"></div>
+            <button class="mt-3 h-10 px-4 rounded-xl bg-white ring-1 ring-whisper text-[12.5px] font-medium text-steel hover:bg-mist/30">＋ Add a class</button>
+            <div class="mt-4 rounded-xl bg-wash/50 ring-1 ring-mist/60 px-4 py-3 text-[12px] text-ink"><span class="font-semibold">Hybrid school:</span> your Islamiyyah levels (I'dadiyyah 1–3) sit alongside JSS/SS — students belong to both.</div>
+          </section>
+
+          <!-- STEP 5 — TERM DATES -->
+          <section class="panel" data-p="4">
+            <p class="text-[11px] font-semibold uppercase tracking-[0.1em] text-blue">Step 5 of 6</p>
+            <h2 class="text-[19px] font-bold tracking-tight text-ink mt-1">Session &amp; term dates</h2>
+            <p class="text-[12.5px] text-steel mt-1.5 max-w-[56ch]">These drive your calendar, attendance counting, and the "next term begins" line on every report card.</p>
+            <div class="mt-5"><label class="lab">Academic session</label><input class="fld max-w-[260px] font-mono" value="2025 / 2026"></div>
+            <div class="mt-5 rounded-xl ring-1 ring-mist/60 bg-wash/40 p-4">
+              <label class="lab">School week — operating days</label>
+              <p class="text-[11px] text-steel mt-0.5 mb-2.5">The days your school runs. This sets the <span class="font-medium text-charcoal">timetable columns</span> and the days <span class="font-medium text-charcoal">attendance</span> is taken. Many Islamiyyah schools run <span class="font-medium text-charcoal">Saturday–Wednesday</span>.</p>
+              <div class="flex flex-wrap gap-2 mb-2.5 text-[12px] font-medium">
+                <button type="button" onclick="setWeek([1,2,3,4,5])" class="h-8 px-3 rounded-lg ring-1 ring-whisper bg-white text-steel hover:bg-mist/30">Mon–Fri</button>
+                <button type="button" onclick="setWeek([6,0,1,2,3])" class="h-8 px-3 rounded-lg ring-1 ring-whisper bg-white text-steel hover:bg-mist/30">Sat–Wed</button>
+                <button type="button" onclick="setWeek([1,2,3,4,5,6])" class="h-8 px-3 rounded-lg ring-1 ring-whisper bg-white text-steel hover:bg-mist/30">Mon–Sat</button>
+              </div>
+              <div id="weekDays" class="flex flex-wrap gap-1.5"></div>
+              <p class="text-[11.5px] text-ink mt-2.5" id="weekSummary"></p>
+            </div>
+            <div class="mt-5 space-y-3">
+              <div class="rounded-xl ring-1 ring-whisper bg-canvas p-4"><p class="text-[12.5px] font-semibold mb-2.5">First Term</p><div class="grid grid-cols-2 gap-3"><div><label class="lab text-[11px]">Resumes</label><input class="fld" value="2025-09-08"></div><div><label class="lab text-[11px]">Ends</label><input class="fld" value="2025-12-12"></div></div></div>
+              <div class="rounded-xl ring-1 ring-whisper bg-canvas p-4"><p class="text-[12.5px] font-semibold mb-2.5">Second Term</p><div class="grid grid-cols-2 gap-3"><div><label class="lab text-[11px]">Resumes</label><input class="fld" value="2026-01-12"></div><div><label class="lab text-[11px]">Ends</label><input class="fld" value="2026-04-03"></div></div></div>
+              <div class="rounded-xl ring-2 ring-blue bg-wash/40 p-4"><p class="text-[12.5px] font-semibold mb-2.5">Third Term <span class="text-[10px] font-normal text-blue">· current</span></p><div class="grid grid-cols-2 gap-3"><div><label class="lab text-[11px]">Resumes</label><input class="fld bg-white" value="2026-04-27"></div><div><label class="lab text-[11px]">Ends</label><input class="fld bg-white" value="2026-07-04"></div></div></div>
+            </div>
+          </section>
+
+          <!-- STEP 6 — REVIEW -->
+          <section class="panel" data-p="5">
+            <p class="text-[11px] font-semibold uppercase tracking-[0.1em] text-blue">Step 6 of 6</p>
+            <h2 class="text-[19px] font-bold tracking-tight text-ink mt-1">Review &amp; finish</h2>
+            <p class="text-[12.5px] text-steel mt-1.5 max-w-[56ch]">Check everything below. You can still change any of it later in Settings.</p>
+            <div class="mt-5 space-y-2.5 text-[12.5px]">
+              <div class="flex items-start gap-3 rounded-xl ring-1 ring-whisper bg-canvas px-4 py-3"><span class="h-6 w-6 rounded-lg bg-confirm/10 text-confirm grid place-items-center text-[11px] shrink-0">✓</span><div class="flex-1"><p class="font-semibold">School profile</p><p class="text-steel text-[11.5px]">Al-Furqan Academy · Bauchi · Ustadh Abdullahi Sani</p></div><button onclick="show(0)" class="text-blue text-[11.5px] font-medium">Edit</button></div>
+              <div class="flex items-start gap-3 rounded-xl ring-1 ring-whisper bg-canvas px-4 py-3"><span class="h-6 w-6 rounded-lg bg-confirm/10 text-confirm grid place-items-center text-[11px] shrink-0">✓</span><div class="flex-1"><p class="font-semibold">Type</p><p class="text-steel text-[11.5px]">Hybrid — conventional + Islamiyyah</p></div><button onclick="show(1)" class="text-blue text-[11.5px] font-medium">Edit</button></div>
+              <div class="flex items-start gap-3 rounded-xl ring-1 ring-whisper bg-canvas px-4 py-3"><span class="h-6 w-6 rounded-lg bg-confirm/10 text-confirm grid place-items-center text-[11px] shrink-0">✓</span><div class="flex-1"><p class="font-semibold">Grading</p><p class="text-steel text-[11.5px]">3 CAs (15/15/10) + Exam 60 · A1–F9 · pass 40</p></div><button onclick="show(2)" class="text-blue text-[11.5px] font-medium">Edit</button></div>
+              <div class="flex items-start gap-3 rounded-xl ring-1 ring-whisper bg-canvas px-4 py-3"><span class="h-6 w-6 rounded-lg bg-confirm/10 text-confirm grid place-items-center text-[11px] shrink-0">✓</span><div class="flex-1"><p class="font-semibold">Classes</p><p class="text-steel text-[11.5px]">12 classes, arms on · 3 Islamiyyah levels</p></div><button onclick="show(3)" class="text-blue text-[11.5px] font-medium">Edit</button></div>
+              <div class="flex items-start gap-3 rounded-xl ring-1 ring-whisper bg-canvas px-4 py-3"><span class="h-6 w-6 rounded-lg bg-confirm/10 text-confirm grid place-items-center text-[11px] shrink-0">✓</span><div class="flex-1"><p class="font-semibold">Term dates</p><p class="text-steel text-[11.5px]">2025/26 · Third term ends 4 Jul 2026</p></div><button onclick="show(4)" class="text-blue text-[11.5px] font-medium">Edit</button></div>
+            </div>
+            <div class="mt-5 rounded-xl bg-confirm/[0.06] ring-1 ring-confirm/25 px-4 py-3 text-[12px] text-charcoal">You're ready. Next you'll add staff and import students — then you can publish your first results.</div>
+            <button class="mt-4 w-full h-12 rounded-xl bg-blue text-white text-[14px] font-semibold shadow-soft active:translate-y-px">Finish setup &amp; go to dashboard</button>
+          </section>
+          </div>
+
+          <!-- nav buttons -->
+          <div class="mt-6 flex items-center justify-between pt-4 border-t border-whisper/70">
+            <button id="backBtn" onclick="show(cur-1)" class="h-10 px-4 rounded-xl bg-white ring-1 ring-whisper text-steel text-[13px] font-medium hover:bg-mist/30">← Back</button>
+            <button id="nextBtn" onclick="show(cur+1)" class="h-10 px-6 rounded-xl bg-blue text-white text-[13.5px] font-semibold shadow-soft active:translate-y-px">Save &amp; continue →</button>
+          </div>
+        </div>
+
+        <!-- LIVE PREVIEW (changes per step) -->
+        <div class="space-y-4">
+          <div class="bg-white ring-1 ring-whisper/80 rounded-2xl shadow-soft p-5">
+            <p class="text-[11px] font-semibold uppercase tracking-wider text-steel">Live preview</p>
+            <div id="preview" class="mt-3"></div>
+          </div>
+          <div class="rounded-2xl ring-1 ring-whisper/80 bg-white p-5 shadow-soft">
+            <p class="text-[12.5px] font-semibold">Why we ask</p>
+            <p id="why" class="text-[11.5px] text-steel mt-1.5 leading-relaxed"></p>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+<script src="../assets/shell.js"></script>
+<script>
+const STEPS=['School profile','School type','Grading scheme','Classes & arms','Term dates','Review'];
+let cur=0;
+const CLASSES=[['JSS 1','A · B'],['JSS 2','A · B'],['JSS 3','A · B'],['SS 1','A · B'],['SS 2','A'],['SS 3','A'],["I'dadiyyah",'1 · 2 · 3']];
+document.getElementById('classRows').innerHTML=CLASSES.map(c=>`
+ <div class="flex items-center gap-3 rounded-xl ring-1 ring-whisper bg-canvas px-4 py-2.5">
+   <span class="text-[13px] font-semibold flex-1 ${c[0].indexOf("'")>-1?'arabic':''}">${c[0]}</span>
+   <span class="text-[11px] text-steel">arms: <span class="font-mono text-charcoal">${c[1]}</span></span>
+   <button class="h-7 w-7 grid place-items-center rounded-lg hover:bg-alert/10 text-steel/60 text-[12px]">✕</button>
+ </div>`).join('');
+
+function renderStepper(){
+  document.getElementById('stepper').innerHTML=STEPS.map((s,i)=>{
+    const state=i<cur?'done':i===cur?'active':'todo';
+    const ring=state==='done'?'bg-confirm text-white border-confirm':state==='active'?'bg-blue text-white border-blue':'bg-white text-steel border-whisper';
+    const glow=state==='active'?'box-shadow:0 0 0 4px rgba(33,119,239,.15)':'';
+    const txt=state==='active'?'text-charcoal font-semibold':state==='done'?'text-charcoal':'text-steel';
+    return `<button onclick="show(${i})" class="flex items-center gap-2.5 shrink-0">
+      <span class="h-8 w-8 rounded-full border grid place-items-center text-[12px] font-bold ${ring}" style="${glow}">${state==='done'?'✓':i+1}</span>
+      <span class="text-[12px] ${txt} hidden md:inline">${s}</span></button>${i<STEPS.length-1?'<span class="h-px w-4 sm:w-7 bg-whisper shrink-0"></span>':''}`;
+  }).join('');
+}
+const PREVIEWS=[
+ `<div class="rounded-xl ring-1 ring-whisper bg-canvas overflow-hidden text-center"><div class="bg-ink text-white py-3"><p class="text-[12px] font-semibold">Al-Furqan Academy</p><p class="text-[8.5px] text-white/60">Knowledge · Character · Faith</p><p class="text-[8px] text-white/50 mt-0.5">12 Zaria Road, Bauchi</p></div><p class="text-[9px] text-steel py-2">↑ your report-card header</p></div>`,
+ `<div class="rounded-xl ring-1 ring-whisper bg-canvas p-3 text-[10.5px]"><p class="font-semibold text-charcoal mb-1.5">Report-card sections</p><div class="space-y-1"><div class="flex justify-between"><span>Conventional subjects</span><span class="text-confirm">✓</span></div><div class="flex justify-between"><span class="arabic">المواد الإسلامية</span><span class="text-confirm">✓</span></div><div class="flex justify-between"><span>Affective &amp; psychomotor</span><span class="text-confirm">✓</span></div></div><p class="text-[9px] text-steel mt-2">Hybrid prints both; Islamiyyah in Arabic.</p></div>`,
+ `<div class="rounded-xl ring-1 ring-whisper bg-canvas p-3.5"><p class="text-[10.5px] text-steel">A score of <span class="font-mono font-semibold text-charcoal">72</span> becomes</p><p class="font-mono text-[26px] font-bold text-blue mt-1">B2</p><p class="text-[10.5px] text-steel mt-0.5">CA 32 + Exam 40 = 72 · "Very Good"</p></div>`,
+ `<div class="rounded-xl ring-1 ring-whisper bg-canvas p-3.5 text-[11px]"><div class="grid grid-cols-2 gap-2 text-center"><div class="rounded-lg bg-white ring-1 ring-whisper py-2"><p class="font-mono text-[18px] font-semibold">12</p><p class="text-[9px] text-steel">classes</p></div><div class="rounded-lg bg-white ring-1 ring-whisper py-2"><p class="font-mono text-[18px] font-semibold">3</p><p class="text-[9px] text-steel">Islamiyyah levels</p></div></div><p class="text-[9px] text-steel mt-2">Students &amp; staff get assigned to these next.</p></div>`,
+ `<div class="rounded-xl ring-1 ring-whisper bg-canvas p-3.5 text-[11px]"><p class="text-steel">On every report card:</p><p class="font-semibold text-charcoal mt-1">Next term begins</p><p class="font-mono text-blue text-[13px]">8 September 2026</p><p class="text-[9px] text-steel mt-2">Auto-filled from your dates — never typed.</p></div>`,
+ `<div class="rounded-xl ring-1 ring-confirm/30 bg-confirm/[0.05] p-3.5 text-center"><p class="text-[11px] text-steel">Setup is</p><p class="font-mono text-[22px] font-bold text-confirm mt-0.5">100%</p><p class="text-[10.5px] text-steel mt-0.5">ready to finish</p></div>`,
+];
+const WHY=[
+ "Your name, motto and head's signature are printed and sealed onto every report card and transcript — that's what makes them official and verifiable.",
+ "The type decides your subject list and whether the card has an Islamiyyah section in Arabic. Hybrid gives you both on one card.",
+ "This is the maths behind every result. Getting weights and bands right now means you never recompute later — ties and positions are handled automatically.",
+ "Classes and arms are where students and teachers get assigned. Arms are optional — turn them off if you run single streams.",
+ "Term dates drive attendance counting and the 'next term begins' line. Set once, used everywhere — no per-card typing.",
+ "A quick check before you commit. Nothing here is locked — Settings lets you change any of it, and changes apply from the next term.",
+];
+function show(n){
+  cur=Math.max(0,Math.min(STEPS.length-1,n));
+  document.querySelectorAll('.panel').forEach(p=>p.classList.toggle('on',+p.dataset.p===cur));
+  document.getElementById('preview').innerHTML=PREVIEWS[cur];
+  document.getElementById('why').textContent=WHY[cur];
+  document.getElementById('stepBadge').textContent='step '+(cur+1)+' of 6';
+  document.getElementById('backBtn').style.visibility=cur===0?'hidden':'visible';
+  const nb=document.getElementById('nextBtn');
+  if(cur===STEPS.length-1){nb.style.display='none';} else {nb.style.display='';nb.textContent=cur===4?'Review →':'Save & continue →';}
+  renderStepper();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+// searchable Nigerian states
+const NG_STATES=['Abia','Adamawa','Akwa Ibom','Anambra','Bauchi','Bayelsa','Benue','Borno','Cross River','Delta','Ebonyi','Edo','Ekiti','Enugu','FCT — Abuja','Gombe','Imo','Jigawa','Kaduna','Bauchi','Katsina','Kebbi','Kogi','Kwara','Lagos','Nasarawa','Niger','Ogun','Ondo','Osun','Oyo','Plateau','Rivers','Sokoto','Taraba','Yobe','Zamfara'];
+function filterStates(){const inp=document.getElementById('stateInput'),list=document.getElementById('stateList');const q=inp.value.toLowerCase();const m=NG_STATES.filter(s=>s.toLowerCase().includes(q));
+  list.innerHTML=m.length?m.map(s=>`<button type="button" onmousedown="document.getElementById('stateInput').value='${s}';document.getElementById('stateList').classList.add('hidden')" class="w-full text-left px-3.5 py-2 hover:bg-mist/30">${s}</button>`).join(''):'<p class="px-3.5 py-2 text-steel">No match</p>';
+  list.classList.remove('hidden');}
+// school operating days
+const DAYNAMES=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];let WEEK=[1,2,3,4,5];
+function renderWeek(){document.getElementById('weekDays').innerHTML=DAYNAMES.map((d,i)=>{const on=WEEK.includes(i);return `<button type="button" onclick="toggleDay(${i})" class="h-9 w-12 rounded-lg text-[12px] font-semibold ${on?'bg-blue text-white shadow-soft':'bg-white ring-1 ring-whisper text-steel'}">${d}</button>`;}).join('');
+  const days=WEEK.slice().sort((a,b)=>a-b).map(i=>DAYNAMES[i]);
+  document.getElementById('weekSummary').innerHTML=days.length?`School runs <span class="font-semibold">${days.join(', ')}</span> (${days.length} days). Attendance &amp; timetable use these days.`:'Pick at least one day.';}
+function toggleDay(i){WEEK=WEEK.includes(i)?WEEK.filter(x=>x!==i):WEEK.concat(i);renderWeek();}
+function setWeek(arr){WEEK=arr.slice();renderWeek();}
+renderWeek();
+// ── Grading scale ──────────────────────────────
+const SCALES={
+  waec:{name:'WAEC standard (A1–F9)',bands:[['A1',75,100,'Excellent'],['B2',70,74,'Very good'],['B3',65,69,'Good'],['C4',60,64,'Credit'],['C5',55,59,'Credit'],['C6',50,54,'Credit'],['D7',45,49,'Pass'],['E8',40,44,'Pass'],['F9',0,39,'Fail']]},
+  simple:{name:'Simple letters (A–F)',bands:[['A',70,100,'Excellent'],['B',60,69,'Very good'],['C',50,59,'Good'],['D',45,49,'Fair'],['E',40,44,'Pass'],['F',0,39,'Fail']]},
+  custom:{name:'Custom bands',bands:[['Distinction',75,100,'Outstanding'],['Merit',60,74,'Strong'],['Pass',40,59,'Satisfactory'],['Fail',0,39,'Below standard']]}
+};
+let curScale='waec';
+function bandRowHTML(b){return `<div class="grid grid-cols-[64px_1fr_1fr_1.3fr_36px] gap-2 px-3 py-2 items-center bg-white">
+  <input value="${b[0]}" class="h-9 rounded-lg border border-whisper bg-canvas px-2 text-[12px] font-semibold font-mono">
+  <input type="number" value="${b[1]}" class="h-9 rounded-lg border border-whisper bg-canvas px-1 text-center font-mono text-[12px]">
+  <input type="number" value="${b[2]}" class="h-9 rounded-lg border border-whisper bg-canvas px-1 text-center font-mono text-[12px]">
+  <input value="${b[3]}" class="h-9 rounded-lg border border-whisper bg-canvas px-2 text-[12px]">
+  <button type="button" onclick="this.closest('div').remove()" class="h-8 w-8 grid place-items-center rounded-lg hover:bg-alert/10 text-steel/70 hover:text-alert">✕</button></div>`;}
+function renderBands(){const s=SCALES[curScale];document.getElementById('bandRows').innerHTML=s.bands.map(bandRowHTML).join('');document.getElementById('scaleName').textContent=s.name;}
+function setScale(key){curScale=key;
+  document.querySelectorAll('.gsc').forEach(l=>{const on=l.dataset.scale===key;l.className='gsc rounded-xl p-3 cursor-pointer '+(on?'ring-2 ring-blue bg-wash/40':'ring-1 ring-whisper bg-canvas hover:ring-mist');l.querySelector('input').checked=on;});
+  renderBands();}
+function addBand(){document.getElementById('bandRows').insertAdjacentHTML('beforeend',bandRowHTML(['',0,0,'']));}
+renderBands();
+show(0);
+</script>
+</body>
+</html>

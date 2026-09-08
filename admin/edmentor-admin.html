@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EdMentor — School Oversight</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script>tailwind.config={theme:{extend:{colors:{canvas:'#F7F9FC',ink:'#0B2A56',charcoal:'#18181B',steel:'#64748B',whisper:'#E2E8F0',blue:'#2177EF',wash:'#EAF2FE',mist:'#D3E4FD',confirm:'#16A34A',caution:'#D97706',alert:'#DC2626',excused:'#7C8DA6'},fontFamily:{sans:['Geist','sans-serif'],mono:['"Geist Mono"','monospace']},boxShadow:{soft:'0 1px 2px rgba(11,42,86,0.04), 0 6px 24px rgba(11,42,86,0.05)',lift:'0 1px 3px rgba(11,42,86,0.10), 0 12px 32px rgba(11,42,86,0.12)'}}}}</script>
+<style>@keyframes rise{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}.rise{animation:rise .45s cubic-bezier(.2,.8,.2,1) both}
+.acc{display:grid;grid-template-rows:0fr;transition:grid-template-rows .3s cubic-bezier(.2,.8,.2,1)}.acc.open{grid-template-rows:1fr}.acc>div{overflow:hidden}</style>
+</head>
+<body data-active="EdMentor" class="bg-canvas font-sans text-charcoal antialiased">
+<div class="flex min-h-screen">
+  <div id="sidebar-root"></div>
+  <div class="flex-1 min-w-0">
+    <header class="h-[60px] bg-white/80 backdrop-blur-md border-b border-whisper/70 flex items-center justify-between px-4 sm:px-7 sticky top-0 z-20">
+      <div class="flex items-center gap-3">
+        <h1 class="text-[15px] font-semibold tracking-tight flex items-center gap-2">
+          <span class="h-6 w-6 rounded-lg bg-blue grid place-items-center text-white"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l1.9 5.7L19.5 10l-5.6 1.3L12 17l-1.9-5.7L4.5 10l5.6-1.3z"/></svg></span>
+          EdMentor — school oversight</h1>
+        <span class="font-mono text-[11px] font-medium text-blue bg-wash rounded-full px-2.5 py-1 hidden sm:inline">AI tier</span>
+      </div>
+      <a href="../student/edmentor-home.html" class="h-9 px-3.5 rounded-lg border border-whisper bg-white text-[12.5px] font-medium hover:bg-mist/30 hidden sm:flex items-center">Preview student view →</a>
+    </header>
+
+    <main class="p-4 sm:p-7 max-w-[1100px] space-y-5">
+
+      <!-- Usage tiles -->
+      <section class="rise grid grid-cols-2 xl:grid-cols-4 gap-3 sm:gap-4">
+        <div class="bg-white border border-whisper/70 rounded-2xl p-4 shadow-soft">
+          <p class="text-[10.5px] font-semibold uppercase tracking-wider text-steel">Students enabled</p>
+          <p class="font-mono text-[24px] font-semibold mt-2 leading-none">186<span class="text-[13px] text-steel">/412</span></p>
+          <p class="text-[11px] text-steel mt-2">JSS 2 – SS 1 levels active</p></div>
+        <div class="bg-white border border-whisper/70 rounded-2xl p-4 shadow-soft">
+          <p class="text-[10.5px] font-semibold uppercase tracking-wider text-steel">Parental consent</p>
+          <p class="font-mono text-[24px] font-semibold mt-2 leading-none">171<span class="text-[13px] text-steel">/186</span></p>
+          <p class="text-[11px] text-caution mt-2 font-medium">15 awaiting consent slips</p></div>
+        <div class="bg-white border border-whisper/70 rounded-2xl p-4 shadow-soft">
+          <p class="text-[10.5px] font-semibold uppercase tracking-wider text-steel">Sessions this term</p>
+          <p class="font-mono text-[24px] font-semibold mt-2 leading-none">2,418</p>
+          <p class="text-[11px] text-steel mt-2">avg <span class="font-mono">14.1</span> per active student</p></div>
+        <div class="bg-white border border-alert/30 rounded-2xl p-4 shadow-soft bg-alert/[0.03]">
+          <p class="text-[10.5px] font-semibold uppercase tracking-wider text-alert">Flagged content</p>
+          <p class="font-mono text-[24px] font-semibold mt-2 leading-none text-alert">1</p>
+          <p class="text-[11px] text-alert/80 mt-2 font-medium">needs your review today</p></div>
+      </section>
+
+      <!-- Enablement -->
+      <section class="rise bg-white border border-whisper/70 rounded-2xl shadow-soft overflow-hidden" style="animation-delay:.05s">
+        <div class="px-6 py-4 border-b border-whisper/60"><h2 class="font-semibold tracking-tight text-[15px]">Where EdMentor is on</h2>
+        <p class="text-[11.5px] text-steel mt-0.5">Per level — students appear in the tab only after the school enables AND a parent consents</p></div>
+        <ul class="divide-y divide-whisper/60 text-[13px]">
+          <li class="px-6 py-3.5 flex items-center justify-between">
+            <div><p class="font-medium">SS 1</p><p class="text-[11px] text-steel">68 students · 64 consented · 31 active this week</p></div>
+            <button onclick="tgl(this,true)" class="tg h-7 w-12 rounded-full bg-blue relative transition-colors"><span class="absolute top-1 right-1 h-5 w-5 rounded-full bg-white shadow-soft transition-all"></span></button></li>
+          <li class="px-6 py-3.5 flex items-center justify-between">
+            <div><p class="font-medium">JSS 3</p><p class="text-[11px] text-steel">61 students · 58 consented · 27 active</p></div>
+            <button onclick="tgl(this,true)" class="tg h-7 w-12 rounded-full bg-blue relative transition-colors"><span class="absolute top-1 right-1 h-5 w-5 rounded-full bg-white shadow-soft transition-all"></span></button></li>
+          <li class="px-6 py-3.5 flex items-center justify-between">
+            <div><p class="font-medium">JSS 2</p><p class="text-[11px] text-steel">57 students · 49 consented · 22 active</p></div>
+            <button onclick="tgl(this,true)" class="tg h-7 w-12 rounded-full bg-blue relative transition-colors"><span class="absolute top-1 right-1 h-5 w-5 rounded-full bg-white shadow-soft transition-all"></span></button></li>
+          <li class="px-6 py-3.5 flex items-center justify-between opacity-70">
+            <div><p class="font-medium">JSS 1 &amp; below</p><p class="text-[11px] text-steel">not enabled — enable per level when ready</p></div>
+            <button onclick="tgl(this,false)" class="tg h-7 w-12 rounded-full bg-whisper relative transition-colors"><span class="absolute top-1 left-1 h-5 w-5 rounded-full bg-white shadow-soft transition-all"></span></button></li>
+        </ul>
+      </section>
+
+      <!-- Transcript review -->
+      <section class="rise bg-white border border-whisper/70 rounded-2xl shadow-soft overflow-hidden" style="animation-delay:.1s">
+        <div class="px-6 py-4 border-b border-whisper/60 flex items-center justify-between">
+          <div><h2 class="font-semibold tracking-tight text-[15px]">Session transcripts</h2>
+          <p class="text-[11.5px] text-steel mt-0.5">Every conversation is stored and reviewable — that's the deal we make with parents</p></div>
+          <input placeholder="Search student…" class="h-9 w-44 rounded-lg border border-whisper bg-canvas px-3 text-[12px] focus:outline-none focus:ring-2 focus:ring-blue/50 hidden sm:block">
+        </div>
+
+        <!-- Flagged row -->
+        <div class="border-b border-whisper/60 bg-alert/[0.04]">
+          <button onclick="this.nextElementSibling.classList.toggle('open')" class="w-full px-6 py-3.5 flex items-center gap-3 text-left">
+            <span class="h-2.5 w-2.5 rounded-full bg-alert animate-pulse shrink-0"></span>
+            <div class="flex-1 min-w-0">
+              <p class="text-[13px] font-medium">Chinedu Okafor · Mathematics · yesterday 21:14</p>
+              <p class="text-[11.5px] text-alert font-medium mt-0.5">Flagged: student expressed exam-anxiety distress — review and follow up</p>
+            </div>
+            <span class="text-[10.5px] font-medium text-alert bg-alert/10 rounded-full px-2.5 py-1 shrink-0">Review now</span>
+          </button>
+          <div class="acc"><div><div class="px-6 pb-4">
+            <div class="rounded-xl ring-1 ring-alert/20 bg-white p-4 space-y-2.5 text-[12.5px]">
+              <p><span class="font-semibold text-steel">Student:</span> "I don't think I can pass this exam, everything I read just disappears…"</p>
+              <p><span class="font-semibold text-blue">EdMentor:</span> "That feeling is more common than you think, and it doesn't mean you can't pass. Let's make a small plan… <em>[continues supportively, stays on study methods]</em>. It could also really help to talk to your teacher or someone you trust about how you're feeling."</p>
+              <p class="text-[11px] text-steel pt-1 border-t border-whisper/60">EdMentor responded within guardrails and suggested speaking to a trusted adult. Flag raised automatically for school follow-up — consider a quiet word with Chinedu before Friday's paper.</p>
+            </div>
+            <div class="flex gap-2 mt-3">
+              <button onclick="toast('Marked handled')" class="h-9 px-4 rounded-lg bg-ink text-white text-[12px] font-medium">Mark handled — I'll speak with him</button>
+              <button onclick="toast('Form teacher notified')" class="h-9 px-4 rounded-lg border border-whisper text-[12px] font-medium hover:bg-mist/30">Notify form teacher</button>
+            </div>
+          </div></div></div>
+        </div>
+
+        <ul class="divide-y divide-whisper/60 text-[13px]">
+          <li onclick="toast('Opening transcript — Fatima Abubakar')" class="px-6 py-3 flex items-center gap-3 hover:bg-mist/10 cursor-pointer">
+            <span class="h-2 w-2 rounded-full bg-confirm shrink-0"></span>
+            <p class="flex-1">Fatima Abubakar · Physics — Refraction · Practice · <span class="text-steel">today 16:02</span></p>
+            <span class="font-mono text-[11px] text-steel">14 msgs</span></li>
+          <li onclick="toast('Opening transcript — Aisha Bello')" class="px-6 py-3 flex items-center gap-3 hover:bg-mist/10 cursor-pointer">
+            <span class="h-2 w-2 rounded-full bg-confirm shrink-0"></span>
+            <p class="flex-1">Aisha Bello · Mathematics — Simultaneous equations · Explain · <span class="text-steel">today 14:40</span></p>
+            <span class="font-mono text-[11px] text-steel">9 msgs</span></li>
+          <li onclick="toast('Opening transcript — Ibrahim Suleiman')" class="px-6 py-3 flex items-center gap-3 hover:bg-mist/10 cursor-pointer">
+            <span class="h-2 w-2 rounded-full bg-confirm shrink-0"></span>
+            <p class="flex-1">Ibrahim Suleiman · Physics — Waves · Check my answer · <span class="text-steel">yesterday 19:25</span></p>
+            <span class="font-mono text-[11px] text-steel">6 msgs</span></li>
+        </ul>
+        <div class="px-6 py-3.5 bg-canvas border-t border-whisper/60 text-[11px] text-steel">
+          Off-topic requests are redirected automatically · sessions cap at 30/student/term · parents see summaries in their portal
+        </div>
+      </section>
+    </main>
+  </div>
+</div>
+<script src="../assets/shell.js"></script>
+<script>
+function tgl(b,on){ on=!b.classList.contains('bg-whisper');
+  if(on){b.classList.remove('bg-blue');b.classList.add('bg-whisper');b.firstElementChild.classList.remove('right-1');b.firstElementChild.classList.add('left-1');}
+  else{b.classList.add('bg-blue');b.classList.remove('bg-whisper');b.firstElementChild.classList.add('right-1');b.firstElementChild.classList.remove('left-1');}}
+</script>
+<div id="toast" class="hidden fixed bottom-5 left-1/2 -translate-x-1/2 z-[60] bg-ink text-white text-[12.5px] font-medium px-4 py-2.5 rounded-xl shadow-lift"></div>
+<script>function toast(m){var t=document.getElementById('toast');t.textContent=m;t.classList.remove('hidden');clearTimeout(window._tt);window._tt=setTimeout(function(){t.classList.add('hidden')},2200);}</script>
+</body>
+</html>

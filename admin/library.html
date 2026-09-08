@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Edsynk — Library</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script>tailwind.config={theme:{extend:{colors:{canvas:'#F7F9FC',ink:'#0B2A56',charcoal:'#18181B',steel:'#64748B',whisper:'#E2E8F0',blue:'#2177EF',skyblue:'#5C9DF5',wash:'#EAF2FE',mist:'#D3E4FD',confirm:'#16A34A',caution:'#D97706',alert:'#DC2626',excused:'#7C8DA6'},fontFamily:{sans:['Geist','sans-serif'],mono:['"Geist Mono"','monospace']},boxShadow:{soft:'0 1px 2px rgba(11,42,86,0.04), 0 6px 24px rgba(11,42,86,0.05)',lift:'0 1px 3px rgba(11,42,86,0.10), 0 12px 32px rgba(11,42,86,0.12)'}}}}</script>
+<style>@keyframes rise{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}.rise{animation:rise .45s cubic-bezier(.2,.8,.2,1) both}.modal.open{opacity:1!important;pointer-events:auto!important}</style>
+</head>
+<body data-active="Library" data-persona="admin" class="bg-canvas font-sans text-charcoal antialiased">
+<div class="flex min-h-screen">
+  <div id="sidebar-root"></div>
+  <div class="flex-1 min-w-0">
+    <header class="h-[60px] bg-white/80 backdrop-blur-md border-b border-whisper/70 flex items-center justify-between px-4 sm:px-7 sticky top-0 z-20">
+      <div class="flex items-center gap-3"><h1 class="text-[15px] font-semibold tracking-tight">Library</h1>
+        <span class="font-mono text-[11.5px] text-steel hidden sm:inline">1,284 titles</span></div>
+      <div class="flex items-center gap-2.5">
+        <button onclick="openM('issueM')" class="h-9 px-3.5 rounded-lg border border-whisper bg-white text-[13px] font-medium hover:bg-mist/30 hidden sm:block">Issue a book</button>
+        <button onclick="openM('addM')" class="h-9 px-4 rounded-lg bg-blue text-white text-[13px] font-medium shadow-soft active:translate-y-px">+ Add book</button>
+      </div>
+    </header>
+    <main class="p-4 sm:p-7 max-w-[1180px] space-y-5 pb-12">
+
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-3">
+        <div class="rise bg-white ring-1 ring-whisper/80 rounded-2xl p-4 shadow-soft" style="animation-delay:.04s"><p class="text-[10.5px] font-semibold uppercase tracking-wider text-steel">Total titles</p><p class="font-mono text-[22px] font-semibold mt-1.5">1,284</p><p class="text-[11.5px] text-steel mt-1">3,910 copies</p></div>
+        <div class="rise bg-white ring-1 ring-whisper/80 rounded-2xl p-4 shadow-soft" style="animation-delay:.08s"><p class="text-[10.5px] font-semibold uppercase tracking-wider text-steel">On loan</p><p class="font-mono text-[22px] font-semibold mt-1.5">217</p><p class="text-[11.5px] text-steel mt-1">copies out today</p></div>
+        <div class="rise bg-white ring-1 ring-whisper/80 rounded-2xl p-4 shadow-soft" style="animation-delay:.12s"><p class="text-[10.5px] font-semibold uppercase tracking-wider text-steel">Overdue</p><p class="font-mono text-[22px] font-semibold mt-1.5 text-alert">9</p><p class="text-[11.5px] text-steel mt-1">past due date</p></div>
+        <div class="rise bg-white ring-1 ring-whisper/80 rounded-2xl p-4 shadow-soft" style="animation-delay:.16s"><p class="text-[10.5px] font-semibold uppercase tracking-wider text-steel">Members</p><p class="font-mono text-[22px] font-semibold mt-1.5">438</p><p class="text-[11.5px] text-steel mt-1">412 students · 26 staff</p></div>
+      </div>
+
+      <!-- Tabs + search -->
+      <div class="rise flex flex-col sm:flex-row gap-3 sm:items-center justify-between" style="animation-delay:.2s">
+        <div class="flex gap-1.5 text-[12.5px] font-medium" id="tabs">
+          <button data-t="catalogue" class="h-9 px-3.5 rounded-xl bg-blue text-white">Catalogue</button>
+          <button data-t="onloan" class="h-9 px-3.5 rounded-xl bg-white ring-1 ring-whisper text-steel">On loan</button>
+          <button data-t="overdue" class="h-9 px-3.5 rounded-xl bg-white ring-1 ring-whisper text-steel">Overdue <span class="font-mono">9</span></button>
+        </div>
+        <div class="relative flex-1 max-w-xs">
+          <svg class="absolute left-3.5 top-1/2 -translate-y-1/2 text-steel" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+          <input id="q" oninput="filterCat()" placeholder="Search title or author…" class="w-full h-9 rounded-xl border border-whisper bg-white pl-10 pr-4 text-[13px] focus:outline-none focus:ring-2 focus:ring-blue/50 shadow-soft">
+        </div>
+      </div>
+
+      <!-- Catalogue -->
+      <div id="catalogue" class="rise bg-white ring-1 ring-whisper/80 rounded-2xl shadow-soft overflow-hidden" style="animation-delay:.24s">
+        <div class="overflow-x-auto"><table class="w-full text-[13px] min-w-[760px]">
+          <thead><tr class="text-left text-[10.5px] font-semibold uppercase tracking-[0.07em] text-steel border-b border-whisper/60 bg-canvas/60">
+            <th class="pl-5 pr-3 py-3">Title</th><th class="px-3 py-3">Author</th><th class="px-3 py-3">Category</th><th class="px-3 py-3 text-center">Copies</th><th class="px-3 py-3 text-center">Available</th><th class="px-5 py-3 text-right">Actions</th></tr></thead>
+          <tbody id="catRows" class="divide-y divide-whisper/60"></tbody>
+        </table></div>
+        <div class="flex items-center justify-between px-5 py-3.5 border-t border-whisper/60 text-[12px] text-steel">
+          <p>Showing <span class="font-mono text-charcoal">8</span> of <span class="font-mono text-charcoal">1,284</span> titles</p>
+          <button onclick="toast('Loading next page of catalogue…')" class="h-8 px-3 rounded-lg border border-whisper hover:bg-mist/30 text-[12px] font-medium">Next page →</button>
+        </div>
+      </div>
+
+      <!-- On loan -->
+      <div id="onloan" class="rise bg-white ring-1 ring-whisper/80 rounded-2xl shadow-soft overflow-hidden hidden">
+        <div class="overflow-x-auto"><table class="w-full text-[13px] min-w-[720px]">
+          <thead><tr class="text-left text-[10.5px] font-semibold uppercase tracking-[0.07em] text-steel border-b border-whisper/60 bg-canvas/60">
+            <th class="pl-5 pr-3 py-3">Book</th><th class="px-3 py-3">Borrower</th><th class="px-3 py-3">Issued</th><th class="px-3 py-3">Due</th><th class="px-3 py-3">Status</th><th class="px-5 py-3 text-right">Action</th></tr></thead>
+          <tbody id="loanRows" class="divide-y divide-whisper/60"></tbody>
+        </table></div>
+      </div>
+
+      <!-- Overdue -->
+      <div id="overdue" class="rise bg-white ring-1 ring-whisper/80 rounded-2xl shadow-soft overflow-hidden hidden">
+        <div class="rounded-t-2xl bg-alert/[0.05] ring-1 ring-alert/15 px-5 py-3 flex items-center justify-between">
+          <p class="text-[12.5px] text-charcoal"><span class="font-semibold text-alert">9 copies</span> are past their due date.</p>
+          <button onclick="toast('Sending overdue reminders to 9 guardians via WhatsApp…')" class="h-8 px-3.5 rounded-lg bg-alert text-white text-[12px] font-medium">Remind all guardians</button>
+        </div>
+        <div class="overflow-x-auto"><table class="w-full text-[13px] min-w-[720px]">
+          <thead><tr class="text-left text-[10.5px] font-semibold uppercase tracking-[0.07em] text-steel border-b border-whisper/60 bg-canvas/60">
+            <th class="pl-5 pr-3 py-3">Book</th><th class="px-3 py-3">Borrower</th><th class="px-3 py-3">Due</th><th class="px-3 py-3">Overdue by</th><th class="px-5 py-3 text-right">Action</th></tr></thead>
+          <tbody id="overdueRows" class="divide-y divide-whisper/60"></tbody>
+        </table></div>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<!-- Add book modal -->
+<div id="addM" class="modal fixed inset-0 z-50 bg-ink/40 backdrop-blur-sm grid place-items-center p-4" style="opacity:0;pointer-events:none;transition:opacity .2s" onclick="if(event.target===this)closeM('addM')">
+  <div class="bg-white rounded-2xl shadow-lift max-w-[460px] w-full p-6">
+    <div class="flex items-center justify-between mb-3"><p class="text-[15px] font-semibold">Add a book</p><button onclick="closeM('addM')" class="h-8 w-8 grid place-items-center rounded-lg hover:bg-mist/40 text-steel">✕</button></div>
+    <div class="grid grid-cols-2 gap-3 text-[12.5px]">
+      <div class="col-span-2"><label class="text-[11.5px] font-semibold text-steel">Title</label><input placeholder="Book title" class="mt-1.5 w-full h-10 rounded-lg border border-whisper bg-canvas px-3.5"></div>
+      <div class="col-span-2"><label class="text-[11.5px] font-semibold text-steel">Author</label><input placeholder="Author name" class="mt-1.5 w-full h-10 rounded-lg border border-whisper bg-canvas px-3.5"></div>
+      <div><label class="text-[11.5px] font-semibold text-steel">Category</label><select class="mt-1.5 w-full h-10 rounded-lg border border-whisper bg-canvas px-2.5"><option>Textbook</option><option>Fiction</option><option>Islamic Studies</option><option>Reference</option></select></div>
+      <div><label class="text-[11.5px] font-semibold text-steel">Copies</label><input type="number" value="5" class="mt-1.5 w-full h-10 rounded-lg border border-whisper bg-canvas px-3 font-mono"></div>
+    </div>
+    <div class="flex justify-end gap-2 mt-5"><button onclick="closeM('addM')" class="h-10 px-4 rounded-lg ring-1 ring-whisper text-[13px] font-medium text-steel">Cancel</button><button onclick="closeM('addM');toast('Book added to the catalogue')" class="h-10 px-5 rounded-lg bg-blue text-white text-[13px] font-semibold shadow-soft">Add book</button></div>
+  </div>
+</div>
+
+<!-- Issue book modal -->
+<div id="issueM" class="modal fixed inset-0 z-50 bg-ink/40 backdrop-blur-sm grid place-items-center p-4" style="opacity:0;pointer-events:none;transition:opacity .2s" onclick="if(event.target===this)closeM('issueM')">
+  <div class="bg-white rounded-2xl shadow-lift max-w-[460px] w-full p-6">
+    <div class="flex items-center justify-between mb-3"><p class="text-[15px] font-semibold">Issue a book</p><button onclick="closeM('issueM')" class="h-8 w-8 grid place-items-center rounded-lg hover:bg-mist/40 text-steel">✕</button></div>
+    <div class="space-y-3 text-[12.5px]">
+      <div><label class="text-[11.5px] font-semibold text-steel">Book</label><input id="issueBook" placeholder="Search catalogue…" class="mt-1.5 w-full h-10 rounded-lg border border-whisper bg-canvas px-3.5"></div>
+      <div><label class="text-[11.5px] font-semibold text-steel">Borrower (student / staff)</label><input placeholder="Name or reg number" class="mt-1.5 w-full h-10 rounded-lg border border-whisper bg-canvas px-3.5"></div>
+      <div><label class="text-[11.5px] font-semibold text-steel">Due date</label><input type="date" value="2026-07-04" class="mt-1.5 w-full h-10 rounded-lg border border-whisper bg-canvas px-2.5 font-mono text-[12px]"></div>
+      <p class="text-[11px] text-steel">Standard loan period is 14 days. The borrower gets a WhatsApp reminder 2 days before the due date.</p>
+    </div>
+    <div class="flex justify-end gap-2 mt-5"><button onclick="closeM('issueM')" class="h-10 px-4 rounded-lg ring-1 ring-whisper text-[13px] font-medium text-steel">Cancel</button><button onclick="closeM('issueM');toast('Book issued — due 4 July 2026')" class="h-10 px-5 rounded-lg bg-blue text-white text-[13px] font-semibold shadow-soft">Issue book</button></div>
+  </div>
+</div>
+
+<script src="../assets/shell.js"></script>
+<div id="toast" class="hidden fixed bottom-5 left-1/2 -translate-x-1/2 z-[60] bg-ink text-white text-[12.5px] font-medium px-4 py-2.5 rounded-xl shadow-lift"></div>
+<script>function toast(m){var t=document.getElementById('toast');t.textContent=m;t.classList.remove('hidden');clearTimeout(window._tt);window._tt=setTimeout(function(){t.classList.add('hidden')},2200);}
+function openM(id){document.getElementById(id).classList.add('open');}
+function closeM(id){document.getElementById(id).classList.remove('open');}
+
+const CAT=[
+ ['New General Mathematics JSS2','M.F. Macrae','Textbook',45,12],
+ ['Things Fall Apart','Chinua Achebe','Fiction',18,5],
+ ['Riyad as-Salihin','Imam an-Nawawi','Islamic Studies',24,9],
+ ['Oxford Advanced Learner\'s Dictionary','A.S. Hornby','Reference',8,3],
+ ['Essential Biology for SSS','M.C. Michael','Textbook',30,0],
+ ['The Sealed Nectar','Safiur Rahman','Islamic Studies',14,11],
+ ['Half of a Yellow Sun','Chimamanda Adichie','Fiction',12,7],
+ ['Encyclopaedia of Science (Vol 1)','Dorling Kindersley','Reference',4,4],
+];
+const CATCOL={'Textbook':'text-blue bg-wash','Fiction':'text-confirm bg-confirm/10','Islamic Studies':'text-caution bg-caution/10','Reference':'text-excused bg-excused/10'};
+function renderCat(){
+  document.getElementById('catRows').innerHTML=CAT.map(b=>{
+    const avail=b[4], soldout=avail===0;
+    return `<tr class="cat hover:bg-mist/15"><td class="pl-5 pr-3 py-3 font-medium title">${b[0]}</td><td class="px-3 py-3 text-steel author">${b[1]}</td><td class="px-3 py-3"><span class="text-[10.5px] font-medium rounded-full px-2 py-0.5 ${CATCOL[b[2]]}">${b[2]}</span></td><td class="px-3 py-3 text-center font-mono">${b[3]}</td><td class="px-3 py-3 text-center font-mono ${soldout?'text-alert':''}">${soldout?'0 (out)':avail}</td><td class="px-5 py-3 text-right whitespace-nowrap"><button onclick="openM('issueM');document.getElementById('issueBook').value='${b[0].replace(/'/g,"\\'")}'" class="h-8 px-3 rounded-lg border border-whisper text-[12px] font-medium hover:bg-mist/30 ${soldout?'opacity-40 pointer-events-none':''}">Issue</button> <button onclick="toast('Editing ${b[0].replace(/'/g,"\\'")}…')" class="h-8 px-3 rounded-lg border border-whisper text-[12px] font-medium hover:bg-mist/30">Edit</button></td></tr>`;
+  }).join('');
+}
+function filterCat(){const q=document.getElementById('q').value.toLowerCase();document.querySelectorAll('#catRows .cat').forEach(r=>{const t=(r.querySelector('.title').textContent+r.querySelector('.author').textContent).toLowerCase();r.style.display=t.includes(q)?'':'none';});}
+
+const LOANS=[
+ ['New General Mathematics JSS2','Fatima Abubakar','JSS 2A','06 Jun','20 Jun','on'],
+ ['Things Fall Apart','Yusuf Abubakar','SS 1 Science','09 Jun','23 Jun','on'],
+ ['Riyad as-Salihin','Aisha Garba','JSS 3A','04 Jun','18 Jun','over'],
+ ['Half of a Yellow Sun','Chiamaka Okafor','SS 2 Arts','12 Jun','26 Jun','on'],
+ ['Essential Biology for SSS','Ibrahim Sani','SS 1 Science','01 Jun','15 Jun','over'],
+];
+function renderLoans(){
+  document.getElementById('loanRows').innerHTML=LOANS.map(l=>{
+    const over=l[5]==='over';
+    return `<tr class="hover:bg-mist/15"><td class="pl-5 pr-3 py-3 font-medium">${l[0]}</td><td class="px-3 py-3"><a href="student-detail.html" class="font-medium hover:text-blue">${l[1]}</a><span class="block text-[11px] text-steel">${l[2]}</span></td><td class="px-3 py-3 font-mono text-steel">${l[3]}</td><td class="px-3 py-3 font-mono ${over?'text-alert':'text-steel'}">${l[4]}</td><td class="px-3 py-3"><span class="text-[10.5px] font-medium rounded-full px-2 py-0.5 ${over?'text-alert bg-alert/10':'text-confirm bg-confirm/10'}">${over?'Overdue':'On time'}</span></td><td class="px-5 py-3 text-right"><button onclick="toast('${l[0].replace(/'/g,"\\'")} returned by ${l[1].replace(/'/g,"\\'")}')" class="h-8 px-3 rounded-lg bg-blue text-white text-[12px] font-medium">Return</button></td></tr>`;
+  }).join('');
+}
+function renderOverdue(){
+  const ov=LOANS.filter(l=>l[5]==='over');
+  document.getElementById('overdueRows').innerHTML=ov.map(l=>`<tr class="hover:bg-mist/15"><td class="pl-5 pr-3 py-3 font-medium">${l[0]}</td><td class="px-3 py-3"><a href="student-detail.html" class="font-medium hover:text-blue">${l[1]}</a><span class="block text-[11px] text-steel">${l[2]}</span></td><td class="px-3 py-3 font-mono text-alert">${l[4]}</td><td class="px-3 py-3 font-mono text-alert">${l[0].includes('Biology')?'5 days':'2 days'}</td><td class="px-5 py-3 text-right whitespace-nowrap"><button onclick="toast('Reminder sent to guardian of ${l[1].replace(/'/g,"\\'")}')" class="h-8 px-3 rounded-lg border border-whisper text-[12px] font-medium hover:bg-mist/30">Remind</button> <button onclick="toast('${l[0].replace(/'/g,"\\'")} returned')" class="h-8 px-3 rounded-lg bg-blue text-white text-[12px] font-medium">Return</button></td></tr>`).join('');
+}
+renderCat();renderLoans();renderOverdue();
+document.querySelectorAll('#tabs button').forEach(b=>b.onclick=()=>{
+  const t=b.dataset.t;
+  document.querySelectorAll('#tabs button').forEach(x=>x.className=x.dataset.t==='overdue'?'h-9 px-3.5 rounded-xl bg-white ring-1 ring-whisper text-steel':'h-9 px-3.5 rounded-xl bg-white ring-1 ring-whisper text-steel');
+  document.querySelectorAll('#tabs button').forEach(x=>{if(x===b)x.className='h-9 px-3.5 rounded-xl bg-blue text-white';else if(x.dataset.t==='overdue')x.innerHTML='Overdue <span class="font-mono">9</span>';});
+  ['catalogue','onloan','overdue'].forEach(id=>document.getElementById(id).classList.toggle('hidden',id!==t));
+});
+</script>
+</body>
+</html>

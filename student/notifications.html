@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Edsynk — Notifications</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script>tailwind.config={theme:{extend:{colors:{canvas:'#F7F9FC',ink:'#0B2A56',charcoal:'#18181B',steel:'#64748B',whisper:'#E2E8F0',blue:'#2177EF',skyblue:'#5C9DF5',wash:'#EAF2FE',mist:'#D3E4FD',confirm:'#16A34A',caution:'#D97706',alert:'#DC2626',excused:'#7C8DA6'},fontFamily:{sans:['Geist','sans-serif'],mono:['"Geist Mono"','monospace']},boxShadow:{soft:'0 1px 2px rgba(11,42,86,0.04), 0 6px 24px rgba(11,42,86,0.05)',lift:'0 1px 3px rgba(11,42,86,0.10), 0 12px 32px rgba(11,42,86,0.12)'}}}}</script>
+<style>@keyframes rise{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}.rise{animation:rise .45s cubic-bezier(.2,.8,.2,1) both}</style>
+</head>
+<body data-active="Notifications" data-persona="student" class="bg-canvas font-sans text-charcoal antialiased">
+<div class="flex min-h-screen">
+  <div id="sidebar-root"></div>
+  <div class="flex-1 min-w-0">
+    <header class="h-[60px] bg-white/80 backdrop-blur-md border-b border-whisper/70 flex items-center justify-between px-4 sm:px-7 sticky top-0 z-20">
+      <div class="flex items-center gap-3"><h1 class="text-[15px] font-semibold tracking-tight">Notifications</h1>
+        <span id="unreadPill" class="font-mono text-[11.5px] font-medium text-alert bg-alert/10 rounded-full px-2.5 py-1 hidden sm:inline">3 unread</span></div>
+      <button onclick="markAllRead()" class="h-9 px-4 rounded-lg bg-white ring-1 ring-whisper text-[13px] font-medium text-steel hover:bg-mist/30">Mark all read</button>
+    </header>
+    <main class="p-4 sm:p-7 max-w-[820px] space-y-4 pb-10">
+      <div class="rise rounded-2xl bg-wash/50 ring-1 ring-mist/60 px-4 py-3 text-[11.5px] text-ink">Your personal alerts. School-wide notices are under <span class="font-medium">Announcements</span>.</div>
+      <div id="feed" class="rise space-y-2.5" style="animation-delay:.05s"></div>
+    </main>
+  </div>
+</div>
+<script src="../assets/shell.js"></script>
+<script>
+const IC={exam:['text-caution bg-caution/10','<rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>'],
+ assign:['text-confirm bg-confirm/10','<path d="M9 11l3 3 8-8"/><path d="M21 12a9 9 0 11-6.2-8.5"/>'],
+ message:['text-blue bg-wash','<path d="M21 11.5a8.5 8.5 0 11-4.6-7.6"/>'],
+ result:['text-confirm bg-confirm/10','<path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M9 15l2 2 4-4"/>']};
+const N=[
+ ['exam','Exam timetable is out','Maths is first — Monday 23 June, 9:00am. Check My Exams.','1 hr ago',1,'exams.html'],
+ ['assign','Holiday assignment posted','Mathematics — "Algebra & geometry revision", due 5 Sept.','4 hr ago',1,'assignments.html'],
+ ['assign','Your project was graded','Statistics mini-project: 18/20 — "Excellent work, clear charts."','1 day ago',1,'assignments.html'],
+ ['message','EdMentor reminder','You left a Refraction practice at 4/6 questions.','2 days ago',0,'edmentor-home.html'],
+ ['result','Second term result published','85.4% · 5th of 38. View your report card.','3 days ago',0,'results.html'],
+];
+document.getElementById('feed').innerHTML=N.map(n=>{const i=IC[n[0]];return `
+ <a href="${n[5]}" class="flex items-start gap-3 bg-white ring-1 ${n[4]?'ring-blue/20':'ring-whisper/80'} rounded-2xl shadow-soft p-4 hover:ring-mist">
+   <span class="h-9 w-9 rounded-xl ${i[0]} grid place-items-center shrink-0"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">${i[1]}</svg></span>
+   <div class="flex-1 min-w-0"><p class="text-[13px] font-semibold">${n[1]}</p><p class="text-[12px] text-steel mt-0.5 leading-relaxed">${n[2]}</p><p class="text-[10.5px] text-steel/70 mt-1.5 font-mono">${n[3]}</p></div>
+   ${n[4]?'<span class="dot-unread h-2 w-2 rounded-full bg-blue shrink-0 mt-1.5"></span>':''}</a>`;}).join('');
+function markAllRead(){
+  document.querySelectorAll('.dot-unread').forEach(d=>d.remove());
+  document.querySelectorAll('#feed a').forEach(a=>{a.classList.remove('ring-blue/20');a.classList.add('ring-whisper/80');});
+  var p=document.getElementById('unreadPill'); if(p){p.textContent='All read ✓';p.className='font-mono text-[11.5px] font-medium text-confirm bg-confirm/10 rounded-full px-2.5 py-1 hidden sm:inline';}
+  toast('All notifications marked as read');
+}
+</script>
+<div id="toast" class="hidden fixed bottom-5 left-1/2 -translate-x-1/2 z-[60] bg-ink text-white text-[12.5px] font-medium px-4 py-2.5 rounded-xl shadow-lift"></div>
+<script>function toast(m){var t=document.getElementById('toast');t.textContent=m;t.classList.remove('hidden');clearTimeout(window._tt);window._tt=setTimeout(function(){t.classList.add('hidden')},2200);}</script>
+</body>
+</html>

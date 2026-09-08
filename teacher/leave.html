@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Edsynk — My Leave</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script>tailwind.config={theme:{extend:{colors:{canvas:'#F7F9FC',ink:'#0B2A56',charcoal:'#18181B',steel:'#64748B',whisper:'#E2E8F0',blue:'#2177EF',skyblue:'#5C9DF5',wash:'#EAF2FE',mist:'#D3E4FD',confirm:'#16A34A',caution:'#D97706',alert:'#DC2626',excused:'#7C8DA6'},fontFamily:{sans:['Geist','sans-serif'],mono:['"Geist Mono"','monospace']},boxShadow:{soft:'0 1px 2px rgba(11,42,86,0.04), 0 6px 24px rgba(11,42,86,0.05)',lift:'0 1px 3px rgba(11,42,86,0.10), 0 12px 32px rgba(11,42,86,0.12)'}}}}</script>
+<style>@keyframes rise{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}.rise{animation:rise .45s cubic-bezier(.2,.8,.2,1) both}#m{opacity:0;pointer-events:none;transition:opacity .2s}body.mopen #m{opacity:1;pointer-events:auto}</style>
+</head>
+<body data-active="My Leave" data-persona="teacher" class="bg-canvas font-sans text-charcoal antialiased">
+<div class="flex min-h-screen">
+  <div id="sidebar-root"></div>
+  <div class="flex-1 min-w-0">
+    <header class="h-[60px] bg-white/80 backdrop-blur-md border-b border-whisper/70 flex items-center justify-between px-4 sm:px-7 sticky top-0 z-20">
+      <div class="flex items-center gap-3"><h1 class="text-[15px] font-semibold tracking-tight">My Leave</h1>
+        <span class="font-mono text-[11.5px] font-medium text-blue bg-wash rounded-full px-2.5 py-1 hidden sm:inline">2025/26 session</span></div>
+      <button onclick="openReq()" class="h-9 px-4 rounded-lg bg-blue text-white text-[13px] font-medium shadow-soft active:translate-y-px flex items-center gap-1.5"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>Request leave</button>
+    </header>
+    <main class="p-4 sm:p-7 max-w-[1100px] space-y-5 pb-10">
+
+      <!-- balances -->
+      <div class="rise grid grid-cols-1 sm:grid-cols-3 gap-3">
+        <div class="bg-white ring-1 ring-whisper/80 rounded-2xl p-5 shadow-soft">
+          <p class="text-[10.5px] font-semibold uppercase tracking-wider text-steel">Annual leave</p>
+          <p class="mt-2 font-mono text-[26px] font-semibold text-blue leading-none">12 <span class="text-[13px] text-steel font-medium">/ 21 days</span></p>
+          <div class="mt-3 h-1.5 rounded-full bg-canvas ring-1 ring-whisper/60 overflow-hidden"><div class="h-full bg-blue rounded-full" style="width:57%"></div></div>
+          <p class="text-[10.5px] text-steel mt-2">9 used · 12 remaining this session</p>
+        </div>
+        <div class="bg-white ring-1 ring-whisper/80 rounded-2xl p-5 shadow-soft">
+          <p class="text-[10.5px] font-semibold uppercase tracking-wider text-steel">Sick leave</p>
+          <p class="mt-2 font-mono text-[26px] font-semibold text-confirm leading-none">8 <span class="text-[13px] text-steel font-medium">/ 10 days</span></p>
+          <div class="mt-3 h-1.5 rounded-full bg-canvas ring-1 ring-whisper/60 overflow-hidden"><div class="h-full bg-confirm rounded-full" style="width:80%"></div></div>
+          <p class="text-[10.5px] text-steel mt-2">2 used · medical note may be requested</p>
+        </div>
+        <div class="bg-white ring-1 ring-whisper/80 rounded-2xl p-5 shadow-soft">
+          <p class="text-[10.5px] font-semibold uppercase tracking-wider text-steel">Casual leave</p>
+          <p class="mt-2 font-mono text-[26px] font-semibold text-caution leading-none">5 <span class="text-[13px] text-steel font-medium">/ 7 days</span></p>
+          <div class="mt-3 h-1.5 rounded-full bg-canvas ring-1 ring-whisper/60 overflow-hidden"><div class="h-full bg-caution rounded-full" style="width:71%"></div></div>
+          <p class="text-[10.5px] text-steel mt-2">2 used · short-notice personal time</p>
+        </div>
+      </div>
+
+      <!-- routing note -->
+      <section class="rise rounded-2xl bg-gradient-to-r from-wash to-white ring-1 ring-mist p-5 shadow-soft flex items-start gap-3.5" style="animation-delay:.05s">
+        <span class="h-10 w-10 rounded-xl bg-blue grid place-items-center text-white shrink-0 shadow-lift"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><path d="M22 4L12 14.01l-3-3"/></svg></span>
+        <div class="flex-1"><p class="text-[13.5px] font-semibold">Requests go to your school admin for approval</p>
+        <p class="text-[12px] text-steel mt-1 leading-relaxed">Submitted requests appear in the school office under <span class="font-medium text-charcoal">Staff leave</span>. The admin (Mrs. Aisha Bello, School Administrator) reviews and approves or declines — you're notified either way. For long absences, add a cover/handover note so your classes are covered.</p></div>
+      </section>
+
+      <!-- my requests -->
+      <section class="rise bg-white ring-1 ring-whisper/80 rounded-2xl shadow-soft overflow-hidden" style="animation-delay:.1s">
+        <div class="px-5 py-3.5 border-b border-whisper/60 flex items-center justify-between flex-wrap gap-2">
+          <div><p class="text-[13.5px] font-semibold">My requests</p><p class="text-[11px] text-steel">This session · most recent first</p></div>
+          <div class="flex gap-1.5 text-[12px] font-medium">
+            <button onclick="pickFilter(this,'all')" class="h-8 px-3 rounded-lg bg-blue text-white">All</button>
+            <button onclick="pickFilter(this,'Pending')" class="h-8 px-3 rounded-lg bg-white ring-1 ring-whisper text-steel">Pending</button>
+            <button onclick="pickFilter(this,'Approved')" class="h-8 px-3 rounded-lg bg-white ring-1 ring-whisper text-steel">Approved</button>
+            <button onclick="pickFilter(this,'Declined')" class="h-8 px-3 rounded-lg bg-white ring-1 ring-whisper text-steel">Declined</button>
+          </div>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-[12.5px]" style="min-width:680px">
+            <thead><tr class="text-[10px] font-semibold uppercase tracking-wider text-steel/70 border-b border-whisper/60">
+              <th class="text-left px-5 py-2.5">Type</th><th class="text-left px-3 py-2.5">Dates</th><th class="text-left px-3 py-2.5">Days</th><th class="text-left px-3 py-2.5">Reason</th><th class="text-left px-3 py-2.5">Approver</th><th class="text-right px-5 py-2.5">Status</th>
+            </tr></thead>
+            <tbody id="reqRows" class="divide-y divide-whisper/50"></tbody>
+          </table>
+        </div>
+        <div class="px-5 py-3 bg-canvas border-t border-whisper/60 text-[11px] text-steel">Cancelling a pending request withdraws it from the admin's queue. Approved leave is added to the school calendar.</div>
+      </section>
+    </main>
+  </div>
+</div>
+
+<!-- request modal -->
+<div id="m" class="fixed inset-0 z-50 bg-ink/40 backdrop-blur-sm grid place-items-end sm:place-items-center p-0 sm:p-4" onclick="if(event.target===this)closeReq()">
+  <div class="bg-white w-full sm:max-w-[520px] rounded-t-3xl sm:rounded-3xl shadow-lift max-h-[92vh] overflow-y-auto">
+    <div class="sticky top-0 bg-white border-b border-whisper/70 px-5 py-3.5 flex items-center justify-between"><p class="text-[14px] font-semibold">Request leave</p><button onclick="closeReq()" class="h-8 w-8 grid place-items-center rounded-lg hover:bg-mist/40 text-steel">✕</button></div>
+    <div class="p-5 space-y-4 text-[12.5px]">
+      <div><label class="text-[11px] font-semibold uppercase tracking-wider text-steel">Leave type</label>
+        <select id="rqType" class="mt-1.5 w-full h-11 rounded-xl border border-whisper bg-canvas px-3">
+          <option>Annual</option><option>Sick</option><option>Casual</option><option>Study</option><option>Hajj / Umrah</option><option>Compassionate</option><option>Maternity</option>
+        </select></div>
+      <div class="grid grid-cols-2 gap-3">
+        <div><label class="text-[11px] font-semibold uppercase tracking-wider text-steel">From</label><input id="rqFrom" type="date" value="2026-07-06" class="mt-1.5 w-full h-11 rounded-xl border border-whisper bg-canvas px-3 font-mono text-[12px]"></div>
+        <div><label class="text-[11px] font-semibold uppercase tracking-wider text-steel">To</label><input id="rqTo" type="date" value="2026-07-08" class="mt-1.5 w-full h-11 rounded-xl border border-whisper bg-canvas px-3 font-mono text-[12px]"></div>
+      </div>
+      <div><label class="text-[11px] font-semibold uppercase tracking-wider text-steel">Reason</label><textarea id="rqReason" rows="3" class="mt-1.5 w-full rounded-xl border border-whisper bg-canvas px-4 py-2.5 resize-none" placeholder="Briefly, so admin can approve quickly…"></textarea></div>
+      <div><label class="text-[11px] font-semibold uppercase tracking-wider text-steel">Cover / handover note <span class="text-steel/60 normal-case font-normal">(optional)</span></label><textarea id="rqCover" rows="2" class="mt-1.5 w-full rounded-xl border border-whisper bg-canvas px-4 py-2.5 resize-none" placeholder="e.g. Mr. Okafor to take my JSS 2A Maths periods; notes are in Lesson Notes."></textarea></div>
+      <div class="flex items-center gap-2.5 rounded-xl bg-wash/60 ring-1 ring-mist px-3.5 py-2.5 text-[11px] text-blue">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="shrink-0"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+        Goes to <span class="font-medium">Mrs. Aisha Bello (Admin)</span> for approval. You'll be notified of the decision.
+      </div>
+      <div class="flex justify-end gap-2 pt-1"><button onclick="closeReq()" class="h-11 px-4 rounded-xl ring-1 ring-whisper text-steel font-medium">Cancel</button><button onclick="submitReq()" class="h-11 px-5 rounded-xl bg-blue text-white font-semibold shadow-soft">Submit request</button></div>
+    </div>
+  </div>
+</div>
+<script src="../assets/shell.js"></script>
+<div id="toast" class="hidden fixed bottom-5 left-1/2 -translate-x-1/2 z-[60] bg-ink text-white text-[12.5px] font-medium px-4 py-2.5 rounded-xl shadow-lift"></div>
+<script>
+function toast(m){var t=document.getElementById('toast');t.textContent=m;t.classList.remove('hidden');clearTimeout(window._tt);window._tt=setTimeout(function(){t.classList.add('hidden')},2200);}
+
+var ST={Pending:['Pending','text-caution bg-caution/10'],Approved:['Approved','text-confirm bg-confirm/10'],Declined:['Declined','text-alert bg-alert/10']};
+var REQS=[
+ {type:'Casual',dates:'10 Jun',days:1,reason:'Family obligation in town',approver:'Mrs. Aisha Bello',status:'Approved'},
+ {type:'Sick',dates:'2–3 Jun',days:2,reason:'Malaria — medical note attached',approver:'Mrs. Aisha Bello',status:'Approved'},
+ {type:'Hajj / Umrah',dates:'15 Jul – 5 Aug',days:18,reason:'Hajj 1447 — pilgrimage',approver:'Mrs. Aisha Bello',status:'Pending'},
+ {type:'Annual',dates:'21–25 Apr',days:5,reason:'Personal time after first term',approver:'Mrs. Aisha Bello',status:'Approved'},
+ {type:'Study',dates:'18 Mar',days:1,reason:'B.Ed exam at BUK — clashed with CBT supervision',approver:'Mrs. Aisha Bello',status:'Declined'},
+];
+var filter='all';
+function fmtDate(s){var d=new Date(s+'T00:00');return d.toLocaleDateString('en-GB',{day:'numeric',month:'short'});}
+function dayCount(a,b){return Math.max(1,Math.round((new Date(b)-new Date(a))/86400000)+1);}
+
+function renderRows(){
+ var rows=REQS.filter(function(r){return filter==='all'||r.status===filter;});
+ if(!rows.length){document.getElementById('reqRows').innerHTML='<tr><td colspan="6" class="px-5 py-8 text-center text-steel text-[12px]">No '+filter+' requests.</td></tr>';return;}
+ document.getElementById('reqRows').innerHTML=rows.map(function(r){
+  var s=ST[r.status];
+  var cancel=r.status==='Pending'?'<button onclick="cancelReq(\''+r.dates+'\')" class="ml-2 text-[10.5px] font-medium text-alert hover:underline align-middle">Cancel</button>':'';
+  return '<tr class="hover:bg-canvas/60">'+
+   '<td class="px-5 py-3.5 font-medium">'+r.type+'</td>'+
+   '<td class="px-3 py-3.5 text-steel font-mono text-[11.5px]">'+r.dates+'</td>'+
+   '<td class="px-3 py-3.5 font-mono">'+r.days+'</td>'+
+   '<td class="px-3 py-3.5 text-steel max-w-[220px] truncate" title="'+r.reason+'">'+r.reason+'</td>'+
+   '<td class="px-3 py-3.5 text-steel">'+r.approver+' <span class="text-steel/60">(Admin)</span></td>'+
+   '<td class="px-5 py-3.5 text-right whitespace-nowrap"><span class="text-[10.5px] font-semibold '+s[1]+' rounded-full px-2.5 py-1">'+s[0]+'</span>'+cancel+'</td>'+
+  '</tr>';
+ }).join('');
+}
+function pickFilter(b,f){filter=f;b.parentElement.querySelectorAll('button').forEach(function(x){x.className='h-8 px-3 rounded-lg bg-white ring-1 ring-whisper text-steel';});b.className='h-8 px-3 rounded-lg bg-blue text-white';renderRows();}
+function cancelReq(dates){
+ var i=REQS.findIndex(function(r){return r.dates===dates&&r.status==='Pending';});
+ if(i>-1){REQS.splice(i,1);renderRows();toast('Request withdrawn');}
+}
+function openReq(){document.body.classList.add('mopen');}
+function closeReq(){document.body.classList.remove('mopen');}
+function submitReq(){
+ var from=document.getElementById('rqFrom').value,to=document.getElementById('rqTo').value;
+ var reason=document.getElementById('rqReason').value.trim();
+ if(!from||!to){toast('Choose your leave dates');return;}
+ if(new Date(to)<new Date(from)){toast('End date is before start date');return;}
+ if(!reason){toast('Add a brief reason');return;}
+ var days=dayCount(from,to);
+ var label=fmtDate(from)+(from===to?'':' – '+fmtDate(to));
+ REQS.unshift({type:document.getElementById('rqType').value,dates:label,days:days,reason:reason,approver:'Mrs. Aisha Bello',status:'Pending'});
+ closeReq();renderRows();
+ toast('Leave request submitted for approval');
+}
+renderRows();
+</script>
+</body>
+</html>

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Edsynk — Communication Log</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script>tailwind.config={theme:{extend:{colors:{canvas:'#F7F9FC',ink:'#0B2A56',charcoal:'#18181B',steel:'#64748B',whisper:'#E2E8F0',blue:'#2177EF',skyblue:'#5C9DF5',wash:'#EAF2FE',mist:'#D3E4FD',confirm:'#16A34A',caution:'#D97706',alert:'#DC2626',excused:'#7C8DA6'},fontFamily:{sans:['Geist','sans-serif'],mono:['"Geist Mono"','monospace']},boxShadow:{soft:'0 1px 2px rgba(11,42,86,0.04), 0 6px 24px rgba(11,42,86,0.05)',lift:'0 1px 3px rgba(11,42,86,0.10), 0 12px 32px rgba(11,42,86,0.12)'}}}}</script>
+<style>@keyframes rise{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}.rise{animation:rise .45s cubic-bezier(.2,.8,.2,1) both}</style>
+</head>
+<body data-active="Comms Log" data-persona="admin" class="bg-canvas font-sans text-charcoal antialiased">
+<div class="flex min-h-screen">
+  <div id="sidebar-root"></div>
+  <div class="flex-1 min-w-0">
+    <header class="h-[60px] bg-white/80 backdrop-blur-md border-b border-whisper/70 flex items-center justify-between px-4 sm:px-7 sticky top-0 z-20">
+      <div class="flex items-center gap-3"><h1 class="text-[15px] font-semibold tracking-tight">Communication Log</h1>
+        <span class="text-[11.5px] font-medium text-blue bg-wash rounded-full px-2.5 py-1 hidden sm:inline">Term 3 · 2025/26</span></div>
+      <div class="flex items-center gap-2.5">
+        <button onclick="toast('Retrying 3 failed messages…')" class="h-9 px-3.5 rounded-lg bg-white ring-1 ring-whisper text-[12.5px] font-medium text-steel hover:bg-mist/30">Retry failed</button>
+        <button onclick="toast('Exporting communication log…')" class="h-9 px-3.5 rounded-lg bg-white ring-1 ring-whisper text-[12.5px] font-medium text-steel hover:bg-mist/30 hidden sm:inline-flex items-center">Export</button>
+        <button onclick="location.href='announcements.html'" class="h-9 px-4 rounded-lg bg-blue text-white text-[13px] font-medium shadow-soft active:translate-y-px">New broadcast</button>
+      </div>
+    </header>
+
+    <main class="p-4 sm:p-7 max-w-[1180px] space-y-5">
+
+      <!-- Stats -->
+      <div class="rise grid grid-cols-2 lg:grid-cols-4 gap-3">
+        <div class="bg-white ring-1 ring-whisper/80 rounded-2xl shadow-soft p-4"><p class="text-[11px] font-semibold uppercase tracking-wider text-steel">Sent this term</p><p class="font-mono text-[24px] font-semibold mt-1">3,847</p><p class="text-[11px] text-steel mt-0.5">SMS · email · WhatsApp</p></div>
+        <div class="bg-white ring-1 ring-whisper/80 rounded-2xl shadow-soft p-4"><p class="text-[11px] font-semibold uppercase tracking-wider text-steel">Delivered</p><p class="font-mono text-[24px] font-semibold mt-1 text-confirm">96.4<span class="text-[14px]">%</span></p><p class="text-[11px] text-steel mt-0.5">3,709 confirmed</p></div>
+        <div class="bg-white ring-1 ring-whisper/80 rounded-2xl shadow-soft p-4"><p class="text-[11px] font-semibold uppercase tracking-wider text-steel">Failed</p><p class="font-mono text-[24px] font-semibold mt-1 text-alert">138</p><p class="text-[11px] text-steel mt-0.5">mostly wrong numbers</p></div>
+        <div class="bg-white ring-1 ring-whisper/80 rounded-2xl shadow-soft p-4"><p class="text-[11px] font-semibold uppercase tracking-wider text-steel">Cost</p><p class="font-mono text-[24px] font-semibold mt-1">₦48,210</p><p class="text-[11px] text-steel mt-0.5">term to date</p></div>
+      </div>
+
+      <!-- Filter chips -->
+      <div class="rise flex gap-1.5 text-[12px] font-medium flex-wrap" id="filter">
+        <button data-f="all" class="h-9 px-3.5 rounded-xl bg-blue text-white">All</button>
+        <button data-f="SMS" class="h-9 px-3.5 rounded-xl bg-white ring-1 ring-whisper text-steel">SMS</button>
+        <button data-f="Email" class="h-9 px-3.5 rounded-xl bg-white ring-1 ring-whisper text-steel">Email</button>
+        <button data-f="WhatsApp" class="h-9 px-3.5 rounded-xl bg-white ring-1 ring-whisper text-steel">WhatsApp</button>
+        <button data-f="Failed" class="h-9 px-3.5 rounded-xl bg-white ring-1 ring-whisper text-steel">Failed</button>
+      </div>
+
+      <!-- Table -->
+      <section class="rise bg-white ring-1 ring-whisper/80 rounded-2xl shadow-soft overflow-hidden">
+        <div class="overflow-x-auto"><table class="w-full text-[12px] min-w-[860px]">
+          <thead><tr class="text-left text-[10px] font-semibold uppercase tracking-wider text-steel border-b border-whisper/60 bg-canvas/60">
+            <th class="px-6 py-3">Time</th><th class="px-3 py-3">Channel</th><th class="px-3 py-3">Recipient</th><th class="px-3 py-3">Message</th><th class="px-3 py-3">Status</th><th class="px-3 py-3 text-right">Cost</th></tr></thead>
+          <tbody id="logBody" class="divide-y divide-whisper/60"></tbody>
+        </table></div>
+        <div class="px-6 py-3.5 bg-canvas border-t border-whisper/60 text-[11px] text-steel" id="foot"></div>
+      </section>
+    </main>
+  </div>
+</div>
+<script src="../assets/shell.js"></script>
+<script>
+// [time, channel, name, number, preview, status, cost]
+const M=[
+ ['14:30','SMS','Hajiya Maryam Abubakar','0803 412 7781','Fatima — Term 3 result is now available in your portal.','Delivered',4.0],
+ ['14:30','SMS','Mr. Bashir Sani','0701 882 0034','Ibrahim — Term 3 result is now available in your portal.','Delivered',4.0],
+ ['14:30','SMS','Mrs. Grace Okafor','0814 003 1190','Chiamaka — Term 3 result is now available in your portal.','Failed',4.0],
+ ['11:12','WhatsApp','Hajiya Maryam Abubakar','0803 412 7781','Receipt #AF-2240 — ₦62,200 received in full. JazakumAllah.','Delivered',0],
+ ['11:12','WhatsApp','Alhaji Umar Garba','0805 667 2210','Fee reminder: 2nd installment ₦29,400 due 20 June.','Sent',0],
+ ['09:48','Email','Mrs. Grace Okafor','grace.okafor@gmail.com','Newsletter: Sports Day & end-of-term arrangements.','Delivered',0],
+ ['09:48','Email','Alhaji Umar Garba','u.garba@yahoo.com','Newsletter: Sports Day & end-of-term arrangements.','Pending',0],
+ ['08:20','SMS','Mr. Bashir Sani','0701 882 0034','Ibrahim was marked absent today (20 Jun).','Delivered',4.0],
+ ['08:20','SMS','Hajiya Maryam Abubakar','0803 999 0000','Yusuf was marked absent today (20 Jun).','Failed',4.0],
+ ['Yesterday','WhatsApp','398 parents','broadcast','PTA meeting Saturday 24 June, 10am. Attendance is important.','Delivered',0],
+ ['Yesterday','SMS','32 parents','broadcast','Outstanding Term 3 fees — please clear before results release.','Delivered',128.0],
+ ['18 Jun','Email','16 staff','broadcast','Staff briefing notes — exam invigilation roster attached.','Delivered',0],
+];
+let f='all';
+function chPill(c){const m={SMS:'text-blue bg-wash',Email:'text-charcoal bg-canvas ring-1 ring-whisper',WhatsApp:'text-confirm bg-confirm/10'};return `<span class="text-[10.5px] font-medium ${m[c]} rounded-full px-2 py-0.5">${c}</span>`;}
+function stPill(s){const m={Delivered:'text-confirm bg-confirm/10',Sent:'text-blue bg-wash',Failed:'text-alert bg-alert/10',Pending:'text-caution bg-caution/10'};return `<span class="text-[10.5px] font-medium ${m[s]} rounded-full px-2.5 py-1">${s}</span>`;}
+function render(){
+  const rows=M.filter(m=>f==='all'||(f==='Failed'?m[5]==='Failed':m[1]===f));
+  document.getElementById('logBody').innerHTML=rows.map(m=>
+   `<tr class="${m[5]==='Failed'?'bg-alert/[0.03]':''} hover:bg-wash/30">
+     <td class="px-6 py-2.5 font-mono text-steel whitespace-nowrap">${m[0]}</td>
+     <td class="px-3 py-2.5">${chPill(m[1])}</td>
+     <td class="px-3 py-2.5"><span class="font-medium">${m[2]}</span><br><span class="font-mono text-[10.5px] text-steel">${m[3]}</span></td>
+     <td class="px-3 py-2.5 text-steel max-w-[280px] truncate">${m[4]}</td>
+     <td class="px-3 py-2.5">${stPill(m[5])}</td>
+     <td class="px-3 py-2.5 text-right font-mono text-steel">${m[6]?'₦'+m[6].toFixed(2):'—'}</td></tr>`).join('')||'<tr><td colspan="6" class="px-6 py-8 text-center text-steel">No messages match.</td></tr>';
+  document.getElementById('foot').textContent=rows.length+' messages shown · failed messages can be retried individually or in bulk.';
+}
+document.querySelectorAll('#filter button').forEach(b=>b.onclick=()=>{f=b.dataset.f;document.querySelectorAll('#filter button').forEach(x=>x.className='h-9 px-3.5 rounded-xl bg-white ring-1 ring-whisper text-steel');b.className='h-9 px-3.5 rounded-xl bg-blue text-white';render();});
+render();
+</script>
+<div id="toast" class="hidden fixed bottom-5 left-1/2 -translate-x-1/2 z-[60] bg-ink text-white text-[12.5px] font-medium px-4 py-2.5 rounded-xl shadow-lift"></div>
+<script>function toast(m){var t=document.getElementById('toast');t.textContent=m;t.classList.remove('hidden');clearTimeout(window._tt);window._tt=setTimeout(function(){t.classList.add('hidden')},2200);}</script>
+</body>
+</html>

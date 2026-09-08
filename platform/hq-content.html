@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Edsynk HQ — Content Library</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script>
+tailwind.config = { theme: { extend: {
+  colors: { canvas:'#F7F9FC', ink:'#0B2A56', charcoal:'#18181B', steel:'#64748B', whisper:'#E2E8F0',
+    blue:'#2177EF', skyblue:'#5C9DF5', wash:'#EAF2FE', mist:'#D3E4FD',
+    confirm:'#16A34A', caution:'#D97706', alert:'#DC2626', excused:'#7C8DA6' },
+  fontFamily: { sans:['Geist','sans-serif'], mono:['"Geist Mono"','monospace'] },
+  boxShadow: { soft:'0 1px 2px rgba(11,42,86,0.04), 0 6px 24px rgba(11,42,86,0.05)',
+               lift:'0 1px 3px rgba(11,42,86,0.10), 0 12px 32px rgba(11,42,86,0.12)' }
+}}}
+</script>
+<style>
+  @keyframes rise{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+  .rise{animation:rise .5s cubic-bezier(.2,.8,.2,1) both}
+  .tabpane{display:none}.tabpane.on{display:block}
+</style>
+</head>
+<body data-active="Content Library" data-persona="platform" class="bg-canvas font-sans text-charcoal antialiased">
+<div class="flex min-h-screen">
+  <div id="sidebar-root"></div>
+  <div class="flex-1 min-w-0">
+    <header class="h-[60px] bg-white/80 backdrop-blur-md border-b border-whisper/70 flex items-center justify-between px-4 sm:px-7 sticky top-0 z-20">
+      <div class="flex items-center gap-3">
+        <h1 class="text-[15px] font-semibold tracking-tight">Content Library</h1>
+        <span class="font-mono text-[11.5px] font-medium text-blue bg-wash rounded-full px-2.5 py-1 hidden sm:inline">curated by HQ</span>
+      </div>
+      <div class="flex items-center gap-2.5">
+        <button onclick="toast('Reviewing teacher-submitted questions…')" class="h-9 px-4 rounded-lg ring-1 ring-whisper bg-white text-[13px] font-medium text-steel hover:bg-mist/30 active:translate-y-px">Review submissions <span class="ml-1 text-[10px] font-semibold text-caution">7</span></button>
+        <button onclick="toast('Opening new question-bank wizard…')" class="h-9 px-4 rounded-lg bg-blue text-white text-[13px] font-medium shadow-soft active:translate-y-px flex items-center gap-1.5">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg><span class="hidden sm:inline">Add bank</span></button>
+      </div>
+    </header>
+    <main class="p-4 sm:p-7 max-w-[1180px] space-y-5 pb-10">
+
+      <div class="rise rounded-2xl ring-1 ring-whisper/80 bg-wash/60 px-4 py-3 text-[11.5px] text-ink" style="animation-delay:.02s">
+        Content here is <span class="font-semibold">curated by Edsynk HQ</span> and offered to schools to adopt. Schools can use it as-is, clone and edit, or ignore it — their own banks stay private to their tenant.
+      </div>
+
+      <!-- tabs -->
+      <div class="rise flex gap-1.5 text-[12.5px] font-medium" id="tabBtns" style="animation-delay:.04s">
+        <button onclick="tab('banks',this)" class="h-10 px-4 rounded-xl bg-blue text-white">Question banks</button>
+        <button onclick="tab('curric',this)" class="h-10 px-4 rounded-xl bg-white ring-1 ring-whisper text-steel hover:bg-mist/30">Curriculum templates</button>
+        <button onclick="tab('report',this)" class="h-10 px-4 rounded-xl bg-white ring-1 ring-whisper text-steel hover:bg-mist/30">Report templates</button>
+      </div>
+
+      <!-- QUESTION BANKS -->
+      <div id="pane-banks" class="tabpane on space-y-4">
+        <div class="flex flex-wrap items-center gap-2 rise" style="animation-delay:.06s">
+          <div class="flex items-center gap-2 h-10 flex-1 min-w-[220px] bg-white ring-1 ring-whisper rounded-xl px-3.5 text-[13px] text-steel">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+            Search banks by subject, level…
+          </div>
+          <button onclick="toast('Import from CSV / WAEC past-question set…')" class="h-10 px-4 rounded-xl ring-1 ring-whisper bg-white text-[12.5px] font-medium text-steel hover:bg-mist/30">Import questions</button>
+        </div>
+        <div class="rise bg-white ring-1 ring-whisper/80 rounded-2xl shadow-soft overflow-hidden" style="animation-delay:.08s">
+          <div class="overflow-x-auto">
+            <table class="w-full text-[12.5px]">
+              <thead><tr class="text-left text-[10.5px] uppercase tracking-wider text-steel border-b border-whisper/70 bg-canvas/60">
+                <th class="px-5 py-3 font-semibold">Question bank</th><th class="px-3 py-3 font-semibold">Level</th>
+                <th class="px-3 py-3 font-semibold">Questions</th><th class="px-3 py-3 font-semibold hidden md:table-cell">Adoption</th>
+                <th class="px-3 py-3 font-semibold">Status</th><th class="px-5 py-3 text-right font-semibold">Action</th></tr></thead>
+              <tbody class="divide-y divide-whisper/60">
+                <tr class="hover:bg-canvas/60">
+                  <td class="px-5 py-3.5"><p class="font-medium">Mathematics</p><p class="font-mono text-[10.5px] text-steel">NERDC-aligned · MCQ + theory</p></td>
+                  <td class="px-3 py-3.5"><span class="text-[10.5px] font-semibold text-steel bg-canvas ring-1 ring-whisper rounded-full px-2 py-0.5">JSS 1–3</span></td>
+                  <td class="px-3 py-3.5 font-mono">640</td>
+                  <td class="px-3 py-3.5 text-steel hidden md:table-cell">Published to 3 schools</td>
+                  <td class="px-3 py-3.5"><span class="text-[10.5px] font-semibold text-confirm bg-confirm/10 rounded-full px-2 py-0.5">Published</span></td>
+                  <td class="px-5 py-3.5 text-right"><button onclick="toast('Opening Mathematics bank…')" class="h-8 px-3 rounded-lg ring-1 ring-whisper text-[11.5px] font-medium text-steel hover:bg-mist/30">Open</button></td>
+                </tr>
+                <tr class="hover:bg-canvas/60">
+                  <td class="px-5 py-3.5"><p class="font-medium">Basic Science</p><p class="font-mono text-[10.5px] text-steel">NERDC-aligned · MCQ</p></td>
+                  <td class="px-3 py-3.5"><span class="text-[10.5px] font-semibold text-steel bg-canvas ring-1 ring-whisper rounded-full px-2 py-0.5">JSS 1–3</span></td>
+                  <td class="px-3 py-3.5 font-mono">512</td>
+                  <td class="px-3 py-3.5 text-steel hidden md:table-cell">Published to 2 schools</td>
+                  <td class="px-3 py-3.5"><span class="text-[10.5px] font-semibold text-confirm bg-confirm/10 rounded-full px-2 py-0.5">Published</span></td>
+                  <td class="px-5 py-3.5 text-right"><button onclick="toast('Opening Basic Science bank…')" class="h-8 px-3 rounded-lg ring-1 ring-whisper text-[11.5px] font-medium text-steel hover:bg-mist/30">Open</button></td>
+                </tr>
+                <tr class="hover:bg-canvas/60">
+                  <td class="px-5 py-3.5"><p class="font-medium">English Language</p><p class="font-mono text-[10.5px] text-steel">comprehension + objective</p></td>
+                  <td class="px-3 py-3.5"><span class="text-[10.5px] font-semibold text-steel bg-canvas ring-1 ring-whisper rounded-full px-2 py-0.5">JSS 1–3</span></td>
+                  <td class="px-3 py-3.5 font-mono">438</td>
+                  <td class="px-3 py-3.5 text-steel hidden md:table-cell">Published to 3 schools</td>
+                  <td class="px-3 py-3.5"><span class="text-[10.5px] font-semibold text-confirm bg-confirm/10 rounded-full px-2 py-0.5">Published</span></td>
+                  <td class="px-5 py-3.5 text-right"><button onclick="toast('Opening English bank…')" class="h-8 px-3 rounded-lg ring-1 ring-whisper text-[11.5px] font-medium text-steel hover:bg-mist/30">Open</button></td>
+                </tr>
+                <tr class="hover:bg-canvas/60">
+                  <td class="px-5 py-3.5"><p class="font-medium">Islamic Studies (IRS)</p><p class="font-mono text-[10.5px] text-steel">aqeedah, fiqh, seerah</p></td>
+                  <td class="px-3 py-3.5"><span class="text-[10.5px] font-semibold text-steel bg-canvas ring-1 ring-whisper rounded-full px-2 py-0.5">JSS 1–3</span></td>
+                  <td class="px-3 py-3.5 font-mono">296</td>
+                  <td class="px-3 py-3.5 text-steel hidden md:table-cell">Published to 2 schools</td>
+                  <td class="px-3 py-3.5"><span class="text-[10.5px] font-semibold text-confirm bg-confirm/10 rounded-full px-2 py-0.5">Published</span></td>
+                  <td class="px-5 py-3.5 text-right"><button onclick="toast('Opening Islamic Studies bank…')" class="h-8 px-3 rounded-lg ring-1 ring-whisper text-[11.5px] font-medium text-steel hover:bg-mist/30">Open</button></td>
+                </tr>
+                <tr class="hover:bg-canvas/60 bg-canvas/40">
+                  <td class="px-5 py-3.5"><p class="font-medium">Qur'an &amp; Tajweed</p><p class="font-mono text-[10.5px] text-steel">recitation rules, hifz checkpoints</p></td>
+                  <td class="px-3 py-3.5"><span class="text-[10.5px] font-semibold text-steel bg-canvas ring-1 ring-whisper rounded-full px-2 py-0.5">JSS 1–3</span></td>
+                  <td class="px-3 py-3.5 font-mono">154</td>
+                  <td class="px-3 py-3.5 text-steel hidden md:table-cell">draft · not yet published</td>
+                  <td class="px-3 py-3.5"><span class="text-[10.5px] font-semibold text-caution bg-caution/10 rounded-full px-2 py-0.5">In review</span></td>
+                  <td class="px-5 py-3.5 text-right"><button onclick="toast('Published Quran bank to all schools')" class="h-8 px-3 rounded-lg bg-blue text-white text-[11.5px] font-medium">Publish to schools</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="px-5 py-3 border-t border-whisper/70 bg-canvas/50 text-[11px] text-steel">Every bank is reviewed against NERDC scope before it can be published. Teacher-submitted questions land in the review queue, never live directly.</p>
+        </div>
+      </div>
+
+      <!-- CURRICULUM -->
+      <div id="pane-curric" class="tabpane space-y-4">
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
+          <div class="bg-white ring-1 ring-whisper/80 rounded-2xl p-5 shadow-soft">
+            <div class="flex items-center justify-between"><p class="text-[13px] font-semibold">NERDC JSS scheme of work</p><span class="text-[10px] font-semibold text-confirm bg-confirm/10 rounded-full px-2 py-0.5">Published</span></div>
+            <p class="text-[11.5px] text-steel mt-2">Full junior-secondary scheme across core subjects, term-by-term breakdown.</p>
+            <div class="mt-3 flex items-center justify-between text-[11px] text-steel"><span class="font-mono">9 subjects · 3 terms</span><span>3 schools adopted</span></div>
+            <button onclick="toast('Opening NERDC JSS scheme…')" class="mt-3 w-full h-9 rounded-lg ring-1 ring-whisper text-[12px] font-medium text-steel hover:bg-mist/30">Open template</button>
+          </div>
+          <div class="bg-white ring-1 ring-whisper/80 rounded-2xl p-5 shadow-soft">
+            <div class="flex items-center justify-between"><p class="text-[13px] font-semibold">NERDC SSS scheme of work</p><span class="text-[10px] font-semibold text-confirm bg-confirm/10 rounded-full px-2 py-0.5">Published</span></div>
+            <p class="text-[11.5px] text-steel mt-2">Senior-secondary scheme, science / arts / commercial streams.</p>
+            <div class="mt-3 flex items-center justify-between text-[11px] text-steel"><span class="font-mono">14 subjects · 3 terms</span><span>2 schools adopted</span></div>
+            <button onclick="toast('Opening NERDC SSS scheme…')" class="mt-3 w-full h-9 rounded-lg ring-1 ring-whisper text-[12px] font-medium text-steel hover:bg-mist/30">Open template</button>
+          </div>
+          <div class="bg-white ring-1 ring-whisper/80 rounded-2xl p-5 shadow-soft">
+            <div class="flex items-center justify-between"><p class="text-[13px] font-semibold">Islamic studies scheme</p><span class="text-[10px] font-semibold text-confirm bg-confirm/10 rounded-full px-2 py-0.5">Published</span></div>
+            <p class="text-[11.5px] text-steel mt-2">Qur'an, Hadith, Fiqh, Arabic and seerah, mapped to weekly periods.</p>
+            <div class="mt-3 flex items-center justify-between text-[11px] text-steel"><span class="font-mono">6 strands · 3 terms</span><span>2 schools adopted</span></div>
+            <button onclick="toast('Opening Islamic studies scheme…')" class="mt-3 w-full h-9 rounded-lg ring-1 ring-whisper text-[12px] font-medium text-steel hover:bg-mist/30">Open template</button>
+          </div>
+          <div class="bg-white ring-1 ring-whisper/80 rounded-2xl p-5 shadow-soft">
+            <div class="flex items-center justify-between"><p class="text-[13px] font-semibold">Hifz progression map</p><span class="text-[10px] font-semibold text-caution bg-caution/10 rounded-full px-2 py-0.5">Draft</span></div>
+            <p class="text-[11.5px] text-steel mt-2">Juz-by-juz memorisation milestones with revision cycle.</p>
+            <div class="mt-3 flex items-center justify-between text-[11px] text-steel"><span class="font-mono">30 juz · checkpoints</span><span>not published</span></div>
+            <button onclick="toast('Published Hifz progression map')" class="mt-3 w-full h-9 rounded-lg bg-blue text-white text-[12px] font-medium">Publish to schools</button>
+          </div>
+          <div class="bg-white ring-1 ring-whisper/80 rounded-2xl p-5 shadow-soft">
+            <div class="flex items-center justify-between"><p class="text-[13px] font-semibold">Primary scheme (UBE)</p><span class="text-[10px] font-semibold text-caution bg-caution/10 rounded-full px-2 py-0.5">Draft</span></div>
+            <p class="text-[11.5px] text-steel mt-2">Lower &amp; upper primary, UBE-aligned. Building ahead of primary tenants.</p>
+            <div class="mt-3 flex items-center justify-between text-[11px] text-steel"><span class="font-mono">Pry 1–6</span><span>no primary schools yet</span></div>
+            <button onclick="toast('Continue editing UBE scheme…')" class="mt-3 w-full h-9 rounded-lg ring-1 ring-whisper text-[12px] font-medium text-steel hover:bg-mist/30">Continue draft</button>
+          </div>
+          <button onclick="toast('Opening new curriculum template…')" class="rounded-2xl ring-1 ring-dashed ring-whisper bg-canvas/40 p-5 grid place-items-center text-steel hover:bg-mist/20">
+            <div class="text-center"><svg class="mx-auto mb-1.5" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg><p class="text-[12px] font-medium">New template</p></div>
+          </button>
+        </div>
+      </div>
+
+      <!-- REPORT TEMPLATES -->
+      <div id="pane-report" class="tabpane space-y-4">
+        <div class="bg-white ring-1 ring-whisper/80 rounded-2xl shadow-soft overflow-hidden">
+          <div class="overflow-x-auto">
+            <table class="w-full text-[12.5px]">
+              <thead><tr class="text-left text-[10.5px] uppercase tracking-wider text-steel border-b border-whisper/70 bg-canvas/60">
+                <th class="px-5 py-3 font-semibold">Report-card template</th><th class="px-3 py-3 font-semibold">Type</th>
+                <th class="px-3 py-3 font-semibold hidden md:table-cell">Adoption</th><th class="px-3 py-3 font-semibold">Status</th>
+                <th class="px-5 py-3 text-right font-semibold">Action</th></tr></thead>
+              <tbody class="divide-y divide-whisper/60">
+                <tr class="hover:bg-canvas/60">
+                  <td class="px-5 py-3.5"><p class="font-medium">Standard Nigerian termly report</p><p class="font-mono text-[10.5px] text-steel">CA + exam, class position, traits, comments</p></td>
+                  <td class="px-3 py-3.5"><span class="text-[10.5px] font-semibold text-steel bg-canvas ring-1 ring-whisper rounded-full px-2 py-0.5">Termly</span></td>
+                  <td class="px-3 py-3.5 text-steel hidden md:table-cell">Al-Furqan, Sunrise</td>
+                  <td class="px-3 py-3.5"><span class="text-[10.5px] font-semibold text-confirm bg-confirm/10 rounded-full px-2 py-0.5">Published</span></td>
+                  <td class="px-5 py-3.5 text-right"><button onclick="toast('Previewing report template…')" class="h-8 px-3 rounded-lg ring-1 ring-whisper text-[11.5px] font-medium text-steel hover:bg-mist/30">Preview</button></td>
+                </tr>
+                <tr class="hover:bg-canvas/60">
+                  <td class="px-5 py-3.5"><p class="font-medium">Islamic school report</p><p class="font-mono text-[10.5px] text-steel">conventional + Qur'an/Arabic strands, RTL names</p></td>
+                  <td class="px-3 py-3.5"><span class="text-[10.5px] font-semibold text-steel bg-canvas ring-1 ring-whisper rounded-full px-2 py-0.5">Termly</span></td>
+                  <td class="px-3 py-3.5 text-steel hidden md:table-cell">Daru-l-Hikma</td>
+                  <td class="px-3 py-3.5"><span class="text-[10.5px] font-semibold text-confirm bg-confirm/10 rounded-full px-2 py-0.5">Published</span></td>
+                  <td class="px-5 py-3.5 text-right"><button onclick="toast('Previewing Islamic report template…')" class="h-8 px-3 rounded-lg ring-1 ring-whisper text-[11.5px] font-medium text-steel hover:bg-mist/30">Preview</button></td>
+                </tr>
+                <tr class="hover:bg-canvas/60">
+                  <td class="px-5 py-3.5"><p class="font-medium">Cumulative / sessional report</p><p class="font-mono text-[10.5px] text-steel">3-term roll-up, promotion decision</p></td>
+                  <td class="px-3 py-3.5"><span class="text-[10.5px] font-semibold text-steel bg-canvas ring-1 ring-whisper rounded-full px-2 py-0.5">Sessional</span></td>
+                  <td class="px-3 py-3.5 text-steel hidden md:table-cell">3 schools</td>
+                  <td class="px-3 py-3.5"><span class="text-[10.5px] font-semibold text-confirm bg-confirm/10 rounded-full px-2 py-0.5">Published</span></td>
+                  <td class="px-5 py-3.5 text-right"><button onclick="toast('Previewing sessional template…')" class="h-8 px-3 rounded-lg ring-1 ring-whisper text-[11.5px] font-medium text-steel hover:bg-mist/30">Preview</button></td>
+                </tr>
+                <tr class="hover:bg-canvas/60 bg-canvas/40">
+                  <td class="px-5 py-3.5"><p class="font-medium">Transcript / leaving certificate <span class="font-mono text-[9.5px] text-blue/80">SEPT</span></p><p class="font-mono text-[10.5px] text-steel">sealed PDF, QR-verifiable</p></td>
+                  <td class="px-3 py-3.5"><span class="text-[10.5px] font-semibold text-steel bg-canvas ring-1 ring-whisper rounded-full px-2 py-0.5">On demand</span></td>
+                  <td class="px-3 py-3.5 text-steel hidden md:table-cell">—</td>
+                  <td class="px-3 py-3.5"><span class="text-[10.5px] font-semibold text-blue bg-wash rounded-full px-2 py-0.5">Beta</span></td>
+                  <td class="px-5 py-3.5 text-right"><button onclick="toast('Transcript template ships with Sept release')" class="h-8 px-3 rounded-lg ring-1 ring-whisper text-[11.5px] font-medium text-steel hover:bg-mist/30">Preview</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="px-5 py-3 border-t border-whisper/70 bg-canvas/50 text-[11px] text-steel">Templates render the same sealed PDF engine used across the platform — QR verification works regardless of which template a school picks.</p>
+        </div>
+      </div>
+
+    </main>
+  </div>
+</div>
+<script src="../assets/shell.js"></script>
+<div id="toast" class="hidden fixed bottom-5 left-1/2 -translate-x-1/2 z-[60] bg-ink text-white text-[12.5px] font-medium px-4 py-2.5 rounded-xl shadow-lift"></div>
+<script>
+function toast(m){var t=document.getElementById('toast');t.textContent=m;t.classList.remove('hidden');clearTimeout(window._tt);window._tt=setTimeout(function(){t.classList.add('hidden')},2200);}
+function tab(id,btn){document.querySelectorAll('.tabpane').forEach(function(p){p.classList.remove('on');});document.getElementById('pane-'+id).classList.add('on');btn.parentNode.querySelectorAll('button').forEach(function(b){b.className='h-10 px-4 rounded-xl bg-white ring-1 ring-whisper text-steel hover:bg-mist/30';});btn.className='h-10 px-4 rounded-xl bg-blue text-white';}
+</script>
+</body>
+</html>

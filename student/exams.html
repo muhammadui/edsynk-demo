@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Edsynk — My Exams</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&family=Noto+Naskh+Arabic:wght@500&display=swap" rel="stylesheet">
+<script>tailwind.config={theme:{extend:{colors:{canvas:'#F7F9FC',ink:'#0B2A56',charcoal:'#18181B',steel:'#64748B',whisper:'#E2E8F0',blue:'#2177EF',skyblue:'#5C9DF5',wash:'#EAF2FE',mist:'#D3E4FD',confirm:'#16A34A',caution:'#D97706',alert:'#DC2626',excused:'#7C8DA6'},fontFamily:{sans:['Geist','sans-serif'],mono:['"Geist Mono"','monospace'],arabic:['"Noto Naskh Arabic"','serif']},boxShadow:{soft:'0 1px 2px rgba(11,42,86,0.04), 0 6px 24px rgba(11,42,86,0.05)',lift:'0 1px 3px rgba(11,42,86,0.10), 0 12px 32px rgba(11,42,86,0.12)'}}}}</script>
+<style>@keyframes rise{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}.rise{animation:rise .45s cubic-bezier(.2,.8,.2,1) both}</style>
+</head>
+<body data-active="My Exams" data-persona="student" class="bg-canvas font-sans text-charcoal antialiased">
+<div class="flex min-h-screen">
+  <div id="sidebar-root"></div>
+  <div class="flex-1 min-w-0">
+    <header class="h-[60px] bg-white/80 backdrop-blur-md border-b border-whisper/70 flex items-center justify-between px-4 sm:px-7 sticky top-0 z-20">
+      <div class="flex items-center gap-3">
+        <h1 class="text-[15px] font-semibold tracking-tight">My Exams</h1>
+        <span class="font-mono text-[11.5px] font-medium text-caution bg-caution/10 rounded-full px-2.5 py-1 hidden sm:inline">Third Term · 23–27 Jun</span>
+      </div>
+      <button onclick="toast('Preparing exam timetable PDF…')" class="h-9 px-4 rounded-lg bg-white ring-1 ring-whisper text-[13px] font-medium text-steel hover:bg-mist/30 hidden sm:block">Download timetable</button>
+    </header>
+
+    <main class="p-4 sm:p-7 max-w-[1100px] space-y-5 pb-10">
+
+      <!-- countdown banner -->
+      <section class="rise bg-ink text-white rounded-2xl p-5 shadow-lift relative overflow-hidden">
+        <div class="absolute -right-8 -top-12 h-36 w-36 rounded-full bg-blue/30 blur-2xl"></div>
+        <div class="relative flex items-center justify-between gap-4 flex-wrap">
+          <div>
+            <p class="text-[10.5px] font-semibold uppercase tracking-[0.08em] text-skyblue">First paper in 4 days</p>
+            <p class="text-[18px] font-semibold mt-1">Mathematics · Monday 23 June, 9:00am</p>
+            <p class="text-[11.5px] text-white/60 mt-1">Written paper · 2 hours · Hall A · seat 14 · bring your own pen &amp; ruler</p>
+          </div>
+          <a href="edmentor-session.html" class="h-10 px-4 rounded-xl bg-blue text-white text-[12.5px] font-semibold grid place-items-center shadow-soft active:translate-y-px shrink-0">Revise with EdMentor</a>
+        </div>
+      </section>
+
+      <!-- stats -->
+      <section class="rise grid grid-cols-2 sm:grid-cols-4 gap-3" style="animation-delay:.05s">
+        <div class="bg-white ring-1 ring-whisper/80 rounded-2xl p-4 shadow-soft"><p class="text-[10.5px] font-semibold uppercase tracking-wider text-steel">Papers</p><p class="font-mono text-[20px] font-semibold mt-1.5">9</p><p class="text-[11px] text-steel mt-1">over 5 days</p></div>
+        <div class="bg-white ring-1 ring-whisper/80 rounded-2xl p-4 shadow-soft"><p class="text-[10.5px] font-semibold uppercase tracking-wider text-steel">Written</p><p class="font-mono text-[20px] font-semibold mt-1.5">6</p><p class="text-[11px] text-steel mt-1">in the hall</p></div>
+        <div class="bg-white ring-1 ring-whisper/80 rounded-2xl p-4 shadow-soft"><p class="text-[10.5px] font-semibold uppercase tracking-wider text-steel">CBT</p><p class="font-mono text-[20px] font-semibold mt-1.5">3</p><p class="text-[11px] text-steel mt-1">ICT hall · on Edsynk</p></div>
+        <div class="bg-white ring-1 ring-whisper/80 rounded-2xl p-4 shadow-soft"><p class="text-[10.5px] font-semibold uppercase tracking-wider text-steel">My seat</p><p class="font-mono text-[20px] font-semibold mt-1.5">14</p><p class="text-[11px] text-steel mt-1">Hall A (written)</p></div>
+      </section>
+
+      <!-- exam schedule by day -->
+      <section class="rise space-y-4" style="animation-delay:.1s" id="schedule"></section>
+
+      <p class="rise text-[11.5px] text-steel" style="animation-delay:.15s">Times are set by the exam office and can change — you'll be notified. CBT papers open here at the scheduled time; written papers are in the hall.</p>
+    </main>
+  </div>
+</div>
+<div id="toast" class="hidden fixed bottom-5 left-1/2 -translate-x-1/2 z-[60] bg-ink text-white text-[12.5px] font-medium px-4 py-2.5 rounded-xl shadow-lift"></div>
+<script>function toast(m){var t=document.getElementById('toast');t.textContent=m;t.classList.remove('hidden');clearTimeout(window._tt);window._tt=setTimeout(function(){t.classList.add('hidden')},2200);}</script>
+<script src="../assets/shell.js"></script>
+<script>
+const DAYS=[
+ ['Monday','23 Jun',[
+   ['09:00','Mathematics','2 hrs','Hall A · seat 14','written','Algebra, mensuration, statistics','done'],
+   ['12:00','Civic Education','1 hr','ICT hall','cbt','40 questions · rights & duties','soon'],
+ ]],
+ ['Tuesday','24 Jun',[
+   ['09:00','English Language','2 hrs','Hall A · seat 14','written','Comprehension, summary, essay','upcoming'],
+   ['12:00','Basic Science','1 hr 30','ICT hall','cbt','Refraction, the cell, energy','upcoming'],
+ ]],
+ ['Wednesday','25 Jun',[
+   ['09:00','القرآن الكريم','1 hr 30','Hall B','written','Suratul Mulk, Tajweed rules','upcoming'],
+   ['11:30','Social Studies','1 hr','ICT hall','cbt','40 questions','upcoming'],
+ ]],
+ ['Thursday','26 Jun',[
+   ['09:00','Basic Technology','1 hr 30','Hall A · seat 14','written','Tools, materials, drawing','upcoming'],
+ ]],
+ ['Friday','27 Jun',[
+   ['09:00','Arabic','1 hr 30','Hall B','written','Grammar, comprehension','upcoming'],
+   ['11:30','Agricultural Science','1 hr','Hall A','written','Crops, soil, farm tools','upcoming'],
+ ]],
+];
+const fmt={written:['Written','text-blue bg-wash'],cbt:['CBT','text-confirm bg-confirm/10']};
+const st={done:['Completed','text-steel bg-canvas ring-1 ring-whisper'],soon:['Today','text-caution bg-caution/10'],upcoming:['Upcoming','text-steel bg-canvas ring-1 ring-whisper']};
+document.getElementById('schedule').innerHTML=DAYS.map((d,di)=>{
+  const today=di===0;
+  return `<div class="bg-white ring-1 ${today?'ring-blue/30':'ring-whisper/80'} rounded-2xl shadow-soft overflow-hidden">
+    <div class="px-5 py-3 border-b border-whisper/60 flex items-center justify-between ${today?'bg-wash/50':'bg-canvas/40'}">
+      <p class="text-[13px] font-semibold">${d[0]} <span class="text-steel font-normal">· ${d[1]}</span></p>
+      ${today?'<span class="text-[9.5px] font-semibold text-blue bg-white ring-1 ring-blue/30 rounded-full px-2 py-0.5">FIRST DAY</span>':`<span class="text-[10.5px] text-steel">${d[2].length} paper${d[2].length>1?'s':''}</span>`}
+    </div>
+    <div class="divide-y divide-whisper/50">
+    ${d[2].map(e=>{
+      const isCbt=e[4]==='cbt';
+      const arc = e[1].indexOf('ال')>-1 ? 'arabic text-[15px] ' : '';
+      return `<div class="px-5 py-3.5 flex items-center gap-4 flex-wrap">
+        <div class="font-mono text-[13px] font-semibold w-16 shrink-0">${e[0]}</div>
+        <div class="flex-1 min-w-[160px]">
+          <div class="flex items-center gap-2"><p class="${arc}text-[13.5px] font-semibold">${e[1]}</p>
+          <span class="text-[9.5px] font-semibold ${fmt[e[4]][1]} rounded-full px-2 py-0.5">${fmt[e[4]][0]}</span></div>
+          <p class="text-[11px] text-steel mt-0.5">${e[2]} · ${e[3]}</p>
+          <p class="text-[11px] text-steel/80 mt-0.5">Scope: ${e[5]}</p>
+        </div>
+        <div class="shrink-0">${
+          e[6]==='done' ? '<span class="text-[10.5px] font-medium text-steel bg-canvas ring-1 ring-whisper rounded-full px-2.5 py-1">Completed ✓</span>'
+          : isCbt ? (e[6]==='soon'
+              ? '<a href="exam-start.html" class="h-9 px-4 rounded-lg bg-blue text-white text-[12px] font-semibold grid place-items-center shadow-soft active:translate-y-px">Start →</a>'
+              : '<a href="exam-start.html" class="h-9 px-4 rounded-lg ring-1 ring-whisper bg-white text-[12px] font-medium text-steel grid place-items-center hover:bg-mist/30">Instructions</a>')
+          : '<span class="text-[10.5px] font-medium '+st[e[6]][1]+' rounded-full px-2.5 py-1">'+st[e[6]][0]+'</span>'
+        }</div>
+      </div>`;
+    }).join('')}
+    </div>
+  </div>`;
+}).join('');
+</script>
+</body>
+</html>
