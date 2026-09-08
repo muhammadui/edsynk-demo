@@ -69,7 +69,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;backdrop-filter:blur(14px);b
 .save-tag{font-size:11px;font-weight:700;color:var(--green);margin-left:8px}
 
 /* plan cards */
-.plans{display:grid;grid-template-columns:1fr 1.12fr 1fr;gap:18px;align-items:start;margin:46px 0 0}
+.plans{display:grid;grid-template-columns:1fr 1.08fr;gap:18px;align-items:start;margin:46px auto 0;max-width:760px}
 .plan{background:#fff;border:1px solid var(--hair);border-radius:20px;padding:28px 24px;box-shadow:var(--shadow);position:relative;transition:transform .25s,box-shadow .25s}
 .plan:hover{transform:translateY(-4px);box-shadow:0 16px 50px rgba(11,42,86,.12)}
 .plan.feat{border:1.5px solid var(--blue);box-shadow:0 0 0 1px rgba(33,119,239,.1),0 24px 70px rgba(33,119,239,.18);transform:translateY(-10px)}
@@ -160,10 +160,10 @@ footer{background:#fff;border-top:1px solid var(--hair);padding:64px 0 36px}
 
   <!-- PLANS -->
   <div class="plans">
-    <!-- Digitize -->
+    <!-- Edsynk Core -->
     <div class="plan rv">
       <span class="pill p-green" style="margin-bottom:8px">● Live today</span>
-      <h3>Digitize</h3>
+      <h3>Edsynk Core</h3>
       <p class="who">The results spine — everything to seal, publish and verify results.</p>
       <div class="price"><span class="cur">₦</span><span class="amt" data-term="500" data-session="1245">500</span><span class="per">/student/term</span></div>
       <p class="note">Early-adopter pricing · grandfathered for pilots</p>
@@ -173,38 +173,27 @@ footer{background:#fff;border-top:1px solid var(--hair);padding:64px 0 36px}
         <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Score entry → computed report cards</li>
         <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Sealed, QR-verifiable results</li>
         <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Parent &amp; student portals</li>
+        <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Announcements + in-app &amp; email alerts</li>
         <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Bulk import, audit logs &amp; data export</li>
       </ul>
     </div>
-    <!-- Synergy (featured) -->
+    <!-- Edsynk Pro (featured) -->
     <div class="plan feat rv">
       <span class="tag">Most popular</span>
-      <h3>Synergy</h3>
-      <p class="who">Everything in Digitize, plus the day-to-day of running a school.</p>
-      <div class="price"><span class="cur">₦</span><span class="amt" data-term="750" data-session="1870">750</span><span class="per">/student/term</span></div>
-      <p class="note">Rolling out this session</p>
+      <h3>Edsynk Pro</h3>
+      <p class="who">Everything in Core, plus the whole school — CBT, AI, HR and your own domain.</p>
+      <div class="price"><span class="cur">₦</span><span class="amt" data-term="1500" data-session="3735">1,500</span><span class="per">/student/term</span></div>
+      <p class="note">The full suite</p>
       <a class="btn btn-blue" href="../auth/register-school.html">Start free pilot</a>
       <ul class="feats">
-        <li class="grp">Everything in Digitize, plus</li>
-        <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Fees &amp; payments (Paystack split)</li>
-        <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Attendance register</li>
-        <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Parent messaging — WhatsApp &amp; SMS</li>
+        <li class="grp">Everything in Core, plus</li>
+        <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Attendance &amp; daily register</li>
         <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Timetable builder &amp; student ID cards</li>
-      </ul>
-    </div>
-    <!-- Edsynk Smart -->
-    <div class="plan rv">
-      <h3>Edsynk Smart</h3>
-      <p class="who">The full suite — AI, CBT and analytics for ambitious schools.</p>
-      <div class="price"><span class="cur">₦</span><span class="amt" data-term="1500" data-session="3735">1,500</span><span class="per">/student/term</span></div>
-      <p class="note">Rolling out this session</p>
-      <a class="btn btn-ghost" href="../auth/register-school.html">Start free pilot</a>
-      <ul class="feats">
-        <li class="grp">Everything in Synergy, plus</li>
-        <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>AI CBT &amp; proctoring</li>
+        <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>CBT exams &amp; proctoring</li>
         <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Edsynk AI — EdInsight · EdAssess · EdMentor</li>
-        <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>HR &amp; payroll · predictive analytics</li>
-        <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Transcripts &amp; custom domain</li>
+        <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Transcripts · HR (staff attendance &amp; leave)</li>
+        <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Custom domain — your own web address</li>
+        <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Priority support</li>
       </ul>
     </div>
   </div>
@@ -214,12 +203,12 @@ footer{background:#fff;border-top:1px solid var(--hair);padding:64px 0 36px}
     <div style="max-width:56ch;text-align:left">
       <span class="pill" style="background:rgba(255,255,255,.1);color:var(--sky)">Enterprise · custom annual</span>
       <h3 style="font-size:20px;margin-top:10px;color:#fff">Multi-campus, white-label &amp; SLA</h3>
-      <p style="font-size:13.5px;color:rgba(255,255,255,.62);margin-top:6px;line-height:1.6">Everything in Smart, plus white-label branding, a dedicated account manager, multi-campus, API &amp; finance integrations, and a custom annual contract — for premium metro schools and multi-school groups.</p>
+      <p style="font-size:13.5px;color:rgba(255,255,255,.62);margin-top:6px;line-height:1.6">Everything in Pro, plus white-label branding, a dedicated account manager, multi-campus, API &amp; finance integrations, and a custom annual contract — for premium metro schools and multi-school groups.</p>
     </div>
     <a class="btn btn-white" href="#" onclick="toast('Opening WhatsApp — let us scope your rollout');return false;">Talk to us →</a>
   </div>
 
-  <p class="sub" style="font-size:12px;margin-top:22px"><b style="color:var(--ink)">Digitize is live today.</b> Synergy &amp; Smart features are rolling out this session — pilot schools are grandfathered onto early-adopter pricing. Pay annually (per session) and save ~17%.</p>
+  <p class="sub" style="font-size:12px;margin-top:22px"><b style="color:var(--ink)">Your first term is a free pilot.</b> We migrate your data and train your teachers before you pay a naira — no setup fee. Pay annually (per session) and save ~17%.</p>
 </div></header>
 
 <!-- COMPARISON -->
@@ -228,32 +217,28 @@ footer{background:#fff;border-top:1px solid var(--hair);padding:64px 0 36px}
   <h2 class="h2 rv" style="margin-top:10px">Every feature, side by side</h2>
   <div class="cmp-wrap rv">
     <table class="cmp">
-      <thead><tr><th>Feature</th><th>Digitize</th><th class="hot">Synergy</th><th>Edsynk Smart</th></tr></thead>
+      <thead><tr><th>Feature</th><th>Edsynk Core</th><th class="hot">Edsynk Pro</th></tr></thead>
       <tbody>
-        <tr class="grp"><td colspan="4">Core records</td></tr>
-        <tr><td>Student &amp; staff records</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
-        <tr><td>Bulk import &amp; audit logs</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
-        <tr><td>Data export, anytime</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
-        <tr class="grp"><td colspan="4">Results &amp; report cards</td></tr>
-        <tr><td>Sealed, QR-verifiable report cards</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
-        <tr><td>Custom grading scheme</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
-        <tr><td>Parent &amp; student portals</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
-        <tr><td>Cumulative transcripts</td><td class="no">—</td><td class="no">—</td><td class="yes">✓</td></tr>
-        <tr class="grp"><td colspan="4">Running the school</td></tr>
-        <tr><td>Fees &amp; payments (Paystack)</td><td class="no">—</td><td class="yes">✓</td><td class="yes">✓</td></tr>
-        <tr><td>Attendance register</td><td class="no">—</td><td class="yes">✓</td><td class="yes">✓</td></tr>
-        <tr><td>Parent messaging — WhatsApp &amp; SMS</td><td class="no">—</td><td class="yes">✓</td><td class="yes">✓</td></tr>
-        <tr><td>Timetable builder &amp; ID cards</td><td class="no">—</td><td class="yes">✓</td><td class="yes">✓</td></tr>
-        <tr><td>HR &amp; payroll</td><td class="no">—</td><td class="no">—</td><td class="yes">✓</td></tr>
-        <tr class="grp"><td colspan="4">CBT &amp; Edsynk AI</td></tr>
-        <tr><td>CBT exams &amp; proctoring</td><td class="no">—</td><td class="no">—</td><td class="yes">✓</td></tr>
-        <tr><td>EdInsight — report remarks</td><td class="no">—</td><td class="no">—</td><td class="yes">✓</td></tr>
-        <tr><td>EdAssess — exam generation</td><td class="no">—</td><td class="no">—</td><td class="yes">✓</td></tr>
-        <tr><td>EdMentor — student tutoring</td><td class="no">—</td><td class="no">—</td><td class="yes">✓</td></tr>
-        <tr><td>Predictive analytics</td><td class="no">—</td><td class="no">—</td><td class="yes">✓</td></tr>
-        <tr class="grp"><td colspan="4">Platform</td></tr>
-        <tr><td>Custom domain</td><td class="no">—</td><td class="no">—</td><td class="yes">✓</td></tr>
-        <tr><td>Support</td><td>Community</td><td>Email</td><td>Priority</td></tr>
+        <tr class="grp"><td colspan="3">Records &amp; results</td></tr>
+        <tr><td>Student &amp; staff records</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+        <tr><td>Sealed, QR-verifiable report cards</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+        <tr><td>Custom grading scheme</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+        <tr><td>Parent &amp; student portals</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+        <tr><td>Announcements + in-app &amp; email alerts</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+        <tr><td>Bulk import, audit logs &amp; data export</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+        <tr><td>Cumulative transcripts</td><td class="no">—</td><td class="yes">✓</td></tr>
+        <tr class="grp"><td colspan="3">Running the school</td></tr>
+        <tr><td>Attendance &amp; daily register</td><td class="no">—</td><td class="yes">✓</td></tr>
+        <tr><td>Timetable builder &amp; ID cards</td><td class="no">—</td><td class="yes">✓</td></tr>
+        <tr><td>HR — staff attendance &amp; leave</td><td class="no">—</td><td class="yes">✓</td></tr>
+        <tr class="grp"><td colspan="3">CBT &amp; Edsynk AI</td></tr>
+        <tr><td>CBT exams &amp; proctoring</td><td class="no">—</td><td class="yes">✓</td></tr>
+        <tr><td>EdInsight — report remarks</td><td class="no">—</td><td class="yes">✓</td></tr>
+        <tr><td>EdAssess — exam generation</td><td class="no">—</td><td class="yes">✓</td></tr>
+        <tr><td>EdMentor — student tutoring</td><td class="no">—</td><td class="yes">✓</td></tr>
+        <tr class="grp"><td colspan="3">Platform</td></tr>
+        <tr><td>Custom domain — your own web address</td><td class="no">—</td><td class="yes">✓</td></tr>
+        <tr><td>Support</td><td>Community</td><td>Priority</td></tr>
       </tbody>
     </table>
   </div>
