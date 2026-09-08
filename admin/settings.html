@@ -360,5 +360,6 @@ document.getElementById('traitGrid').innerHTML=TRAITS.map(t=>{const on=TRAIT_ON.
 const TS_HINT={'15':'Each ticked trait is rated 1 (lowest) to 5 (highest) on the card.','ae':'Each ticked trait is rated A (highest) to E (lowest) on the card.','desc':'Each ticked trait shows a word — e.g. Excellent / Good / Fair — on the card.'};
 function setTraitScale(btn,key){document.querySelectorAll('.trs').forEach(b=>{const on=b===btn;b.className='trs h-10 rounded-xl '+(on?'bg-blue text-white shadow-soft':'bg-white ring-1 ring-whisper text-steel');});document.getElementById('traitScaleHint').textContent=TS_HINT[key];}
 </script>
+<div title="Edsynk product preview — design mockups, not the live app" style="position:fixed;bottom:14px;right:14px;z-index:99999;background:#0B2A56;color:#fff;font:600 11px/1 -apple-system,system-ui,sans-serif;letter-spacing:.04em;padding:7px 13px;border-radius:999px;box-shadow:0 4px 14px rgba(11,42,86,.35);pointer-events:none">PREVIEW</div>
 </body>
 </html>

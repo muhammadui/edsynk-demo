@@ -103,5 +103,6 @@ document.getElementById('methods').innerHTML=M.map(m=>`<div><div class="flex jus
 const TX=[['confirm','₦29,400 · Fatima A. (Al-Furqan)','card · 2 min ago'],['confirm','₦62,200 · paid in full (Sunrise)','transfer · 8 min ago'],['confirm','₦15,000 · transport (Al-Furqan)','USSD · 14 min ago'],['alert','₦44,100 · failed — insufficient funds','card · 21 min ago · auto-retry'],['confirm','₦10,000 · part payment (Daru-l-Hikma)','transfer · 33 min ago']];
 document.getElementById('txns').innerHTML=TX.map((t,i)=>`<div class="flex gap-3 pb-3"><div class="flex flex-col items-center"><span class="h-2 w-2 rounded-full bg-${t[0]} mt-1.5"></span>${i<TX.length-1?'<span class="w-px flex-1 bg-whisper"></span>':''}</div><div><p class="font-medium">${t[1]}</p><p class="font-mono text-[10px] text-steel mt-0.5">${t[2]}</p></div></div>`).join('');
 </script>
+<div title="Edsynk product preview — design mockups, not the live app" style="position:fixed;bottom:14px;right:14px;z-index:99999;background:#0B2A56;color:#fff;font:600 11px/1 -apple-system,system-ui,sans-serif;letter-spacing:.04em;padding:7px 13px;border-radius:999px;box-shadow:0 4px 14px rgba(11,42,86,.35);pointer-events:none">PREVIEW</div>
 </body>
 </html>

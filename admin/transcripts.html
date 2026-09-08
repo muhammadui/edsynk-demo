@@ -119,5 +119,6 @@ document.getElementById('finalSubs').innerHTML=rows;
 function tab(n){document.querySelectorAll('.tabp').forEach(p=>p.classList.toggle('on',+p.dataset.p===n));document.querySelectorAll('.tb').forEach(b=>{const on=+b.dataset.t===n;b.className='tb shrink-0 px-4 py-2.5 text-[12.5px] font-medium border-b-2 -mb-px '+(on?'text-ink border-blue':'text-steel border-transparent hover:text-charcoal');});}
 document.querySelectorAll('.tb').forEach(b=>b.onclick=()=>tab(+b.dataset.t));
 </script>
+<div title="Edsynk product preview — design mockups, not the live app" style="position:fixed;bottom:14px;right:14px;z-index:99999;background:#0B2A56;color:#fff;font:600 11px/1 -apple-system,system-ui,sans-serif;letter-spacing:.04em;padding:7px 13px;border-radius:999px;box-shadow:0 4px 14px rgba(11,42,86,.35);pointer-events:none">PREVIEW</div>
 </body>
 </html>

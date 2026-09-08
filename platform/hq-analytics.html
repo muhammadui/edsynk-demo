@@ -209,5 +209,6 @@ tailwind.config = { theme: { extend: {
 function toast(m){var t=document.getElementById('toast');t.textContent=m;t.classList.remove('hidden');clearTimeout(window._tt);window._tt=setTimeout(function(){t.classList.add('hidden')},2200);}
 function rng(btn){btn.parentNode.querySelectorAll('button').forEach(function(b){b.className='h-9 px-3 rounded-lg bg-white ring-1 ring-whisper text-steel hover:bg-mist/30';});btn.className='h-9 px-3 rounded-lg bg-blue text-white';toast('Range: '+btn.textContent.trim());}
 </script>
+<div title="Edsynk product preview — design mockups, not the live app" style="position:fixed;bottom:14px;right:14px;z-index:99999;background:#0B2A56;color:#fff;font:600 11px/1 -apple-system,system-ui,sans-serif;letter-spacing:.04em;padding:7px 13px;border-radius:999px;box-shadow:0 4px 14px rgba(11,42,86,.35);pointer-events:none">PREVIEW</div>
 </body>
 </html>

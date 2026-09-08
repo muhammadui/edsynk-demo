@@ -480,5 +480,6 @@ document.querySelectorAll('#remChan button').forEach(function(b){b.onclick=funct
 document.querySelectorAll('#remTone button').forEach(function(b){b.onclick=function(){remTone=b.dataset.t;document.querySelectorAll('#remTone button').forEach(function(x){x.className='h-7 px-2.5 rounded-lg ring-1 ring-whisper bg-white text-steel';});b.className='h-7 px-2.5 rounded-lg bg-blue text-white';document.getElementById('remTpl').value=TONE_TPL[remTone];renderPreview();};});
 function openComposer(){if(!document.getElementById('remTpl').value){document.getElementById('remTpl').value=TONE_TPL[remTone];}setChanUI();renderPreview();openM('remM');}
 </script>
+<div title="Edsynk product preview — design mockups, not the live app" style="position:fixed;bottom:14px;right:14px;z-index:99999;background:#0B2A56;color:#fff;font:600 11px/1 -apple-system,system-ui,sans-serif;letter-spacing:.04em;padding:7px 13px;border-radius:999px;box-shadow:0 4px 14px rgba(11,42,86,.35);pointer-events:none">PREVIEW</div>
 </body>
 </html>
