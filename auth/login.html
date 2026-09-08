@@ -26,7 +26,7 @@
 
     <div class="rise mt-5 space-y-4" style="animation-delay:.12s">
       <div><label class="text-[11.5px] font-semibold uppercase tracking-wider text-steel" id="idLabel">Email</label>
-        <input type="text" id="idField" value="abdullahi@alfurqan.edsynk.ng" class="mt-1.5 w-full h-12 rounded-xl border border-whisper bg-canvas px-4 text-[14px] focus:outline-none focus:ring-2 focus:ring-blue/50"></div>
+        <input type="text" id="idField" value="abdullahi@eis.edsynk.ng" class="mt-1.5 w-full h-12 rounded-xl border border-whisper bg-canvas px-4 text-[14px] focus:outline-none focus:ring-2 focus:ring-blue/50"></div>
       <div><label class="text-[11.5px] font-semibold uppercase tracking-wider text-steel">Password</label>
         <input type="password" value="••••••••" class="mt-1.5 w-full h-12 rounded-xl border border-whisper bg-canvas px-4 text-[15px] focus:outline-none focus:ring-2 focus:ring-blue/50"></div>
       <div class="flex items-center justify-between text-[12.5px]">
@@ -67,9 +67,9 @@
 function toast(m){var t=document.getElementById('toast');t.textContent=m;t.classList.remove('hidden');clearTimeout(window._tt);window._tt=setTimeout(function(){t.classList.add('hidden')},2200);}
 
 var ROLES={
-  admin:{label:'Admin',dest:'../admin/admin-dashboard.html',help:'School owner / administrator — full console, staff, billing and approvals.',idLabel:'Email',idValue:'abdullahi@alfurqan.edsynk.ng',code:false},
-  teacher:{label:'Teacher',dest:'../teacher/teacher-home.html',help:'Enter scores, mark attendance and run your classes from any phone.',idLabel:'Email or staff ID',idValue:'musa.ibrahim@alfurqan.edsynk.ng',code:false},
-  student:{label:'Student',dest:'../student/student-home.html',help:'Sign in with your admission number to see results and CBT.',idLabel:'Admission number',idValue:'AFA/2024/0117',code:true},
+  admin:{label:'Admin',dest:'../admin/admin-dashboard.html',help:'School owner / administrator — full console, staff, billing and approvals.',idLabel:'Email',idValue:'abdullahi@eis.edsynk.ng',code:false},
+  teacher:{label:'Teacher',dest:'../teacher/teacher-home.html',help:'Enter scores, mark attendance and run your classes from any phone.',idLabel:'Email or staff ID',idValue:'musa.ibrahim@eis.edsynk.ng',code:false},
+  student:{label:'Student',dest:'../student/student-home.html',help:'Sign in with your admission number to see results and CBT.',idLabel:'Admission number',idValue:'EIS/2024/0117',code:true},
   parent:{label:'Parent',dest:'../parent/parent-home.html',help:'One login for every child — results, attendance and fees.',idLabel:'Email or phone',idValue:'0803 481 2207',code:true}
 };
 var current='admin';

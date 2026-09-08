@@ -74,7 +74,7 @@ document.getElementById('sidebar-root').outerHTML = `
     <div class="idcard flex items-center gap-3 rounded-xl bg-canvas ring-1 ring-whisper/80 px-3 py-3 cursor-pointer hover:ring-mist">
       <div class="h-9 w-9 rounded-lg ${isHQ?'bg-ink':'bg-blue'} grid place-items-center font-bold text-[15px] text-white shadow-lift shrink-0">${isHQ?'E':'AF'}</div>
       <div class="lbl min-w-0">
-        <p class="text-[13px] font-semibold truncate leading-tight">${isHQ?'Edsynk HQ':'Al-Furqan Academy'}</p>
+        <p class="text-[13px] font-semibold truncate leading-tight">${isHQ?'Edsynk HQ':'Al-edsynk-intl Academy'}</p>
         <p class="text-[11px] text-blue font-medium mt-0.5">${isHQ?'Platform console · production':isPortal?'Bauchi · 2025/26':'Pro plan · Bauchi'}</p>
       </div>
       <svg class="lbl ml-auto text-steel/60 shrink-0" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 9l4-4 4 4M8 15l4 4 4-4"/></svg>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://demo.edsynk.ng/</loc><priority>1.0</priority></url>
+  <url><loc>https://demo.edsynk.ng/public/landing.html</loc><priority>0.8</priority></url>
+  <url><loc>https://demo.edsynk.ng/public/pricing.html</loc><priority>0.7</priority></url>
+  <url><loc>https://demo.edsynk.ng/public/verify-result.html</loc><priority>0.6</priority></url>
+  <url><loc>https://demo.edsynk.ng/admin/admin-dashboard.html</loc><priority>0.6</priority></url>
+</urlset>

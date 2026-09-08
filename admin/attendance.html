@@ -68,20 +68,20 @@ renderTrend();
 let SESSION='morning';
 const REG={
  morning:{
-  'JSS 1A':[['Abdulrahman Aliyu','AFA/2024/0102','P',''],['Hauwa Adamu','AFA/2024/0104','P',''],['Sani Lawal','AFA/2024/0108','L','8:14am'],['Grace Eze','AFA/2024/0111','P',''],['Musa Tijjani','AFA/2024/0115','A','']],
-  'JSS 1B':[['Amina Kabir','AFA/2024/0118','L','8:21am'],['Tunde Bello','AFA/2024/0120','P',''],['Khadija Sule','AFA/2024/0123','P',''],['Peter Obi','AFA/2024/0126','E',''],['Halima Idris','AFA/2024/0128','P','']],
-  'JSS 2A':[['Fatima Abubakar','AFA/2024/0117','P',''],['Yusuf Musa','AFA/2024/0149','A',''],['Ibrahim Sani','AFA/2024/0129','L','8:17am'],['Chiamaka Okafor','AFA/2024/0133','L','8:32am'],['Aisha Garba','AFA/2024/0136','P',''],['Maryam Shehu','AFA/2024/0140','P',''],['Zainab Umar','AFA/2024/0144','E','']],
-  'JSS 2B':[['Emeka Eze','AFA/2024/0150','P',''],['Saadiya Bala','AFA/2024/0153','P',''],['Bashir Nuhu','AFA/2024/0156','L','8:09am'],['Ngozi Okonkwo','AFA/2024/0159','P',''],['Sadiq Garba','AFA/2024/0162','A','']],
-  'JSS 3A':[['Aliyu Danjuma','AFA/2024/0165','L','8:41am'],['Rakiya Sani','AFA/2024/0168','A',''],['Chidi Nwosu','AFA/2024/0171','P',''],['Bashir Nuhu','AFA/2024/0174','P',''],['Hadiza Yakubu','AFA/2024/0177','P','']],
-  'SS 1A':[['Aisha Garba','AFA/2024/0180','P',''],['Daniel Okeke','AFA/2024/0183','P',''],['Fatima Lawan','AFA/2024/0186','L','8:12am'],['Usman Bello','AFA/2024/0189','P',''],['Joy Adeyemi','AFA/2024/0192','E','']]
+  'JSS 1A':[['Abdulrahman Aliyu','EIS/2024/0102','P',''],['Hauwa Adamu','EIS/2024/0104','P',''],['Sani Lawal','EIS/2024/0108','L','8:14am'],['Grace Eze','EIS/2024/0111','P',''],['Musa Tijjani','EIS/2024/0115','A','']],
+  'JSS 1B':[['Amina Kabir','EIS/2024/0118','L','8:21am'],['Tunde Bello','EIS/2024/0120','P',''],['Khadija Sule','EIS/2024/0123','P',''],['Peter Obi','EIS/2024/0126','E',''],['Halima Idris','EIS/2024/0128','P','']],
+  'JSS 2A':[['Fatima Abubakar','EIS/2024/0117','P',''],['Yusuf Musa','EIS/2024/0149','A',''],['Ibrahim Sani','EIS/2024/0129','L','8:17am'],['Chiamaka Okafor','EIS/2024/0133','L','8:32am'],['Aisha Garba','EIS/2024/0136','P',''],['Maryam Shehu','EIS/2024/0140','P',''],['Zainab Umar','EIS/2024/0144','E','']],
+  'JSS 2B':[['Emeka Eze','EIS/2024/0150','P',''],['Saadiya Bala','EIS/2024/0153','P',''],['Bashir Nuhu','EIS/2024/0156','L','8:09am'],['Ngozi Okonkwo','EIS/2024/0159','P',''],['Sadiq Garba','EIS/2024/0162','A','']],
+  'JSS 3A':[['Aliyu Danjuma','EIS/2024/0165','L','8:41am'],['Rakiya Sani','EIS/2024/0168','A',''],['Chidi Nwosu','EIS/2024/0171','P',''],['Bashir Nuhu','EIS/2024/0174','P',''],['Hadiza Yakubu','EIS/2024/0177','P','']],
+  'SS 1A':[['Aisha Garba','EIS/2024/0180','P',''],['Daniel Okeke','EIS/2024/0183','P',''],['Fatima Lawan','EIS/2024/0186','L','8:12am'],['Usman Bello','EIS/2024/0189','P',''],['Joy Adeyemi','EIS/2024/0192','E','']]
  },
  afternoon:{
-  'JSS 1A':[['Abdulrahman Aliyu','AFA/2024/0102','P',''],['Hauwa Adamu','AFA/2024/0104','P',''],['Sani Lawal','AFA/2024/0108','P',''],['Grace Eze','AFA/2024/0111','A',''],['Musa Tijjani','AFA/2024/0115','A','']],
-  'JSS 1B':[['Amina Kabir','AFA/2024/0118','P',''],['Tunde Bello','AFA/2024/0120','P',''],['Khadija Sule','AFA/2024/0123','P',''],['Peter Obi','AFA/2024/0126','E',''],['Halima Idris','AFA/2024/0128','L','1:08pm']],
-  'JSS 2A':[['Fatima Abubakar','AFA/2024/0117','P',''],['Yusuf Musa','AFA/2024/0149','A',''],['Ibrahim Sani','AFA/2024/0129','P',''],['Chiamaka Okafor','AFA/2024/0133','P',''],['Aisha Garba','AFA/2024/0136','P',''],['Maryam Shehu','AFA/2024/0140','L','1:04pm'],['Zainab Umar','AFA/2024/0144','E','']],
-  'JSS 2B':[['Emeka Eze','AFA/2024/0150','P',''],['Saadiya Bala','AFA/2024/0153','P',''],['Bashir Nuhu','AFA/2024/0156','P',''],['Ngozi Okonkwo','AFA/2024/0159','L','1:11pm'],['Sadiq Garba','AFA/2024/0162','A','']],
-  'JSS 3A':[['Aliyu Danjuma','AFA/2024/0165','P',''],['Rakiya Sani','AFA/2024/0168','A',''],['Chidi Nwosu','AFA/2024/0171','P',''],['Bashir Nuhu','AFA/2024/0174','P',''],['Hadiza Yakubu','AFA/2024/0177','P','']],
-  'SS 1A':[['Aisha Garba','AFA/2024/0180','P',''],['Daniel Okeke','AFA/2024/0183','L','1:02pm'],['Fatima Lawan','AFA/2024/0186','P',''],['Usman Bello','AFA/2024/0189','P',''],['Joy Adeyemi','AFA/2024/0192','E','']]
+  'JSS 1A':[['Abdulrahman Aliyu','EIS/2024/0102','P',''],['Hauwa Adamu','EIS/2024/0104','P',''],['Sani Lawal','EIS/2024/0108','P',''],['Grace Eze','EIS/2024/0111','A',''],['Musa Tijjani','EIS/2024/0115','A','']],
+  'JSS 1B':[['Amina Kabir','EIS/2024/0118','P',''],['Tunde Bello','EIS/2024/0120','P',''],['Khadija Sule','EIS/2024/0123','P',''],['Peter Obi','EIS/2024/0126','E',''],['Halima Idris','EIS/2024/0128','L','1:08pm']],
+  'JSS 2A':[['Fatima Abubakar','EIS/2024/0117','P',''],['Yusuf Musa','EIS/2024/0149','A',''],['Ibrahim Sani','EIS/2024/0129','P',''],['Chiamaka Okafor','EIS/2024/0133','P',''],['Aisha Garba','EIS/2024/0136','P',''],['Maryam Shehu','EIS/2024/0140','L','1:04pm'],['Zainab Umar','EIS/2024/0144','E','']],
+  'JSS 2B':[['Emeka Eze','EIS/2024/0150','P',''],['Saadiya Bala','EIS/2024/0153','P',''],['Bashir Nuhu','EIS/2024/0156','P',''],['Ngozi Okonkwo','EIS/2024/0159','L','1:11pm'],['Sadiq Garba','EIS/2024/0162','A','']],
+  'JSS 3A':[['Aliyu Danjuma','EIS/2024/0165','P',''],['Rakiya Sani','EIS/2024/0168','A',''],['Chidi Nwosu','EIS/2024/0171','P',''],['Bashir Nuhu','EIS/2024/0174','P',''],['Hadiza Yakubu','EIS/2024/0177','P','']],
+  'SS 1A':[['Aisha Garba','EIS/2024/0180','P',''],['Daniel Okeke','EIS/2024/0183','L','1:02pm'],['Fatima Lawan','EIS/2024/0186','P',''],['Usman Bello','EIS/2024/0189','P',''],['Joy Adeyemi','EIS/2024/0192','E','']]
  }
 };
 const TEACHERS={'JSS 1A':'Mallam Yusuf','JSS 1B':'Hauwa Adamu','JSS 2A':'Mallam Musa Ibrahim','JSS 2B':'Mr. Chinedu Okafor','JSS 3A':'Mr. Nuhu','SS 1A':'Mrs. Bello'};
