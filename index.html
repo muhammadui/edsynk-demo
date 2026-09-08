@@ -200,13 +200,21 @@
     </aside>
 
     <script>
-      // Demo access — per-role credentials. NOTE: this is a soft gate on a static site (the role pages
-      // are still static files; real protection is Vercel Password Protection over the whole site).
+      // Demo access. Each key is one login (username → { password, landing page }). To give a specific
+      // person their OWN private-feeling credentials, add another key pointing at the SAME url — e.g.
+      // add `musa: { pw:"...", url:"admin/admin-dashboard.html" }` and they'll think it's just for them,
+      // while still landing on the owner view. Add/remove freely; keep DEMO-ACCESS.md in sync.
+      // NOTE: soft gate only (static pages are reachable by direct URL) — real lock = Vercel Password Protection.
       var CREDS = {
+        // default role logins
         owner:   { pw: "Owner$925",  url: "admin/admin-dashboard.html" },
         teacher: { pw: "Teach$418",  url: "teacher/teacher-home.html" },
         student: { pw: "Learn$736",  url: "student/student-home.html" },
         parent:  { pw: "Home$254",   url: "parent/parent-home.html" }
+
+        // per-guest example (uncomment + rename to give someone their own creds for the owner view):
+        // , "musa":   { pw: "Musa-7742",   url: "admin/admin-dashboard.html" }
+        // , "aisha":  { pw: "Aisha-1093",  url: "admin/admin-dashboard.html" }
       };
       function doSignIn(e) {
         e.preventDefault();
